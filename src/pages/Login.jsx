@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormGroup,
   FormControl,
@@ -6,8 +6,42 @@ import {
   Input,
   Button,
 } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "../features/auth/authSlice";
 
 export default function Login() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { email, password } = formData;
+
+  const handleChanges = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    // window.alert(`Email : ${email}, Password : ${password}`);
+    if(email === '' || password === ''){
+      window.alert("Fill all the fields...")
+    }
+    else{
+      const userData = {
+        email,
+        password
+      }  
+      dispatch(login(userData));
+    }
+  };
   return (
     <>
       <div className="loginform">
@@ -22,7 +56,7 @@ export default function Login() {
             borderBottom: "1px solid #457b9d",
             width: "fit-content",
             color: "#457b9d",
-            backgroundColor : "white"
+            backgroundColor: "white",
           }}
         >
           Login
@@ -39,23 +73,37 @@ export default function Login() {
             border: "1px solid #457b9d",
             boxShadow: "10px 10px 25px 1px rgba(69, 123, 157, 0.6)",
             borderRadius: "30px",
-            backgroundColor : "white"
+            backgroundColor: "white",
           }}
         >
           {/* Change color of border of the box */}
           <FormControl>
             <InputLabel> Enter Email :</InputLabel>
-            <Input required/>
+            <Input
+              name="email"
+              value={email}
+              id="email"
+              onChange={handleChanges}
+              required
+            />
           </FormControl>
           <br />
           <FormControl>
             <InputLabel> Enter Password :</InputLabel>
-            <Input required/>
-          </FormControl>{" "}
+            <Input
+              type="password"
+              name="password"
+              value={password}
+              id="password"
+              onChange={handleChanges}
+              required
+            />
+          </FormControl>
           <br />
           <Button
             variant="contained"
             style={{ backgroundColor: "#457b9d", color: "White" }}
+            onClick={handleSubmit}
           >
             Login
           </Button>

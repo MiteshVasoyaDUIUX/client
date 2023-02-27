@@ -51,7 +51,7 @@ export default function Register() {
     return <Spinner />;
   }
 
-  const onChange = (e) => {
+  const handleChanges = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -59,7 +59,7 @@ export default function Register() {
     return;
   };
 
-  const onSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (password !== password2) {
@@ -97,65 +97,82 @@ export default function Register() {
           Register
         </h1>
         <form>
-        <FormGroup
-          style={{
-            width: "50%",
-            marginLeft: "auto",
-            marginRight: "auto",
-            paddingTop: "110px",
-            paddingBottom: "110px",
-            paddingLeft: "60px",
-            paddingRight: "60px",
-            border: "1px solid #457b9d",
-            boxShadow: "7px 7px 29px 1px rgba(69, 123, 157, 0.6) ",
-            borderRadius: "30px",
-            backgroundColor: "white",
-          }}
-        >
-          {/* Change color of border of the box */}
-          <FormControl>
-            <InputLabel> Enter Name :</InputLabel>
-            <Input value={name} onChange={onChange} name="name" required />
-          </FormControl>
-          <br />
-          <FormControl>
-            <InputLabel> Enter Email :</InputLabel>
-            <Input value={email} onChange={onChange} name="email" required />
-          </FormControl>
-          <br />
-          <FormControl>
-            <InputLabel> Enter Mobile No. :</InputLabel>
-            <Input value={mono} onChange={onChange} name="mono" required />
-          </FormControl>
-          <br />
-          <FormControl>
-            <InputLabel> Enter Password :</InputLabel>
-            <Input
-              value={password}
-              onChange={onChange}
-              name="password"
-              required
-            />
-          </FormControl>{" "}
-          <br />
-          <FormControl>
-            <InputLabel> Re-Enter Password :</InputLabel>
-            <Input
-              value={password2}
-              onChange={onChange}
-              name="password2"
-              required
-            />
-          </FormControl>{" "}
-          <br />
-          <Button
-            variant="contained"
-            style={{ backgroundColor: "#457b9d", color: "White" }}
-            onClick={onSubmit}
+          <FormGroup
+            style={{
+              width: "50%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              paddingTop: "110px",
+              paddingBottom: "110px",
+              paddingLeft: "60px",
+              paddingRight: "60px",
+              border: "1px solid #457b9d",
+              boxShadow: "7px 7px 29px 1px rgba(69, 123, 157, 0.6) ",
+              borderRadius: "30px",
+              backgroundColor: "white",
+            }}
           >
-            Register
-          </Button>
-        </FormGroup>
+            {/* Change color of border of the box */}
+            <FormControl>
+              <InputLabel> Enter Name :</InputLabel>
+              <Input
+                value={name}
+                onChange={handleChanges}
+                name="name"
+                required
+              />
+            </FormControl>
+            <br />
+            <FormControl>
+              <InputLabel> Enter Email :</InputLabel>
+              <Input
+                value={email}
+                onChange={handleChanges}
+                name="email"
+                required
+              />
+            </FormControl>
+            <br />
+            <FormControl>
+              <InputLabel> Enter Mobile No. :</InputLabel>
+              <Input
+                value={mono}
+                onChange={handleChanges}
+                name="mono"
+                required
+              />
+            </FormControl>
+            <br />
+            <FormControl>
+              <InputLabel> Enter Password :</InputLabel>
+              <Input
+                type="password"
+                value={password}
+                onChange={handleChanges}
+                name="password"
+                required
+              />
+            </FormControl>{" "}
+            <br />
+            <FormControl>
+              <InputLabel> Re-Enter Password :</InputLabel>
+              <Input
+                type="password"
+                value={password2}
+                onChange={handleChanges}
+                name="password2"
+                required
+              />
+            </FormControl>{" "}
+            <br />
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "#457b9d", color: "White" }}
+              onClick={handleSubmit}
+            >
+              Register
+            </Button>
+          </FormGroup>
         </form>
       </div>
     </>
