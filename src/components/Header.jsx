@@ -13,7 +13,9 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, reset } from "../features/auth/authSlice";
 
 const pages = [""];
 const options = ["Cart", "My Orders", "Logout"];
@@ -22,7 +24,16 @@ const optionIfNotLoggedIn = ["Login", "Register"];
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isUserLoggedIn, setUserLoggedIn] = React.useState(false);
+  // const [isUserLoggedIn, setUserLoggedIn] = React.useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+
+  const onLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+    navigate("/");
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -57,10 +68,11 @@ function Header() {
               color: "inherit",
               textDecoration: "none",
             }}
-          link="/">
+            link="/"
+          >
             {/* Link  to Dashboard... */}
             {/* <Link style={{ textDecoration: "None", color: "white" }} to="/"> */}
-              LOGO
+            LOGO
             {/* </Link> */}
           </Typography>
 
@@ -87,7 +99,7 @@ function Header() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {isUserLoggedIn ? (
+            {user ? (
               <>
                 <Tooltip>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -129,7 +141,7 @@ function Header() {
                   <MenuItem key={options[2]} onClick={handleCloseUserMenu}>
                     <Link
                       style={{ textDecoration: "None", color: "black" }}
-                      to="/logout"
+                      onClick={onLogout}
                     >
                       {options[2]}
                     </Link>
