@@ -26,7 +26,7 @@ export default function Register() {
   //Default Role...
   const role = "buyer";
 
-  const { name, email, password, mono, password2 } = formData;
+  const { name, email, password, phoneNumber, password2 } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -68,8 +68,8 @@ export default function Register() {
       const userData = {
         name,
         email,
-        mono,
         password,
+        phoneNumber,
         role,
       };
       console.log("In register Page...");
@@ -126,6 +126,7 @@ export default function Register() {
             <FormControl>
               <InputLabel> Enter Email :</InputLabel>
               <Input
+                type="email"
                 value={email}
                 onChange={handleChanges}
                 name="email"
@@ -136,9 +137,9 @@ export default function Register() {
             <FormControl>
               <InputLabel> Enter Mobile No. :</InputLabel>
               <Input
-                value={mono}
+                value={phoneNumber}
                 onChange={handleChanges}
-                name="mono"
+                name="phoneNumber"
                 required
               />
             </FormControl>

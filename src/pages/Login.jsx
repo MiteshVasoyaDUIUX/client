@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FormGroup,
   FormControl,
@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login } from "../features/auth/authSlice";
+import { login, reset } from "../features/auth/authSlice";
+import Spinner from "../components/Spinner";
 
 export default function Login() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,6 +23,24 @@ export default function Login() {
 
   const { email, password } = formData;
 
+  const { user, isError, isLoading, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+    }
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [user, isSuccess, isError, message, navigate, dispatch]);
+
+  if(isLoading) {
+    // return <Spinner/>;
+  };
+
   const handleChanges = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -32,14 +50,13 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     // window.alert(`Email : ${email}, Password : ${password}`);
-    if(email === '' || password === ''){
-      window.alert("Fill all the fields...")
-    }
-    else{
+    if (email === "" || password === "") {
+      window.alert("Fill all the fields...");
+    } else {
       const userData = {
         email,
-        password
-      }  
+        password,
+      };
       dispatch(login(userData));
     }
   };
