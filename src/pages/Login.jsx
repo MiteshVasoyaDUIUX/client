@@ -31,7 +31,12 @@ export default function Login() {
     if (isError) {
     }
     if (isSuccess || user) {
-      navigate("/");
+      // console.log("User : ", user.role);
+      if(user.role === "buyer"){
+        navigate("/");
+      } else if (user.role === "admin"){
+        navigate("/adminpanel");
+      }
     }
 
     dispatch(reset());
