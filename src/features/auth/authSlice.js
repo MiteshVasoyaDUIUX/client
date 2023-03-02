@@ -92,8 +92,8 @@ export const authSlice = createSlice({
         state.user = null;
         state.message = action.payload;
       })
-      .addCase(logout.pending, (state) => {
-        state.isLoading = true;
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
       });
   },
 });

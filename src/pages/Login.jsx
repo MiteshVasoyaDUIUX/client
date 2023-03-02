@@ -35,7 +35,7 @@ export default function Login() {
       if(user.role === "buyer"){
         navigate("/");
       } else if (user.role === "admin"){
-        navigate("/adminpanel");
+        navigate("/admin");  
       }
     }
 

@@ -17,7 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
 
-const pages = [""];
+const pagesForAdmin = ["Dashboard", "Add Product", "All Users"];
 const options = ["Cart", "My Orders", "Logout"];
 const optionIfNotLoggedIn = ["Login", "Register"];
 
@@ -95,66 +95,153 @@ function Header() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button disabled></Button>
+            <Button></Button>
           </Box>
+
+
+            {user ? (
+              user.role === "admin" ? (
+                <>
+                  <Box
+                    sx={{ flexGrow: 50, display: { xs: "none", md: "flex" } }}
+                  >
+                    <Button
+                      key={pagesForAdmin[0]}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: 2, color: "white", display: "block" }}
+                    >
+                      <Link
+                        style={{ textDecoration: "None", color: "white " }}
+                        to="/"
+                      >
+                        {pagesForAdmin[0]}
+                      </Link>
+                    </Button>
+                    <Button
+                      key={pagesForAdmin[1]}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: 2, color: "white", display: "block" }}
+                    >
+                      <Link
+                        style={{ textDecoration: "None", color: "white " }}
+                        to="/admin/addproduct"
+                      >
+                        {pagesForAdmin[1]}
+                      </Link>
+                    </Button>
+                    <Button
+                      key={pagesForAdmin[2]}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: 2, color: "white", display: "block" }}
+                    >
+                      <Link
+                        style={{ textDecoration: "None", color: "white " }}
+                        to="/admin/alluser"
+                      >
+                        {pagesForAdmin[2]}
+                      </Link>
+                    </Button>
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <Box
+                    sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+                  >
+                    <Button disabled></Button>
+                  </Box>
+                </>
+              )
+            ) : (
+              <>
+                <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                  <Button disabled></Button>
+                </Box>
+              </>
+            )}
 
           <Box sx={{ flexGrow: 0 }}>
             {user ? (
-              <>
-                <Tooltip>
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="No Image" src="#" />
-                  </IconButton>
-                </Tooltip>{" "}
-                <Menu
-                  sx={{ mt: "45px" }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  <MenuItem key={options[0]} onClick={handleCloseUserMenu}>
+              user.role === "admin" ? (
+                <>
+                  <MenuItem
+                    key={options[2]}
+                    onClick={handleCloseUserMenu}
+                    style={{
+                      border: "2px solid white",
+                      fontSize: "15px",
+                      paddingTop: "6px",
+                    }}
+                  >
                     <Link
-                      style={{ textDecoration: "None", color: "black" }}
-                      to="/cart"
-                    >
-                      {options[0]}
-                    </Link>
-                  </MenuItem>
-                  <MenuItem key={options[1]} onClick={handleCloseUserMenu}>
-                    <Link
-                      style={{ textDecoration: "None", color: "black" }}
-                      to="/myorders"
-                    >
-                      {options[1]}
-                    </Link>
-                  </MenuItem>
-                  <MenuItem key={options[2]} onClick={handleCloseUserMenu}>
-                    <Link
-                      style={{ textDecoration: "None", color: "black" }}
+                      style={{
+                        textDecoration: "None",
+                        color: "white",
+                        padding: "5px",
+                      }}
                       onClick={onLogout}
                     >
                       {options[2]}
                     </Link>
                   </MenuItem>
-                </Menu>
-              </>
+                </>
+              ) : (
+                <>
+                  <Tooltip>
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar alt="No Image" src="#" />
+                    </IconButton>
+                  </Tooltip>{" "}
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    <MenuItem key={options[0]} onClick={handleCloseUserMenu}>
+                      <Link
+                        style={{ textDecoration: "None", color: "black" }}
+                        to="/cart"
+                      >
+                        {options[0]}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem key={options[1]} onClick={handleCloseUserMenu}>
+                      <Link
+                        style={{ textDecoration: "None", color: "black" }}
+                        to="/myorders"
+                      >
+                        {options[1]}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem key={options[2]} onClick={handleCloseUserMenu}>
+                      <Link
+                        style={{ textDecoration: "None", color: "black" }}
+                        onClick={onLogout}
+                      >
+                        {options[2]}
+                      </Link>
+                    </MenuItem>
+                  </Menu>
+                </>
+              )
             ) : (
               <>
                 <Tooltip>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar alt="No Image" src="#" />
                   </IconButton>
-                </Tooltip>{" "}
+                </Tooltip>
                 <Menu
                   sx={{ mt: "45px" }}
                   id="menu-appbar"

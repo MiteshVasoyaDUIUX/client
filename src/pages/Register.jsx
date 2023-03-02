@@ -52,7 +52,7 @@ export default function Register() {
   }
 
   const handleChanges = (e) => {
-    setFormData((prevState) => ({
+    setFormData((prevState) => ({ 
       ...prevState,
       [e.target.name]: e.target.value,
     }));
@@ -121,7 +121,7 @@ export default function Register() {
                 name="name"
                 required
               />
-            </FormControl>
+            </FormControl> 
             <br />
             <FormControl>
               <InputLabel> Enter Email :</InputLabel>
