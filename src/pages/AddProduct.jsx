@@ -13,40 +13,40 @@ import {
 
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 50,
-  },
-  preview: {
-    marginTop: 50,
-    display: "flex",
-    flexDirection: "column",
-    width: "fit-content",
-  },
-  image: { width: "300px", height: "200px" },
-  delete: {
-    cursor: "pointer",
-    width: "300px",
-    padding: 15,
-    background: "#457b9d",
-    color: "white",
-    border: "none",
-  },
-  floatContainer: {
-    border: "3px solid #fff",
-    padding: "20px",
-  },
-  floatChild: {
-    width: "50%",
-    float: "left",
-    padding: "20px",
-    border: "2px solid red",
-  },
-};
+// const styles = {
+//   container: {
+//     display: "flex",
+//     flexDirection: "column",
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   preview: {
+//     marginTop: 50,
+//     display: "flex",
+//     flexDirection: "column",
+//     width: "fit-content",
+//     paddingTop: "5px",
+//   },
+//   image: { width: "300px", height: "200px" },
+//   delete: {
+//     cursor: "pointer",
+//     width: "300px",
+//     padding: "5px",
+//     background: "#457b9d",
+//     color: "white",
+//     border: "none",
+//   },
+//   floatContainer: {
+//     border: "3px solid #fff",
+//     padding: "20px",
+//   },
+//   floatChild: {
+//     width: "50%",
+//     float: "left",
+//     padding: "20px",
+//     border: "2px solid red",
+//   },
+// };
 
 function AddProduct() {
   const [image, setImage] = useState([]);
@@ -166,7 +166,7 @@ function AddProduct() {
           </FormControl>
 
           <FormControl>
-            <InputLabel>Upload Image : </InputLabel>
+            <InputLabel>Upload Product Image : <small> (Max. 6 Images) </small> </InputLabel>
             <br />
             <br />
             <br />
@@ -180,24 +180,21 @@ function AddProduct() {
               padding: "15px",
             }}
             onChange={handleImageChange}
+            disabled = {image.length === 6}
             multiple
           />
-          <div className="row" style={styles.floatContainer}>
+          <div className="row image-container">
             {image.length > 0 &&
               image.map((item, index) => {
                 return (
-                  <div
-                    className="float-child"
-                    key={item}
-                    style={styles.preview}
-                  >
-                    <img src={item} alt="" style={styles.image} />
-                    <button 
+                  <div className="image-div" key={item}>
+                    <img src={item} className="image" alt="" />
+                    <button
                       type="button"
-                      style={styles.delete}
+                      className="delete-image"
                       onClick={() => deleteFile(index)}
                     >
-                      delete
+                      Remove
                     </button>
                   </div>
                 );
@@ -212,6 +209,7 @@ function AddProduct() {
               fontSize: "15px",
               fontWeight: "bolder",
             }}
+            
           >
             Upload
           </Button>
