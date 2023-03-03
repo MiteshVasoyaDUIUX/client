@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FormGroup,
   FormControl,
@@ -9,47 +9,75 @@ import {
   FormHelperText,
   FormLabel,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
-
-// const styles = {
-//   container: {
-//     display: "flex",
-//     flexDirection: "column",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   preview: {
-//     marginTop: 50,
-//     display: "flex",
-//     flexDirection: "column",
-//     width: "fit-content",
-//     paddingTop: "5px",
-//   },
-//   image: { width: "300px", height: "200px" },
-//   delete: {
-//     cursor: "pointer",
-//     width: "300px",
-//     padding: "5px",
-//     background: "#457b9d",
-//     color: "white",
-//     border: "none",
-//   },
-//   floatContainer: {
-//     border: "3px solid #fff",
-//     padding: "20px",
-//   },
-//   floatChild: {
-//     width: "50%",
-//     float: "left",
-//     padding: "20px",
-//     border: "2px solid red",
-//   },
-// };
+import { uploadProduct, reset } from "../features/product/productSlice";
 
 function AddProduct() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [productData, setProductData] = useState({
+    prodName: "",
+    prodDesc: "",
+    prodCategory: "",
+    prodQuantity: "",
+    prodPrice: "",
+    prodImage: [],
+  });
+
+  const [selectedCategory, setSelectedCategory] = useState("Select Category");
+
+  const { products, isError, isLoading, isSuccess, message } = useSelector(
+    (state) => state.product
+  );
+
+  useEffect(() => {
+    if (isError) {
+      //Add Toast Message Of Error...
+      // toast.error(message);
+    }
+
+    if (isSuccess) {
+      //Add Toast Message Of Successfull...
+    }
+
+    dispatch(reset());
+  }, [isSuccess, isError, message, navigate, dispatch]);
+
+  if(isLoading) {
+    //Add Spinner...
+  }
+  
+  const categories = [
+    "Select Category",
+    "Cloths",
+    "Footware",
+    "Accessories",
+    "Other",
+  ];
+
   const [image, setImage] = useState([]);
+
+  const {
+    prodName,
+    prodDesc,
+    prodCategory,
+    prodQuantity,
+    prodPrice,
+    prodImage,
+  } = productData;
+
+  const handleChanges = (e) => {
+    setProductData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleImageChange = (e) => {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
@@ -58,6 +86,15 @@ function AddProduct() {
     console.log(ImagesArray);
     setImage([...image, ...ImagesArray]);
     console.log("file", image);
+  };
+
+  const handleCategoryChange = (e) => {
+    if (e.target.value === "Select Category") {
+      return;
+    } else {
+      setSelectedCategory(e.target.value);
+      console.log(e.target.value);
+    }
   };
 
   const upload = (e) => {
@@ -69,6 +106,21 @@ function AddProduct() {
     const s = image.filter((item, index) => index !== e);
     setImage(s);
     console.log(s);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const productData = {
+      prodName,
+      prodDesc,
+      prodCategory: selectedCategory,
+      prodQuantity,
+      prodPrice,
+      prodImage: image,
+    };
+    console.log("In Product Upload Page...", productData);
+    dispatch(uploadProduct(productData));
   };
 
   return (
@@ -95,8 +147,8 @@ function AddProduct() {
             width: "50%",
             marginLeft: "auto",
             marginRight: "auto",
-            paddingTop: "110px",
-            paddingBottom: "110px",
+            paddingTop: "80px",
+            paddingBottom: "80px",
             paddingLeft: "60px",
             paddingRight: "60px",
             border: "1px solid #457b9d",
@@ -109,8 +161,8 @@ function AddProduct() {
           <FormControl>
             <TextField
               type="text"
-              // value={name}
-              // onChange={handleChanges}
+              value={prodName}
+              onChange={handleChanges}
               name="prodName"
               placeholder="Product Name"
               required
@@ -120,9 +172,9 @@ function AddProduct() {
           <FormControl>
             <TextField
               type="textfield"
-              // value={email}
-              // onChange={handleChanges}
-              name="prodDescription"
+              value={prodDesc}
+              onChange={handleChanges}
+              name="prodDesc"
               multiline
               rows={4}
               placeholder="Product Description"
@@ -130,23 +182,37 @@ function AddProduct() {
             />
           </FormControl>
           <br />
-          <FormControl>
-            <TextField
+          {/* <TextField
               type="text"
-              // value={email}
-              // onChange={handleChanges}
+              value={prodCategory}
+              onChange={handleChanges}
               name="prodCategory"
               placeholder="Product Category"
               required
-            />
-          </FormControl>
+            /> */}
+
+          <Select
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            placeholder="Select Category"
+            name="prodCategory"
+          >
+            {categories.map((category, index) => {
+              return (
+                <MenuItem key={category} value={category}>
+                  {category}
+                </MenuItem>
+              );
+            })}
+          </Select>
+
           <br />
           <FormControl>
             <TextField
               type="number"
-              // value={phoneNumber}
-              // onChange={handleChanges}
-              name="quantity"
+              value={prodQuantity}
+              onChange={handleChanges}
+              name="prodQuantity"
               placeholder="Quantity"
               required
             />
@@ -156,9 +222,9 @@ function AddProduct() {
           <FormControl>
             <TextField
               type="text"
-              // value={password}
-              // onChange={handleChanges}
-              name="price"
+              value={prodPrice}
+              onChange={handleChanges}
+              name="prodPrice"
               variant="outlined"
               placeholder="Price"
               required
@@ -166,7 +232,9 @@ function AddProduct() {
           </FormControl>
 
           <FormControl>
-            <InputLabel>Upload Product Image : <small> (Max. 6 Images) </small> </InputLabel>
+            <InputLabel>
+              Upload Product Image : <small> (Max. 6 Images) </small>
+            </InputLabel>
             <br />
             <br />
             <br />
@@ -180,7 +248,7 @@ function AddProduct() {
               padding: "15px",
             }}
             onChange={handleImageChange}
-            disabled = {image.length === 6}
+            disabled={image.length === 6}
             multiple
           />
           <div className="row image-container">
@@ -200,7 +268,7 @@ function AddProduct() {
                 );
               })}
           </div>
-          <br />
+
           <Button
             variant="contained"
             style={{
@@ -209,7 +277,7 @@ function AddProduct() {
               fontSize: "15px",
               fontWeight: "bolder",
             }}
-            
+            onClick={handleSubmit}
           >
             Upload
           </Button>
