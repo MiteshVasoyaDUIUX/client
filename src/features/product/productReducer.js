@@ -14,6 +14,7 @@ const uploadProduct = async (productData, token) => {
 
   const response = await axios.post(API_URL + '/admin/addproducts', productData, config);
 
+  console.log("Response : ", response.data);
   return response.data;
 };
 

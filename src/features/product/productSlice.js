@@ -44,7 +44,7 @@ const productSlice = createSlice({
         state.isSuccess = true;
         state.isLoading = false;
         state.products.push(action.payload);
-        // console.log("New State : ", initialState.products);
+        console.log("New State : ", initialState.products);
       })
       .addCase(uploadProduct.rejected, (state, action) => {
         state.isError = true;

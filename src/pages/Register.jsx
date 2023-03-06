@@ -56,7 +56,7 @@ export default function Register() {
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-    return;
+
   };
 
   const handleSubmit = (e) => {

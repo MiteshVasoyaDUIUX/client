@@ -43,16 +43,26 @@ function AddProduct() {
     }
 
     if (isSuccess) {
-      //Add Toast Message Of Successfull...
+      setProductData({
+        prodName: "",
+        prodDesc: "",
+        prodCategory: "",
+        prodQuantity: "",
+        prodPrice: "",
+        prodImage: [],
+      });
+
+      setSelectedCategory("Select Category");
+      setImage([]);
     }
 
     dispatch(reset());
   }, [isSuccess, isError, message, navigate, dispatch]);
 
-  if(isLoading) {
+  if (isLoading) {
     //Add Spinner...
   }
-  
+
   const categories = [
     "Select Category",
     "Cloths",
@@ -83,9 +93,10 @@ function AddProduct() {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
       URL.createObjectURL(e[1])
     );
-    console.log(ImagesArray);
+    console.log("New Image : ", ImagesArray);
+
     setImage([...image, ...ImagesArray]);
-    console.log("file", image);
+    console.log("All Image Array : ", image);
   };
 
   const handleCategoryChange = (e) => {
@@ -99,17 +110,18 @@ function AddProduct() {
 
   const upload = (e) => {
     e.preventDefault();
-    console.log(image);
   };
 
   const deleteFile = (e) => {
     const s = image.filter((item, index) => index !== e);
     setImage(s);
-    console.log(s);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // const url = URL.createObjectURL(image[0].slice(5));
+    console.log("URL.createObjectURL : ", image.files);
 
     const productData = {
       prodName,
@@ -119,7 +131,7 @@ function AddProduct() {
       prodPrice,
       prodImage: image,
     };
-    console.log("In Product Upload Page...", productData);
+    // console.log("In Product Upload Page...", productData);
     dispatch(uploadProduct(productData));
   };
 
