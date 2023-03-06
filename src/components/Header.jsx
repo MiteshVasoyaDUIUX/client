@@ -17,7 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
 
-const pagesForAdmin = ["Dashboard", "Add Product", "All Users"];
+const pagesForAdmin = ["Dashboard", "Add Product", "All Products", "All Users"];
 const options = ["Cart", "My Orders", "Logout"];
 const optionIfNotLoggedIn = ["Login", "Register"];
 
@@ -136,9 +136,21 @@ function Header() {
                     >
                       <Link
                         style={{ textDecoration: "None", color: "white " }}
-                        to="/admin/alluser"
+                        to="/admin/allproduct"
                       >
                         {pagesForAdmin[2]}
+                      </Link>
+                    </Button>
+                    <Button
+                      key={pagesForAdmin[3]}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: 2, color: "white", display: "block" }}
+                    >
+                      <Link
+                        style={{ textDecoration: "None", color: "white " }}
+                        to="/admin/alluser"
+                      >
+                        {pagesForAdmin[3]}
                       </Link>
                     </Button>
                   </Box>

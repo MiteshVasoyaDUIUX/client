@@ -12,14 +12,32 @@ const uploadProduct = async (productData, token) => {
     },
   };
 
-  const response = await axios.post(API_URL + '/admin/addproducts', productData, config);
+  const response = await axios.post(
+    API_URL + "/admin/addproducts",
+    productData,
+    config
+  );
 
   console.log("Response : ", response.data);
   return response.data;
 };
 
+const fetchProduct = async (productData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + "/admin/allproducts", config);
+
+  // console.log("Response : ", response.data);
+  return response.data;
+};
+
 const productService = {
-      uploadProduct,
-}
+  uploadProduct,
+  fetchProduct,
+};
 
 export default productService;

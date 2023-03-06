@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import productService from "./productReducer";
+
 const initialState = {
   products: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isFetched : false,
   message: "",
 };
 
@@ -17,6 +19,26 @@ export const uploadProduct = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
 
       return await productService.uploadProduct(productData, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchProduct = createAsyncThunk(
+  "prouduct/fetch",
+  async (productData, thunkAPI) => {
+    try {
+      //'token' may be not use because only user can add the goal...
+      const token = thunkAPI.getState().auth.user.token;
+
+      return await productService.fetchProduct(productData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -50,21 +72,21 @@ const productSlice = createSlice({
         state.isError = true;
         state.isLoading = false;
         state.message = action.payload;
+      })
+      .addCase(fetchProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchProduct.fulfilled, (state, action) => {
+        state.isFetch = true;
+        state.isLoading = false;
+        state.products = action.payload;
+        // console.log("New State : ", initialState.products);
+      })
+      .addCase(fetchProduct.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.message = action.payload;
       });
-    // .addCase(fetchProduct.pending, (state) => {
-    //   state.isLoading = true;
-    // })
-    // .addCase(fetchProduct.fulfilled, (state, action) => {
-    //   state.isSuccess = true;
-    //   state.isLoading = false;
-    //   state.products = action.payload;
-    //   // console.log("New State : ", initialState.products);
-    // })
-    // .addCase(fetchProduct.rejected, (state, action) => {
-    //   state.isError = true;
-    //   state.isLoading = false;
-    //   state.message = action.payload;
-    // })
     // .addCase(removeProduct.pending, (state) => {
     //   state.isLoading = true;
     // })
@@ -87,5 +109,5 @@ const productSlice = createSlice({
   },
 });
 
-export const {reset} = productSlice.actions;
+export const { reset } = productSlice.actions;
 export default productSlice.reducer;

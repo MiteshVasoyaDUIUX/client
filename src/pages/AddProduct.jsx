@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
+import {toast} from 'react-toastify';
 import {
   FormGroup,
   FormControl,
@@ -38,11 +39,22 @@ function AddProduct() {
 
   useEffect(() => {
     if (isError) {
-      //Add Toast Message Of Error...
-      // toast.error(message);
+      toast.error(message);
     }
 
     if (isSuccess) {
+
+      toast.success('Product Added Successfully', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+        });
+
       setProductData({
         prodName: "",
         prodDesc: "",
@@ -93,10 +105,10 @@ function AddProduct() {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
       URL.createObjectURL(e[1])
     );
-    console.log("New Image : ", ImagesArray);
+    // console.log("New Image : ", ImagesArray);
 
     setImage([...image, ...ImagesArray]);
-    console.log("All Image Array : ", image);
+    // console.log("All Image Array : ", image);
   };
 
   const handleCategoryChange = (e) => {

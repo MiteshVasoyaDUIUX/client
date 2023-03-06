@@ -11,6 +11,10 @@ import MyOrders from "./pages/MyOrders";
 import AdminDashboard from "./pages/AdminDashboard";
 import AddProduct from "./pages/AddProduct";
 import AllUser from "./pages/AllUser";
+import AllProduct from "./pages/AllProduct";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   return (
@@ -26,11 +30,13 @@ function App() {
             <Route path="/myorders" element={<MyOrders />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/addproduct" element={<AddProduct />} />
+            <Route path="/admin/allproduct" element={<AllProduct />} />
             <Route path="/admin/alluser" element={<AllUser />} />
             <Route path="/logout" />
           </Routes>
         </div>
       </Router>
+      <ToastContainer />
     </>
   );
 }
