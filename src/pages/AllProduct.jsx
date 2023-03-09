@@ -1,13 +1,14 @@
 /* eslint-disable no-lone-blocks */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { fetchProduct } from "../features/product/productSlice";
 
 //MaterialUI Components import...
 import {
+  IconButton,
   ImageList,
   ImageListItem,
   Paper,
@@ -170,9 +171,12 @@ function AllProduct() {
                             hover
                             role="checkbox"
                             tabIndex={-1}
-                            key={row.code}
-                            sx={{ margin: "2px", padding: "0px" }}
-                            style={{ height: "150px" }}
+                            key={row}
+                            sx={{
+                              margin: "2px",
+                              padding: "10px",
+                              height: "10px",
+                            }}
                           >
                             {columns.map((column) => {
                               const value = row[column.id];
@@ -189,33 +193,46 @@ function AllProduct() {
                               }
 
                               return (
+                                <>
                                 <TableCell key={column.id} align={column.align}>
-                                  {column.id === "prodImage" ? (
-                                    <ImageList
-                                      sx={{ width: 230, height: 200 }}
-                                      cols={3}
-                                      rowHeight={50}
-                                    >
-                                      {images.map((item) => (
-                                        <ImageListItem key={item.img}>
-                                          <img
-                                            src = {item}
-                                            alt = {item}
-                                            loading="lazy"
-                                          />
-                                        </ImageListItem>
-                                      ))}
-                                    </ImageList>
-                                  ) : column.id === "prodStatus" ? (
-                                    status
-                                  ) : (
-                                    value
-                                  )}
+                                  <div
+                                    style={{
+                                      whiteSpace: "wrap",
+                                      textOverflow: "ellipsis",
+                                      overflow : "clip",
+                                      height : "60px"
+                                    }}
+                                  >
+                                    {column.id === "prodImage" ? (
+                                      <ImageList
+                                        sx={{ width: 230, height: 80 }}
+                                        cols={3}
+                                        rowHeight={50}
+                                      >
+                                        {images.map((item) => (
+                                          <ImageListItem key={item}>
+                                            <img
+                                              src={item}
+                                              alt={item}
+                                              loading="lazy"
+                                            />
+                                          </ImageListItem>
+                                        ))}
+                                      </ImageList>
+                                    ) : column.id === "prodStatus" ? (
+                                      status
+                                    ) : (
+                                      value
+                                    )}
+                                  </div>
                                 </TableCell>
+                                 
+                               </>
                               );
                             })}
 
                             {/* <button>Edit</button> */}
+                            
                           </TableRow>
                         );
                       })}
