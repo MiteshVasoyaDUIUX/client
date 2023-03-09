@@ -8,6 +8,8 @@ import { fetchProduct } from "../features/product/productSlice";
 
 //MaterialUI Components import...
 import {
+  ImageList,
+  ImageListItem,
   Paper,
   Table,
   TableBody,
@@ -172,14 +174,43 @@ function AllProduct() {
                             sx={{ margin: "2px", padding: "0px" }}
                             style={{ height: "150px" }}
                           >
-                            {  columns.map((column) => {
-                              
-                              
+                            {columns.map((column) => {
                               const value = row[column.id];
-                              const status = column.prodQuantity;
+
+                              const quantity = row.prodQuantity;
+                              let status = "";
+                              const images = row.prodImage;
+                              if (quantity < 5) {
+                                status = "Low Stock";
+                              } else if (quantity === 0) {
+                                status = "Out Of Stock";
+                              } else {
+                                status = "Active";
+                              }
+
                               return (
                                 <TableCell key={column.id} align={column.align}>
-                                  {column.id === "prodStatus" ? "a" : value}
+                                  {column.id === "prodImage" ? (
+                                    <ImageList
+                                      sx={{ width: 230, height: 200 }}
+                                      cols={3}
+                                      rowHeight={50}
+                                    >
+                                      {images.map((item) => (
+                                        <ImageListItem key={item.img}>
+                                          <img
+                                            src = {item}
+                                            alt = {item}
+                                            loading="lazy"
+                                          />
+                                        </ImageListItem>
+                                      ))}
+                                    </ImageList>
+                                  ) : column.id === "prodStatus" ? (
+                                    status
+                                  ) : (
+                                    value
+                                  )}
                                 </TableCell>
                               );
                             })}
