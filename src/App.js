@@ -13,8 +13,8 @@ import AddProduct from "./pages/AddProduct";
 import AllUser from "./pages/AllUser";
 import AllProduct from "./pages/AllProduct";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
+import "react-toastify/dist/ReactToastify.css";
+import EditProduct from "./pages/EditProduct";
 
 function App() {
   return (
@@ -32,6 +32,8 @@ function App() {
             <Route path="/admin/addproduct" element={<AddProduct />} />
             <Route path="/admin/allproduct" element={<AllProduct />} />
             <Route path="/admin/alluser" element={<AllUser />} />
+            <Route path="/admin/editproduct" element={<EditProduct />} />
+            <Route path="/admin/profile" element={<EditProduct />} />
             <Route path="/logout" />
           </Routes>
         </div>

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5555";
 
-const API_URL_TO_REMOVE_PRODUCT = "/products";
+const API_URL_TO_REMOVE_PRODUCT = "http://localhost:5555/admin/product";
 
 const uploadProduct = async (productData, token) => {
   const config = {
@@ -35,9 +35,37 @@ const fetchProduct = async (productData, token) => {
   return response.data;
 };
 
+const removeProduct = async (productId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.delete(API_URL_TO_REMOVE_PRODUCT + productId, config);
+
+  // console.log("Response : ", response.data);
+  return response.data;
+};
+
+const updateProduct = async (productData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(API_URL + "/admin/product/" + productData.productId, productData, config);
+
+  // console.log("Response : ", response.data);
+  return response.data;
+};
+
 const productService = {
   uploadProduct,
   fetchProduct,
+  removeProduct,
+  updateProduct
 };
 
 export default productService;

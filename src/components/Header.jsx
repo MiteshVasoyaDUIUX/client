@@ -18,7 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
 
 const pagesForAdmin = ["Dashboard", "Add Product", "All Products", "All Users"];
-const options = ["Cart", "My Orders", "Logout"];
+const optionsForClient = ["Cart", "My Orders", "Logout"];
+const optionsForAdmin = ["Profile", "Logout"];
 const optionIfNotLoggedIn = ["Login", "Register"];
 
 function Header() {
@@ -98,104 +99,123 @@ function Header() {
             <Button></Button>
           </Box>
 
-
-            {user ? (
-              user.role === "admin" ? (
-                <>
-                  <Box
-                    sx={{ flexGrow: 50, display: { xs: "none", md: "flex" } }}
+          {user ? (
+            user.role === "admin" ? (
+              <>
+                <Box sx={{ flexGrow: 50, display: { xs: "none", md: "flex" } }}>
+                  <Button
+                    key={pagesForAdmin[0]}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
                   >
-                    <Button
-                      key={pagesForAdmin[0]}
-                      onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: "white", display: "block" }}
+                    <Link
+                      style={{ textDecoration: "None", color: "white " }}
+                      to="/"
                     >
-                      <Link
-                        style={{ textDecoration: "None", color: "white " }}
-                        to="/"
-                      >
-                        {pagesForAdmin[0]}
-                      </Link>
-                    </Button>
-                    <Button
-                      key={pagesForAdmin[1]}
-                      onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: "white", display: "block" }}
-                    >
-                      <Link
-                        style={{ textDecoration: "None", color: "white " }}
-                        to="/admin/addproduct"
-                      >
-                        {pagesForAdmin[1]}
-                      </Link>
-                    </Button>
-                    <Button
-                      key={pagesForAdmin[2]}
-                      onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: "white", display: "block" }}
-                    >
-                      <Link
-                        style={{ textDecoration: "None", color: "white " }}
-                        to="/admin/allproduct"
-                      >
-                        {pagesForAdmin[2]}
-                      </Link>
-                    </Button>
-                    <Button
-                      key={pagesForAdmin[3]}
-                      onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: "white", display: "block" }}
-                    >
-                      <Link
-                        style={{ textDecoration: "None", color: "white " }}
-                        to="/admin/alluser"
-                      >
-                        {pagesForAdmin[3]}
-                      </Link>
-                    </Button>
-                  </Box>
-                </>
-              ) : (
-                <>
-                  <Box
-                    sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+                      {pagesForAdmin[0]}
+                    </Link>
+                  </Button>
+                  <Button
+                    key={pagesForAdmin[1]}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
                   >
-                    <Button disabled></Button>
-                  </Box>
-                </>
-              )
+                    <Link
+                      style={{ textDecoration: "None", color: "white " }}
+                      to="/admin/addproduct"
+                    >
+                      {pagesForAdmin[1]}
+                    </Link>
+                  </Button>
+                  <Button
+                    key={pagesForAdmin[2]}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    <Link
+                      style={{ textDecoration: "None", color: "white " }}
+                      to="/admin/allproduct"
+                    >
+                      {pagesForAdmin[2]}
+                    </Link>
+                  </Button>
+                  <Button
+                    key={pagesForAdmin[3]}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    <Link
+                      style={{ textDecoration: "None", color: "white " }}
+                      to="/admin/alluser"
+                    >
+                      {pagesForAdmin[3]}
+                    </Link>
+                  </Button>
+                </Box>
+              </>
             ) : (
               <>
                 <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                   <Button disabled></Button>
                 </Box>
               </>
-            )}
+            )
+          ) : (
+            <>
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                <Button disabled></Button>
+              </Box>
+            </>
+          )}
 
           <Box sx={{ flexGrow: 0 }}>
             {user ? (
               user.role === "admin" ? (
                 <>
-                  <MenuItem
-                    key={options[2]}
-                    onClick={handleCloseUserMenu}
-                    style={{
-                      border: "2px solid white",
-                      fontSize: "15px",
-                      paddingTop: "6px",
+                  <Tooltip>
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar alt="No Image" src="#" />
+                    </IconButton>
+                  </Tooltip>{" "}
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
                     }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
                   >
-                    <Link
-                      style={{
-                        textDecoration: "None",
-                        color: "white",
-                        padding: "5px",
-                      }}
-                      onClick={onLogout}
+                    <MenuItem
+                      key={optionsForAdmin[0]}
+                      onClick={handleCloseUserMenu}
                     >
-                      {options[2]}
-                    </Link>
-                  </MenuItem>
+                      <Link
+                        style={{ textDecoration: "None", color: "black" }}
+                        to="/admin/profile"
+                      >
+                        {optionsForAdmin[0]}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem
+                      key={optionsForAdmin[1]}
+                      onClick={handleCloseUserMenu}
+                    >
+                      <Link
+                        style={{ textDecoration: "None", color: "black" }}
+                        onClick={onLogout}
+                      >
+                        {optionsForAdmin[1]}
+                      </Link>
+                    </MenuItem>
+                  </Menu>
                 </>
               ) : (
                 <>
@@ -220,28 +240,37 @@ function Header() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    <MenuItem key={options[0]} onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      key={optionsForClient[0]}
+                      onClick={handleCloseUserMenu}
+                    >
                       <Link
                         style={{ textDecoration: "None", color: "black" }}
                         to="/cart"
                       >
-                        {options[0]}
+                        {optionsForClient[0]}
                       </Link>
                     </MenuItem>
-                    <MenuItem key={options[1]} onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      key={optionsForClient[1]}
+                      onClick={handleCloseUserMenu}
+                    >
                       <Link
                         style={{ textDecoration: "None", color: "black" }}
                         to="/myorders"
                       >
-                        {options[1]}
+                        {optionsForClient[1]}
                       </Link>
                     </MenuItem>
-                    <MenuItem key={options[2]} onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      key={optionsForClient[2]}
+                      onClick={handleCloseUserMenu}
+                    >
                       <Link
                         style={{ textDecoration: "None", color: "black" }}
                         onClick={onLogout}
                       >
-                        {options[2]}
+                        {optionsForClient[2]}
                       </Link>
                     </MenuItem>
                   </Menu>

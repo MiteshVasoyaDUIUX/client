@@ -4,7 +4,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { fetchProduct } from "../features/product/productSlice";
+import { useNavigate } from "react-router-dom";
+import {
+  fetchProduct,
+  removeProduct,
+  updateProduct,
+  reset
+} from "../features/product/productSlice";
 
 //MaterialUI Components import...
 import {
@@ -19,69 +25,74 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Button,
 } from "@mui/material";
+
+import DeleteIcon from "@mui/icons-material/DeleteRounded";
+import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
+import { margin } from "@mui/system";
 
 const columns = [
   {
     id: "prodImage",
     label: "Image",
-    width: "120px",
+    width: "15%",
     imageHeight: "200px",
     align: "center",
   },
   {
     id: "prodStatus",
     label: "Status",
-    width: "60px",
+    width: "8%",
     align: "center",
   },
   {
     id: "prodName",
     label: "Name",
-    width: "220px",
+    width: "13%",
     align: "center",
   },
   {
     id: "prodDesc",
     label: "Description",
-    width: "220px",
+    width: "19%",
     align: "center",
   },
   {
     id: "prodCategory",
     label: "Category",
-    width: "120px",
+    width: "6%",
     align: "center",
   },
   {
     id: "prodQuantity",
     label: "Quantity",
-    width: "120px",
-    align: "right",
+    width: "6%",
+    align: "center",
   },
   {
     id: "prodPrice",
-    label: "Price(₹)",
-    width: "120px",
+    label: "Price (₹)",
+    width: "5%",
     align: "right",
   },
   {
     id: "discount",
-    label: "Discount(%)",
-    width: "120px",
+    label: "Discount (%)",
+    width: "6%",
     align: "center",
   },
   {
     id: "rating",
     label: "Rating",
-    width: "120px",
+    width: "5%",
     align: "center",
   },
   {
     id: "deliveryType",
     label: "Delivery Type",
-    width: "120px",
+    width: "8%",
     align: "center",
   },
   // {
@@ -91,6 +102,122 @@ const columns = [
   //   align: 'right',
   // },
 ];
+
+function Row(props) {
+  const { row } = props;
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleEditButton = () => {
+    // console.log("Edit Button Clicked", row);
+    const state = row;
+    // console.log("State ", state);
+    navigate("/admin/editproduct/", { state });
+    // dispatch(updateProduct(row._id));
+  };
+  const handleRemoveButton = () => {
+    console.log("Remove Button Clicked", row._id);
+    dispatch(removeProduct(row._id));
+  };
+
+  return (
+    <TableRow
+      hover
+      role="checkbox"
+      tabIndex={-1}
+      key={row}
+      sx={{
+        margin: "2px",
+        padding: "10px",
+        height: "10px",
+      }}
+    >
+      {columns.map((column) => {
+        const value = row[column.id];
+
+        const quantity = row.prodQuantity;
+        let status = "";
+        const images = row.prodImage;
+        if (quantity < 5) {
+          status = "Low Stock";
+        } else if (quantity === 0) {
+          status = "Out Of Stock";
+        } else {
+          status = "Active";
+        }
+
+        return (
+          <>
+            <TableCell key={column.id} align={column.align}>
+              <div
+                style={{
+                  whiteSpace: "wrap",
+                  textOverflow: "ellipsis",
+                  overflow: "clip",
+                  height: "100px",
+                  margin: "10",
+                }}
+              >
+                {column.id === "prodImage" ? (
+                  <ImageList
+                    sx={{ width: 200, height: "100px" }}
+                    cols={1}
+                    rowHeight="auto"
+                  >
+                    {images.map((item) => (
+                      <ImageListItem key={item}>
+                        <img src={item} alt={item} loading="lazy" />
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
+                ) : column.id === "prodStatus" ? (
+                  status
+                ) : (
+                  value
+                )}
+              </div>
+            </TableCell>
+          </>
+        );
+      })}
+      <TableCell>
+        <div>
+          {/* <Link to="/admin/updateproduct" style={{
+            textDecoration: "none",
+          }}> */}
+          <Button
+            variant="outlined"
+            startIcon={<EditIcon />}
+            style={{
+              width: "100px",
+              margin: "3px",
+              textDecoration: "none",
+            }}
+            onClick={handleEditButton}
+          >
+            Edit
+          </Button>
+          {/* </Link> */}
+        </div>
+        <div>
+          <Button
+            variant="outlined"
+            startIcon={<DeleteIcon />}
+            style={{
+              width: "100px",
+              margin: "3px",
+            }}
+            color="error"
+            onClick={handleRemoveButton}
+          >
+            Delete
+          </Button>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
 
 function AllProduct() {
   const dispatch = useDispatch();
@@ -121,6 +248,8 @@ function AllProduct() {
     if (products) {
       dispatch(fetchProduct());
     }
+
+    dispatch(reset());
   }, [dispatch]);
 
   if (isLoading) {
@@ -157,6 +286,9 @@ function AllProduct() {
                           {column.label}
                         </TableCell>
                       ))}
+                      <TableCell
+                        style={{ borderBottom: "1px solid black" }}
+                      ></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -166,75 +298,7 @@ function AllProduct() {
                         page * rowsPerPage + rowsPerPage
                       )
                       .map((row) => {
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={row}
-                            sx={{
-                              margin: "2px",
-                              padding: "10px",
-                              height: "10px",
-                            }}
-                          >
-                            {columns.map((column) => {
-                              const value = row[column.id];
-
-                              const quantity = row.prodQuantity;
-                              let status = "";
-                              const images = row.prodImage;
-                              if (quantity < 5) {
-                                status = "Low Stock";
-                              } else if (quantity === 0) {
-                                status = "Out Of Stock";
-                              } else {
-                                status = "Active";
-                              }
-
-                              return (
-                                <>
-                                <TableCell key={column.id} align={column.align}>
-                                  <div
-                                    style={{
-                                      whiteSpace: "wrap",
-                                      textOverflow: "ellipsis",
-                                      overflow : "clip",
-                                      height : "60px"
-                                    }}
-                                  >
-                                    {column.id === "prodImage" ? (
-                                      <ImageList
-                                        sx={{ width: 230, height: 80 }}
-                                        cols={3}
-                                        rowHeight={50}
-                                      >
-                                        {images.map((item) => (
-                                          <ImageListItem key={item}>
-                                            <img
-                                              src={item}
-                                              alt={item}
-                                              loading="lazy"
-                                            />
-                                          </ImageListItem>
-                                        ))}
-                                      </ImageList>
-                                    ) : column.id === "prodStatus" ? (
-                                      status
-                                    ) : (
-                                      value
-                                    )}
-                                  </div>
-                                </TableCell>
-                                 
-                               </>
-                              );
-                            })}
-
-                            {/* <button>Edit</button> */}
-                            
-                          </TableRow>
-                        );
+                        return <Row row={row}></Row>;
                       })}
                   </TableBody>
                 </Table>

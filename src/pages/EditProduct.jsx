@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   FormGroup,
   FormControl,
@@ -13,67 +15,18 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
-import { uploadProduct, reset } from "../features/product/productSlice";
+import { updateProduct, reset } from "../features/product/productSlice";
+import { toast } from "react-toastify";
 
-function AddProduct() {
+function EditProduct() {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [productData, setProductData] = useState({
-    prodName: "",
-    prodDesc: "",
-    prodCategory: "",
-    prodQuantity: "",
-    prodPrice: "",
-    prodImage: [],
-  });
+  const formData = location.state;
 
-  const [selectedCategory, setSelectedCategory] = useState("Select Category");
-
-  const { products, isError, isLoading, isSuccess, message } = useSelector(
-    (state) => state.product
-  );
-
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
-
-    if (isSuccess) {
-      toast.success("Product Added Successfully", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
-      });
-
-      setProductData({
-        prodName: "",
-        prodDesc: "",
-        prodCategory: "",
-        prodQuantity: "",
-        prodPrice: "",
-        prodImage: [],
-      });
-
-      setSelectedCategory("Select Category");
-      setImage([]);
-    }
-
-    dispatch(reset());
-  }, [isSuccess, isError, message, navigate, dispatch]);
-
-  if (isLoading) {
-    //Add Spinner...
-  }
-
+  //Print form data...
+//     console.log("Form Data : ", formData);
   const categories = [
     "Select Category",
     "Cloths",
@@ -82,9 +35,32 @@ function AddProduct() {
     "Other",
   ];
 
-  const [image, setImage] = useState([]);
+  //Initial Data to get filled form...
+  const [productData, setProductData] = useState({
+    productId: formData._id,
+    prodName: formData.prodName,
+    prodDesc: formData.prodDesc,
+    prodCategory: formData.prodCategory,
+    prodQuantity: formData.prodQuantity,
+    prodPrice: formData.prodPrice,
+    prodImage: formData.prodImage,
+  });
+
+  const [image, setImage] = useState(formData.prodImage);
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    formData.prodCategory
+  );
+  const { products, isError, isLoading, isUpdated, message } = useSelector(
+    (state) => state.product
+  );
+
+  if (isLoading) {
+    //Add Spinner...
+  }
 
   const {
+    productId,
     prodName,
     prodDesc,
     prodCategory,
@@ -93,11 +69,14 @@ function AddProduct() {
     prodImage,
   } = productData;
 
+//   console.log("Prod Id : ", productId);
   const handleChanges = (e) => {
     setProductData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
+
+    //     console.log(productData);
   };
 
   const handleImageChange = (e) => {
@@ -128,9 +107,9 @@ function AddProduct() {
     e.preventDefault();
 
     // const url = URL.createObjectURL(image[0].slice(5));
-    console.log("URL.createObjectURL : ", image.files);
 
     const productData = {
+      productId,
       prodName,
       prodDesc,
       prodCategory: selectedCategory,
@@ -138,16 +117,44 @@ function AddProduct() {
       prodPrice,
       prodImage: image,
     };
-    // console.log("In Product Upload Page...", productData);
-    dispatch(uploadProduct(productData));
+
+//     console.log("New Data : ", productData);
+    // console.log("In Product Update Page...", productData);
+    dispatch(updateProduct(productData));
   };
+
+  useEffect(() => {
+      if (isError) {
+        toast.error(message);
+      }
+  
+      if (isUpdated) {
+        toast.success("Product Updated Successfully", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+  
+  
+        navigate("/admin/allproduct");
+      }
+  
+      dispatch(reset());
+    }, [isUpdated, isError, message, navigate, dispatch]);
+
+  //   console.log("Data : ", formData);
 
   return (
     <div className="addproductform">
       <h1
         style={{
           textAlign: "center",
-          marginTop: "70px",
+          marginTop: "80px",
           marginLeft: "auto",
           marginRight: "auto",
           padding: "20px",
@@ -158,7 +165,7 @@ function AddProduct() {
           backgroundColor: "white",
         }}
       >
-        Add Product
+        Update Product Details
       </h1>
       <form>
         <FormGroup
@@ -202,13 +209,13 @@ function AddProduct() {
           </FormControl>
           <br />
           {/* <TextField
-              type="text"
-              value={prodCategory}
-              onChange={handleChanges}
-              name="prodCategory"
-              placeholder="Product Category"
-              required
-            /> */}
+                type="text"
+                value={prodCategory}
+                onChange={handleChanges}
+                name="prodCategory"
+                placeholder="Product Category"
+                required
+              /> */}
 
           <Select
             value={selectedCategory}
@@ -306,4 +313,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default EditProduct;

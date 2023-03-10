@@ -7,7 +7,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
-  isFetched : false,
+  isFetched: false,
   message: "",
 };
 
@@ -33,12 +33,51 @@ export const uploadProduct = createAsyncThunk(
 
 export const fetchProduct = createAsyncThunk(
   "prouduct/fetch",
+  async (productId, thunkAPI) => {
+    try {
+      //'token' may be not use because only user can add the goal...
+      const token = thunkAPI.getState().auth.user.token;
+
+      return await productService.fetchProduct(productId, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const removeProduct = createAsyncThunk(
+  "prouduct/remove",
   async (productData, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
 
-      return await productService.fetchProduct(productData, token);
+      return await productService.removeProduct(productData, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "prouduct/edit",
+  async (productData, thunkAPI) => {
+    try {
+      //'token' may be not use because only user can add the goal...
+      const token = thunkAPI.getState().auth.user.token;
+      return await productService.updateProduct(productData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -80,32 +119,39 @@ const productSlice = createSlice({
         state.isFetch = true;
         state.isLoading = false;
         state.products = action.payload;
-        // console.log("New State : ", initialState.products);
       })
       .addCase(fetchProduct.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
         state.message = action.payload;
+      })
+      .addCase(removeProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(removeProduct.fulfilled, (state, action) => {
+        state.isProductRemoved = true;
+        state.isLoading = false;
+        state.products = state.products.filter(
+          (product) => product._id !== action.payload._id
+        );
+      })
+      .addCase(removeProduct.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.isUpdated = true;
+        state.isLoading = false;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.message = action.payload;
       });
-    // .addCase(removeProduct.pending, (state) => {
-    //   state.isLoading = true;
-    // })
-    // .addCase(removeProduct.fulfilled, (state, action) => {
-    //   state.isSuccess = true;
-    //   state.isLoading = false;
-    //   state.products = state.products.filter(
-    //     (goal) => goal._id !== action.payload._id
-    //   );
-    //   // console.log("New State : ", state.products);
-    //   // console.log("Action Payload : ", action.payload._id);
-    //   // console.log("Goal Id : ", goal._id);
-    // })
-    // .addCase(removeProduct.rejected, (state, action) => {
-    //   state.isError = true;
-    //   state.isError = false;
-    //   state.isLoading = false;
-    //   state.message = action.payload;
-    // });
   },
 });
 
