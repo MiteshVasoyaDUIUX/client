@@ -9,7 +9,7 @@ import {
   fetchProduct,
   removeProduct,
   updateProduct,
-  reset
+  reset,
 } from "../features/product/productSlice";
 
 //MaterialUI Components import...
@@ -32,6 +32,7 @@ import DeleteIcon from "@mui/icons-material/DeleteRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
+import {GridLoader} from "react-spinners"
 
 const columns = [
   {
@@ -222,7 +223,7 @@ function Row(props) {
 function AllProduct() {
   const dispatch = useDispatch();
 
-  const { products, isLoading, isFetched, isError, message } = useSelector(
+  const { products, isLoading, isFetched,isFetching, isError, message } = useSelector(
     (state) => state.product
   );
 
@@ -252,8 +253,20 @@ function AllProduct() {
     dispatch(reset());
   }, [dispatch]);
 
-  if (isLoading) {
-    return;
+  if (isLoading || isFetching) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "48%",
+          transform: "translate(0, -50%)",
+          padding: "10px",
+        }}
+      >
+        <GridLoader color="#437b9f" speedMultiplier="0.75" />
+      </div>
+    );
   }
 
   return (

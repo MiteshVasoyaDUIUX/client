@@ -32,7 +32,7 @@ export const uploadProduct = createAsyncThunk(
 );
 
 export const fetchProduct = createAsyncThunk(
-  "prouduct/fetch",
+  "product/fetch",
   async (productId, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
@@ -52,7 +52,7 @@ export const fetchProduct = createAsyncThunk(
 );
 
 export const removeProduct = createAsyncThunk(
-  "prouduct/remove",
+  "product/remove",
   async (productData, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
@@ -72,7 +72,7 @@ export const removeProduct = createAsyncThunk(
 );
 
 export const updateProduct = createAsyncThunk(
-  "prouduct/edit",
+  "product/edit",
   async (productData, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
@@ -114,15 +114,18 @@ const productSlice = createSlice({
       })
       .addCase(fetchProduct.pending, (state) => {
         state.isLoading = true;
+        state.isFetching = true;
+        state.isFetched = false;
       })
       .addCase(fetchProduct.fulfilled, (state, action) => {
-        state.isFetch = true;
-        state.isLoading = false;
+        state.isFetched = true;
+        state.isFetching = false;
         state.products = action.payload;
       })
       .addCase(fetchProduct.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
+        state.isFetching = false;
         state.message = action.payload;
       })
       .addCase(removeProduct.pending, (state) => {
