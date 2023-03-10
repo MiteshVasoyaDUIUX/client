@@ -32,7 +32,7 @@ export const fetchUsers = createAsyncThunk(
 );
 
 export const fetchOrderUserwise = createAsyncThunk(
-  "user/products/fetch",
+  "user/orders/fetch",
   async (userId, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
@@ -60,29 +60,29 @@ const usersSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
-        state.isLoading = true;
+        state.isUserFetching = true;
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.isFetched = true;
-        state.isLoading = false;
+        state.isUsersFetched = true;
+        state.isUserFetching = false;
         state.users = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.isError = true;
-        state.isLoading = false;
+        state.isUserFetching = false;
         state.message = action.payload;
       })
       .addCase(fetchOrderUserwise.pending, (state) => {
-        state.isLoading = true;
+        state.isOrderFetching = true;
       })
       .addCase(fetchOrderUserwise.fulfilled, (state, action) => {
         state.isOrdersFetched = true;
-        state.isLoading = false;
+        state.isOrderFetching = false;
         state.ordersUserwise = action.payload;
       })
       .addCase(fetchOrderUserwise.rejected, (state, action) => {
         state.isError = true;
-        state.isLoading = false;
+        state.isOrderFetching = false;
         state.message = action.payload;
       });
   },

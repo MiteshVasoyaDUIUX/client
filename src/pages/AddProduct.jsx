@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { uploadProduct, reset } from "../features/product/productSlice";
+import { GridLoader } from "react-spinners";
 
 function AddProduct() {
   const dispatch = useDispatch();
@@ -30,8 +31,9 @@ function AddProduct() {
     prodPrice: "",
     prodImage: [],
   });
-
   const [selectedCategory, setSelectedCategory] = useState("Select Category");
+  const [image, setImage] = useState([]);
+
 
   const { products, isError, isLoading, isSuccess, message } = useSelector(
     (state) => state.product
@@ -71,7 +73,19 @@ function AddProduct() {
   }, [isSuccess, isError, message, navigate, dispatch]);
 
   if (isLoading) {
-    //Add Spinner...
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left : "48%",
+          transform: "translate(0, -50%)",
+          padding: "10px",
+        }}
+      >
+        <GridLoader color="#437b9f" speedMultiplier="0.75"/>
+      </div>
+    );
   }
 
   const categories = [
@@ -82,7 +96,6 @@ function AddProduct() {
     "Other",
   ];
 
-  const [image, setImage] = useState([]);
 
   const {
     prodName,

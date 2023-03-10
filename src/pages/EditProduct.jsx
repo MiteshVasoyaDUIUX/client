@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { updateProduct, reset } from "../features/product/productSlice";
 import { toast } from "react-toastify";
+import { GridLoader } from "react-spinners";
 
 function EditProduct() {
   const location = useLocation();
@@ -26,7 +27,7 @@ function EditProduct() {
   const formData = location.state;
 
   //Print form data...
-//     console.log("Form Data : ", formData);
+  //     console.log("Form Data : ", formData);
   const categories = [
     "Select Category",
     "Cloths",
@@ -46,17 +47,53 @@ function EditProduct() {
     prodImage: formData.prodImage,
   });
 
-  const [image, setImage] = useState(formData.prodImage);
-
   const [selectedCategory, setSelectedCategory] = useState(
     formData.prodCategory
   );
+
+  const [image, setImage] = useState(formData.prodImage);
+
   const { products, isError, isLoading, isUpdated, message } = useSelector(
     (state) => state.product
   );
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isUpdated) {
+      toast.success("Product Updated Successfully", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+
+      navigate("/admin/allproduct");
+    }
+
+    dispatch(reset());
+  }, [isUpdated, isError, message, navigate, dispatch]);
+
   if (isLoading) {
-    //Add Spinner...
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "48%",
+          transform: "translate(0, -50%)",
+          padding: "10px",
+        }}
+      >
+        <GridLoader color="#437b9f" speedMultiplier="0.75" />
+      </div>
+    );
   }
 
   const {
@@ -69,7 +106,7 @@ function EditProduct() {
     prodImage,
   } = productData;
 
-//   console.log("Prod Id : ", productId);
+  //   console.log("Prod Id : ", productId);
   const handleChanges = (e) => {
     setProductData((prevState) => ({
       ...prevState,
@@ -118,34 +155,10 @@ function EditProduct() {
       prodImage: image,
     };
 
-//     console.log("New Data : ", productData);
+    //     console.log("New Data : ", productData);
     // console.log("In Product Update Page...", productData);
     dispatch(updateProduct(productData));
   };
-
-  useEffect(() => {
-      if (isError) {
-        toast.error(message);
-      }
-  
-      if (isUpdated) {
-        toast.success("Product Updated Successfully", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
-  
-  
-        navigate("/admin/allproduct");
-      }
-  
-      dispatch(reset());
-    }, [isUpdated, isError, message, navigate, dispatch]);
 
   //   console.log("Data : ", formData);
 

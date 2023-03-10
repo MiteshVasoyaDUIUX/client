@@ -23,6 +23,7 @@ import { TablePagination } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 import { ErrorBoundary } from "../components/ErrorBoundary";
+import { GridLoader } from "react-spinners";
 
 const columns = [
   {
@@ -222,8 +223,15 @@ function Row(props) {
 function AllUser() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const { users, ordersUserwise, isLoading, isFetched, isError, message } =
-    useSelector((state) => state.user);
+  const {
+    users,
+    ordersUserwise,
+    isUserFetching,
+    isOrderFetching,
+    isUsersFetched,
+    isError,
+    message,
+  } = useSelector((state) => state.user);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -251,9 +259,20 @@ function AllUser() {
     }
   }, [dispatch, isError, message]);
 
-  if (isLoading) {
-    //Add Spinner...
-    return;
+  if (isUserFetching || isOrderFetching) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left : "48%",
+          transform: "translate(0, -50%)",
+          padding: "10px",
+        }}
+      >
+        <GridLoader color="#437b9f" speedMultiplier="0.75"/>
+      </div>
+    );
   }
   return (
     <section className="content" style={{ marginTop: "140px" }}>
