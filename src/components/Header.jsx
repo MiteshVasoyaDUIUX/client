@@ -33,7 +33,7 @@ function Header() {
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
-    navigate("/");
+    console.log("OnLogOUT");
   };
 
   const handleOpenNavMenu = (event) => {

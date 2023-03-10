@@ -11,8 +11,12 @@ function Dashboard() {
   const { user, isError, message } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
+
     if (!user) {
-      navigate("/login");
+      navigate("/");
     }
 
     if (user) {
@@ -32,7 +36,11 @@ function Dashboard() {
     };
   }, [user, isError, message, navigate, dispatch]);
 
-  return <></>;
+  return (
+    <>
+      
+    </>
+  );
 }
 
 export default Dashboard;
