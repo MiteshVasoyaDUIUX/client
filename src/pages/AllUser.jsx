@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import { TablePagination } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 const columns = [
   {
@@ -57,17 +58,18 @@ const columns = [
 ];
 
 const subColumns = [
+  // {
+  //   id: "userId",
+  //   label: "userId",
+  //   width: "120px",
+  //   align: "center",
+  // },
   {
-    id: "userId",
-    label: "userId",
+    id: "orderDate",
+    label: "Order Date",
     width: "120px",
     align: "center",
-  },
-  {
-    id: "quantity",
-    label: "Quantity",
-    width: "120px",
-    align: "center",
+    format: (value) => value.slice(0, 10),
   },
   {
     id: "status",
@@ -76,14 +78,21 @@ const subColumns = [
     align: "center",
   },
   {
+    id: "quantity",
+    label: "Quantity",
+    width: "120px",
+    align: "center",
+  },
+
+  {
     id: "price",
-    label: "price (₹)",
+    label: "Product Price (₹)",
     width: "120px",
     align: "center",
   },
   {
     id: "billAmount",
-    label: "Amount (₹)",
+    label: "Total Amount (₹)",
     width: "120px",
     align: "center",
   },
@@ -93,14 +102,39 @@ const subColumns = [
     width: "60px",
     align: "center",
   },
-
-  {
-    id: "orderDate",
-    label: "Order Date",
-    width: "120px",
-    align: "center",
-  },
 ];
+
+function OrderRow(props) {
+  const { order } = props;
+  const { userId } = props;
+  // console.log("Order Data : ", userId);
+
+  //Filtering Orders by User...
+
+  // eslint-disable-next-line no-lone-blocks
+
+  // eslint-disable-next-line no-unused-expressions
+  return userId === order.userId ? (
+    <TableRow
+      hover
+      role="checkbox"
+      tabIndex={-1}
+      key={order._id}
+      sx={{ margin: "2px", padding: "0px" }}
+    >
+      {subColumns.map((column) => {
+        const value = order[column.id];
+        return (
+          <TableCell align={column.align}>
+            {column.format ? column.format(value) : value}
+          </TableCell>
+        );
+      })}
+    </TableRow>
+  ) : (
+    ""
+  );
+}
 
 function Row(props) {
   const [open, setOpen] = useState(false);
@@ -111,20 +145,19 @@ function Row(props) {
   );
 
   const handleOrdersButton = () => {
-    const userId = { userId: row._id };
-    console.log(userId);
+    // console.log(userId);
     // Fetch Order of Particular User...
     setOpen(!open);
-    console.log("Orders : ", ordersUserwise[0]._id);
     // dispatch(fetchOrderUserwise({ userId }));
   };
+
   return (
     <>
       <TableRow
         hover
         role="checkbox"
         tabIndex={-1}
-        key={row.email}
+        key={row._id}
         sx={{ margin: "2px", padding: "0px" }}
       >
         {columns.map((column) => {
@@ -151,14 +184,14 @@ function Row(props) {
 
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
-          <Collapse in={!open} timeout="auto" unmountOnExit>
+          <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
                     {subColumns.map((column) => (
                       <TableCell
-                        key={column.name}
+                        key={column.id}
                         align={column.align}
                         style={{
                           width: column.width,
@@ -172,26 +205,10 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* add order details here par user... */}
-                  <TableRow key={row._id}>
-                    {subColumns.map((column) => {
-                      ordersUserwise.map((order) => {
-                        return (
-                          <TableCell
-                            key={column.name}
-                            align={column.align}
-                            style={{
-                              width: column.width,
-                              fontWeight: "bold",
-                              borderBottom: "1px solid black",
-                            }}
-                          >
-                            {column.label}
-                          </TableCell>
-                        );
-                      });
-                    })}
-                  </TableRow>
+                  {ordersUserwise.map((order) => {
+                    const userId = row._id;
+                    return <OrderRow order={order} userId={userId} />;
+                  })}
                 </TableBody>
               </Table>
             </Box>
@@ -257,7 +274,7 @@ function AllUser() {
                   <TableRow>
                     {columns.map((column) => (
                       <TableCell
-                        key={column.name}
+                        key={column._id}
                         align={column.align}
                         style={{
                           width: column.width,
