@@ -196,6 +196,7 @@ function Header() {
                     <MenuItem
                       key={optionsForAdmin[0]}
                       onClick={handleCloseUserMenu}
+                      disabled
                     >
                       <Link
                         style={{ textDecoration: "None", color: "black" }}
