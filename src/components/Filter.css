@@ -1,0 +1,10 @@
+.category-button {
+      border : 0px solid black;
+      width : 300px;
+      height:  30px;
+      margin: 1px;
+}
+
+#category-div-content {
+      margin-top: 10px;
+}

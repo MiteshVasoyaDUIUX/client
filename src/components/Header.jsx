@@ -52,7 +52,7 @@ function Header() {
   };
 
   return (
-    <AppBar position="fixed" style={{ backgroundColor: "#457b9d" }}>
+    <AppBar position="sticky" style={{ backgroundColor: "#457b9d" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -73,7 +73,7 @@ function Header() {
           >
             {/* Link  to Dashboard... */}
             {/* <Link style={{ textDecoration: "None", color: "white" }} to="/"> */}
-            LOGO
+            SHOP
             {/* </Link> */}
           </Typography>
 
@@ -93,7 +93,7 @@ function Header() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            SHOP
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button></Button>

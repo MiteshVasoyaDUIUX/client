@@ -160,7 +160,7 @@ function AddProduct() {
       <h1
         style={{
           textAlign: "center",
-          marginTop: "70px",
+          marginTop: "5px",
           marginLeft: "auto",
           marginRight: "auto",
           padding: "20px",

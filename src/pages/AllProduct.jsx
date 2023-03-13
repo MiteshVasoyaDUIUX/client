@@ -32,7 +32,7 @@ import DeleteIcon from "@mui/icons-material/DeleteRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
-import {GridLoader} from "react-spinners"
+import { GridLoader } from "react-spinners";
 
 const columns = [
   {
@@ -223,7 +223,7 @@ function Row(props) {
 function AllProduct() {
   const dispatch = useDispatch();
 
-  const { products, isLoading, isFetched,isFetching, isError, message } = useSelector(
+  const { products, isLoading, isFetching, isError, message } = useSelector(
     (state) => state.product
   );
 
@@ -250,10 +250,13 @@ function AllProduct() {
       dispatch(fetchProduct());
     }
 
-    dispatch(reset());
+    return() => {
+      dispatch(reset());
+    }
   }, [dispatch]);
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
+    // console.log("Fetching Products...");
     return (
       <div
         style={{
@@ -271,7 +274,7 @@ function AllProduct() {
 
   return (
     <>
-      <section className="content" style={{ marginTop: "140px" }}>
+      <section className="content" style={{ marginTop: "55px" }}>
         {products.length > 0 ? (
           <div className="product">
             <Paper

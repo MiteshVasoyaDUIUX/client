@@ -16,6 +16,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditProduct from "./pages/EditProduct";
 import EditAdminProfile from "./pages/EditAdminProfile";
+import MensWear from "./components/Products/MensWear";
+import OtherProducts from "./components/Products/OtherProducts";
+import Accessories from "./components/Products/Accessories";
 
 function App() {
   return (
@@ -35,6 +38,9 @@ function App() {
             <Route path="/admin/alluser" element={<AllUser />} />
             <Route path="/admin/editproduct" element={<EditProduct />} />
             <Route path="/admin/profile" element={<EditAdminProfile />} />
+            <Route path="/products/other" element={<OtherProducts />} />
+            <Route path="/products/accessories" element={<Accessories />} />
+            <Route path="/products/menswear" element={<MensWear />} />
             <Route path="/logout" />
           </Routes>
         </div>

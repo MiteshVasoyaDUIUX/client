@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, fetchOrderUserwise } from "../features/users/usersSlice";
+import { fetchUsers, fetchOrderUserwise, reset } from "../features/users/usersSlice";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -257,6 +257,10 @@ function AllUser() {
     if (ordersUserwise) {
       dispatch(fetchOrderUserwise());
     }
+
+    return() => {
+      dispatch(reset());
+    }
   }, [dispatch, isError, message]);
 
   if (isUserFetching || isOrderFetching) {
@@ -275,7 +279,7 @@ function AllUser() {
     );
   }
   return (
-    <section className="content" style={{ marginTop: "140px" }}>
+    <section className="content" style={{ marginTop: "55px" }}>
       {users.length > 0 ? (
         <div className="users">
           <Paper

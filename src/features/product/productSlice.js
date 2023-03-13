@@ -116,10 +116,12 @@ const productSlice = createSlice({
         state.isLoading = true;
         state.isFetching = true;
         state.isFetched = false;
+        state.message = "";
       })
       .addCase(fetchProduct.fulfilled, (state, action) => {
         state.isFetched = true;
         state.isFetching = false;
+        state.isLoading = false;
         state.products = action.payload;
       })
       .addCase(fetchProduct.rejected, (state, action) => {

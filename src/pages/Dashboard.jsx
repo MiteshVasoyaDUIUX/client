@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { reset } from "../features/auth/authSlice";
+import ItemsList from "../components/ItemsList";
+import ImageSlider from "../components/ImageSlider";
+import NewArrivals from "../components/DashboardComponents/NewArrivals";
+import TrandingProducts from "../components/DashboardComponents/TrendingProducts";
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -38,7 +42,9 @@ function Dashboard() {
 
   return (
     <>
-      
+      <ImageSlider />
+      <NewArrivals />
+      <TrandingProducts />
     </>
   );
 }
