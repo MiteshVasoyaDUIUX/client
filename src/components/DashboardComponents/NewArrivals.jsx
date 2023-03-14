@@ -9,6 +9,11 @@ import { Typography } from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import {IconButton} from "@mui/material";
+import {
+  fetchProduct,
+  reset,
+} from "../../features/productsForClient/productsForClientSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function CardA() {
   return (
@@ -63,6 +68,8 @@ function ProductCard() {
   );
 }
 function NewArrivals() {
+  const dispatch = useDispatch();
+  const {products} = useSelector((state) => state.productsForClient)
   return (
     <>
       <div>
