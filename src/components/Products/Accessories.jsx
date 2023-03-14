@@ -11,29 +11,51 @@ import { IconButton } from "@mui/material";
 import "./Accessories.css";
 import Filter from "../Filter";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { fetchProduct, reset } from "../../features/product/productSlice";
+import {
+  fetchProduct,
+  reset,
+} from "../../features/productsForClient/productsForClientSlice";
 
-function CardA() {
+function CardA({ product }) {
+  console.log("Products : CardA : ", product);
   return (
     <>
       <Card
         sx={{
-          maxWidth: 345,
+          maxWidth: 400,
           textAlign: "center",
           marginBottom: "30px",
-          marginRight: "15px",
+          marginRight: "30px",
+          border : "0.5px solid white",
+          boxShadow : "none",
+          borderRadius : "15px"
         }}
+        className= "product-card"
       >
         <CardMedia
           component="img"
           alt="green iguana"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
+          image={product.prodImage}
+          sx={{
+            height: "fitContent",
+            width: "fitContent",
+            minHeight : "300px",
+          }}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
+          <Typography
+            variant="h6"
+            component="div"
+            style={{
+              textAlign: "left",
+              overflow: "hidden",
+              whiteSpace: "wrap",
+              textOverflow: "ellipsis",
+              height: "60px",
+              marginBottom: "8px",
+            }}
+          >
+            {product.prodName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -52,26 +74,19 @@ function CardA() {
     </>
   );
 }
-function ProductCard() {
+function ProductCard({ products }) {
   return (
     <>
-      <Grid item xs={3}>
-        <CardA />
-      </Grid>
-      <Grid item xs={3}>
-        <CardA />
-      </Grid>
-      <Grid item xs={3}>
-        <CardA />
-      </Grid>
-      <Grid item xs={3}>
-        <CardA />
-      </Grid>
+      {products.map((product) => (
+        <Grid>
+          <CardA product={product} />
+        </Grid>
+      ))}
     </>
   );
 }
 
-function AccessoriesItems() {
+function AccessoriesItems({ products }) {
   return (
     <>
       <div>
@@ -83,7 +98,7 @@ function AccessoriesItems() {
       >
         <Grid container spacing={0}>
           <Grid container item spacing={0}>
-            <ProductCard />
+            <ProductCard products={products} />
           </Grid>
         </Grid>
       </div>
@@ -93,7 +108,9 @@ function AccessoriesItems() {
 
 function Accessories() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { products, isLoading, isError, message } = useSelector(
+    (state) => state.productsForClient
+  );
 
   useEffect(() => {
     if (isError) {
@@ -107,13 +124,8 @@ function Accessories() {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch]);
+  }, [isError, dispatch]);
 
-  const { products, isLoading, isError, message } = useSelector(
-    (state) => state.product
-  );
-
-  console.log("Products : ", products);
   const [priceSliderValue, setPriceSliderValue] = useState([100, 5000]);
   const [ratingValue, setRatingValue] = useState();
   const [PODEligibility, setPODEligibility] = useState(false);
@@ -134,8 +146,8 @@ function Accessories() {
           includeOutOfStock={includeOutOfStock}
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div style={{ marginLeft: "80px", width: "fitContent" }}>
-          <AccessoriesItems />
+        <div style={{ marginLeft: "100px", width: "fitContent" }}>
+          <AccessoriesItems products={products} />
         </div>
       </div>
     </>

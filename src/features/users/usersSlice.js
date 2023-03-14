@@ -15,9 +15,7 @@ export const fetchUsers = createAsyncThunk(
   "users/fetch",
   async (usersList, thunkAPI) => {
     try {
-      //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-
       return await usersService.fetchUsers(token);
     } catch (error) {
       const message =
@@ -35,7 +33,6 @@ export const fetchOrderUserwise = createAsyncThunk(
   "user/orders/fetch",
   async (userId, thunkAPI) => {
     try {
-      //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
 
       return await usersService.fetchOrderUserwise(userId, token);

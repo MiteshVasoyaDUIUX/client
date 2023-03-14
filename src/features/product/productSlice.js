@@ -35,7 +35,6 @@ export const fetchProduct = createAsyncThunk(
   "product/fetch",
   async (productId, thunkAPI) => {
     try {
-      //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
 
       return await productService.fetchProduct(productId, token);
