@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid } from "@mui/material";
 import { Card } from "@mui/material";
 import { CardActions } from "@mui/material";
@@ -8,7 +8,8 @@ import { Typography } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IconButton } from "@mui/material";
-import './OtherProducts.css';
+import "./OtherProducts.css";
+import Filter from "../Filter";
 
 function CardA() {
   return (
@@ -67,14 +68,13 @@ function ProductCard() {
   );
 }
 
-
-function OtherProducts() {
+function OtherProductsItem() {
   return (
     <>
       <div>
         <h1 id="other-products-title">
           {/* Add Title According to the Category of the Products... */}
-          Add Title According to the Category of the Products... 
+          Add Title According to the Category of the Products...
         </h1>
       </div>
       <div
@@ -86,6 +86,39 @@ function OtherProducts() {
             <ProductCard />
           </Grid>
         </Grid>
+      </div>
+    </>
+  );
+}
+
+function OtherProducts() {
+  const [priceSliderValue, setPriceSliderValue] = useState([100, 5000]);
+  const [ratingValue, setRatingValue] = useState();
+  const [PODEligibility, setPODEligibility] = useState(false);
+  const [discount, setDiscount] = useState();
+  const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+
+  // console.log("includeOutOfStock : ", includeOutOfStock);
+  // console.log("Discount : ", discount);
+
+  return (
+    <>
+      <div style={{ display: "flex" }}>
+        <Filter
+          priceSliderValue={priceSliderValue}
+          setPriceSliderValue={setPriceSliderValue}
+          ratingValue={ratingValue}
+          setRatingValue={setRatingValue}
+          PODEligibility={PODEligibility}
+          setPODEligibility={setPODEligibility}
+          discount={discount}
+          setDiscount={setDiscount}
+          includeOutOfStock={includeOutOfStock}
+          setIncludeOutOfStock={setIncludeOutOfStock}
+        />
+        <div style={{ marginLeft: "80px", width: "fitContent" }}>
+          <OtherProductsItem />
+        </div>
       </div>
     </>
   );

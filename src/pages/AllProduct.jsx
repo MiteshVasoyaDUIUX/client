@@ -250,9 +250,9 @@ function AllProduct() {
       dispatch(fetchProduct());
     }
 
-    return() => {
+    return () => {
       dispatch(reset());
-    }
+    };
   }, [dispatch]);
 
   if (isLoading) {

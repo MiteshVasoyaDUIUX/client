@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import { Card } from "@mui/material";
 import { CardActions } from "@mui/material";
@@ -10,6 +10,9 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IconButton } from "@mui/material";
 import "./Accessories.css";
 import Filter from "../Filter";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchProduct, reset } from "../../features/product/productSlice";
 
 function CardA() {
   return (
@@ -89,15 +92,53 @@ function AccessoriesItems() {
 }
 
 function Accessories() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isError) {
+      // toast.error(message);
+    }
+
+    if (products) {
+      dispatch(fetchProduct());
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]);
+
+  const { products, isLoading, isError, message } = useSelector(
+    (state) => state.product
+  );
+
+  console.log("Products : ", products);
+  const [priceSliderValue, setPriceSliderValue] = useState([100, 5000]);
+  const [ratingValue, setRatingValue] = useState();
+  const [PODEligibility, setPODEligibility] = useState(false);
+  const [discount, setDiscount] = useState();
+  const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
   return (
     <>
-    <div style={{display : "flex"}}>
-    <Filter />
-    <div style={{marginLeft : "80px", width : "fitContent"}}>
-    <AccessoriesItems />
-    </div>
-    </div>
+      <div style={{ display: "flex" }}>
+        <Filter
+          priceSliderValue={priceSliderValue}
+          setPriceSliderValue={setPriceSliderValue}
+          ratingValue={ratingValue}
+          setRatingValue={setRatingValue}
+          PODEligibility={PODEligibility}
+          setPODEligibility={setPODEligibility}
+          discount={discount}
+          setDiscount={setDiscount}
+          includeOutOfStock={includeOutOfStock}
+          setIncludeOutOfStock={setIncludeOutOfStock}
+        />
+        <div style={{ marginLeft: "80px", width: "fitContent" }}>
+          <AccessoriesItems />
+        </div>
+      </div>
     </>
-  )
+  );
 }
 export default Accessories;
