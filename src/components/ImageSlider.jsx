@@ -7,15 +7,15 @@ function ImageSlider() {
   const Array = [
     {
       url: "https://www.innermedia.co.uk/wp-content/uploads/2016/06/luxe.jpg",
-      link: "/products/other",
+      link: "/products/accessories",
     },
     {
       url: "https://wallpaperaccess.com/full/1448067.jpg",
-      link: "/products/menswear",
+      link: "/products/clothes",
     },
     {
       url: "https://media.istockphoto.com/id/689373484/photo/still-life-of-casual-man-modern-male-accessories-on-black.jpg?b=1&s=170667a&w=0&k=20&c=Wqrt6XlYrTyD9YjHKqBaWbFIhlEeJJrVOhwQbH4ggCs=",
-      link: "/products/accessories",
+      link: "/products/other",
     },
   ];
   return (

@@ -27,12 +27,10 @@ function Dashboard() {
       if (user.role === "admin") {
         navigate(`/admin?token=${user.token}`);
         console.log(`In ${user.token}  Panel :`);
-      } else if (user.role === "buyer") {
-        console.log("In Buyer Panel : ");
-        navigate(`/buyer?token=${user.token}`);
       } else {
-        throw new Error("Contact Admin For Access...");
-      }
+        // console.log("In Buyer Panel : ");
+        navigate(`/`);
+      } 
     }
 
     return () => {

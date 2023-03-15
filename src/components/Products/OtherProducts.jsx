@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import { Card } from "@mui/material";
 import { CardActions } from "@mui/material";
@@ -10,65 +10,23 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IconButton } from "@mui/material";
 import "./OtherProducts.css";
 import Filter from "../Filter";
+import ProductCard from "../ProductCard";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProduct, reset } from "../../features/productsForClient/productsForClientSlice";
 
-function CardA() {
+function ProductCards({ products }) {
   return (
     <>
-      <Card
-        sx={{
-          maxWidth: 345,
-          textAlign: "center",
-          marginBottom: "30px",
-          marginRight: "15px",
-        }}
-      >
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <IconButton>
-            <AddShoppingCartIcon />
-          </IconButton>
-          <IconButton>
-            <FavoriteBorderIcon />
-          </IconButton>
-        </CardActions>
-      </Card>
-    </>
-  );
-}
-function ProductCard() {
-  return (
-    <>
-      <Grid item xs={3}>
-        <CardA />
-      </Grid>
-      <Grid item xs={3}>
-        <CardA />
-      </Grid>
-      <Grid item xs={3}>
-        <CardA />
-      </Grid>
-      <Grid item xs={3}>
-        <CardA />
-      </Grid>
+      {products.map((product) => (
+        <Grid>
+          <ProductCard product={product} />
+        </Grid>
+      ))}
     </>
   );
 }
 
-function OtherProductsItem() {
+function OtherProductsItem({products}) {
   return (
     <>
       <div>
@@ -83,7 +41,7 @@ function OtherProductsItem() {
       >
         <Grid container spacing={0}>
           <Grid container item spacing={0}>
-            <ProductCard />
+            <ProductCards products={products}/>
           </Grid>
         </Grid>
       </div>
@@ -101,6 +59,25 @@ function OtherProducts() {
   // console.log("includeOutOfStock : ", includeOutOfStock);
   // console.log("Discount : ", discount);
 
+  const dispatch = useDispatch();
+  const { products, isLoading, isError, message } = useSelector(
+    (state) => state.productsForClient
+  );
+
+  useEffect(() => {
+    if (isError) {
+      // toast.error(message);
+    }
+
+    if (products) {
+      dispatch(fetchProduct());
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [isError, dispatch]);
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -117,7 +94,7 @@ function OtherProducts() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "80px", width: "fitContent" }}>
-          <OtherProductsItem />
+          <OtherProductsItem products={products}/>
         </div>
       </div>
     </>

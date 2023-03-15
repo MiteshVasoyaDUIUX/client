@@ -13,6 +13,7 @@ import { IconButton } from "@mui/material";
 export default function ProductCard({ product }) {
   const [wishlist, setWishlist] = useState(false);
   const [addToCart, setAddToCart] = useState(false);
+  // console.log("Products : ", product.prodImage);
   return (
     <>
       <Card
@@ -25,12 +26,13 @@ export default function ProductCard({ product }) {
           boxShadow: "none",
           borderRadius: "15px",
         }}
+        key = {product._id}
         className="product-card"
       >
         <CardMedia
           component="img"
           alt="green iguana"
-          image={product.prodImage}
+          image={product.prodImage[0]}
           sx={{
             height: "fitContent",
             width: "fitContent",
