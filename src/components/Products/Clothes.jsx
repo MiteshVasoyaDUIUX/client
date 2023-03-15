@@ -8,7 +8,7 @@ import { Typography } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IconButton } from "@mui/material";
-import "../Products/MensWear.css";
+import "../Products/Clothes.css";
 
 function CardA() {
   return (
@@ -67,7 +67,7 @@ function ProductCard() {
   );
 }
 
-function MensWear() {
+function Clothes() {
   return (
     <>
       <div>
@@ -87,4 +87,4 @@ function MensWear() {
   );
 }
 
-export default MensWear;
+export default Clothes;
