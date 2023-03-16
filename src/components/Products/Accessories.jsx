@@ -13,11 +13,126 @@ import "./Accessories.css";
 import Filter from "../Filter";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addToWishList,
   fetchProduct,
+  fetchWishList,
   reset,
 } from "../../features/productsForClient/productsForClientSlice";
-import ProductCard from "../ProductCard";
+import { toast } from "react-toastify";
 
+function ProductCard({ product }) {
+  const [wishList, setWishList] = useState(false);
+  const [addToCart, setAddToCart] = useState(false);
+  // console.log("Products : ", product.prodImage);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { wishlist } = useSelector((state) => state.productsForClient);
+  useEffect(() => {
+    if (user) {
+      const userId = user.user._id;
+      dispatch(fetchWishList(userId));
+    }
+  }, [user, dispatch]);
+
+  const handleCartButton = () => {
+    if (user) {
+      const productId = product._id;
+      const userData = user;
+      const userId = userData.user._id;
+      const data = {
+        userId,
+        productId,
+      };
+      console.log("Data : ", data);
+      dispatch(addToCart(data));
+    } else {
+      toast.error("Not Logged In");
+    }
+  };
+
+  const handleWishListButton = (e) => {
+    e.preventDefault();
+    if (user) {
+      setWishList(!wishList);
+      const productId = product._id;
+      const userData = user;
+      const userId = userData.user._id;
+      const data = {
+        userId,
+        productId,
+      };
+      console.log("Data : ", data);
+      dispatch(addToWishList(data));
+    } else {
+      toast.error("Not Logged In");
+    }
+  };
+
+  return (
+    <>
+      <Card
+        sx={{
+          maxWidth: 400,
+          textAlign: "center",
+          marginBottom: "30px",
+          marginRight: "30px",
+          border: "0.5px solid white",
+          boxShadow: "none",
+          borderRadius: "15px",
+        }}
+        key={product._id}
+        className="product-card"
+      >
+        <CardMedia
+          component="img"
+          alt="green iguana"
+          image={product.prodImage[0]}
+          sx={{
+            height: "fitContent",
+            width: "fitContent",
+            minHeight: "300px",
+          }}
+        />
+        <CardContent>
+          <Typography
+            variant="h6"
+            component="div"
+            style={{
+              textAlign: "left",
+              overflow: "hidden",
+              whiteSpace: "wrap",
+              textOverflow: "ellipsis",
+              height: "60px",
+              marginBottom: "8px",
+            }}
+          >
+            {product.prodName}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Lizards are a widespread group of squamate reptiles, with over 6,000
+            species, ranging across all continents except Antarctica
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <IconButton onClick={handleCartButton}>
+            {addToCart ? (
+              <AddShoppingCartIcon color="primary" />
+            ) : (
+              <AddShoppingCartIcon />
+            )}
+          </IconButton>
+          <IconButton onClick={handleWishListButton}>
+            {wishlist.includes(product._id) ? (
+              <FavouriteRoundedIcon color="error" />
+            ) : (
+              <FavoriteBorderIcon color="error" />
+            )}
+          </IconButton>
+        </CardActions>
+      </Card>
+    </>
+  );
+}
 
 function ProductCards({ products }) {
   return (
