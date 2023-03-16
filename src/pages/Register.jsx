@@ -97,13 +97,14 @@ export default function Register() {
           style={{
             textAlign: "center",
             marginTop: "70px",
+            marginBottom: "50px",
             marginLeft: "auto",
             marginRight: "auto",
             padding: "20px",
             fontFamily: "sans-serif",
-            borderBottom: "1px solid #457b9d",
+            borderBottom: "1px solid #000000",
             width: "fit-content",
-            color: "#457b9d",
+            color: "#000000",
             backgroundColor: "white",
           }}
         >
@@ -119,8 +120,8 @@ export default function Register() {
               paddingBottom: "110px",
               paddingLeft: "60px",
               paddingRight: "60px",
-              border: "1px solid #457b9d",
-              boxShadow: "7px 7px 29px 1px rgba(69, 123, 157, 0.6) ",
+              border: "1px solid #000000",
+              boxShadow: "7px 7px 29px 1px  rgba(50, 100, 100, 0.6) ",
               borderRadius: "30px",
               backgroundColor: "white",
             }}
@@ -181,7 +182,7 @@ export default function Register() {
             <br />
             <Button
               variant="contained"
-              style={{ backgroundColor: "#457b9d", color: "White" }}
+              style={{ backgroundColor: "#000000", color: "White", fontWeight : "bold", fontSize : "15px" }}
               onClick={handleSubmit}
             >
               Register

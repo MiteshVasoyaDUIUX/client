@@ -4,6 +4,7 @@ import productServiceForClient from "./productForClientReducer";
 
 const initialState = {
   products: [],
+  wishlist: [],
   isError: false,
   isFetching: false,
   isFetched: false,
@@ -31,15 +32,62 @@ export const fetchProduct = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "productsForClient/addToCart",
-  async (data, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
 
       const message = await productServiceForClient.addToCart(
+        userId,
+        token
+      );
+      // console.log("TOTKEOKE : ", message);
+      return message;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const addToWishList = createAsyncThunk(
+  "productsForClient/addToWishList",
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+
+      const message = await productServiceForClient.addToWishList(
         data,
         token
       );
       console.log("TOTKEOKE : ", message);
+      return message;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchWishList = createAsyncThunk(
+  "productsForClient/fetchWishList",
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+
+      const message = await productServiceForClient.fetchWishList(
+        data,
+        token
+      );
       return message;
     } catch (error) {
       const message =
@@ -95,6 +143,43 @@ const productForClientSlice = createSlice({
         state.isError = true;
         state.isAdding = false;
         state.isAdded = false;
+        state.message = action.payload;
+      })
+      .addCase(fetchWishList.pending, (state) => {
+        state.isError = false;
+        state.isFetchingWishList = true;
+        state.isFetchedWishList = false;
+        state.message = "";
+      })
+      .addCase(fetchWishList.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isFetchingWishList = false;
+        state.isFetchedWishList = true;
+        state.wishlist = action.payload;
+      })
+      .addCase(fetchWishList.rejected, (state, action) => {
+        state.isError = true;
+        state.isFetchingWishList = false;
+        state.isFetchedWishList = false;
+        state.message = action.payload;
+      })
+      .addCase(addToWishList.pending, (state) => {
+        state.isError = false;
+        state.isAddingToWishList = true;
+        state.isAddedToWishList = false;
+        state.message = "";
+      })
+      .addCase(addToWishList.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isAddingToWishList = false;
+        state.isAddedToWishList = true;
+        state.wishlist = action.payload;
+        // console.log("Slice : ", action.payload);
+      })
+      .addCase(addToWishList.rejected, (state, action) => {
+        state.isError = true;
+        state.isAddingToWishList = false;
+        state.isAddedToWishList = false;
         state.message = action.payload;
       });
   },

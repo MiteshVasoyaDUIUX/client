@@ -9,7 +9,7 @@ const fetchProduct = async () => {
 };
 
 const addToCart = async (data, token) => {
-  console.log("Token : ", token);
+  // console.log("Token : ", data.userId);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -24,9 +24,42 @@ const addToCart = async (data, token) => {
   return response.data;
 };
 
+const fetchWishList = async (userId, token) => {
+  // console.log("Token : ", data.userId);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(
+    API_URL + "/buyer/fetchwishlist/" + userId,
+    config
+  );
+  // console.log("Fetch Wishlist Initially : ", response.data);
+  return response.data;
+};
+
+const addToWishList = async (data, token) => {
+  // console.log("Token : ", data.userId);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.put(
+    API_URL + "/buyer/addtowishlist/" + data.userId,
+    data,
+    config
+  );
+  console.log("Data.ProductId: ", data.productId);
+  return response.data;
+};
+
 const productServiceForClient = {
   fetchProduct,
   addToCart,
+  fetchWishList,
+  addToWishList
 };
 
 export default productServiceForClient;
