@@ -114,9 +114,21 @@ function ProductCard({ NewArrival }) {
           >
             {NewArrival.prodName}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ marginTop: "10px" }}
+          >
+            {NewArrival.prodName}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ fontSize: "17px", marginTop: "10px" }}
+          >
+            Price : {NewArrival.prodPrice}
           </Typography>
         </CardContent>
         <CardActions>
@@ -155,20 +167,24 @@ function ProductCards({ NewArrivals }) {
 function NewArrivals() {
   const dispatch = useDispatch();
 
-  const { products, isFetching, isError, message } = useSelector(
+  const { products, isFetching, isError, message, isAddedCart } = useSelector(
     (state) => state.productsForClient
   );
 
   useEffect(() => {
     dispatch(fetchProduct());
+
     if (isError) {
       console.log("Error : ", message);
     }
 
+    if (isAddedCart) {
+      toast.success(message);
+    }
     return () => {
       dispatch(reset());
     };
-  }, [isError, dispatch]);
+  }, [isError, isAddedCart, dispatch]);
 
   if (isFetching) {
     return (

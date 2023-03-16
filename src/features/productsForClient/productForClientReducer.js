@@ -20,7 +20,7 @@ const addToCart = async (data, token) => {
     data,
     config
   );
-  console.log("Data.ProductId: ", data.productId);
+  console.log("Data.ProductId: ", response.data);
   return response.data;
 };
 

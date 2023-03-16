@@ -11,7 +11,10 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addToCart,
+  addToWishList,
   fetchProduct,
+  fetchWishList,
   reset,
 } from "../../features/productsForClient/productsForClientSlice";
 import { GridLoader } from "react-spinners";
@@ -19,11 +22,61 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { toast } from "react-toastify";
 
 function ProductCard({ trendingProduct }) {
-  const [wishlist, setWishlist] = useState(false);
-  const [addToCart, setAddToCart] = useState(false);
+  const [wishList, setWishList] = useState(false);
+  const [addtoCart, setAddToCart] = useState(false);
   // console.log("ProductsCard : ", NewArrival);
+
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { wishlist } = useSelector((state) => state.productsForClient);
+
+  // console.log("UserId From Store : ", user.user._id);
+  // console.log("WishList From Store : ", wishlist);
+
+  useEffect(() => {
+    if (user) {
+      const userId = user.user._id;
+      dispatch(fetchWishList(userId));
+    }
+  }, [user, dispatch]);
+
+  const handleCartButton = () => {
+    if (user) {
+      const productId = trendingProduct._id;
+      const userData = user;
+      const userId = userData.user._id;
+      const data = {
+        userId,
+        productId,
+      };
+      console.log("Data : ", data);
+      dispatch(addToCart(data));
+    } else {
+      toast.error("Not Logged In");
+    }
+  };
+
+  const handleWishListButton = (e) => {
+    e.preventDefault();
+    if (user) {
+      setWishList(!wishList);
+      const productId = trendingProduct._id;
+      const userData = user;
+      const userId = userData.user._id;
+      const data = {
+        userId,
+        productId,
+      };
+      console.log("Data : ", data);
+      dispatch(addToWishList(data));
+    } else {
+      toast.error("Not Logged In");
+    }
+  };
+
   return (
     <>
       <Card
@@ -71,15 +124,15 @@ function ProductCard({ trendingProduct }) {
           </Typography>
         </CardContent>
         <CardActions>
-          <IconButton onClick={() => setAddToCart(!addToCart)}>
+          <IconButton onClick={handleCartButton}>
             {addToCart ? (
               <AddShoppingCartIcon color="primary" />
             ) : (
               <AddShoppingCartIcon />
             )}
           </IconButton>
-          <IconButton onClick={() => setWishlist(!wishlist)}>
-            {wishlist ? (
+          <IconButton onClick={handleWishListButton}>
+            {wishlist.includes(trendingProduct._id) ? (
               <FavouriteRoundedIcon color="error" />
             ) : (
               <FavoriteBorderIcon color="error" />

@@ -18,6 +18,7 @@ import {
 } from "../../features/productsForClient/productsForClientSlice";
 import ProductCard from "../ProductCard";
 
+
 function ProductCards({ products }) {
   return (
     <>

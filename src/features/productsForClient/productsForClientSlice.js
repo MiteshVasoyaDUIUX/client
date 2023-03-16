@@ -5,6 +5,7 @@ import productServiceForClient from "./productForClientReducer";
 const initialState = {
   products: [],
   wishlist: [],
+  cart : [],
   isError: false,
   isFetching: false,
   isFetched: false,
@@ -64,7 +65,7 @@ export const addToWishList = createAsyncThunk(
         data,
         token
       );
-      console.log("TOTKEOKE : ", message);
+      // console.log("TOTKEOKE : ", message);
       return message;
     } catch (error) {
       const message =
@@ -129,20 +130,20 @@ const productForClientSlice = createSlice({
       })
       .addCase(addToCart.pending, (state) => {
         state.isError = false;
-        state.isAdding = true;
-        state.isAdded = false;
+        state.isAddingCart = true;
+        state.isAddedCart = false;
         state.message = "";
       })
       .addCase(addToCart.fulfilled, (state, action) => {
         state.isError = false;
-        state.isAdding = false;
-        state.isAdded = true;
+        state.isAddingCart = false;
+        state.isAddedCart = true;
         state.message = "Added to Cart";
       })
       .addCase(addToCart.rejected, (state, action) => {
         state.isError = true;
-        state.isAdding = false;
-        state.isAdded = false;
+        state.isAddingCart = false;
+        state.isAddedCart = false;
         state.message = action.payload;
       })
       .addCase(fetchWishList.pending, (state) => {
