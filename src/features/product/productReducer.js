@@ -22,7 +22,7 @@ const uploadProduct = async (productData, token) => {
   return response.data;
 };
 
-const fetchProduct = async (productData, token) => {
+const fetchProducts = async (productData, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const updateProduct = async (productData, token) => {
 
 const productService = {
   uploadProduct,
-  fetchProduct,
+  fetchProducts,
   removeProduct,
   updateProduct
 };

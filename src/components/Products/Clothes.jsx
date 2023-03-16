@@ -7,17 +7,149 @@ import { CardMedia } from "@mui/material";
 import { Typography } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { IconButton } from "@mui/material";
 import "../Products/Clothes.css";
-import ProductCard from "../ProductCard";
-import { fetchProduct, reset } from "../../features/productsForClient/productsForClientSlice";
+import {
+  addToWishList,
+  fetchProducts,
+  fetchWishList,
+  reset,
+} from "../../features/productsForClient/productsForClientSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Filter from "../Filter";
+import { toast } from "react-toastify";
 
-function ProductCards({ products }) {
+function ProductCard({ product }) {
+  const [wishList, setWishList] = useState(false);
+  const [addToCart, setAddToCart] = useState(false);
+  // console.log("Products : ", product.prodImage);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { wishlist } = useSelector((state) => state.productsForClient);
+  useEffect(() => {
+    if (user) {
+      const userId = user.user._id;
+      dispatch(fetchWishList(userId));
+    }
+  }, [user, dispatch]);
+
+  const handleCartButton = () => {
+    if (user) {
+      const productId = product._id;
+      const userData = user;
+      const userId = userData.user._id;
+      const data = {
+        userId,
+        productId,
+      };
+      console.log("Data : ", data);
+      dispatch(addToCart(data));
+    } else {
+      toast.error("Not Logged In");
+    }
+  };
+
+  const handleWishListButton = (e) => {
+    e.preventDefault();
+    if (user) {
+      setWishList(!wishList);
+      const productId = product._id;
+      const userData = user;
+      const userId = userData.user._id;
+      const data = {
+        userId,
+        productId,
+      };
+      console.log("Data : ", data);
+      dispatch(addToWishList(data));
+    } else {
+      toast.error("Not Logged In");
+    }
+  };
+
   return (
     <>
-      {products.map((product) => (
+      <Card
+        sx={{
+          maxWidth: 400,
+          textAlign: "center",
+          marginBottom: "30px",
+          marginRight: "30px",
+          border: "0.5px solid white",
+          boxShadow: "none",
+          borderRadius: "15px",
+        }}
+        key={product._id}
+        className="product-card"
+      >
+        <CardMedia
+          component="img"
+          alt="green iguana"
+          image={product.prodImage[0]}
+          sx={{
+            height: "fitContent",
+            width: "fitContent",
+            minHeight: "300px",
+          }}
+        />
+        <CardContent>
+          <Typography
+            variant="h6"
+            component="div"
+            style={{
+              textAlign: "left",
+              overflow: "hidden",
+              whiteSpace: "wrap",
+              textOverflow: "ellipsis",
+              height: "60px",
+              marginBottom: "8px",
+            }}
+          >
+            {product.prodName}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ marginTop: "10px" }}
+          >
+            {product.prodDesc}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ fontSize: "17px", marginTop: "10px" }}
+          >
+            Price : {product.prodPrice}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <IconButton onClick={handleCartButton}>
+            {addToCart ? (
+              <AddShoppingCartIcon color="primary" />
+            ) : (
+              <AddShoppingCartIcon />
+            )}
+          </IconButton>
+          <IconButton onClick={handleWishListButton}>
+            {wishlist.includes(product._id) ? (
+              <FavouriteRoundedIcon color="error" />
+            ) : (
+              <FavoriteBorderIcon color="error" />
+            )}
+          </IconButton>
+        </CardActions>
+      </Card>
+    </>
+  );
+}
+
+function ProductCards({ newProdArray }) {
+  return (
+    <>
+      {newProdArray.map((product) => (
         <Grid>
           <ProductCard product={product} />
         </Grid>
@@ -26,7 +158,7 @@ function ProductCards({ products }) {
   );
 }
 
-function ClothesItem({ products }) {
+function ClothesItem({ newProdArray }) {
   return (
     <>
       <div>
@@ -38,7 +170,7 @@ function ClothesItem({ products }) {
       >
         <Grid container spacing={0}>
           <Grid container item spacing={0}>
-            <ProductCards products={products}/>
+            <ProductCards newProdArray={newProdArray} />
           </Grid>
         </Grid>
       </div>
@@ -58,7 +190,7 @@ function Clothes() {
     }
 
     if (products) {
-      dispatch(fetchProduct());
+      dispatch(fetchProducts());
     }
 
     return () => {
@@ -71,6 +203,23 @@ function Clothes() {
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+
+  let newProdArray = [];
+  if (products.length > 0) {
+    products.map((product) => {
+      let category = product.prodCategory;
+      if (
+        category.includes("clothes") ||
+        category.includes("Clothes") ||
+        category.includes("cloth") ||
+        category.includes("Cloth")
+      ) {
+        newProdArray.push(product);
+        // console.log("category : ", category);
+      }
+    });
+  }
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -87,7 +236,7 @@ function Clothes() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <ClothesItem products={products} />
+          <ClothesItem newProdArray={newProdArray} />
         </div>
       </div>
     </>

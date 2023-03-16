@@ -3,8 +3,13 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5555";
 
-const fetchProduct = async () => {
+const fetchProducts = async () => {
   const response = await axios.get(API_URL);
+  return response.data;
+};
+
+const fetchOneProduct = async (productId) => {
+  const response = await axios.get(API_URL + "/product/" + productId);
   return response.data;
 };
 
@@ -56,10 +61,11 @@ const addToWishList = async (data, token) => {
 };
 
 const productServiceForClient = {
-  fetchProduct,
+  fetchProducts,
   addToCart,
   fetchWishList,
-  addToWishList
+  addToWishList,
+  fetchOneProduct
 };
 
 export default productServiceForClient;

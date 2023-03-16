@@ -14,7 +14,7 @@ import Filter from "../Filter";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToWishList,
-  fetchProduct,
+  fetchProducts,
   fetchWishList,
   reset,
 } from "../../features/productsForClient/productsForClientSlice";
@@ -108,9 +108,21 @@ function ProductCard({ product }) {
           >
             {product.prodName}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ marginTop: "10px" }}
+          >
+            {product.prodDesc}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ fontSize: "17px", marginTop: "10px" }}
+          >
+            Price : {product.prodPrice}
           </Typography>
         </CardContent>
         <CardActions>
@@ -134,10 +146,10 @@ function ProductCard({ product }) {
   );
 }
 
-function ProductCards({ products }) {
+function ProductCards({ newProdArray }) {
   return (
     <>
-      {products.map((product) => (
+      {newProdArray.map((product) => (
         <Grid>
           <ProductCard product={product} />
         </Grid>
@@ -146,7 +158,7 @@ function ProductCards({ products }) {
   );
 }
 
-function AccessoriesItems({ products }) {
+function AccessoriesItems({ newProdArray }) {
   return (
     <>
       <div>
@@ -158,7 +170,7 @@ function AccessoriesItems({ products }) {
       >
         <Grid container spacing={0}>
           <Grid container item spacing={0}>
-            <ProductCards products={products} />
+            <ProductCards newProdArray={newProdArray} />
           </Grid>
         </Grid>
       </div>
@@ -173,12 +185,9 @@ function Accessories() {
   );
 
   useEffect(() => {
+    dispatch(fetchProducts());
     if (isError) {
       // toast.error(message);
-    }
-
-    if (products) {
-      dispatch(fetchProduct());
     }
 
     return () => {
@@ -191,6 +200,21 @@ function Accessories() {
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+  let newProdArray = [];
+
+  if (products.length > 0) {
+    products.map((product) => {
+      let category = product.prodCategory;
+      if (
+        category.includes("Accessories") ||
+        category.includes("accessories")
+      ) {
+        newProdArray.push(product);
+        // console.log("category : ", category);
+      }
+    });
+  }
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -207,7 +231,7 @@ function Accessories() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <AccessoriesItems products={products} />
+          <AccessoriesItems newProdArray={newProdArray} />
         </div>
       </div>
     </>

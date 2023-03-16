@@ -20,7 +20,7 @@ function Dashboard() {
     }
 
     if (!user) {
-      navigate("/");
+      navigate("/product/1111");
     }
 
     if (user) {

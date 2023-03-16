@@ -4,6 +4,7 @@ import productServiceForClient from "./productForClientReducer";
 
 const initialState = {
   products: [],
+  product : [],
   wishlist: [],
   cart : [],
   isError: false,
@@ -12,13 +13,32 @@ const initialState = {
   message: "",
 };
 
-export const fetchProduct = createAsyncThunk(
-  "productsForClient/fetch",
+export const fetchProducts = createAsyncThunk(
+  "productsForClient/fetchProducts",
   async (thunkAPI) => {
     try {
-      const products = await productServiceForClient.fetchProduct();
+      const products = await productServiceForClient.fetchProducts();
       // console.log(products);
       return products;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchOneProduct = createAsyncThunk(
+  "productsForClient/fetchOneProducts",
+  async (productId, thunkAPI) => {
+    try {
+      const product = await productServiceForClient.fetchOneProduct(productId);
+      console.log("One Product : ", product);
+      // return products;
     } catch (error) {
       const message =
         (error.response &&
@@ -110,19 +130,37 @@ const productForClientSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProduct.pending, (state) => {
+      .addCase(fetchProducts.pending, (state) => {
         state.isError = false;
         state.isFetching = true;
         state.isFetched = false;
         state.message = "";
       })
-      .addCase(fetchProduct.fulfilled, (state, action) => {
+      .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isError = false;
         state.isFetching = false;
         state.isFetched = true;
         state.products = action.payload;
       })
-      .addCase(fetchProduct.rejected, (state, action) => {
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.isError = true;
+        state.isFetching = false;
+        state.isFetched = false;
+        state.message = action.payload;
+      })
+      .addCase(fetchOneProduct.pending, (state) => {
+        state.isError = false;
+        state.isFetching = true;
+        state.isFetched = false;
+        state.message = "";
+      })
+      .addCase(fetchOneProduct.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isFetching = false;
+        state.isFetched = true;
+        state.product = action.payload;
+      })
+      .addCase(fetchOneProduct.rejected, (state, action) => {
         state.isError = true;
         state.isFetching = false;
         state.isFetched = false;

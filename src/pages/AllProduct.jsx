@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {
-  fetchProduct,
+  fetchProducts,
   removeProduct,
   updateProduct,
   reset,
@@ -247,7 +247,7 @@ function AllProduct() {
     }
 
     if (products) {
-      dispatch(fetchProduct());
+      dispatch(fetchProducts());
     }
 
     return () => {

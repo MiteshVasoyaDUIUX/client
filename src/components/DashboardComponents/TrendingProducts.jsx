@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
   addToWishList,
-  fetchProduct,
+  fetchProducts,
   fetchWishList,
   reset,
 } from "../../features/productsForClient/productsForClientSlice";
@@ -118,9 +118,21 @@ function ProductCard({ trendingProduct }) {
           >
             {trendingProduct.prodName}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ marginTop: "10px" }}
+          >
+            {trendingProduct.prodDesc}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ fontSize: "17px", marginTop: "10px" }}
+          >
+            Price : {trendingProduct.prodPrice}
           </Typography>
         </CardContent>
         <CardActions>
@@ -177,7 +189,7 @@ function TrendingProducts() {
     }
 
     if (products) {
-      dispatch(fetchProduct());
+      dispatch(fetchProducts());
     }
 
     return () => {

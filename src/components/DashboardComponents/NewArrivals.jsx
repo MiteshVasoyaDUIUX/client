@@ -11,7 +11,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { IconButton } from "@mui/material";
 import {
-  fetchProduct,
+  fetchProducts,
   addToCart,
   fetchWishList,
   reset,
@@ -120,7 +120,7 @@ function ProductCard({ NewArrival }) {
             align="justify"
             style={{ marginTop: "10px" }}
           >
-            {NewArrival.prodName}
+            {NewArrival.prodDesc}
           </Typography>
           <Typography
             variant="body2"
@@ -172,7 +172,7 @@ function NewArrivals() {
   );
 
   useEffect(() => {
-    dispatch(fetchProduct());
+    dispatch(fetchProducts());
 
     if (isError) {
       console.log("Error : ", message);

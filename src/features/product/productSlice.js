@@ -31,13 +31,13 @@ export const uploadProduct = createAsyncThunk(
   }
 );
 
-export const fetchProduct = createAsyncThunk(
+export const fetchProducts= createAsyncThunk(
   "product/fetch",
   async (productId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
 
-      return await productService.fetchProduct(productId, token);
+      return await productService.fetchProducts(productId, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -111,19 +111,19 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.message = action.payload;
       })
-      .addCase(fetchProduct.pending, (state) => {
+      .addCase(fetchProducts.pending, (state) => {
         state.isLoading = true;
         state.isFetching = true;
         state.isFetched = false;
         state.message = "";
       })
-      .addCase(fetchProduct.fulfilled, (state, action) => {
+      .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isFetched = true;
         state.isFetching = false;
         state.isLoading = false;
         state.products = action.payload;
       })
-      .addCase(fetchProduct.rejected, (state, action) => {
+      .addCase(fetchProducts.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
         state.isFetching = false;
