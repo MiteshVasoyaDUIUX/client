@@ -1,5 +1,183 @@
 .details-page {
-      border : 1px solid black;
-      height:  100%;
+      border: 1px solid black;
+      height: 100%;
       padding: 30px;
+      display: flex;
+}
+
+.page-details {
+      width: 850px;
+      margin-right: 80px;
+}
+
+.detailed-page-title {
+      margin-left: 90px;
+      margin-top: 40px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 40px;
+      font-weight: 500;
+      text-transform: capitalize;
+      width: 600px;
+      min-height: 150px;
+      height: fit-content;
+}
+
+.detailed-page-wishlist-button {
+      margin-left: 30px;
+      margin-top: 45px;
+      width: fit-content;
+      height: fit-content;
+}
+
+
+.detailed-page-rating {
+      margin-left: 90px;
+      margin-right: auto;
+      margin-top: 15px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: rgb(133, 133, 133);
+      text-transform: capitalize;
+      width: fit-content;
+      height: fit-content;
+      display: flex;
+}
+
+/* 
+.detailed-page-rating:hover {
+      border: 1px solid black;
+} */
+
+.detailed-page-price {
+      margin-left: 90px;
+      margin-right: auto;
+      margin-top: 25px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: rgb(133, 133, 133);
+      text-transform: capitalize;
+      width: fit-content;
+      height: fit-content;
+}
+
+.detailed-page-description {
+      margin-left: 90px;
+      margin-right: auto;
+      margin-top: 30px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 18 px;
+      font-weight: 500;
+      color: rgb(133, 133, 133);
+      text-transform: capitalize;
+      width: 600px;
+      height: fit-content;
+}
+
+
+
+.buying-details {
+      width: 400px;
+      padding: 50px 50px 5px 50px;
+      border: 1px solid black;
+      border-radius: 10px;
+}
+
+.detailed-page-quantity {
+      margin-left: 20px;
+      margin-right: auto;
+      margin-top: 30px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 25px;
+      font-weight: 500;
+      color: rgb(0, 0, 0);
+      text-transform: capitalize;
+      display: flex;
+      /* width: fit-content; */
+      /* height: fit-content; */
+}
+
+#quantity-text-field {
+      height: 40px;
+      width: 45px;
+      border-top: 1px solid rgb(0, 0, 0);
+      border-bottom: 1px solid rgb(0, 0, 0);
+      border-left: 0px;
+      border-right: 0px;
+      text-align: center;
+      font-size: x-large;
+}
+
+#quantity-text-field:focus {
+      outline: none;
+}
+
+#quantity-increase {
+      height: 44px;
+      width: 50px;
+      border: 1px solid rgb(0, 0, 0);
+      background-color: black;
+      color: aliceblue;
+      border-bottom-right-radius: 9px;
+      font-size: x-large;
+      border-top-right-radius: 9px;
+}
+
+#quantity-decrease {
+      height: 44px;
+      width: 50px;
+      border: 1px solid rgb(0, 0, 0);
+      background-color: black;
+      color: aliceblue;
+      border-bottom-left-radius: 9px;
+      font-size: x-large;
+      border-top-left-radius: 9px;
+}
+
+#buy-now-button {
+      width: 300px;
+      height: 50px;
+      margin-left: 30px;
+      margin-right: auto;
+      margin-top: 20px;
+      border: 0px;
+      background-color: black;
+      color: white;
+      border-radius: 10px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: 600;
+      font-size: 20px
+}
+
+#add-to-cart-button {
+      width: 300px;
+      height: 50px;
+      margin-left: 30px;
+      margin-right: auto;
+      margin-top: 20px;
+      border: 0px;
+      background-color: black;
+      color: white;
+      border-radius: 10px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: 600;
+      font-size: 18px
+}
+
+.detailed-page-share-icons {
+      vertical-align: bottom;
+      margin-top: 240px;
+      padding: 15px;
+}
+
+.share-title {
+      font-size: larger;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
+
+.share-icons {
+      margin-top: 10px;
+      margin-left: 40px;
 }

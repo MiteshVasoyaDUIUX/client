@@ -20,7 +20,7 @@ function Dashboard() {
     }
 
     if (!user) {
-      navigate("/product/1111");
+      navigate("/product/64104882a04e33e631c70b31");
     }
 
     if (user) {

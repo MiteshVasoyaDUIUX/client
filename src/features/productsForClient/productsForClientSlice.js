@@ -37,8 +37,7 @@ export const fetchOneProduct = createAsyncThunk(
   async (productId, thunkAPI) => {
     try {
       const product = await productServiceForClient.fetchOneProduct(productId);
-      console.log("One Product : ", product);
-      // return products;
+      return product;
     } catch (error) {
       const message =
         (error.response &&
