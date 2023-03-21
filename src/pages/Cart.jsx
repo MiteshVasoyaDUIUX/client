@@ -66,15 +66,12 @@ export default function Cart() {
       <Box sx={{ width: "100%" }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 4, md: 1 }}>
           {cart.map((item) => {
-            return (
-              <p>
-                {item}
-              </p>
-            );
+            return <></>;
           })}
           <Grid item xs={12}></Grid>
         </Grid>
       </Box>
+      <Paper elevation={3} />
     </>
   );
 }
