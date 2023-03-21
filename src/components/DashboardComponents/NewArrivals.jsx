@@ -21,12 +21,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { GridLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function ProductCard({ NewArrival }) {
   const [wishList, setWishList] = useState(false);
   const [addtoCart, setAddToCart] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { wishlist } = useSelector((state) => state.productsForClient);
 
@@ -74,6 +76,11 @@ function ProductCard({ NewArrival }) {
     }
   };
 
+  const handleCardClick = () => {
+    console.log("New Arrivals : ", NewArrival._id);
+    navigate(`/product/${NewArrival._id}`);
+  }
+
   return (
     <>
       <Card
@@ -85,8 +92,10 @@ function ProductCard({ NewArrival }) {
           border: "0.5px solid white",
           boxShadow: "none",
           borderRadius: "15px",
+          cursor : 'pointer'
         }}
         className="product-card"
+        onClick={handleCardClick}
       >
         <CardMedia
           component="img"

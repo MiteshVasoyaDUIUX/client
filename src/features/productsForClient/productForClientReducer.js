@@ -44,6 +44,22 @@ const fetchWishList = async (userId, token) => {
   return response.data;
 };
 
+const fetchCart = async (userId, token) => {
+  // console.log("Token : ", data.userId);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(
+    API_URL + "/buyer/fetchcart/" + userId,
+    config
+  );
+  // console.log("response.data Cart: ", response.data);
+
+  return response.data;
+};
+
 const addToWishList = async (data, token) => {
   // console.log("Token : ", data.userId);
   const config = {
@@ -64,6 +80,7 @@ const productServiceForClient = {
   fetchProducts,
   addToCart,
   fetchWishList,
+  fetchCart,
   addToWishList,
   fetchOneProduct
 };

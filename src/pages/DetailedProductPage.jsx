@@ -18,13 +18,14 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { toast } from "react-toastify";
+import { reset } from "../features/auth/authSlice";
 
 function DetailedProductPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [wishList, setWishList] = useState(false);
   const [addtoCart, setAddToCart] = useState(false);
-
+  const params = useParams();
   //Directly get Params from URLs...
 
   const { user } = useSelector((state) => state.auth);
@@ -33,16 +34,18 @@ function DetailedProductPage() {
     (state) => state.productsForClient
   );
   const [quantity, setQuantity] = useState(3);
-  const productId = "64104882a04e33e631c70b31";
-
+  const productId = params.id;
+  console.log("Product Id : ", productId)
   let outOfStock;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    dispatch(fetchOneProduct("64104882a04e33e631c70b31"));
+    dispatch(fetchOneProduct(productId));
 
     if (isAddedCart) {
       toast.success("Added to cart...");
     }
+
+    reset();
   }, [isAddedCart]);
 
   if (product.prodQuantity === 0) {

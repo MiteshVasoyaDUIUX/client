@@ -19,6 +19,7 @@ import { fetchOneProduct } from "../features/productsForClient/productsForClient
 import "./BuyProduct.css";
 import { placeOrder } from "../features/order/orderSlice";
 import Spinner from "../components/Spinner";
+import { reset } from "../features/auth/authSlice";
 
 function BuyProduct() {
   const dispatch = useDispatch();
@@ -39,8 +40,10 @@ function BuyProduct() {
     if(isPlaced) {
       alert(`Your Order Id is  ${orderId.orderId}`);
       // console.log("Your Order Id is ", orderId.orderId)
-      navigate('/');
+      navigate('/myorders');
     }
+
+    reset()
   }, [isPlaced]);
 
   if(isPlacing) {
@@ -58,6 +61,8 @@ function BuyProduct() {
     const checkoutData = {
       userId, 
       productId,
+      prodImage : product.prodImage,
+      prodName : product.prodName,
       quantity,
       productPrice : product.prodPrice,
       paymentOption

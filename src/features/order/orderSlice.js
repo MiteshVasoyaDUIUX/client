@@ -3,8 +3,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import orderService from "./orderReducer";
 
 const initialState = {
-  order: [],
-  orderId : '',
+  orders: [],
+  orderId: "",
   isError: false,
   isPlaced: false,
   isPlacing: false,
@@ -17,8 +17,28 @@ export const placeOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-
       return await orderService.placeOrder(checkoutData, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchAllOrders = createAsyncThunk(
+  "order/fetchallorders",
+  async (userId, thunkAPI) => {
+    try {
+      //'token' may be not use because only user can add the goal...
+      const token = thunkAPI.getState().auth.user.token;
+      // console.log("Token : ", token);
+
+      return await orderService.fetchAllOrders(userId, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -49,12 +69,30 @@ const orderSlice = createSlice({
         state.isPlacing = false;
         state.isError = false;
         state.orderId = action.payload;
-      //   console.log("New State : ", state.orderId);
+        //   console.log("New State : ", state.orderId);
       })
       .addCase(placeOrder.rejected, (state, action) => {
         state.isError = true;
         state.isPlaced = false;
         state.isPlacing = false;
+        state.message = action.payload;
+      })
+      .addCase(fetchAllOrders.pending, (state) => {
+        state.isFetched = false;
+        state.isFetching = false;
+        state.isError = false;
+      })
+      .addCase(fetchAllOrders.fulfilled, (state, action) => {
+        state.isFetched = true;
+        state.isFetching = false;
+        state.isError = false;
+        state.orders = action.payload;
+        // console.log("New State : ", action.payload);
+      })
+      .addCase(fetchAllOrders.rejected, (state, action) => {
+        state.isError = true;
+        state.isFetched = false;
+        state.isFetching = false;
         state.message = action.payload;
       });
   },

@@ -23,6 +23,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function ProductCard({ trendingProduct }) {
   const [wishList, setWishList] = useState(false);
@@ -30,6 +31,7 @@ function ProductCard({ trendingProduct }) {
   // console.log("ProductsCard : ", NewArrival);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { wishlist } = useSelector((state) => state.productsForClient);
 
@@ -77,6 +79,11 @@ function ProductCard({ trendingProduct }) {
     }
   };
 
+  const handleCardClick = () => {
+    console.log(trendingProduct._id);
+    navigate(`/product/${trendingProduct._id}`);
+  }
+
   return (
     <>
       <Card
@@ -88,9 +95,11 @@ function ProductCard({ trendingProduct }) {
           border: "0.5px solid white",
           boxShadow: "none",
           borderRadius: "15px",
+          cursor : 'pointer'
         }}
         // key={NewArrival._id}
         className="product-card"
+        onClick={handleCardClick}
       >
         <CardMedia
           component="img"
