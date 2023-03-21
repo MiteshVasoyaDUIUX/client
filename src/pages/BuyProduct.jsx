@@ -11,47 +11,60 @@ import {
   TextField,
 } from "@mui/material";
 
-import makeStyles from "@mui";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import Images from "../components/DetailedProductPage.jsx/Images";
+import { useNavigate, useParams } from "react-router-dom";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { fetchOneProduct } from "../features/productsForClient/productsForClientSlice";
 import "./BuyProduct.css";
+import { placeOrder } from "../features/order/orderSlice";
+import Spinner from "../components/Spinner";
 
 function BuyProduct() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams();
-  const [paymentOption, setPaymentOption] = React.useState("");
-  let paymentDetailsForm = "";
+  const [paymentOption, setPaymentOption] = React.useState("cod");
 
   const { product } = useSelector((state) => state.productsForClient);
-  
-  const useStyles = makeStyles({
-    label: {
-      color: "darkred",
-      "&.Mui-focused": {
-        color: "darkred",
-      },
-    },
-  });
-  const classes = useStyles();
-  
+  const { user } = useSelector((state) => state.auth);
+  const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
+
   let productId = params.id.split("&")[0];
   let quantity = params.id.split("&")[1];
 
   useEffect(() => {
     dispatch(fetchOneProduct(productId));
-  }, []);
+
+    if(isPlaced) {
+      alert(`Your Order Id is  ${orderId.orderId}`);
+      // console.log("Your Order Id is ", orderId.orderId)
+      navigate('/');
+    }
+  }, [isPlaced]);
+
+  if(isPlacing) {
+    <Spinner />
+  }
 
   const handleChange = (event) => {
     setPaymentOption(event.target.value);
   };
-  console.log(paymentOption);
+  // console.log(paymentOption);
 
   const handlePayNowButton = () => {
-    console.log("Paid");
+    const userId = user.user._id;
+
+    const checkoutData = {
+      userId, 
+      productId,
+      quantity,
+      productPrice : product.prodPrice,
+      paymentOption
+    }
+    console.log("User CheckOut : ", checkoutData);
+
+    dispatch(placeOrder(checkoutData));
   };
   return (
     <>
@@ -135,7 +148,7 @@ function BuyProduct() {
                       >
                         <b> City : </b> Surat
                       </div>
-                      <div style={{display : "flex"}}>
+                      <div style={{ display: "flex" }}>
                         <div
                           style={{
                             width: "100%",
@@ -161,7 +174,7 @@ function BuyProduct() {
                     <Select
                       value={paymentOption}
                       onChange={handleChange}
-                      className={classes.label}
+                      className="payment-select"
                       displayEmpty
                       inputProps={{ "aria-label": "Without label" }}
                     >

@@ -85,7 +85,8 @@ function DetailedProductPage() {
   const handleBuyNowButton = () => {
     if (user) {
       const userData = user;
-      // dispatch(addToCart(data));
+      navigate(`/product/placeorder/${productId}&${quantity}`)
+
     } else {
       toast.error("Not Logged In");
     }
@@ -258,13 +259,13 @@ function DetailedProductPage() {
               <button id="add-to-cart-button" onClick={handleCartButton}>
                 Add To Cart
               </button>
-              <Link
+              {/* <Link
                 to={`/product/placeorder/${productId}&${quantity}`}
-              >
+              > */}
                 <button id="buy-now-button" onClick={handleBuyNowButton}>
                   Buy Now
                 </button>
-              </Link>
+              {/* </Link> */}
             </div>
 
             <div className="detailed-page-share-icons">
