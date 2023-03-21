@@ -20,6 +20,7 @@ import Clothes from "./components/Products/Clothes";
 import OtherProducts from "./components/Products/OtherProducts";
 import Accessories from "./components/Products/Accessories";
 import DetailedProductPage from "./pages/DetailedProductPage";
+import BuyProduct from "./pages/BuyProduct";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             <Route path="/products/accessories" element={<Accessories />} />
             <Route path="/products/clothes" element={<Clothes />} />
             <Route path="/product/:id" element={<DetailedProductPage />} />
+            <Route path="/product/placeorder/:id" element={<BuyProduct />} />
             <Route path="/logout" />
           </Routes>
         </div>

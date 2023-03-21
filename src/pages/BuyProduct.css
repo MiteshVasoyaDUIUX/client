@@ -1,0 +1,188 @@
+.place-order-page {
+      display: flex;
+}
+
+.product-detail-page {
+      height: 825px;
+      width: 550px;
+      border-right: 1px solid rgb(189, 187, 187);
+      margin-top: 2.5%;
+      margin-left: 3%;
+}
+
+.product-image {
+      width: 56%;
+      height: 60%;
+      margin-left: 22%;
+      margin-top: 10%;
+      border-radius: 2px;
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 50px 40px -7px;
+}
+
+.buy-product-page-name {
+      margin-left: 10%;
+      margin-top: 15%;
+      width: 80%;
+      font-size: larger;
+      font-weight: 500;
+      font-family: 'Roboto', sans-serif;
+}
+
+.buy-product-page-quantity {
+      margin-left: 10%;
+      margin-top: 3%;
+      width: 80%;
+      font-size: larger;
+      font-weight: 400;
+      font-family: 'Roboto', sans-serif;
+}
+
+.buy-product-page-amount {
+      margin-left: 10%;
+      margin-top: 5%;
+      width: fit-content;
+      font-size: 20px;
+      padding: 6px 10px;
+      font-weight: 600;
+      font-family: 'Roboto', sans-serif;
+      background-color: rgb(31, 133, 18);
+      color: aliceblue;
+}
+
+.order-summary {
+      width: 60%;
+      margin-left: 1.25%;
+}
+
+.total-bill-summary {
+      border-bottom: 1px solid rgb(190, 190, 190);
+      height: fit-content;
+      max-height: 25%;
+      padding: 1%;
+      width: 100%;
+      margin-left: 2%;
+      margin-top: 3%;
+}
+
+.delivery-address {
+      border-bottom: 1px solid rgb(190, 190, 190);
+      height: 21%;
+      padding: 1%;
+      width: 100%;
+      margin-left: 2%;
+      margin-top: 2%;
+}
+
+.delivery-address-title {
+      font-family: 'Questrial', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      border-bottom: 2px solid black;
+      padding-bottom: 2px;
+      width: fit-content;
+}
+
+.order-summary-title {
+      font-family: 'Questrial', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      border-bottom: 2px solid black;
+      padding-bottom: 2px;
+      width: fit-content;
+}
+
+.products-total-amount {
+      width: 110%;
+      margin-top: 3%;
+      margin-right: 0px;
+      font-family: 'Questrial', sans-serif;
+      font-size: 25px;
+      font-weight: 500;
+      padding-bottom: 2px;
+      color: rgb(109, 109, 109);
+      text-align: end;
+}
+
+.order-summary-details {
+      margin-top: 1%;
+      font-family: 'Questrial', sans-serif;
+      font-size: 18px;
+      font-weight: 200;
+      padding-bottom: 2px;
+      width: fit-content;
+      color: rgb(46, 46, 46);
+      width: 80%;
+}
+
+.delivery-address-details {
+      margin-top: 2%;
+      font-family: 'Questrial', sans-serif;
+      font-size: 18px;
+      font-weight: 200;
+      padding-bottom: 2px;
+      width: fit-content;
+      color: rgb(46, 46, 46);
+      width: 80%;
+}
+
+.payment-details {
+      margin-top: 20px;
+      margin-left:3.5%;
+}
+
+.payment-details-title {
+      font-family: 'Questrial', sans-serif;
+      font-size: 29px;
+      font-weight: 800;
+      border-bottom: 2px solid black;
+      padding-bottom: 2px;
+      width: fit-content;
+}
+
+.payment-type {
+      font-family: 'Questrial', sans-serif;
+      margin-top: 4%;
+      font-size: 12px;
+      padding-bottom: 2px;
+      width: fit-content;
+}
+
+.payment-details-form {
+      margin-top: 3%;
+      margin-left: 18%;
+      display: block;
+}
+
+.payment-select {
+      outline: none;
+      width: 350px;
+      border: 1px solid rgb(31, 31, 31);
+      padding-left: 10px;
+}
+
+.payment-select {
+      outline: none;
+      width: 350px;
+      border: 10px solid rgb(31, 31, 31);
+      padding-left: 10px;
+}
+
+.payment-button {
+      width: 50%;
+      height: 40px;
+      margin-left: 25%;
+      margin-top: 4%;
+      background-color: rgb(255, 255, 255);
+      box-shadow: 4px 5px 10px -2px rgb(121, 121, 121);
+      border-radius: 7px;
+      border: 1px solid rgb(150, 150, 150);
+      color: rgb(78, 78, 78);
+      font-size: 17px;
+
+}
+
+.payment-button:hover {
+      background-color: rgb(255, 255, 255);
+      box-shadow: 4px 5px 10px -2px rgb(121, 121, 121);
+      border-radius: 7px;
+}
