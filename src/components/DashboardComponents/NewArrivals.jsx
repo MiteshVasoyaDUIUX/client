@@ -30,7 +30,7 @@ function ProductCard({ NewArrival }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { wishlist } = useSelector((state) => state.productsForClient);
+  const { wishlist, isAddedCart, isError, message } = useSelector((state) => state.productsForClient);
 
   // console.log("UserId From Store : ", user.user._id);
   // console.log("WishList From Store : ", wishlist);
@@ -40,9 +40,21 @@ function ProductCard({ NewArrival }) {
       const userId = user.user._id;
       dispatch(fetchWishList(userId));
     }
-  }, [user, dispatch]);
 
-  const handleCartButton = () => {
+    if (isAddedCart) {
+      toast.success("Added to cart...");
+    }
+    
+    if (isError && message) {
+      toast.error("Error : " + message);
+    }
+
+    reset();
+  }, [dispatch, isAddedCart, isError, message]);
+
+  const handleCartButton = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     if (user) {
       const productId = NewArrival._id;
       const userData = user;
@@ -58,8 +70,9 @@ function ProductCard({ NewArrival }) {
     }
   };
 
-  const handleWishListButton = (e) => {
-    e.preventDefault();
+  const handleWishListButton = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     if (user) {
       setWishList(!wishList);
       const productId = NewArrival._id;
@@ -79,7 +92,7 @@ function ProductCard({ NewArrival }) {
   const handleCardClick = () => {
     console.log("New Arrivals : ", NewArrival._id);
     navigate(`/product/${NewArrival._id}`);
-  }
+  };
 
   return (
     <>
@@ -92,7 +105,7 @@ function ProductCard({ NewArrival }) {
           border: "0.5px solid white",
           boxShadow: "none",
           borderRadius: "15px",
-          cursor : 'pointer'
+          cursor: "pointer",
         }}
         className="product-card"
         onClick={handleCardClick}

@@ -30,12 +30,12 @@ function DetailedProductPage() {
 
   const { user } = useSelector((state) => state.auth);
   const { wishlist } = useSelector((state) => state.productsForClient);
-  const { product, isAddedCart } = useSelector(
+  const { product, isAddedCart, isError, message } = useSelector(
     (state) => state.productsForClient
   );
   const [quantity, setQuantity] = useState(3);
   const productId = params.id;
-  console.log("Product Id : ", productId)
+  console.log("Product Id : ", productId);
   let outOfStock;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -45,8 +45,12 @@ function DetailedProductPage() {
       toast.success("Added to cart...");
     }
 
+    if (isError) {
+      toast.error("Error : " + message);
+    }
+
     reset();
-  }, [isAddedCart]);
+  }, [isAddedCart, isError]);
 
   if (product.prodQuantity === 0) {
     outOfStock = 0;
@@ -88,8 +92,7 @@ function DetailedProductPage() {
   const handleBuyNowButton = () => {
     if (user) {
       const userData = user;
-      navigate(`/product/placeorder/${productId}&${quantity}`)
-
+      navigate(`/product/placeorder/${productId}&${quantity}`);
     } else {
       toast.error("Not Logged In");
     }
@@ -265,9 +268,9 @@ function DetailedProductPage() {
               {/* <Link
                 to={`/product/placeorder/${productId}&${quantity}`}
               > */}
-                <button id="buy-now-button" onClick={handleBuyNowButton}>
-                  Buy Now
-                </button>
+              <button id="buy-now-button" onClick={handleBuyNowButton}>
+                Buy Now
+              </button>
               {/* </Link> */}
             </div>
 

@@ -27,13 +27,14 @@ import { useNavigate } from "react-router-dom";
 
 function ProductCard({ trendingProduct }) {
   const [wishList, setWishList] = useState(false);
-  const [addtoCart, setAddToCart] = useState(false);
   // console.log("ProductsCard : ", NewArrival);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { wishlist } = useSelector((state) => state.productsForClient);
+  const { wishlist, isAddedCart, isError, message } = useSelector(
+    (state) => state.productsForClient
+  );
 
   // console.log("UserId From Store : ", user.user._id);
   // console.log("WishList From Store : ", wishlist);
@@ -43,9 +44,20 @@ function ProductCard({ trendingProduct }) {
       const userId = user.user._id;
       dispatch(fetchWishList(userId));
     }
-  }, [user, dispatch]);
 
-  const handleCartButton = () => {
+    if (isAddedCart) {
+      toast.success("Added to cart...");
+    }
+
+    if (isError && message) {
+      toast.error("Error : " + message);
+    }
+
+    reset();
+  }, [dispatch, isAddedCart, isError, message]);
+
+  const handleCartButton = (event) => {
+    event.stopPropagation();
     if (user) {
       const productId = trendingProduct._id;
       const userData = user;
@@ -61,8 +73,9 @@ function ProductCard({ trendingProduct }) {
     }
   };
 
-  const handleWishListButton = (e) => {
-    e.preventDefault();
+  const handleWishListButton = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     if (user) {
       setWishList(!wishList);
       const productId = trendingProduct._id;
@@ -82,7 +95,7 @@ function ProductCard({ trendingProduct }) {
   const handleCardClick = () => {
     console.log(trendingProduct._id);
     navigate(`/product/${trendingProduct._id}`);
-  }
+  };
 
   return (
     <>
@@ -95,7 +108,7 @@ function ProductCard({ trendingProduct }) {
           border: "0.5px solid white",
           boxShadow: "none",
           borderRadius: "15px",
-          cursor : 'pointer'
+          cursor: "pointer",
         }}
         // key={NewArrival._id}
         className="product-card"
@@ -146,7 +159,7 @@ function ProductCard({ trendingProduct }) {
         </CardContent>
         <CardActions>
           <IconButton onClick={handleCartButton}>
-            {addToCart ? (
+            {!addToCart ? (
               <AddShoppingCartIcon color="primary" />
             ) : (
               <AddShoppingCartIcon />
