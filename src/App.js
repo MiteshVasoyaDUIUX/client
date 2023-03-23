@@ -21,7 +21,6 @@ import OtherProducts from "./components/Products/OtherProducts";
 import Accessories from "./components/Products/Accessories";
 import DetailedProductPage from "./pages/DetailedProductPage";
 import BuyProduct from "./pages/BuyProduct";
-
 function App() {
   return (
     <>

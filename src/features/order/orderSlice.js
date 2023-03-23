@@ -17,6 +17,7 @@ export const placeOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
+      console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
       return await orderService.placeOrder(checkoutData, token);
     } catch (error) {
       const message =
@@ -68,7 +69,7 @@ const orderSlice = createSlice({
         state.isPlaced = true;
         state.isPlacing = false;
         state.isError = false;
-        state.orderId = action.payload;
+        // state.orderId = action.payload;
         //   console.log("New State : ", state.orderId);
       })
       .addCase(placeOrder.rejected, (state, action) => {
@@ -80,11 +81,15 @@ const orderSlice = createSlice({
       .addCase(fetchAllOrders.pending, (state) => {
         state.isFetched = false;
         state.isFetching = false;
+        state.isPlaced = false;
+        state.isPlacing = false;
         state.isError = false;
       })
       .addCase(fetchAllOrders.fulfilled, (state, action) => {
         state.isFetched = true;
         state.isFetching = false;
+        state.isPlaced = false;
+        state.isPlacing = false;
         state.isError = false;
         state.orders = action.payload;
         // console.log("New State : ", action.payload);
@@ -92,6 +97,8 @@ const orderSlice = createSlice({
       .addCase(fetchAllOrders.rejected, (state, action) => {
         state.isError = true;
         state.isFetched = false;
+        state.isPlaced = false;
+        state.isPlacing = false;
         state.isFetching = false;
         state.message = action.payload;
       });

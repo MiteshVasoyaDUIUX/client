@@ -9,7 +9,7 @@ const placeOrder = async (checkoutData, token) => {
             }
       }
 
-      console.log("Config : ", config);
+      console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData)
 
 
       const response = await axios.post(

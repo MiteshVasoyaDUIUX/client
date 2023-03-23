@@ -37,17 +37,19 @@ function BuyProduct() {
   useEffect(() => {
     dispatch(fetchOneProduct(productId));
 
-    if(isPlaced) {
-      alert(`Your Order Id is  ${orderId.orderId}`);
-      // console.log("Your Order Id is ", orderId.orderId)
-      navigate('/myorders');
-    }
+    // if (isPlaced) {
+    //   alert(`Your Order is Placed...`);
+    //   // console.log("Your Order Id is ", orderId.orderId)
+    //   navigate("/myorders");
+    // }
 
-    reset()
+    return () => {
+      reset();
+    };
   }, [isPlaced]);
 
-  if(isPlacing) {
-    <Spinner />
+  if (isPlacing) {
+    <Spinner />;
   }
 
   const handleChange = (event) => {
@@ -59,15 +61,15 @@ function BuyProduct() {
     const userId = user.user._id;
 
     const checkoutData = {
-      userId, 
+      userId,
       productId,
-      prodImage : product.prodImage,
-      prodName : product.prodName,
+      prodImage: product.prodImage,
+      prodName: product.prodName,
       quantity,
-      productPrice : product.prodPrice,
-      paymentOption
-    }
-    console.log("User CheckOut : ", checkoutData);
+      productPrice: product.prodPrice,
+      paymentOption,
+    };
+    console.log("User Checkout : ", checkoutData);
 
     dispatch(placeOrder(checkoutData));
   };

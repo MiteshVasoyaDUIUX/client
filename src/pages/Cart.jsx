@@ -17,33 +17,197 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  MenuItem,
+  Select,
   Typography,
 } from "@mui/material";
 import "./Cart.css";
 import {
   fetchCart,
   removeFromCart,
+  reset,
   updateCartQuantity,
 } from "../features/productsForClient/productsForClientSlice";
+import { useNavigate } from "react-router-dom";
+import { placeOrder } from "../features/order/orderSlice";
 
-const columns = [
-  {
-    id: "_id",
-    label: "Order ID",
-    titleAlign: "center",
-  },
-  {
-    id: "prodName",
-    label: "Product Name",
-    titleAlign: "center",
-  },
-  {
-    id: "quantity",
-    label: "Quantity",
-    titleAlign: "center",
-    valueAlign: "center",
-  },
-];
+function PaymentDeliveryPage({
+  handlePaymentButton,
+  paymentOption,
+  setPaymentOption,
+}) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { product } = useSelector((state) => state.productsForClient);
+  const { user } = useSelector((state) => state.auth);
+
+  const handleChange = (event) => {
+    setPaymentOption(event.target.value);
+  };
+
+  return (
+    <>
+      <div
+        style={{
+          border: "1px solid black",
+          width: "99.9%",
+          height: "fit-content",
+          paddingBottom: "20px",
+          display: "flex",
+        }}
+      >
+        <div className="delivery-address-div">
+          <div className="delivery-address-title-div">Shipping Details :</div>
+          <div className="delivery-address-content">
+            <div
+              className="delivery-address-name"
+              style={{ marginTop: "10px", padding: "2px" }}
+            >
+              Name : {user.user.name}
+            </div>
+            <div
+              className="delivery-address-email"
+              style={{ marginTop: "10px" }}
+            >
+              Email : {user.user.email}
+            </div>
+            <div
+              className="delivery-address-address"
+              style={{ marginTop: "10px" }}
+            >
+              Address : {user.user.address.street}
+            </div>
+            <div style={{ display: "flex" }}>
+              <div
+                className="delivery-address-city"
+                style={{ marginTop: "10px" }}
+              >
+                City : {user.user.address.city}
+              </div>
+              <div
+                className="delivery-address-state"
+                style={{ marginTop: "10px", marginLeft: "40px" }}
+              >
+                State : {user.user.address.state}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="payment-info-div">
+          <div className="payment-info-title">Payment Info :</div>
+          <div className="accepted-cards-icons">
+            Accepted Cards : <br />
+            <i
+              class="fa fa-cc-visa"
+              style={{
+                color: "navy",
+                marginLeft: "0px",
+                marginTop: "15px",
+                fontSize: "40px",
+              }}
+            ></i>
+            <i
+              class="fa fa-cc-amex"
+              style={{
+                color: "blue",
+                marginLeft: "15px",
+                marginTop: "15px",
+                fontSize: "40px",
+              }}
+            ></i>
+            <i
+              class="fa fa-cc-mastercard"
+              style={{
+                color: "red",
+                marginLeft: "15px",
+                marginTop: "15px",
+                fontSize: "40px",
+              }}
+            ></i>
+            <i
+              class="fa fa-cc-discover"
+              style={{
+                color: "orange",
+                marginLeft: "15px",
+                marginTop: "15px",
+                fontSize: "40px",
+              }}
+            ></i>
+          </div>
+
+          <div className="payment-details-payment-page">
+            <div className="payment-details-payment-page-title">
+              Payment Method :
+            </div>
+            <div className="payment-type-payment-page">
+              <Select
+                value={paymentOption}
+                onChange={handleChange}
+                className="payment-select-payment-page"
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                <MenuItem value="COD">Cash On Delivery</MenuItem>
+                <MenuItem value="UPI">UPI ID</MenuItem>
+                <MenuItem value="CARD">
+                  Pay with Credit Card/Debit Card/ ATM Card
+                </MenuItem>
+              </Select>
+            </div>
+            <div style={{ marginTop: "21px" }}>
+              {paymentOption === "CARD" ? (
+                <>
+                  <div style={{ display: "flex" }}>
+                    <div className="card-holder-name">
+                      Card Holder Name
+                      <br />
+                      <input type="text" />
+                    </div>
+                    <div className="card-number">
+                      Card Number
+                      <br />
+                      <input type="text" />
+                    </div>
+                  </div>
+                  <div style={{ display: "flex" }}>
+                    <div className="card-expiry-date-year">
+                      Enter Exp Month & Year (mm/yyyy)
+                      <br />
+                      <input type="text" />
+                    </div>
+                    <div className="card-cvv-number">
+                      Enter CVV
+                      <br />
+                      <input type="text" />
+                    </div>
+                  </div>
+                </>
+              ) : paymentOption === "COD" ? (
+                <></>
+              ) : paymentOption === "UPI" ? (
+                <div>
+                  <div className="upi-payment-info">
+                    Enter UPI ID :
+                    <br />
+                    <input type="text" />
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className="payment-button-div">
+              <button className="payment-button" onClick={handlePaymentButton}>
+                Pay Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
 function ProductCard({ item }) {
   const dispatch = useDispatch();
@@ -55,8 +219,8 @@ function ProductCard({ item }) {
 
   const handleRemoveButton = (id) => {
     console.log("Remove Button is Clicked...", id);
-  
-    dispatch(removeFromCart(id))
+
+    dispatch(removeFromCart(id));
   };
 
   const handleQuantityChange = (sign, id) => {
@@ -141,7 +305,7 @@ function ProductCard({ item }) {
             style={{ display: "block", position: "relative", padding: "15px" }}
           >
             <div>
-              <button   
+              <button
                 className="cart-item-decrease-button"
                 onClick={() => handleQuantityChange("-", item._id)}
                 style={{
@@ -207,9 +371,14 @@ function ProductCard({ item }) {
 
 export default function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [page, setPage] = useState(1);
+  const [paymentOption, setPaymentOption] = useState("COD");
 
   const { user } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.productsForClient);
+  const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
 
   let totalAmount = 0;
 
@@ -219,14 +388,38 @@ export default function Cart() {
 
   totalAmount = totalAmount.toLocaleString("en-IN");
 
-  console.log(totalAmount);
+  // console.log(paymentOption);
 
   const userId = user.user._id;
 
-  console.log("cart :", cart);
+  console.log("cart :", cart.length);
 
   const handleCheckout = () => {
-    //Navigate to Payment Page...
+    setPage(!page);
+  };
+
+  const handlePaymentButton = () => {
+    // const userId = user.user._id;
+
+    let checkoutData = [];
+
+    for (let index = 0; index < cart.length; index++) {
+      const newData = {
+        userId,
+        productId: cart[index]._id,
+        prodImage: cart[index].prodImage,
+        prodName: cart[index].prodName,
+        quantity: cart[index].quantity,
+        productPrice: cart[index].prodPrice,
+        paymentOption,
+      };
+      checkoutData.push(newData);
+    }
+
+    console.log("User CheckOut : ", checkoutData);
+
+    dispatch(placeOrder(checkoutData));
+    console.log("Clicked Payment Button in Payment Page...");
   };
 
   useEffect(() => {
@@ -234,39 +427,93 @@ export default function Cart() {
       // console.log("User : ", user)
       dispatch(fetchCart(userId));
     }
-  }, [dispatch]);
+
+    if (isPlaced) {
+      alert("Order Placed Successfully");
+      // console.log("Your Order Id is ", orderId.orderId)
+      navigate("/myorders");
+    }
+
+    return () => {
+      dispatch(reset());
+    }
+
+  }, [dispatch, isPlaced]);
 
   return (
     <>
-      <div className="buyers-orders-table-title">Cart</div>
-      <Box sx={{ width: "100%", marginTop: "20px" }}>
-        <Grid container rowSpacing={1}>
-          {cart.map((item) => {
-            return <ProductCard item={item} />;
-          })}
-        </Grid>
-      </Box>
-      <div className="cart-grand-total">
-        <div className="grand-total-summary-title">Summary :</div>
-        <div style={{ display: "flex", marginTop: "10px" }}>
-          <div className="total-title">Total :</div>
-          <div className="total-value">{totalAmount} ₹</div>
-        </div>
-        <div style={{ display: "flex" }}>
-          <div className="shipping-charge-title">Shipping Charge :</div>
-          <div className="shipping-charge-value">0 ₹</div>
-        </div>
-        <hr style={{ marginTop: "20px" }} />
-        <div style={{ display: "flex" }}>
-          <div className="grand-total-title">Total Amount :</div>
-          <div className="grand-total-value">{totalAmount} ₹</div>
-        </div>
-        <div className="cart-page-checkout-button">
-          <button className="checkout-button" onClick={handleCheckout}>
-            CHECKOUT
-          </button>
-        </div>
-      </div>
+      {cart.length !== 0 ? (
+        page ? (
+          <>
+            <div className="buyers-orders-table-title">Cart</div>
+            <Box sx={{ width: "100%", marginTop: "20px" }}>
+              <Grid container rowSpacing={1}>
+                {cart.map((item) => {
+                  return <ProductCard item={item} />;
+                })}
+              </Grid>
+            </Box>
+            <div className="cart-grand-total">
+              <div className="grand-total-summary-title">Summary :</div>
+              <div style={{ display: "flex", marginTop: "10px" }}>
+                <div className="total-title">Total :</div>
+                <div className="total-value">{totalAmount} ₹</div>
+              </div>
+              <div style={{ display: "flex" }}>
+                <div className="shipping-charge-title">Shipping Charge :</div>
+                <div className="shipping-charge-value">0 ₹</div>
+              </div>
+              <hr style={{ marginTop: "20px" }} />
+              <div style={{ display: "flex" }}>
+                <div className="grand-total-title">Total Amount :</div>
+                <div className="grand-total-value">{totalAmount} ₹</div>
+              </div>
+              <div className="cart-page-checkout-button">
+                <button className="checkout-button" onClick={handleCheckout}>
+                  CHECKOUT
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <PaymentDeliveryPage
+              handlePaymentButton={handlePaymentButton}
+              paymentOption={paymentOption}
+              setPaymentOption={setPaymentOption}
+            />
+            <div
+              style={{
+                width: "fit-content",
+                marginLeft: "auto",
+                marginRight: "20px",
+                marginTop: "50px",
+              }}
+            >
+              <button
+                style={{
+                  width: "70px",
+                  height: "30px",
+                  fontSize: "15px",
+                  border: "1px solid black",
+                  backgroundColor: "white",
+                  fontWeight: "bold",
+                  opacity: "0.7",
+                }}
+                onClick={handleCheckout}
+              >
+                Back
+              </button>
+            </div>
+          </>
+        )
+      ) : (
+        <>
+          <div align="center">
+            <h1>Cart is Empty</h1>
+          </div>
+        </>
+      )}
     </>
   );
 }
