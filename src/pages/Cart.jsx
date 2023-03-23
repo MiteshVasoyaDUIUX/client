@@ -20,7 +20,10 @@ import {
   Typography,
 } from "@mui/material";
 import "./Cart.css";
-import { fetchCart, updateCartQuantity } from "../features/productsForClient/productsForClientSlice";
+import {
+  fetchCart,
+  updateCartQuantity,
+} from "../features/productsForClient/productsForClientSlice";
 
 const columns = [
   {
@@ -43,8 +46,12 @@ const columns = [
 
 function ProductCard({ item, setCart }) {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
   const [quantity, setQuantity] = useState(item.quantity);
-  const subTotal = item.prodPrice * quantity;
+  let subTotal = item.prodPrice * quantity;
+  subTotal = subTotal.toLocaleString("en-IN");
+
   let cartObj = [];
 
   const handleRemoveButton = (id) => {
@@ -63,14 +70,25 @@ function ProductCard({ item, setCart }) {
             : window.alert("You can Select Max 10 Quantity...");
 
           //Update Cart Quantity...
-          dispatch(updateCartQuantity(quantity + 1));
-          console.log(quantity + 1);
+          const newData = {
+            userId: user.user._id,
+            productId: id,
+            newQuantity: quantity + 1,
+          };
+          dispatch(updateCartQuantity(newData));
+          // console.log(quantity + 1);
         }
         break;
       case "-":
         {
           quantity > 1 ? setQuantity(quantity - 1) : setQuantity(quantity);
           console.log(sign, id);
+          const newData = {
+            userId: user.user._id,
+            productId: id,
+            newQuantity: quantity - 1,
+          };
+          dispatch(updateCartQuantity(newData));
         }
         break;
 
@@ -159,7 +177,7 @@ function ProductCard({ item, setCart }) {
 
               <div
                 style={{
-                  width: "200px",
+                  width: "fitContent",
                   marginTop: "10%",
                   marginLeft: "2%",
                   fontSize: "150%",
@@ -197,6 +215,8 @@ export default function Cart() {
     totalAmount = totalAmount + cart[index].quantity * cart[index].prodPrice;
   }
 
+  totalAmount = totalAmount.toLocaleString("en-IN");
+
   console.log(totalAmount);
 
   const userId = user.user._id;
@@ -213,6 +233,10 @@ export default function Cart() {
     }
     console.log("Final Cart : ", cartData);
   };
+
+  const handleCheckout = () => {
+    //Navigate to Payment Page...
+  }
 
   useEffect(() => {
     if (user) {
@@ -245,6 +269,9 @@ export default function Cart() {
         <div style={{ display: "flex" }}>
           <div className="grand-total-title">Total Amount :</div>
           <div className="grand-total-value">{totalAmount} ₹</div>
+        </div>
+        <div className="cart-page-checkout-button">
+          <button className="checkout-button" onClick={handleCheckout}>CHECKOUT</button>
         </div>
       </div>
     </>

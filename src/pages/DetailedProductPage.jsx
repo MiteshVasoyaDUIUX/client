@@ -33,7 +33,7 @@ function DetailedProductPage() {
   const { product, isAddedCart, isError, message } = useSelector(
     (state) => state.productsForClient
   );
-  const [quantity, setQuantity] = useState(3);
+  const [quantity, setQuantity] = useState(1);
   const productId = params.id;
   console.log("Product Id : ", productId);
   let outOfStock;

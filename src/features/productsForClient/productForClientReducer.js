@@ -36,12 +36,12 @@ const updateCart = async (newData, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
+  console.log("Data.ProductId: ", newData);
   const response = await axios.put(
     API_URL + "/buyer/updatecart/" + newData.userId,
     newData,
     config
   );
-  console.log("Data.ProductId: ", response.data);
   return response.data;
 };
 
@@ -99,7 +99,7 @@ const productServiceForClient = {
   fetchCart,
   addToWishList,
   fetchOneProduct,
-  updateCart
+  updateCart,
 };
 
 export default productServiceForClient;
