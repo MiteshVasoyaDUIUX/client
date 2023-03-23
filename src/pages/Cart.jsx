@@ -44,7 +44,7 @@ const columns = [
   },
 ];
 
-function ProductCard({ item, setCart }) {
+function ProductCard({ item }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
@@ -52,13 +52,8 @@ function ProductCard({ item, setCart }) {
   let subTotal = item.prodPrice * quantity;
   subTotal = subTotal.toLocaleString("en-IN");
 
-  let cartObj = [];
-
   const handleRemoveButton = (id) => {
-    const productId = [id, quantity];
-
-    setCart(productId);
-    // console.log("Remove Button is Clicked...", cartObj);
+    console.log("Remove Button is Clicked...", id);
   };
 
   const handleQuantityChange = (sign, id) => {
@@ -70,25 +65,30 @@ function ProductCard({ item, setCart }) {
             : window.alert("You can Select Max 10 Quantity...");
 
           //Update Cart Quantity...
-          const newData = {
-            userId: user.user._id,
-            productId: id,
-            newQuantity: quantity + 1,
-          };
-          dispatch(updateCartQuantity(newData));
-          // console.log(quantity + 1);
+          if (quantity < 10) {
+            const newData = {
+              userId: user.user._id,
+              productId: id,
+              newQuantity: quantity + 1,
+            };
+            dispatch(updateCartQuantity(newData));
+            // console.log(quantity + 1);
+          }
         }
         break;
       case "-":
         {
           quantity > 1 ? setQuantity(quantity - 1) : setQuantity(quantity);
           console.log(sign, id);
-          const newData = {
-            userId: user.user._id,
-            productId: id,
-            newQuantity: quantity - 1,
-          };
-          dispatch(updateCartQuantity(newData));
+
+          if (quantity > 1) {
+            const newData = {
+              userId: user.user._id,
+              productId: id,
+              newQuantity: quantity - 1,
+            };
+            dispatch(updateCartQuantity(newData));
+          }
         }
         break;
 
@@ -207,7 +207,6 @@ export default function Cart() {
 
   const { user } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.productsForClient);
-  const [cartData, setCartData] = useState([]);
 
   let totalAmount = 0;
 
@@ -222,28 +221,17 @@ export default function Cart() {
   const userId = user.user._id;
 
   console.log("cart :", cart);
-  const setCart = (newData) => {
-    for (let i = 0; i < 5; i++) {
-      if (!cartData[i][0].includes("s")) {
-        console.log("Includes");
-        console.log("Final Cart : ", cartData);
-      } else {
-        setCartData([...cartData, newData]);
-      }
-    }
-    console.log("Final Cart : ", cartData);
-  };
 
   const handleCheckout = () => {
     //Navigate to Payment Page...
-  }
+  };
 
   useEffect(() => {
     if (user) {
       // console.log("User : ", user)
       dispatch(fetchCart(userId));
     }
-  }, [dispatch, cartData]);
+  }, [dispatch]);
 
   return (
     <>
@@ -251,7 +239,7 @@ export default function Cart() {
       <Box sx={{ width: "100%", marginTop: "20px" }}>
         <Grid container rowSpacing={1}>
           {cart.map((item) => {
-            return <ProductCard item={item} setCart={setCart} />;
+            return <ProductCard item={item} />;
           })}
         </Grid>
       </Box>
@@ -271,7 +259,9 @@ export default function Cart() {
           <div className="grand-total-value">{totalAmount} ₹</div>
         </div>
         <div className="cart-page-checkout-button">
-          <button className="checkout-button" onClick={handleCheckout}>CHECKOUT</button>
+          <button className="checkout-button" onClick={handleCheckout}>
+            CHECKOUT
+          </button>
         </div>
       </div>
     </>
