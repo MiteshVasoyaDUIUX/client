@@ -76,6 +76,22 @@ const fetchCart = async (userId, token) => {
   return response.data;
 };
 
+const removeFromCart = async (productId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.delete(
+    API_URL + "/buyer/removefromcart/" + productId,
+    config
+  );
+
+  // console.log("Response : ", response.data);
+  return response.data;
+};
+
 const addToWishList = async (data, token) => {
   // console.log("Token : ", data.userId);
   const config = {
@@ -100,6 +116,7 @@ const productServiceForClient = {
   addToWishList,
   fetchOneProduct,
   updateCart,
+  removeFromCart
 };
 
 export default productServiceForClient;

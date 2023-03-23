@@ -22,6 +22,7 @@ import {
 import "./Cart.css";
 import {
   fetchCart,
+  removeFromCart,
   updateCartQuantity,
 } from "../features/productsForClient/productsForClientSlice";
 
@@ -49,11 +50,13 @@ function ProductCard({ item }) {
   const { user } = useSelector((state) => state.auth);
 
   const [quantity, setQuantity] = useState(item.quantity);
-  let subTotal = item.prodPrice * quantity;
+  let subTotal = item.prodPrice * item.quantity;
   subTotal = subTotal.toLocaleString("en-IN");
 
   const handleRemoveButton = (id) => {
     console.log("Remove Button is Clicked...", id);
+  
+    dispatch(removeFromCart(id))
   };
 
   const handleQuantityChange = (sign, id) => {
@@ -138,7 +141,7 @@ function ProductCard({ item }) {
             style={{ display: "block", position: "relative", padding: "15px" }}
           >
             <div>
-              <button
+              <button   
                 className="cart-item-decrease-button"
                 onClick={() => handleQuantityChange("-", item._id)}
                 style={{
@@ -154,7 +157,7 @@ function ProductCard({ item }) {
                 type="text"
                 name="cart-quantity"
                 id="cart-quantity"
-                value={quantity}
+                value={item.quantity}
                 style={{
                   width: "12%",
                   height: "26px",

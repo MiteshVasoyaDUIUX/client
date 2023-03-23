@@ -92,6 +92,26 @@ export const updateCartQuantity = createAsyncThunk(
   }
 );
 
+export const removeFromCart = createAsyncThunk(
+  "productsForClient/removeFromCart",
+  async (productId, thunkAPI) => {
+    try {
+      //'token' may be not use because only user can add the goal...
+      const token = thunkAPI.getState().auth.user.token;
+
+      return await productServiceForClient.removeFromCart(productId, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const addToWishList = createAsyncThunk(
   "productsForClient/addToWishList",
   async (data, thunkAPI) => {
@@ -227,6 +247,7 @@ const productForClientSlice = createSlice({
         state.isAddingCart = false;
         state.isAddedCart = true;
         state.isUpdateCart = true;
+        state.cart = action.payload;
         state.message = "Added to Cart";
       })
       .addCase(updateCartQuantity.rejected, (state, action) => {
@@ -234,6 +255,20 @@ const productForClientSlice = createSlice({
         state.isAddingCart = false;
         state.isAddedCart = false;
         state.isUpdateCart = false;
+        state.message = action.payload;
+      })
+      .addCase(removeFromCart.pending, (state) => {
+        state.message = "";
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isRemoved = true;
+        // state.message = "Added to Cart";
+        console.log("NEW DAAATA : ", action.payload);
+        state.cart = action.payload;
+      })
+      .addCase(removeFromCart.rejected, (state, action) => {
+        state.isError = true;
         state.message = action.payload;
       })
       .addCase(fetchWishList.pending, (state) => {
