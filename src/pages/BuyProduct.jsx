@@ -20,6 +20,7 @@ import "./BuyProduct.css";
 import { placeOrder } from "../features/order/orderSlice";
 import Spinner from "../components/Spinner";
 import { reset } from "../features/auth/authSlice";
+import { Image } from "../components/DetailedProductPage.jsx/Images";
 
 function BuyProduct() {
   const dispatch = useDispatch();
@@ -68,6 +69,7 @@ function BuyProduct() {
       quantity,
       productPrice: product.prodPrice,
       paymentOption,
+      buypage : 1
     };
 
     let checkoutData = [];
@@ -83,11 +85,7 @@ function BuyProduct() {
           <>
             <div className="place-order-page">
               <div className="product-detail-page">
-                <img
-                  src={product.prodImage[0]}
-                  className="product-image"
-                  alt="asas"
-                />
+              <Image prodImage={product.prodImage} />
                 {/* <img src={product.prodImage[0]} className="product-image" alt="asas"/> */}
                 <div className="buy-product-page-name">{product.prodName}</div>
                 <div className="buy-product-page-quantity">
@@ -125,7 +123,7 @@ function BuyProduct() {
                       </div>
                     </div>
                     <div className="products-total-amount">
-                      Total :{quantity * product.prodPrice}
+                      Total : {quantity * product.prodPrice} ₹
                     </div>
                   </div>
                 </div>
@@ -147,8 +145,7 @@ function BuyProduct() {
                           marginBottom: "10px",
                         }}
                       >
-                        <b> Address : </b> F-304, Shreeji Avenue, Sayan Road,
-                        Amroli
+                        <b> Address : </b> {user.user.address.street}
                       </div>
                       <div
                         style={{
@@ -156,7 +153,7 @@ function BuyProduct() {
                           marginBottom: "10px",
                         }}
                       >
-                        <b> City : </b> Surat
+                        <b> City : </b> {user.user.address.city}
                       </div>
                       <div style={{ display: "flex" }}>
                         <div
@@ -164,14 +161,14 @@ function BuyProduct() {
                             width: "100%",
                           }}
                         >
-                          <b> State : </b> Gujarat
+                          <b> State : </b> {user.user.address.state}
                         </div>
                         <div
                           style={{
                             width: "100%",
                           }}
                         >
-                          <b> Pin Code : </b> 394107
+                          <b> Pin Code : </b> {user.user.address.pincode}
                         </div>
                       </div>
                     </div>

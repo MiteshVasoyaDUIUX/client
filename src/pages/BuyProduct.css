@@ -3,25 +3,18 @@
 }
 
 .product-detail-page {
-      height: 825px;
+      height: fit-content;
       width: 550px;
       border-right: 1px solid rgb(189, 187, 187);
+      border-left: 1px solid rgb(189, 187, 187);
       margin-top: 2.5%;
       margin-left: 3%;
-}
-
-.product-image {
-      width: 56%;
-      height: 60%;
-      margin-left: 22%;
-      margin-top: 10%;
-      border-radius: 2px;
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 50px 40px -7px;
+      padding-bottom: 5px;
 }
 
 .buy-product-page-name {
       margin-left: 10%;
-      margin-top: 15%;
+      margin-top: 8%;
       width: 80%;
       font-size: larger;
       font-weight: 500;

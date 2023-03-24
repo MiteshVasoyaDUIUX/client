@@ -13,28 +13,36 @@ import "./OtherProducts.css";
 import Filter from "../Filter";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addToCart,
   addToWishList,
   fetchProducts,
   fetchWishList,
   reset,
 } from "../../features/productsForClient/productsForClientSlice";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function ProductCard({ product }) {
   const [wishList, setWishList] = useState(false);
-  const [addToCart, setAddToCart] = useState(false);
   // console.log("Products : ", product.prodImage);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { wishlist } = useSelector((state) => state.productsForClient);
+  const { wishlist, isAddedCart, isError, message } = useSelector(
+    (state) => state.productsForClient
+  );
   useEffect(() => {
     if (user) {
       const userId = user.user._id;
       dispatch(fetchWishList(userId));
     }
-  }, [user, dispatch]);
+    // if (isError && message) {
+    //   toast.error("Error : " + message);
+    // }
+  }, [dispatch, isError]);
 
-  const handleCartButton = () => {
+  const handleCartButton = (e) => {
+    e.stopPropagation();
     if (user) {
       const productId = product._id;
       const userData = user;
@@ -50,7 +58,13 @@ function ProductCard({ product }) {
     }
   };
 
+  const handleCardClick = () => {
+    console.log(product._id);
+    navigate(`/product/${product._id}`);
+  };
+
   const handleWishListButton = (e) => {
+    e.stopPropagation();
     e.preventDefault();
     if (user) {
       setWishList(!wishList);
@@ -79,9 +93,11 @@ function ProductCard({ product }) {
           border: "0.5px solid white",
           boxShadow: "none",
           borderRadius: "15px",
+          cursor: "pointer",
         }}
         key={product._id}
         className="product-card"
+        onClick={handleCardClick}
       >
         <CardMedia
           component="img"
@@ -127,7 +143,7 @@ function ProductCard({ product }) {
         </CardContent>
         <CardActions>
           <IconButton onClick={handleCartButton}>
-            {addToCart ? (
+            {!addToCart ? (
               <AddShoppingCartIcon color="primary" />
             ) : (
               <AddShoppingCartIcon />
@@ -215,10 +231,7 @@ function OtherProducts() {
   if (products.length > 0) {
     products.map((product) => {
       let category = product.prodCategory;
-      if (
-        category.includes("Other") ||
-        category.includes("other")
-      ) {
+      if (category.includes("Other") || category.includes("other")) {
         newProdArray.push(product);
         // console.log("category : ", category);
       }

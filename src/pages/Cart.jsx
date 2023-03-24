@@ -304,44 +304,100 @@ function ProductCard({ item }) {
           <div
             style={{ display: "block", position: "relative", padding: "15px" }}
           >
+            {item.prodQuantity > 0 ? (
+              <>
+                <button
+                  className="cart-item-decrease-button"
+                  onClick={() => handleQuantityChange("-", item._id)}
+                  style={{
+                    marginLeft: "32%",
+                    width: "12%",
+                    marginTop: "1%",
+                    marginBottom: "4%",
+                  }}
+                >
+                  -
+                </button>
+                <input
+                  type="text"
+                  name="cart-quantity"
+                  id="cart-quantity"
+                  value={item.quantity}
+                  style={{
+                    width: "12%",
+                    height: "26px",
+                    outline: "none",
+                    border: "1px solid grey",
+                    fontSize: "18px",
+                    textAlign: "center",
+                  }}
+                  disabled
+                />
+                <button
+                  className="cart-item-icrease-button"
+                  onClick={() => handleQuantityChange("+", item._id)}
+                  style={{
+                    width: "12%",
+                  }}
+                >
+                  +
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="cart-item-decrease-button"
+                  onClick={() => handleQuantityChange("-", item._id)}
+                  style={{
+                    marginLeft: "32%",
+                    width: "12%",
+                    marginTop: "1%",
+                    marginBottom: "4%",
+                  }}
+                  disabled
+                >
+                  -
+                </button>
+                <input
+                  type="text"
+                  name="cart-quantity"
+                  id="cart-quantity"
+                  value={item.quantity}
+                  style={{
+                    width: "12%",
+                    height: "26px",
+                    outline: "none",
+                    border: "1px solid grey",
+                    fontSize: "18px",
+                    textAlign: "center",
+                  }}
+                  disabled
+                />
+                <button
+                  className="cart-item-icrease-button"
+                  onClick={() => handleQuantityChange("+", item._id)}
+                  style={{
+                    width: "12%",
+                  }}
+                  disabled
+                >
+                  +
+                </button>
+                <div
+                  style={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    width: "fit-content",
+                    marginTop: "1%",
+                    marginBottom: "4%",
+                    fontSize: "25px",
+                  }}
+                >
+                  Out Of Stock
+                </div>
+              </>
+            )}
             <div>
-              <button
-                className="cart-item-decrease-button"
-                onClick={() => handleQuantityChange("-", item._id)}
-                style={{
-                  marginLeft: "32%",
-                  width: "12%",
-                  marginTop: "1%",
-                  marginBottom: "4%",
-                }}
-              >
-                -
-              </button>
-              <input
-                type="text"
-                name="cart-quantity"
-                id="cart-quantity"
-                value={item.quantity}
-                style={{
-                  width: "12%",
-                  height: "26px",
-                  outline: "none",
-                  border: "1px solid grey",
-                  fontSize: "18px",
-                  textAlign: "center",
-                }}
-                disabled
-              />
-              <button
-                className="cart-item-icrease-button"
-                onClick={() => handleQuantityChange("+", item._id)}
-                style={{
-                  width: "12%",
-                }}
-              >
-                +
-              </button>
-
               <div
                 style={{
                   width: "fitContent",
@@ -383,7 +439,9 @@ export default function Cart() {
   let totalAmount = 0;
 
   for (let index = 0; index < cart.length; index++) {
-    totalAmount = totalAmount + cart[index].quantity * cart[index].prodPrice;
+    if (cart[index].prodQuantity !== 0) {
+      totalAmount = totalAmount + cart[index].quantity * cart[index].prodPrice;
+    }
   }
 
   totalAmount = totalAmount.toLocaleString("en-IN");
@@ -404,16 +462,18 @@ export default function Cart() {
     let checkoutData = [];
 
     for (let index = 0; index < cart.length; index++) {
-      const newData = {
-        userId,
-        productId: cart[index]._id,
-        prodImage: cart[index].prodImage,
-        prodName: cart[index].prodName,
-        quantity: cart[index].quantity,
-        productPrice: cart[index].prodPrice,
-        paymentOption,
-      };
-      checkoutData.push(newData);
+      if (cart[index].prodQuantity !== 0) {
+        const newData = {
+          userId,
+          productId: cart[index]._id,
+          prodImage: cart[index].prodImage,
+          prodName: cart[index].prodName,
+          quantity: cart[index].quantity,
+          productPrice: cart[index].prodPrice,
+          paymentOption,
+        };
+        checkoutData.push(newData);
+      }
     }
 
     console.log("User CheckOut : ", checkoutData);
@@ -436,8 +496,7 @@ export default function Cart() {
 
     return () => {
       dispatch(reset());
-    }
-
+    };
   }, [dispatch, isPlaced]);
 
   return (

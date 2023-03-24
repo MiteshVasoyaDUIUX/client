@@ -49,11 +49,13 @@ function ProductCard({ trendingProduct }) {
       toast.success("Added to cart...");
     }
 
-    if (isError && message) {
-      toast.error("Error : " + message);
-    }
+    // if (isError && message) {
+    //   toast.error("Error : " + message);
+    // }
 
-    reset();
+    return () => {
+      reset();
+    };
   }, [dispatch, isAddedCart, isError, message]);
 
   const handleCartButton = (event) => {

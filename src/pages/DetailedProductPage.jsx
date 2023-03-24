@@ -4,7 +4,7 @@ import { IconButton, Rating } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import Images from "../components/DetailedProductPage.jsx/Images";
+import Images, { Image } from "../components/DetailedProductPage.jsx/Images";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import {
   addToCart,
@@ -90,11 +90,14 @@ function DetailedProductPage() {
   };
 
   const handleBuyNowButton = () => {
-    if (user) {
-      const userData = user;
-      navigate(`/product/placeorder/${productId}&${quantity}`);
+    if (product.prodQuantity !== 0 && quantity <= product.prodQuantity) {
+      if (user) {
+        navigate(`/product/placeorder/${productId}&${quantity}`);
+      } else {
+        toast.error("Not Logged In");
+      }
     } else {
-      toast.error("Not Logged In");
+      alert("Currently Product is out of stock...");
     }
   };
 
