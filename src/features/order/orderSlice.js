@@ -69,6 +69,7 @@ const orderSlice = createSlice({
         state.isPlaced = true;
         state.isPlacing = false;
         state.isError = false;
+        state.message = action.payload.message;
         // state.orderId = action.payload;
         //   console.log("New State : ", state.orderId);
       })
