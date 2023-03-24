@@ -6,21 +6,21 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Cart from "./pages/Cart";
-import MyOrders from "./pages/MyOrders";
-import AdminDashboard from "./pages/AdminDashboard";
-import AddProduct from "./pages/AddProduct";
-import AllUser from "./pages/AllUser";
-import AllProduct from "./pages/AllProduct";
+import Cart from "./pages/Client Pages/Cart";
+import MyOrders from "./pages/Client Pages/MyOrders";
+import AdminDashboard from "./pages/Admin Pages/AdminDashboard";
+import AddProduct from "./pages/Admin Pages/AddProduct";
+import AllUser from "./pages/Admin Pages/AllUser";
+import AllProduct from "./pages/Admin Pages/AllProduct";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import EditProduct from "./pages/EditProduct";
+import EditProduct from "./pages/Admin Pages/EditProduct";
 import EditAdminProfile from "./pages/EditAdminProfile";
 import Clothes from "./components/Products/Clothes";
 import OtherProducts from "./components/Products/OtherProducts";
 import Accessories from "./components/Products/Accessories";
-import DetailedProductPage from "./pages/DetailedProductPage";
-import BuyProduct from "./pages/BuyProduct";
+import DetailedProductPage from "./pages/Client Pages/DetailedProductPage";
+import BuyProduct from "./pages/Client Pages/BuyProduct";
 function App() {
   return (
     <>
@@ -33,7 +33,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/myorders" element={<MyOrders />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/addproduct" element={<AddProduct />} />
             <Route path="/admin/allproduct" element={<AllProduct />} />
             <Route path="/admin/alluser" element={<AllUser />} />

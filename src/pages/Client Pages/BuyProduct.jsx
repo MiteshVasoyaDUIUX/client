@@ -14,13 +14,13 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { ErrorBoundary } from "../components/ErrorBoundary";
-import { fetchOneProduct } from "../features/productsForClient/productsForClientSlice";
+import { ErrorBoundary } from "../../components/ErrorBoundary";
+import { fetchOneProduct } from "../../features/productsForClient/productsForClientSlice";
 import "./BuyProduct.css";
-import { placeOrder } from "../features/order/orderSlice";
-import Spinner from "../components/Spinner";
-import { reset } from "../features/auth/authSlice";
-import { Image } from "../components/DetailedProductPage.jsx/Images";
+import { placeOrder } from "../../features/order/orderSlice";
+import Spinner from "../../components/Spinner";
+import { reset } from "../../features/auth/authSlice";
+import { Image } from "../../components/DetailedProductPage.jsx/Images";
 
 function BuyProduct() {
   const dispatch = useDispatch();

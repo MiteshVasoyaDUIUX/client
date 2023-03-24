@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Filter from "../Filter";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 
 function ProductCard({ product }) {
   const [wishList, setWishList] = useState(false);
@@ -97,7 +98,9 @@ function ProductCard({ product }) {
     <>
       <Card
         sx={{
-          maxWidth: 400,
+          width: 390,
+          height: 650,
+          paddingBottom: "10px",
           textAlign: "center",
           marginBottom: "30px",
           marginRight: "30px",
@@ -110,16 +113,9 @@ function ProductCard({ product }) {
         className="product-card"
         onClick={handleCardClick}
       >
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          image={product.prodImage[0]}
-          sx={{
-            height: "fitContent",
-            width: "fitContent",
-            minHeight: "300px",
-          }}
-        />
+       <div className="detailed-page-image">
+          <ImageForCard prodImage={product.prodImage} />
+        </div>
         <CardContent>
           <Typography
             variant="h6"

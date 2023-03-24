@@ -4,12 +4,12 @@ import { IconButton, Rating } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import Images, { Image } from "../components/DetailedProductPage.jsx/Images";
-import { ErrorBoundary } from "../components/ErrorBoundary";
+import Images, { Image } from "../../components/DetailedProductPage.jsx/Images";
+import { ErrorBoundary } from "../../components/ErrorBoundary";
 import {
   addToCart,
   fetchOneProduct,
-} from "../features/productsForClient/productsForClientSlice";
+} from "../../features/productsForClient/productsForClientSlice";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import "./DetailedProductPage.css";
@@ -18,7 +18,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { toast } from "react-toastify";
-import { reset } from "../features/auth/authSlice";
+import { reset } from "../../features/auth/authSlice";
 
 function DetailedProductPage() {
   const dispatch = useDispatch();

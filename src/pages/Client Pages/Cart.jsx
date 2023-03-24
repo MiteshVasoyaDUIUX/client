@@ -27,9 +27,9 @@ import {
   removeFromCart,
   reset,
   updateCartQuantity,
-} from "../features/productsForClient/productsForClientSlice";
+} from "../../features/productsForClient/productsForClientSlice";
 import { useNavigate } from "react-router-dom";
-import { placeOrder } from "../features/order/orderSlice";
+import { placeOrder } from "../../features/order/orderSlice";
 
 function PaymentDeliveryPage({
   handlePaymentButton,

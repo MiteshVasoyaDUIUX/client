@@ -31,7 +31,7 @@ function Slider(props) {
   const images = props;
   return (
     <>
-      <div className="carousel-wrapper">
+      <div className="carousel-wrapper" style={{zIndex : "0"}}>
         <Carousel showThumbs={false} swipeable>
           <Link to={images.image[0].link}>
             <div>

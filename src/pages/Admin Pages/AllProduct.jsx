@@ -10,7 +10,7 @@ import {
   removeProduct,
   updateProduct,
   reset,
-} from "../features/product/productSlice";
+} from "../../features/product/productSlice";
 
 //MaterialUI Components import...
 import {
@@ -33,55 +33,58 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
 import { GridLoader } from "react-spinners";
+import {
+  ImageForCard,
+  ImageForList,
+} from "../../components/DetailedProductPage.jsx/Images";
 
 const columns = [
   {
     id: "prodImage",
     label: "Image",
-    width: "15%",
-    imageHeight: "200px",
+    width: "10px",
     align: "center",
   },
   {
     id: "prodStatus",
     label: "Status",
-    width: "8%",
+    width: "10%",
     align: "center",
   },
   {
     id: "prodName",
     label: "Name",
-    width: "13%",
-    align: "center",
-  },
-  {
-    id: "prodDesc",
-    label: "Description",
-    width: "19%",
+    width: "30%",
     align: "center",
   },
   {
     id: "prodCategory",
     label: "Category",
-    width: "6%",
+    width: "3%",
+    align: "center",
+  },
+  {
+    id: "prodDesc",
+    label: "Description",
+    width: "99%",
     align: "center",
   },
   {
     id: "prodQuantity",
     label: "Quantity",
-    width: "6%",
+    width: "16%",
     align: "center",
   },
   {
     id: "prodPrice",
     label: "Price (₹)",
-    width: "5%",
+    width: "15%",
     align: "right",
   },
   {
     id: "discount",
     label: "Discount (%)",
-    width: "6%",
+    width: "16%",
     align: "center",
   },
   {
@@ -132,6 +135,7 @@ function Row(props) {
         margin: "2px",
         padding: "10px",
         height: "10px",
+        
       }}
     >
       {columns.map((column) => {
@@ -140,12 +144,43 @@ function Row(props) {
         const quantity = row.prodQuantity;
         let status = "";
         const images = row.prodImage;
-        if (quantity < 5) {
-          status = "Low Stock";
+        if (quantity < 5 && quantity > 0) {
+          status = (
+            <div
+              style={{
+                fontSize: "15px",
+                backgroundColor: "orange",
+                color: "white",
+                height: "fit-content",
+              }}
+            >
+              Low Stock
+            </div>
+          );
         } else if (quantity === 0) {
-          status = "Out Of Stock";
+          status = (
+            <div
+              style={{
+                fontSize: "15px",
+                backgroundColor: "#CD0404",
+                color: "white",
+              }}
+            >
+              Out Of Stock
+            </div>
+          );
         } else {
-          status = "Active";
+          status = (
+            <div
+              style={{
+                fontSize: "15px",
+                backgroundColor: "green",
+                color: "white",
+              }}
+            >
+              Active
+            </div>
+          );
         }
 
         return (
@@ -157,23 +192,14 @@ function Row(props) {
                   textOverflow: "ellipsis",
                   overflow: "clip",
                   height: "100px",
-                  margin: "10",
                 }}
               >
                 {column.id === "prodImage" ? (
-                  <ImageList
-                    sx={{ width: 200, height: "100px" }}
-                    cols={1}
-                    rowHeight="auto"
-                  >
-                    {images.map((item) => (
-                      <ImageListItem key={item}>
-                        <img src={item} alt={item} loading="lazy" />
-                      </ImageListItem>
-                    ))}
-                  </ImageList>
+                  <div className="detailed-page-image">
+                    <ImageForList prodImage={images} />
+                  </div>
                 ) : column.id === "prodStatus" ? (
-                  status
+                  <div>{status}</div>
                 ) : (
                   value
                 )}
@@ -267,14 +293,14 @@ function AllProduct() {
           padding: "10px",
         }}
       >
-        <GridLoader color="#437b9f" speedMultiplier="0.75" />
+        <GridLoader color="#000000" speedMultiplier="0.75" />
       </div>
     );
   }
 
   return (
     <>
-      <section className="content" style={{ marginTop: "55px" }}>
+      <section className="content" style={{ marginTop: "55px", zIndex: "0" }}>
         {products.length > 0 ? (
           <div className="product">
             <Paper
@@ -297,6 +323,7 @@ function AllProduct() {
                             width: column.width,
                             fontWeight: "bold",
                             borderBottom: "1px solid black",
+                            zIndex: "0",
                           }}
                         >
                           {column.label}
@@ -339,7 +366,6 @@ function AllProduct() {
               fontWeight: "bold",
             }}
           >
-            {" "}
             No Products Found, 
             <Link to="/admin/addproduct">Click Here To Add Products</Link>
           </div>

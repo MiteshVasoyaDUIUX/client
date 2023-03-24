@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import {
   FormGroup,
   FormControl,
@@ -15,45 +13,29 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { updateProduct, reset } from "../features/product/productSlice";
-import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import TextareaAutosize from "@mui/base/TextareaAutosize";
+import { uploadProduct, reset } from "../../features/product/productSlice";
 import { GridLoader } from "react-spinners";
 
-function EditProduct() {
-  const location = useLocation();
+function AddProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const formData = location.state;
-
-  //Print form data...
-  //     console.log("Form Data : ", formData);
-  const categories = [
-    "Select Category",
-    "Cloths",
-    "Footware",
-    "Accessories",
-    "Other",
-  ];
-
-  //Initial Data to get filled form...
   const [productData, setProductData] = useState({
-    productId: formData._id,
-    prodName: formData.prodName,
-    prodDesc: formData.prodDesc,
-    prodCategory: formData.prodCategory,
-    prodQuantity: formData.prodQuantity,
-    prodPrice: formData.prodPrice,
-    prodImage: formData.prodImage,
+    prodName: "",
+    prodDesc: "",
+    prodCategory: "",
+    prodQuantity: "",
+    prodPrice: "",
+    prodImage: [],
   });
+  const [selectedCategory, setSelectedCategory] = useState("Select Category");
+  const [image, setImage] = useState([]);
 
-  const [selectedCategory, setSelectedCategory] = useState(
-    formData.prodCategory
-  );
 
-  const [image, setImage] = useState(formData.prodImage);
-
-  const { products, isError, isLoading, isUpdated, message } = useSelector(
+  const { products, isError, isLoading, isSuccess, message } = useSelector(
     (state) => state.product
   );
 
@@ -62,11 +44,11 @@ function EditProduct() {
       toast.error(message);
     }
 
-    if (isUpdated) {
-      toast.success("Product Updated Successfully", {
+    if (isSuccess) {
+      toast.success("Product Added Successfully", {
         position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
+        autoClose: 2000,
+        hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: false,
         draggable: false,
@@ -74,11 +56,21 @@ function EditProduct() {
         theme: "light",
       });
 
-      navigate("/admin/allproduct");
+      setProductData({
+        prodName: "",
+        prodDesc: "",
+        prodCategory: "",
+        prodQuantity: "",
+        prodPrice: "",
+        prodImage: [],
+      });
+
+      setSelectedCategory("Select Category");
+      setImage([]);
     }
 
     dispatch(reset());
-  }, [isUpdated, isError, message, navigate, dispatch]);
+  }, [isSuccess, isError, message, navigate, dispatch]);
 
   if (isLoading) {
     return (
@@ -86,18 +78,26 @@ function EditProduct() {
         style={{
           position: "absolute",
           top: "50%",
-          left: "48%",
+          left : "48%",
           transform: "translate(0, -50%)",
           padding: "10px",
         }}
       >
-        <GridLoader color="#437b9f" speedMultiplier="0.75" />
+        <GridLoader color="#000000" speedMultiplier="0.75"/>
       </div>
     );
   }
 
+  const categories = [
+    "Select Category",
+    "Cloths",
+    "Footware",
+    "Accessories",
+    "Other",
+  ];
+
+
   const {
-    productId,
     prodName,
     prodDesc,
     prodCategory,
@@ -106,14 +106,11 @@ function EditProduct() {
     prodImage,
   } = productData;
 
-  //   console.log("Prod Id : ", productId);
   const handleChanges = (e) => {
     setProductData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-
-    //     console.log(productData);
   };
 
   const handleImageChange = (e) => {
@@ -144,9 +141,9 @@ function EditProduct() {
     e.preventDefault();
 
     // const url = URL.createObjectURL(image[0].slice(5));
+    console.log("URL.createObjectURL : ", image.files);
 
     const productData = {
-      productId,
       prodName,
       prodDesc,
       prodCategory: selectedCategory,
@@ -154,31 +151,27 @@ function EditProduct() {
       prodPrice,
       prodImage: image,
     };
-
-    //     console.log("New Data : ", productData);
-    // console.log("In Product Update Page...", productData);
-    dispatch(updateProduct(productData));
+    // console.log("In Product Upload Page...", productData);
+    dispatch(uploadProduct(productData));
   };
-
-  //   console.log("Data : ", formData);
 
   return (
     <div className="addproductform">
       <h1
         style={{
           textAlign: "center",
-          marginTop: "80px",
+          marginTop: "5px",
           marginLeft: "auto",
           marginRight: "auto",
           padding: "20px",
           fontFamily: "sans-serif",
-          borderBottom: "1px solid #457b9d",
+          borderBottom: "1px solid #000000",
           width: "fit-content",
-          color: "#457b9d",
+          color: "#000000",
           backgroundColor: "white",
         }}
       >
-        Update Product Details
+        Add Product
       </h1>
       <form>
         <FormGroup
@@ -190,8 +183,8 @@ function EditProduct() {
             paddingBottom: "80px",
             paddingLeft: "60px",
             paddingRight: "60px",
-            border: "1px solid #457b9d",
-            boxShadow: "7px 7px 29px 1px rgba(69, 123, 157, 0.6) ",
+            border: "1px solid #000000",
+            boxShadow: "7px 7px 16px -1px rgba(0, 0, 0, 0.4) ",
             borderRadius: "30px",
             backgroundColor: "white",
           }}
@@ -222,13 +215,13 @@ function EditProduct() {
           </FormControl>
           <br />
           {/* <TextField
-                type="text"
-                value={prodCategory}
-                onChange={handleChanges}
-                name="prodCategory"
-                placeholder="Product Category"
-                required
-              /> */}
+              type="text"
+              value={prodCategory}
+              onChange={handleChanges}
+              name="prodCategory"
+              placeholder="Product Category"
+              required
+            /> */}
 
           <Select
             value={selectedCategory}
@@ -311,7 +304,7 @@ function EditProduct() {
           <Button
             variant="contained"
             style={{
-              backgroundColor: "#457b9d",
+              backgroundColor: "black",
               color: "White",
               fontSize: "15px",
               fontWeight: "bolder",
@@ -326,4 +319,4 @@ function EditProduct() {
   );
 }
 
-export default EditProduct;
+export default AddProduct;

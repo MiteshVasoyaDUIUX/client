@@ -22,6 +22,8 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { GridLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { ImageForCard } from "../DetailedProductPage.jsx/Images";
+import { height } from "@mui/system";
 
 function ProductCard({ NewArrival }) {
   const [wishList, setWishList] = useState(false);
@@ -30,7 +32,9 @@ function ProductCard({ NewArrival }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { wishlist, isAddedCart, isError, message } = useSelector((state) => state.productsForClient);
+  const { wishlist, isAddedCart, isError, message } = useSelector(
+    (state) => state.productsForClient
+  );
 
   // console.log("UserId From Store : ", user.user._id);
   // console.log("WishList From Store : ", wishlist);
@@ -44,7 +48,7 @@ function ProductCard({ NewArrival }) {
     if (isAddedCart) {
       toast.success("Added to cart...");
     }
-    
+
     if (isError && message) {
       toast.error("Error : " + message);
     }
@@ -98,7 +102,9 @@ function ProductCard({ NewArrival }) {
     <>
       <Card
         sx={{
-          maxWidth: 390,
+          width: 390,
+          height: 650,
+          paddingBottom: "10px",
           textAlign: "center",
           marginBottom: "30px",
           marginRight: "30px",
@@ -110,17 +116,9 @@ function ProductCard({ NewArrival }) {
         className="product-card"
         onClick={handleCardClick}
       >
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          image={NewArrival.prodImage[0]}
-          sx={{
-            height: "fitContent",
-            width: "fitContent",
-            minHeight: "300px",
-            maxHeight: "600px",
-          }}
-        />
+        <div className="detailed-page-image">
+          <ImageForCard prodImage={NewArrival.prodImage} />
+        </div>
         <CardContent>
           <Typography
             variant="h6"
@@ -153,7 +151,14 @@ function ProductCard({ NewArrival }) {
             Price : {NewArrival.prodPrice}
           </Typography>
         </CardContent>
-        <CardActions>
+
+        <div
+          style={{
+            marginLeft : "20px",
+            width : "fit-content",
+            height : 'fit-content'
+          }}
+        >
           <IconButton onClick={handleCartButton}>
             {addtoCart ? (
               <AddShoppingCartIcon color="primary" />
@@ -168,7 +173,7 @@ function ProductCard({ NewArrival }) {
               <FavoriteBorderIcon color="error" />
             )}
           </IconButton>
-        </CardActions>
+        </div>
       </Card>
     </>
   );

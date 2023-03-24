@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllOrders } from "../features/order/orderSlice";
+import { fetchAllOrders } from "../../features/order/orderSlice";
 import "./MyOrders.css";
 import { styled } from '@mui/material/styles';
 

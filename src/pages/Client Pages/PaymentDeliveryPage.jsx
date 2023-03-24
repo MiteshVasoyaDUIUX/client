@@ -2,7 +2,7 @@ import { MenuItem, Select, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { placeOrder } from "../features/order/orderSlice";
+import { placeOrder } from "../../features/order/orderSlice";
 import "./PaymentDeliveryPage.css";
 import Person2Icon from "@mui/icons-material/Person2";
 

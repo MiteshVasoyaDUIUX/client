@@ -24,6 +24,7 @@ import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 
 function ProductCard({ trendingProduct }) {
   const [wishList, setWishList] = useState(false);
@@ -103,7 +104,9 @@ function ProductCard({ trendingProduct }) {
     <>
       <Card
         sx={{
-          maxWidth: 390,
+          width: 390,
+          height: 650,
+          paddingBottom: "10px",
           textAlign: "center",
           marginBottom: "30px",
           marginRight: "30px",
@@ -116,17 +119,9 @@ function ProductCard({ trendingProduct }) {
         className="product-card"
         onClick={handleCardClick}
       >
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          image={trendingProduct.prodImage[0]}
-          sx={{
-            height: "fitContent",
-            width: "fitContent",
-            minHeight: "300px",
-            maxHeight: "600px",
-          }}
-        />
+       <div className="detailed-page-image">
+          <ImageForCard prodImage={trendingProduct.prodImage} />
+        </div>
         <CardContent>
           <Typography
             variant="h6"

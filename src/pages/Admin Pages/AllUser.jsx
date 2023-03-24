@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, fetchOrderUserwise, reset } from "../features/users/usersSlice";
+import { fetchUsers, fetchOrderUserwise, reset } from "../../features/users/usersSlice";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -22,7 +22,7 @@ import { Link } from "react-router-dom";
 import { TablePagination } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
-import { ErrorBoundary } from "../components/ErrorBoundary";
+import { ErrorBoundary } from "../../components/ErrorBoundary";
 import { GridLoader } from "react-spinners";
 
 const columns = [
@@ -274,7 +274,7 @@ function AllUser() {
           padding: "10px",
         }}
       >
-        <GridLoader color="#437b9f" speedMultiplier="0.75"/>
+        <GridLoader color="#000000" speedMultiplier="0.75"/>
       </div>
     );
   }
@@ -288,6 +288,7 @@ function AllUser() {
               overflow: "hidden",
               marginLeft: "2.3%",
               border: "0.1px solid black",
+              
             }}
           >
             <TableContainer sx={{ height: "750px" }}>
@@ -303,6 +304,7 @@ function AllUser() {
                           width: column.width,
                           fontWeight: "bold",
                           borderBottom: "1px solid black",
+                          zIndex: "0"
                         }}
                       >
                         {column.label}

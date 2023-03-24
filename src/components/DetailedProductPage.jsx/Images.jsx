@@ -25,11 +25,11 @@ function OneImage({ prodImage }) {
       navButtonsAlwaysInvisible={true}
     >
       <img
-      src={item}
-      alt="Images"
-      className="carousel-one-image"
-      style={{ boxShadow: "none" }}
-    />
+        src={item}
+        alt="Images"
+        className="carousel-one-image"
+        style={{ boxShadow: "none" }}
+      />
     </Carousel>
   );
 }
@@ -54,5 +54,51 @@ export default function Images({ prodImage }) {
 export const Image = ({ prodImage }) => {
   if (prodImage !== undefined) {
     return <OneImage prodImage={prodImage} />;
+  }
+};
+
+export const ImageForCard = ({ prodImage }) => {
+  if (prodImage !== undefined) {
+    return (
+      <>
+        <Carousel
+          className="carousel-one-image-for-card-class"
+          indicators={false}
+          NextIcon={false}
+          PrevIcon={false}
+          navButtonsAlwaysInvisible={true}
+        >
+          <img
+            src={prodImage[0]}
+            alt="Images"
+            className="carousel-image-for-card"
+            style={{ boxShadow: "none" }}
+          />
+        </Carousel>
+      </>
+    );
+  }
+};
+
+export const ImageForList = ({ prodImage }) => {
+  if (prodImage !== undefined) {
+    return (
+      <>
+        <Carousel
+          className="carousel-one-image-for-list"
+          indicators={false}
+          NextIcon={false}
+          PrevIcon={false}
+          navButtonsAlwaysInvisible={true}
+        >
+          <img
+            src={prodImage[0]}
+            alt="Images"
+            className="carousel-image-for-list"
+            style={{ boxShadow: "none", zIndex: "0" }}
+          />
+        </Carousel>
+      </>
+    );
   }
 };
