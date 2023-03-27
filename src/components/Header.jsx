@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -43,10 +43,12 @@ function Header() {
 
   const [sidebar, setSideBar] = useState(false);
 
-  console.log("User Role : ", user);
+  // console.log("User Role : ", user);
+
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
+
     console.log("OnLogOUT");
   };
 
@@ -64,6 +66,12 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <>

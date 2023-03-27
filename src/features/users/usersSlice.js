@@ -4,6 +4,8 @@ import usersService from "./usersReducer";
 const initialState = {
   users: [],
   ordersUserwise: [],
+  allOrders: [],
+  orderMonthwise : [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -48,6 +50,25 @@ export const fetchOrderUserwise = createAsyncThunk(
   }
 );
 
+export const fetchMonthlyOrders = createAsyncThunk(
+  "user/monthlyOrders/fetch",
+  async (userId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+
+      return await usersService.fetchMonthlyOrders(userId, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "product",
   initialState,
@@ -76,10 +97,24 @@ const usersSlice = createSlice({
         state.isOrdersFetched = true;
         state.isOrderFetching = false;
         state.ordersUserwise = action.payload;
+        state.allOrders = action.payload;
       })
       .addCase(fetchOrderUserwise.rejected, (state, action) => {
         state.isError = true;
         state.isOrderFetching = false;
+        state.message = action.payload;
+      })
+      .addCase(fetchMonthlyOrders.pending, (state) => {
+        state.isMonthlyOrdersFetching = true;
+      })
+      .addCase(fetchMonthlyOrders.fulfilled, (state, action) => {
+        state.isMonthlyOrdersFetched = true;
+        state.isMonthlyOrdersFetching = false;
+        state.orderMonthwise = action.payload;
+      })
+      .addCase(fetchMonthlyOrders.rejected, (state, action) => {
+        state.isError = true;
+        state.isMonthlyOrdersFetching = false;
         state.message = action.payload;
       });
   },

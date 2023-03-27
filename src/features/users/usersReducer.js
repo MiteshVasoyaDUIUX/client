@@ -31,9 +31,25 @@ const fetchOrderUserwise = async (userId, token) => {
   return response.data;
 };
 
+const fetchMonthlyOrders = async (userId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(
+    API_URL + "/admin/allorders/monthwise",
+    config
+  );
+
+  return response.data;
+};
+
 const usersService = {
   fetchUsers,
   fetchOrderUserwise,
+  fetchMonthlyOrders
 };
 
 export default usersService;

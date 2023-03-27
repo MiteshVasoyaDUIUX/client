@@ -1,8 +1,306 @@
 .dashboard-body {
       border: 1px solid rgb(245, 0, 0);
-      width: 98%;
-      height: 93vh;
+      width: 99%;
+      height: fit-content;
       margin-left: auto;
       margin-right: auto;
 
+}
+
+.dashboard-quick-insights {
+      border: 1px solid black;
+      height: 170px;
+      width: 95%;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+}
+
+.dashboard-total-orders {
+      margin-top: 25px;
+      margin-right: 30px;
+      margin-left: 30px;
+      border-radius: 6px;
+      height: 120px;
+      width: 300px;
+      background-color: rgb(18, 18, 109);
+      color: white;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      text-align: center;
+      display: flex;
+}
+
+.dashboard-total-orders-desc {
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-total-orders-image {
+      margin-bottom: auto;
+      margin-top: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-todays-orders {
+      margin-top: 25px;
+      margin-right: 30px;
+      margin-left: 30px;
+      border-radius: 6px;
+      height: 120px;
+      width: 300px;
+      background-color: rgb(17, 87, 119);
+      color: white;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      text-align: center;
+      display: flex;
+}
+
+.dashboard-todays-orders-desc {
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-todays-orders-image {
+      margin-bottom: auto;
+      margin-top: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-todays-sales {
+      margin-top: 25px;
+      margin-right: 30px;
+      margin-left: 30px;
+      border-radius: 6px;
+      height: 120px;
+      width: 300px;
+      background-color: rgb(71, 13, 94);
+      color: white;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      text-align: center;
+      display: flex;
+}
+
+.dashboard-todays-sales-desc {
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-todays-sales-image {
+      margin-bottom: auto;
+      margin-top: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-total-sales {
+      margin-top: 25px;
+      margin-right: 30px;
+      margin-left: 30px;
+      border-radius: 6px;
+      height: 120px;
+      width: 300px;
+      background-color: rgb(91, 97, 15);
+      color: white;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      text-align: center;
+      display: flex;
+}
+
+.dashboard-total-sales-desc {
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-total-sales-image {
+      margin-bottom: auto;
+      margin-top: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-inventory {
+      margin-top: 25px;
+      margin-right: 30px;
+      margin-left: 30px;
+      border-radius: 6px;
+      height: 120px;
+      width: 300px;
+      background-color: rgb(21, 88, 24);
+      color: white;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      text-align: center;
+      display: flex;
+}
+
+.dashboard-inventory-desc {
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-inventory-image {
+      margin-bottom: auto;
+      margin-top: auto;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.dashboard-charts {
+      border: 1px solid rgb(48, 62, 255);
+      margin-left: 2.4%;
+      margin-right: 5%;
+      margin-top: 1%;
+      width: 94%;
+      height: 500px;
+      color: rgb(3, 3, 3);
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+}
+
+.order-status-div {
+      height: 460px;
+      margin-left: 20px;
+      margin-right: 10px;
+      margin-top: auto;
+      margin-bottom: auto;
+      width: fit-content;
+      border: 1px solid black;
+      padding: 10px;
+      border-radius: 15px;
+}
+
+.order-status-chart-desc {
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10px;
+      width: fit-content;
+}
+
+.order-status-chart-div {
+      /* margin-left: 50px; */
+      margin-top: auto;
+      margin-bottom: auto;
+      height: fit-content;
+      width: fit-content;
+
+}
+
+.total-orders-line-chart {
+      height: 460px;
+      padding: 10px;
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-right: 0px;
+      margin-left: auto;
+      border: 1px solid black;
+      border-radius: 15px;
+}
+
+.total-orders-line-chart-div {
+      height: fit-content;
+      width: fit-content;
+}
+
+.total-orders-line-chart-desc {
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-size: 25px;
+      font-weight: 600;
+      margin-right: auto;
+      margin-top: 10px;
+      margin-left: auto;
+      margin-right: auto;
+      width: fit-content;
+}
+
+.customer-review-div {
+      height: 110px;
+      margin-left: 20px;
+      margin-right: 10px;
+      margin-top: auto;
+      margin-bottom: auto;
+      width: fit-content;
+      border: 1px solid black;
+      padding: 10px;
+      border-radius: 15px;
+}
+
+.customer-review-div-desc {
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 5px;
+      width: fit-content;
+}
+
+.customer-review-div-details {
+      /* margin-left: 50px; */
+      margin-top: auto;
+      margin-bottom: auto;
+      height: fit-content;
+      width: fit-content;
+
+}
+
+.customer-review-rating-stars {
+      margin-left: 32px;
+      margin-top: 10px;
+      font-size: 35px;
+      width: fit-content;
+}
+
+.top-selling-products-div {
+      width: 400px;
+      height: 390px;
+      margin-left: 20px;
+      margin-right: 10px;
+      margin-top: auto;
+      margin-bottom: auto;
+      border: 1px solid black;
+      padding: 10px;
+      border-radius: 15px;
+}
+
+.top-selling-products-desc {
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10px;
+      width: fit-content;
+}
+
+.top-selling-products-div {
+      /* margin-left: 50px; */
+      margin-top: auto;
+      margin-bottom: auto;
+      height: fit-content;
+      width: fit-content;
 }

@@ -8,6 +8,10 @@ body {
       display: flex;
       background-color: black;
       height: 60px;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 4;
 }
 
 .sidebar-toggle-button {
@@ -23,13 +27,14 @@ body {
       font-size: 30px;
       color: white;
       animation: close-button 0.51s;
- }
+}
 
 @keyframes close-button {
       from {
             opacity: 0;
             transform: rotate(0);
       }
+
       to {
             opacity: 1;
             transform: rotate(90);
@@ -47,6 +52,7 @@ body {
             opacity: 0;
             transform: rotate(0);
       }
+
       to {
             opacity: 1;
             transform: rotate(90);
@@ -89,7 +95,7 @@ body {
       animation: sidebar-animation 0.2s;
       backdrop-filter: blur(50px);
       /* box-shadow: 0px 500px 1000px 100px rgb(155, 155, 155); */
-      filter: drop-shadow(50px -1px 100px  rgba(0,0,0,0.3));
+      filter: drop-shadow(50px -1px 100px rgba(0, 0, 0, 0.3));
 }
 
 @keyframes sidebar-animation {
@@ -114,13 +120,13 @@ body {
       padding-right: 16px;
       border-radius: 5px;
       transition: ease-in-out 0.2s;
-      
+
 }
 
 .sidebar-submenu:hover {
       background-color: rgb(255, 255, 255);
       color: black;
-      
+
 }
 
 .header-user-name {
@@ -133,3 +139,4 @@ body {
       font-size: 20px;
       font-family: Verdana, Geneva, Tahoma, sans-serif
 }
+
