@@ -12,7 +12,6 @@ import { fetchProducts } from "../../features/product/productSlice";
 import { Chart } from "react-google-charts";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import { Card, Rating, Typography } from "@mui/material";
-import { padding } from "@mui/system";
 import { fetchAllOrders } from "../../features/admin/adminSlice";
 
 const optionsForPieChart = {
@@ -22,11 +21,15 @@ const optionsForPieChart = {
   is3D: false,
   width: 400,
   height: 400,
-  slices : {
-    0 : {color : "Orange"},
-    1 : {color : "Green"},
-    2 : {color : "Red"}
-  }
+  // colors: ['#FB7A21'],
+  // backgroundColor: 'red',
+  slices: {
+    0: { color: "Orange" },
+    1: { color: "#0c7509" },
+    2: { color: "#a80c0c" },
+  },
+  backgroundColor: "#423129",
+  // chartArea: { backgroundColor: '#203b48' },
 };
 
 const optionsForLineChart = {
@@ -34,11 +37,31 @@ const optionsForLineChart = {
   fontSize: 12,
   pieHole: 0.4,
   is3D: false,
-  width: 750,
+  width: 800,
   height: 400,
   vAxis: {
+    title: "Orders",
     format: "0",
+    color: "white",
+    titleTextStyle: { color: "white", fontSize: "20" },
+    textStyle: {
+      color: "#f8f2e7",
+    },
   },
+  hAxis: {
+    title: "Month",
+    format: "0",
+    color: "white",
+    titleTextStyle: { color: "white", fontSize: "20" },
+    textStyle: {
+      color: "#f8f2e7",
+    },
+    baselineColor: "#ffffff",
+  },
+  colors: ["#09ae40"],
+  backgroundColor: "#423129",
+  chartArea: { width: "84%", height: "70%" },
+  lineWidth: 3,
 };
 
 function TopSellingProducts({ products }) {
@@ -46,13 +69,14 @@ function TopSellingProducts({ products }) {
     <>
       <Card
         style={{
-          width: "500px",
+          width: "520px",
           height: "120px",
-          marginLeft: "30px",
+          marginLeft: "20px",
           marginRight: "0px",
           marginBottom: "19px",
           marginTop: "15px",
         }}
+
       >
         <div style={{ display: "flex" }}>
           <div
@@ -85,11 +109,12 @@ function TopSellingProducts({ products }) {
       </Card>
       <Card
         style={{
-          width: "500px",
+          width: "520px",
           height: "120px",
-          marginLeft: "30px",
+          marginLeft: "20px",
           marginRight: "0px",
           marginBottom: "24px",
+          
         }}
       >
         <div style={{ display: "flex" }}>
@@ -145,7 +170,7 @@ function AdminDashboard() {
       dispatch(fetchOrderUserwise());
       dispatch(fetchProducts());
       dispatch(fetchMonthlyOrders());
-      dispatch(fetchAllOrders())
+      dispatch(fetchAllOrders());
     }
   }, [dispatch]);
 
@@ -188,7 +213,6 @@ function AdminDashboard() {
     } else if (allOrders[index].status === "Cancel") {
       cancelledOrders += 1;
     }
-
   }
 
   for (let index = 0; index < orderMonthwise.length; index++) {
@@ -301,19 +325,16 @@ function AdminDashboard() {
                 data={OrderStatusData}
                 options={optionsForPieChart}
               />
-              {
-                console.log("Pie Chart : ", OrderStatusData)
-              }
+              {console.log("Pie Chart : ", OrderStatusData)}
             </div>
           </div>
           <div
             style={{
-              border: "1px solid black",
-              marginLeft: "0px",
-              marginRight: "10px",
+              marginLeft: "auto",
+              marginRight: "0px",
               height: "480px",
               marginBottom: "auto",
-              marginTop: "auto",
+              marginTop: "0",
             }}
           >
             <div className="customer-review-div">
@@ -326,6 +347,7 @@ function AdminDashboard() {
                   readOnly
                   className="customer-review-rating-stars"
                   size="large"
+                  color="white"
                 />
                 <div style={{ display: "flex" }}>
                   <Typography
@@ -368,7 +390,6 @@ function AdminDashboard() {
           </div>
         </div>
       </div>
-      
     </>
   );
 }

@@ -7,6 +7,7 @@ import ItemsList from "../components/ItemsList";
 import ImageSlider from "../components/ImageSlider";
 import NewArrivals from "../components/DashboardComponents/NewArrivals";
 import TrandingProducts from "../components/DashboardComponents/TrendingProducts";
+import ChatBox from "./Client Pages/ChatBox";
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -26,11 +27,10 @@ function Dashboard() {
     if (user) {
       if (user.role === "admin") {
         navigate(`/admin?token=${user.token}`);
-        console.log(`In ${user.token}  Panel :`);
       } else {
         // console.log("In Buyer Panel : ");
         navigate(`/`);
-      } 
+      }
     }
 
     return () => {
@@ -40,6 +40,7 @@ function Dashboard() {
 
   return (
     <>
+      <ChatBox />
       <ImageSlider />
       <NewArrivals />
       <TrandingProducts />

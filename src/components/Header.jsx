@@ -20,6 +20,12 @@ import { FaIcons } from "react-icons/fa";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+import AddIcon from "@mui/icons-material/Add";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import MessageIcon from "@mui/icons-material/Message";
 import "./Header.css";
 
 const pagesForAdmin = [
@@ -28,8 +34,9 @@ const pagesForAdmin = [
   "Add Product",
   "Inventory",
   "All Users",
+  "Messages",
 ];
-const optionsForClient = ["Cart", "My Orders", "Logout"];
+const optionsForClient = ["Cart", "My Orders","Chat", "Logout"];
 const optionsForAdmin = ["Profile", "Logout"];
 const optionIfNotLoggedIn = ["Login", "Register"];
 
@@ -107,18 +114,18 @@ function Header() {
             user.role === "admin" ? (
               <Link
                 to="/admin/dashboard"
-                style={{ color: "white", textDecoration: "none" }}
+                style={{ color: "#f7f0e4", textDecoration: "none" }}
               >
                 LOGO
               </Link>
             ) : (
-              <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+              <Link to="/" style={{ color: "#f7f0e4", textDecoration: "none" }}>
                 LOGO
               </Link>
             )
           ) : (
             <>
-              <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+              <Link to="/" style={{ color: "#f7f0e4", textDecoration: "none" }}>
                 LOGO
               </Link>
             </>
@@ -229,9 +236,20 @@ function Header() {
                   >
                     <Link
                       style={{ textDecoration: "None", color: "black" }}
-                      onClick={onLogout}
+                      to="/myorders"
                     >
                       {optionsForClient[2]}
+                    </Link>
+                  </MenuItem>
+                  <MenuItem
+                    key={optionsForClient[3]}
+                    onClick={handleCloseUserMenu}
+                  >
+                    <Link
+                      style={{ textDecoration: "None", color: "black" }}
+                      onClick={onLogout}
+                    >
+                      {optionsForClient[3]}
                     </Link>
                   </MenuItem>
                 </Menu>
@@ -292,34 +310,70 @@ function Header() {
           <>
             <div className="sidebar-menu">
               <Link
-                style={{ textDecoration: "None", color: "white " }}
+                style={{ textDecoration: "None", color: "#f9f3ea" }}
                 to="/admin/dashboard"
               >
-                <div className="sidebar-submenu">{pagesForAdmin[0]}</div>
+                <div className="sidebar-submenu">
+                  <div style={{ marginRight: "10px" }}>
+                    <DashboardIcon fontSize="medium" />
+                  </div>
+                  {pagesForAdmin[0]}
+                </div>
               </Link>
               <Link
-                style={{ textDecoration: "None", color: "white " }}
+                style={{ textDecoration: "None", color: "#f9f3ea" }}
                 to="/admin/orders"
               >
-                <div className="sidebar-submenu">{pagesForAdmin[1]}</div>
+                <div className="sidebar-submenu">
+                  <div style={{ marginRight: "10px" }}>
+                    <LocalMallIcon fontSize="medium" />
+                  </div>
+                  {pagesForAdmin[1]}
+                </div>
               </Link>
               <Link
-                style={{ textDecoration: "None", color: "white " }}
+                style={{ textDecoration: "None", color: "#f9f3ea" }}
                 to="/admin/addproduct"
               >
-                <div className="sidebar-submenu">{pagesForAdmin[2]}</div>
+                <div className="sidebar-submenu">
+                  <div style={{ marginRight: "10px" }}>
+                    <AddIcon fontSize="medium" />
+                  </div>
+                  {pagesForAdmin[2]}
+                </div>
               </Link>
               <Link
-                style={{ textDecoration: "None", color: "white " }}
+                style={{ textDecoration: "None", color: "#f9f3ea" }}
                 to="/admin/allproduct"
               >
-                <div className="sidebar-submenu">{pagesForAdmin[3]}</div>
+                <div className="sidebar-submenu">
+                  <div style={{ marginRight: "10px" }}>
+                    <InventoryIcon fontSize="medium" />
+                  </div>
+                  {pagesForAdmin[3]}
+                </div>
               </Link>
               <Link
-                style={{ textDecoration: "None", color: "white " }}
+                style={{ textDecoration: "None", color: "#f9f3ea" }}
                 to="/admin/alluser"
               >
-                <div className="sidebar-submenu">{pagesForAdmin[4]}</div>
+                <div className="sidebar-submenu">
+                  <div style={{ marginRight: "10px" }}>
+                    <PersonIcon fontSize="medium" />
+                  </div>
+                  {pagesForAdmin[4]}
+                </div>
+              </Link>
+              <Link
+                style={{ textDecoration: "None", color: "#f9f3ea" }}
+                to="/admin/messages"
+              >
+                <div className="sidebar-submenu">
+                  <div style={{ marginRight: "10px" }}>
+                    <MessageIcon fontSize="medium" />
+                  </div>
+                  {pagesForAdmin[5]}
+                </div>
               </Link>
             </div>
           </>
