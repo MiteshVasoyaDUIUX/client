@@ -10,8 +10,9 @@ import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllOrders } from "../../features/order/orderSlice";
 import "./MyOrders.css";
-import { styled } from '@mui/material/styles';
-
+import { styled } from "@mui/material/styles";
+import { reset } from "../../features/admin/adminSlice";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   {
@@ -25,9 +26,10 @@ const columns = [
     titleAlign: "center",
   },
   {
-    id: "orderDate",
+    id: "createdAt",
     label: "Order Date",
     titleAlign: "center",
+    format: (value) => value.split("T")[0],
   },
   {
     id: "status",
@@ -67,17 +69,30 @@ export default function MyOrders() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
   const { orders } = useSelector((state) => state.order);
-  const userId = user.user._id;
-
+  let userId;
+  
   useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+
     if (user) {
       // console.log("User : ", user)
       dispatch(fetchAllOrders(userId));
     }
-  }, [dispatch]);
+
+    return () => {
+      reset();
+    };
+  }, [dispatch, user]);
+
+  if (user) {
+    userId = user.user._id;
+  }
 
   console.log("Orders : ", orders);
 
@@ -124,9 +139,7 @@ export default function MyOrders() {
                         const value = order[column.id];
                         return (
                           <TableCell key={column.id} align={column.valueAlign}>
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
+                            {column.format ? column.format(value) : value}
                           </TableCell>
                         );
                       })}

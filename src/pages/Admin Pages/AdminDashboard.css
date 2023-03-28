@@ -181,8 +181,8 @@
 
 .order-status-div {
       height: 460px;
-      margin-left: 20px;
-      margin-right: 10px;
+      margin-left: 0px;
+      margin-right: 5px;
       margin-top: auto;
       margin-bottom: auto;
       width: fit-content;
@@ -211,14 +211,14 @@
 }
 
 .total-orders-line-chart {
-      height: 460px;
-      padding: 10px;
+      height: 480px;
       margin-top: auto;
       margin-bottom: auto;
-      margin-right: 0px;
-      margin-left: auto;
+      margin-right: 5px;
+      margin-left: 0px;
       border: 1px solid black;
       border-radius: 15px;
+      width: 750px;
 }
 
 .total-orders-line-chart-div {
@@ -239,14 +239,15 @@
 
 .customer-review-div {
       height: 110px;
-      margin-left: 20px;
-      margin-right: 10px;
+      margin-left: auto;
+      margin-right: auto;
       margin-top: auto;
       margin-bottom: auto;
-      width: fit-content;
+      width: 300px;
       border: 1px solid black;
       padding: 10px;
       border-radius: 15px;
+
 }
 
 .customer-review-div-desc {
@@ -263,44 +264,46 @@
       /* margin-left: 50px; */
       margin-top: auto;
       margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
       height: fit-content;
       width: fit-content;
-
 }
 
 .customer-review-rating-stars {
-      margin-left: 32px;
+      margin-left: 0px;
       margin-top: 10px;
       font-size: 35px;
       width: fit-content;
 }
 
-.top-selling-products-div {
-      width: 400px;
-      height: 390px;
-      margin-left: 20px;
-      margin-right: 10px;
-      margin-top: auto;
+.top-selling-products {
+      width: 560px;
+      height: fit-content;
+      max-height: 345px;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 5px;
       margin-bottom: auto;
       border: 1px solid black;
-      padding: 10px;
+      padding: 5px;
       border-radius: 15px;
 }
 
-.top-selling-products-desc {
+.top-selling-prod-desc {
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       font-size: 24px;
       font-weight: 600;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 10px;
+      margin-top: 5px;
       width: fit-content;
 }
 
-.top-selling-products-div {
+.top-selling-prod-list {
       /* margin-left: 50px; */
       margin-top: auto;
       margin-bottom: auto;
       height: fit-content;
-      width: fit-content;
+      width: 500px;
 }

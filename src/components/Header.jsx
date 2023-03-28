@@ -71,7 +71,11 @@ function Header() {
     if (!user) {
       navigate("/");
     }
-  }, [user]);
+
+    return () => {
+      reset();
+    };
+  }, [user, dispatch]);
 
   return (
     <>
@@ -99,12 +103,26 @@ function Header() {
         </div>
 
         <div className="header-logo">
-          <Link
-            to="/admin/dashboard"
-            style={{ color: "white", textDecoration: "none" }}
-          >
-            LOGO
-          </Link>
+          {user ? (
+            user.role === "admin" ? (
+              <Link
+                to="/admin/dashboard"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                LOGO
+              </Link>
+            ) : (
+              <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+                LOGO
+              </Link>
+            )
+          ) : (
+            <>
+              <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+                LOGO
+              </Link>
+            </>
+          )}
         </div>
 
         <div className="header-signin">

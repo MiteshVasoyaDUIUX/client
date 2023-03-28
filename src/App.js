@@ -21,6 +21,7 @@ import OtherProducts from "./components/Products/OtherProducts";
 import Accessories from "./components/Products/Accessories";
 import DetailedProductPage from "./pages/Client Pages/DetailedProductPage";
 import BuyProduct from "./pages/Client Pages/BuyProduct";
+import Orders from "./pages/Admin Pages/Orders";
 function App() {
   return (
     <>
@@ -37,6 +38,7 @@ function App() {
             <Route path="/admin/addproduct" element={<AddProduct />} />
             <Route path="/admin/allproduct" element={<AllProduct />} />
             <Route path="/admin/alluser" element={<AllUser />} />
+            <Route path="/admin/orders" element={<Orders />} />
             <Route path="/admin/editproduct" element={<EditProduct />} />
             <Route path="/admin/profile" element={<EditAdminProfile />} />
             <Route path="/products/other" element={<OtherProducts />} />

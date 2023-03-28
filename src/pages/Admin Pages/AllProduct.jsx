@@ -33,10 +33,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
 import { GridLoader } from "react-spinners";
-import {
-  ImageForCard,
-  ImageForList,
-} from "../../components/DetailedProductPage.jsx/Images";
+import { ImageForList } from "../../components/DetailedProductPage.jsx/Images";
 
 const columns = [
   {
@@ -135,7 +132,6 @@ function Row(props) {
         margin: "2px",
         padding: "10px",
         height: "10px",
-        
       }}
     >
       {columns.map((column) => {
@@ -323,7 +319,7 @@ function AllProduct() {
                             width: column.width,
                             fontWeight: "bold",
                             borderBottom: "1px solid black",
-                            zIndex: "0",
+                            zIndex: "1",
                           }}
                         >
                           {column.label}

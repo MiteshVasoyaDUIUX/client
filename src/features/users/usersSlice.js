@@ -4,8 +4,7 @@ import usersService from "./usersReducer";
 const initialState = {
   users: [],
   ordersUserwise: [],
-  allOrders: [],
-  orderMonthwise : [],
+  orderMonthwise: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -97,7 +96,6 @@ const usersSlice = createSlice({
         state.isOrdersFetched = true;
         state.isOrderFetching = false;
         state.ordersUserwise = action.payload;
-        state.allOrders = action.payload;
       })
       .addCase(fetchOrderUserwise.rejected, (state, action) => {
         state.isError = true;

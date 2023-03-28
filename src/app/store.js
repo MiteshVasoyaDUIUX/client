@@ -4,6 +4,7 @@ import productReducer from "../features/product/productSlice";
 import usersReducer from "../features/users/usersSlice";
 import productsForClientReducers from "../features/productsForClient/productsForClientSlice";
 import orderReducers from "../features/order/orderSlice"; 
+import adminReducers from "../features/admin/adminSlice"
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     product: productReducer,
     user: usersReducer,
     productsForClient : productsForClientReducers,
-    order : orderReducers
+    order : orderReducers,
+    admin : adminReducers
   },
 });
