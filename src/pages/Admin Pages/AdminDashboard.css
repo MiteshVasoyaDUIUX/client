@@ -23,13 +23,14 @@
       border-radius: 6px;
       height: 120px;
       width: 300px;
-      background-color: #423129;
+      background-color: #1d2133;
       color: #f8f2e7;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
       font-weight: 600;
       font-size: 15px;
       text-align: center;
       display: flex;
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 }
 
 .dashboard-total-orders-desc {
@@ -53,13 +54,14 @@
       border-radius: 6px;
       height: 120px;
       width: 300px;
-      background-color: #423129;
+      background-color: #1d2133;
       color: #f8f2e7;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
       font-weight: 600;
       font-size: 15px;
       text-align: center;
       display: flex;
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 }
 
 .dashboard-todays-orders-desc {
@@ -83,13 +85,14 @@
       border-radius: 6px;
       height: 120px;
       width: 300px;
-      background-color: #423129;
+      background-color: #1d2133;
       color: #f8f2e7;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
       font-weight: 600;
       font-size: 15px;
       text-align: center;
       display: flex;
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 }
 
 .dashboard-todays-sales-desc {
@@ -113,13 +116,14 @@
       border-radius: 6px;
       height: 120px;
       width: 300px;
-      background-color: #423129;
+      background-color: #1d2133;
       color: #f8f2e7;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
       font-weight: 600;
       font-size: 15px;
       text-align: center;
       display: flex;
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 }
 
 .dashboard-total-sales-desc {
@@ -143,13 +147,14 @@
       border-radius: 6px;
       height: 120px;
       width: 300px;
-      background-color: #423129;
+      background-color: #1d2133;
       color: #f8f2e7;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
       font-weight: 600;
       font-size: 15px;
       text-align: center;
       display: flex;
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 }
 
 .dashboard-inventory-desc {
@@ -191,9 +196,9 @@
       /* border: 1px solid black; */
       padding: 10px;
       border-radius: 15px;
-      background-color: #423129;
+      background-color: #1d2133;
       color: #f8f2e7;
-      box-shadow: 1px 4px 10px 1px rgba(117, 101, 47, 0.877);
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 }
 
 .order-status-chart-desc {
@@ -224,8 +229,8 @@
       border-radius: 15px;
       width: 800px;
       color: #f8f2e7;
-      background-color: #423129;
-      box-shadow: 1px 4px 10px 1px rgba(117, 101, 47, 0.877);
+      background-color: #1d2133;
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 
 }
 
@@ -255,7 +260,8 @@
       width: 300px;
       padding: 10px;
       border-radius: 15px;
-      background-color: #423129;
+      background-color: #1d2133;
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 }
 
 .customer-review-div-desc {
@@ -294,9 +300,10 @@
       margin-top: 5px;
       margin-bottom: auto;
       border: 1px solid black;
-      background-color: #423129;
+      background-color: #1d2133;
       padding: 5px;
       border-radius: 15px;
+      box-shadow: 0px 2px 5px 1px #282e46bd;
 }
 
 .top-selling-prod-desc {

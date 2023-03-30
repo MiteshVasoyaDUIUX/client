@@ -504,7 +504,7 @@ export default function Cart() {
       {cart.length !== 0 ? (
         page ? (
           <>
-            <div className="buyers-orders-table-title">Cart</div>
+            <div className="cart-table-title">Cart</div>
             <Box sx={{ width: "100%", marginTop: "20px" }}>
               <Grid container rowSpacing={1}>
                 {cart.map((item) => {

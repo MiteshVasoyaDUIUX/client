@@ -23,6 +23,7 @@ import DetailedProductPage from "./pages/Client Pages/DetailedProductPage";
 import BuyProduct from "./pages/Client Pages/BuyProduct";
 import Orders from "./pages/Admin Pages/Orders";
 import Messages from "./pages/Admin Pages/Messages";
+import ChatClient from "./pages/Client Pages/ChatClient";
 function App() {
   return (
     <>
@@ -35,6 +36,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/myorders" element={<MyOrders />} />
+            <Route path="/chat/buyer" element={<ChatClient />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/addproduct" element={<AddProduct />} />
             <Route path="/admin/allproduct" element={<AllProduct />} />

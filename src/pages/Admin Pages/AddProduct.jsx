@@ -167,8 +167,9 @@ function AddProduct() {
           fontFamily: "sans-serif",
           borderBottom: "1px solid #000000",
           width: "fit-content",
-          color: "#000000",
-          backgroundColor: "white",
+          color: "#1d2133",
+          backgroundColor: "#f0f3ed",
+          cursor : "default"
         }}
       >
         Add Product
@@ -304,7 +305,7 @@ function AddProduct() {
           <Button
             variant="contained"
             style={{
-              backgroundColor: "black",
+              backgroundColor: "#1d2133",
               color: "White",
               fontSize: "15px",
               fontWeight: "bolder",

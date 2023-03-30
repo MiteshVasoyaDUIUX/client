@@ -10,12 +10,11 @@
       transition: font-weight 500 ease-in-out;
       width: 90%;
       text-decoration: underline;
+      border: #1d2133;
+      cursor: default;
       /* border: 1px solid black; */
 }
 
-.buyers-orders-table-title:hover {
-      color: rgb(15, 76, 78);
-}
 
 .buyers-orders-table {
       margin-top: 1%;

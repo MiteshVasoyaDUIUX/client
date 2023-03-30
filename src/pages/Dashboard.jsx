@@ -26,7 +26,7 @@ function Dashboard() {
 
     if (user) {
       if (user.role === "admin") {
-        navigate(`/admin?token=${user.token}`);
+        navigate(`/admin/dashboard`);
       } else {
         // console.log("In Buyer Panel : ");
         navigate(`/`);
@@ -40,7 +40,6 @@ function Dashboard() {
 
   return (
     <>
-      <ChatBox />
       <ImageSlider />
       <NewArrivals />
       <TrandingProducts />

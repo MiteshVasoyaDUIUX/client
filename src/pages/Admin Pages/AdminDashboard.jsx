@@ -28,7 +28,7 @@ const optionsForPieChart = {
     1: { color: "#0c7509" },
     2: { color: "#a80c0c" },
   },
-  backgroundColor: "#423129",
+  backgroundColor: "#1d2133",
   // chartArea: { backgroundColor: '#203b48' },
 };
 
@@ -59,7 +59,7 @@ const optionsForLineChart = {
     baselineColor: "#ffffff",
   },
   colors: ["#09ae40"],
-  backgroundColor: "#423129",
+  backgroundColor: "#1d2133",
   chartArea: { width: "84%", height: "70%" },
   lineWidth: 3,
 };

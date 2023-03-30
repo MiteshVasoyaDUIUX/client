@@ -296,7 +296,7 @@ function AllProduct() {
 
   return (
     <>
-      <section className="content" style={{ marginTop: "55px", zIndex: "0" }}>
+      <section className="content" style={{ marginTop: "55px", zIndex: "0"}}>
         {products.length > 0 ? (
           <div className="product">
             <Paper
@@ -307,7 +307,7 @@ function AllProduct() {
                 border: "0.1px solid black",
               }}
             >
-              <TableContainer sx={{ height: "750px" }}>
+              <TableContainer sx={{ height: "750px", }}>
                 <Table stickyHeader aria-label="sticky table">
                   <TableHead>
                     <TableRow>
@@ -320,13 +320,19 @@ function AllProduct() {
                             fontWeight: "bold",
                             borderBottom: "1px solid black",
                             zIndex: "1",
+                            backgroundColor: "#1d2133",
+                            color: "#f0f3ed",
                           }}
                         >
                           {column.label}
                         </TableCell>
                       ))}
                       <TableCell
-                        style={{ borderBottom: "1px solid black" }}
+                        style={{
+                          borderBottom: "1px solid black",
+                          backgroundColor: "#1d2133",
+                          color: "#f0f3ed",
+                        }}
                       ></TableCell>
                     </TableRow>
                   </TableHead>

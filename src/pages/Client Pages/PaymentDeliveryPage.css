@@ -52,9 +52,8 @@
 
 .payment-select-payment-page {
       outline: none;
-      width: 350px;
+      width: 30px;
       padding-left: 10px;
-      background-color: #FFFFFF;
 }
 
 .payment-info-div {
@@ -245,11 +244,11 @@
       height: 40px;
       margin-left: 25%;
       margin-top: 4%;
-      background-color: #585858;
+      background-color: #1d2133;
       box-shadow: 4px 5px 10px -2px rgb(121, 121, 121);
       border-radius: 3px;
       border: 1px solid #5e5e5e;
-      color: rgb(255, 255, 255);
+      color: #f4ede2;
       font-size: 17px;
       font-weight: 700;
       background-position: center;
@@ -257,7 +256,6 @@
 }
 
 .payment-button:hover {
-      background: #000000 radial-gradient(circle, transparent 1%, #000000 1%) center/15000%;
       border: 1px solid #000000;
 }
 

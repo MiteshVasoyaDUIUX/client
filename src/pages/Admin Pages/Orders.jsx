@@ -14,7 +14,11 @@ import {
   TableRow,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { acceptOrder, cancelOrder, fetchAllOrders } from "../../features/admin/adminSlice";
+import {
+  acceptOrder,
+  cancelOrder,
+  fetchAllOrders,
+} from "../../features/admin/adminSlice";
 
 const columns = [
   {
@@ -114,9 +118,11 @@ function Row(props) {
                   value.name
                 ) : column.id === "prodStatus" ? (
                   <div>{value}</div>
-                ) : column.id === 'createdAt' ? (
+                ) : column.id === "createdAt" ? (
                   column.format(value)
-                ) : (value)}
+                ) : (
+                  value
+                )}
               </div>
             </TableCell>
           </>
@@ -224,13 +230,19 @@ function Orders() {
                             fontWeight: "bold",
                             borderBottom: "1px solid black",
                             zIndex: "1",
+                            backgroundColor: "#1d2133",
+                            color: "#f0f3ed",
                           }}
                         >
                           {column.label}
                         </TableCell>
                       ))}
                       <TableCell
-                        style={{ borderBottom: "1px solid black" }}
+                        style={{
+                          borderBottom: "1px solid black",
+                          backgroundColor: "#1d2133",
+                          color: "#f0f3ed",
+                        }}
                       ></TableCell>
                     </TableRow>
                   </TableHead>

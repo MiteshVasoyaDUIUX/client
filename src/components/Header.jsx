@@ -36,7 +36,7 @@ const pagesForAdmin = [
   "All Users",
   "Messages",
 ];
-const optionsForClient = ["Cart", "My Orders","Chat", "Logout"];
+const optionsForClient = ["Cart", "My Orders", "Chat", "Logout"];
 const optionsForAdmin = ["Profile", "Logout"];
 const optionIfNotLoggedIn = ["Login", "Register"];
 
@@ -114,18 +114,18 @@ function Header() {
             user.role === "admin" ? (
               <Link
                 to="/admin/dashboard"
-                style={{ color: "#f7f0e4", textDecoration: "none" }}
+                style={{ color: "#1d2133", textDecoration: "none" }}
               >
                 LOGO
               </Link>
             ) : (
-              <Link to="/" style={{ color: "#f7f0e4", textDecoration: "none" }}>
+              <Link to="/" style={{ color: "#1d2133", textDecoration: "none" }}>
                 LOGO
               </Link>
             )
           ) : (
             <>
-              <Link to="/" style={{ color: "#f7f0e4", textDecoration: "none" }}>
+              <Link to="/" style={{ color: "#1d2133", textDecoration: "none" }}>
                 LOGO
               </Link>
             </>
@@ -137,7 +137,9 @@ function Header() {
             user.role === "admin" ? (
               <>
                 <div style={{ display: "flex" }}>
-                  <div className="header-user-name">Hello, {user.role}</div>
+                  <div className="header-user-name" sx={{ color: "#f4ede2" }}>
+                    Hello, {user.role}
+                  </div>
                   <Tooltip>
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar />
@@ -175,6 +177,11 @@ function Header() {
                   <MenuItem
                     key={optionsForAdmin[1]}
                     onClick={handleCloseUserMenu}
+                    className="menu-icon-options"
+                    sx={{
+                      backgroundColor: "#f0f3ed",
+                      color: "#f0f3ed",
+                    }}
                   >
                     <Link
                       style={{ textDecoration: "None", color: "black" }}
@@ -189,9 +196,13 @@ function Header() {
               <>
                 <Tooltip>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="No Image" src="#" />
+                    <Avatar
+                      alt="P Image"
+                      src="#"
+                      sx={{ backgroundColor: " #1d2133" }}
+                    />
                   </IconButton>
-                </Tooltip>{" "}
+                </Tooltip>
                 <Menu
                   sx={{ mt: "45px" }}
                   id="menu-appbar"
@@ -236,7 +247,7 @@ function Header() {
                   >
                     <Link
                       style={{ textDecoration: "None", color: "black" }}
-                      to="/myorders"
+                      to="/chat/buyer"
                     >
                       {optionsForClient[2]}
                     </Link>

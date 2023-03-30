@@ -12,12 +12,12 @@ const initialState = {
 };
 
 export const placeOrder = createAsyncThunk(
-  "order/place",
+  "client/order/place",
   async (checkoutData, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
+      // console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
       return await orderService.placeOrder(checkoutData, token);
     } catch (error) {
       const message =
@@ -32,7 +32,7 @@ export const placeOrder = createAsyncThunk(
 );
 
 export const fetchAllOrders = createAsyncThunk(
-  "order/fetchallorders",
+  "client/order/fetchallorders",
   async (userId, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...

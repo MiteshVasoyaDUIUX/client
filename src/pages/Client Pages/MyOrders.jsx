@@ -74,7 +74,7 @@ export default function MyOrders() {
   const { user } = useSelector((state) => state.auth);
   const { orders } = useSelector((state) => state.order);
   let userId;
-  
+
   useEffect(() => {
     if (!user) {
       navigate("/");
@@ -117,7 +117,10 @@ export default function MyOrders() {
                   <StyledTableCell
                     key={column.id}
                     align={column.titleAlign}
-                    style={{ minWidth: column.minWidth }}
+                    style={{
+                      minWidth: column.minWidth,
+                      backgroundColor: "#1d2133",
+                    }}
                   >
                     {column.label}
                   </StyledTableCell>

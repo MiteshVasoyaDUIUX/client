@@ -3,7 +3,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, fetchOrderUserwise, reset } from "../../features/users/usersSlice";
+import {
+  fetchUsers,
+  fetchOrderUserwise,
+  reset,
+} from "../../features/users/usersSlice";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -258,9 +262,9 @@ function AllUser() {
       dispatch(fetchOrderUserwise());
     }
 
-    return() => {
+    return () => {
       dispatch(reset());
-    }
+    };
   }, [dispatch, isError, message]);
 
   if (isUserFetching || isOrderFetching) {
@@ -269,12 +273,12 @@ function AllUser() {
         style={{
           position: "absolute",
           top: "50%",
-          left : "48%",
+          left: "48%",
           transform: "translate(0, -50%)",
           padding: "10px",
         }}
       >
-        <GridLoader color="#000000" speedMultiplier="0.75"/>
+        <GridLoader color="#000000" speedMultiplier="0.75" />
       </div>
     );
   }
@@ -288,7 +292,6 @@ function AllUser() {
               overflow: "hidden",
               marginLeft: "2.3%",
               border: "0.1px solid black",
-              
             }}
           >
             <TableContainer sx={{ height: "750px" }}>
@@ -304,7 +307,9 @@ function AllUser() {
                           width: column.width,
                           fontWeight: "bold",
                           borderBottom: "1px solid black",
-                          zIndex: "0"
+                          zIndex: "0",
+                          backgroundColor: "#1d2133",
+                          color: "#f0f3ed",
                         }}
                       >
                         {column.label}
