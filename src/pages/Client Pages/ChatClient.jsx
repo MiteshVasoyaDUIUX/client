@@ -19,6 +19,7 @@ function ChatClient() {
       // console.log(data);
       const newData = `"Message : ", ${data.message}, "from User : ", ${data.user}`;
       setReceiveMessage((prevState) => [...prevState, newData]);
+      console.log(data);
     });
 
     socket.on("connect", () => {
