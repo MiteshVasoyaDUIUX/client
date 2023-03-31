@@ -24,6 +24,8 @@ import BuyProduct from "./pages/Client Pages/BuyProduct";
 import Orders from "./pages/Admin Pages/Orders";
 import Messages from "./pages/Admin Pages/Messages";
 import ChatClient from "./pages/Client Pages/ChatClient";
+import ChatAdmin from "./pages/Admin Pages/ChatAdmin";
+
 function App() {
   return (
     <>
@@ -42,7 +44,7 @@ function App() {
             <Route path="/admin/allproduct" element={<AllProduct />} />
             <Route path="/admin/alluser" element={<AllUser />} />
             <Route path="/admin/orders" element={<Orders />} />
-            <Route path="/admin/messages" element={<Messages />} />
+            <Route path="/admin/messages" element={<ChatAdmin />} />
             <Route path="/admin/editproduct" element={<EditProduct />} />
             <Route path="/admin/profile" element={<EditAdminProfile />} />
             <Route path="/products/other" element={<OtherProducts />} />

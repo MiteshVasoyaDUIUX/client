@@ -1,11 +1,16 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useRef } from "react";
-import "./ChatClient.css";
-
+import "./ChatAdmin.css";
+// import { useDispatch } from "react-redux";
+// import { connectChat } from "../../features/chat/client/clientChatSlice";
 import { io } from "socket.io-client";
 
-function ChatClient() {
-  const socket = io("http://localhost:5555");
+//SocketIO Implementation...
+const socket = io("http://localhost:5555");
 
+function ChatClient() {
+  // console.log("Main");
+  //   const dispatch = useDispatch();
   const [socketId, setSocketId] = useState("");
   const [sendMessage, setSendMessage] = useState("");
   const [receiveMessage, setReceiveMessage] = useState([]);
@@ -17,16 +22,11 @@ function ChatClient() {
 
     socket.on("receive_message", (data) => {
       // console.log(data);
-      const newData = `"Message : ", ${data.message}, "from User : ", ${data.user}`;
-      setReceiveMessage((prevState) => [...prevState, newData]);
+      setReceiveMessage((prevState) => [...prevState, data]);
     });
 
     socket.on("connect", () => {
-      console.warn("Connected...");
-    });
-
-    socket.on("send-message", (data) => {
-      console.log("Message : ", data.message, "from User : ", data.user);
+      setSocketId(socket.id);
     });
   }, []);
 
@@ -53,11 +53,9 @@ function ChatClient() {
         }}
       >
         <div className="socketId">Socket ID : {socketId}</div>
-        <div className="display-message">
-          {receiveMessage.map((message) => {
-            return <div>{message}</div>;
-          })}
-        </div>
+        {receiveMessage.map((message) => {
+          return <div>{message}</div>;
+        })}
       </div>
       <input type="text" className="chat-text-box" ref={ref} />
       <button onClick={handleSendButton}>Send</button>
