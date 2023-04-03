@@ -247,7 +247,7 @@ function Header() {
                   >
                     <Link
                       style={{ textDecoration: "None", color: "black" }}
-                      to="/chat/buyer"
+                      to="/buyer/chat"
                     >
                       {optionsForClient[2]}
                     </Link>

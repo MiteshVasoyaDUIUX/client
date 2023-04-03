@@ -2,20 +2,39 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import clientChatService from "./clientChatReducer";
 
 const initialState = {
-  msgs: [],
+  messages: [],
   isError: false,
   isMsgSent: false,
   isMsgSending: false,
   message: "",
 };
 
-export const connectChat = createAsyncThunk(
+export const fetchChat = createAsyncThunk(
   "client/chat",
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       // console.log("CHAT IN SLICE  : ");
-      return await clientChatService.connectChat(token);
+      return await clientChatService.fetchChat(token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const insertSocketID = createAsyncThunk(
+  "client/insertSocketId",
+  async (socketID, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      console.log("CHAT IN SLICE  : ");
+      return await clientChatService.insertSocketID(socketID, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -36,24 +55,19 @@ const clientChatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(connectChat.pending, (state) => {
-      //   state.isPlaced = false;
-      //   state.isPlacing = false;
-      //   state.isError = false;
+      .addCase(fetchChat.pending, (state) => {
       })
-      .addCase(connectChat.fulfilled, (state, action) => {
-      //   state.isPlaced = true;
-      //   state.isPlacing = false;
-      //   state.isError = false;
-      //   state.message = action.payload.message;
-        // state.orderId = action.payload;
-        //   console.log("New State : ", state.orderId);
+      .addCase(fetchChat.fulfilled, (state, action) => {
+        state.messages = action.payload;
       })
-      .addCase(connectChat.rejected, (state, action) => {
-      //   state.isError = true;
-      //   state.isPlaced = false;
-      //   state.isPlacing = false;
-      //   state.message = action.payload;
+      .addCase(fetchChat.rejected, (state, action) => {
+      })
+      .addCase(insertSocketID.pending, (state) => {
+      })
+      .addCase(insertSocketID.fulfilled, (state, action) => {
+        console.log("SocketID Insterted Successsfully")
+      })
+      .addCase(insertSocketID.rejected, (state, action) => {
       });
   },
 });
