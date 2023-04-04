@@ -44,7 +44,7 @@ function App() {
             <Route path="/admin/allproduct" element={<AllProduct />} />
             <Route path="/admin/alluser" element={<AllUser />} />
             <Route path="/admin/orders" element={<Orders />} />
-            <Route path="/admin/messages" element={<Chat />} />
+            <Route path="/admin/messages" element={<ChatAdmin />} />
             <Route path="/admin/editproduct" element={<EditProduct />} />
             <Route path="/admin/profile" element={<EditAdminProfile />} />
             <Route path="/products/other" element={<OtherProducts />} />

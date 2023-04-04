@@ -2,7 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import "./Chat.css";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchChat, insertSocketID } from "../../features/chat/client/clientChatSlice";
+import {
+  fetchChat,
+  saveChat,
+} from "../../features/chat/client/clientChatSlice";
 
 function Chat() {
   const dispatch = useDispatch();
@@ -13,7 +16,9 @@ function Chat() {
   const { user } = useSelector((state) => state.auth);
   const { messages } = useSelector((state) => state.clientChat);
 
-  let message = "";
+  let allMessages = [];
+
+  messages.map((message) => allMessages.push(message));
 
   useEffect(() => {
     if (user) {
@@ -25,20 +30,34 @@ function Chat() {
     const socketIO = io("ws://localhost:8888");
     setSocket(socketIO);
     socketIO.on("connect", () => {
-      console.log("Connected with Id : ", socketIO.id)
-      dispatch(insertSocketID(socketIO.id))
-    })
-    console.log("Socket IO ", socketIO);
-  }, []);
+      console.log("Connected with Id : ", socketIO.id);
 
-  useEffect(() => {
+      const socketIdData = {
+        userId: user.user._id,
+        socketId: socketIO.id,
+      };
 
-    socket?.emit("addUser", user.adminId);
-
-    socket?.on("getUsers", (users) => {
-      console.log("Users : ", users);
+      if (user.user.role === "admin") {
+        socketIO.emit("addActiveAdmin", socketIdData);
+      } else if (user.user.role === "buyer") {
+        socketIO.emit("addActiveClient", socketIdData);
+      }
     });
-  }, [socket]);
+
+    socketIO.on("privatemessage", (data) => {
+      // allMessages.push(data);
+      console.log("Received Message : ", data);
+      // console.log("All Message : ", allMessages);
+    });
+
+    socketIO.on("disconnect", () => {
+      console.log("Disconnect From....");
+      const socketIOData = {
+        userId: user.user._id,
+        socketId: socketIO.id,
+      };
+    });
+  }, []);
 
   const handleMessageChanges = (e) => {
     //
@@ -46,32 +65,72 @@ function Chat() {
 
   const handleSendButton = async () => {
     const message = document.getElementById("messageBox").value;
+
     // console.log(ref.current.value);
     setSendMessage(message);
+    let fromBuyer, fromAdmin;
 
-    const sent = await socket.emit("sendMessage", {
-      senderId: user.id,
+    if (user.user.role === "buyer") {
+      fromBuyer = true;
+      fromAdmin = false;
+    } else if (user.user.role === "admin") {
+      fromBuyer = false;
+      fromAdmin = true;
+    }
+
+    const data = {
+      senderId: user.user._id,
+      fromBuyer,
+      fromAdmin,
       text: message,
-    });
+    };
 
-    socket.on("receive-message", (data) => {
-      console.log(data);
+    const div = document.createElement("p");
+    div.textContent = message;
+
+    if (user.user.role === "buyer") {
+      div.classList.add("message-from-buyer");
+      document.getElementById("message-area-id").append(div);
+    } else if (user.user.role === "admin") {
+      div.classList.add("message-from-buyer");
+      document.getElementById("message-area-id").append(div);
+    }
+
+    // if (user.user.role === "buyer") {
+    //   socket.emit("isAdminActive");
+
+    // } else if (user.user.role === "admin") {
+    // }
+
+    socket.emit("sendMessage", data);
+    // console.log("Sent Message :", sent);
+
+    socket.on("privatemessage", (data) => {
+      allMessages.push(data);
+      console.log("Received Message : ", data);
+      console.log("All Message : ", allMessages);
     });
-    console.log(sent);
+    // console.log("Sent Message :", user.user.role);
+
+    dispatch(saveChat(data));
   };
 
   return (
     <>
       <div className="client-chat-area">
-        <div className="message-area">
-          {messages.map((message) => {
+        <div className="message-area" id="message-area-id">
+          {allMessages.map((message) => {
             return message.message.fromAdmin ? (
               <>
-                <p className="message-from-admin">{message.message.text}</p>
+                <p className="message-from-admin" key={message.message.text}>
+                  {message.message.text}
+                </p>
               </>
             ) : message.message.fromBuyer ? (
               <>
-                <p className="message-from-buyer">{message.message.text}</p>
+                <p className="message-from-buyer" key={message.message.text}>
+                  {message.message.text}
+                </p>
               </>
             ) : (
               <></>
