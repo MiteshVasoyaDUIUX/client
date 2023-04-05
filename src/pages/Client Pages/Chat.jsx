@@ -5,27 +5,56 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchChat,
   saveChat,
-} from "../../features/chat/client/clientChatSlice";
+} from "../../features/chat/client/chatSlice";
+import Messages from "../Admin Pages/Messages";
+
+function Message({ message, own }) {
+  return (
+    <div>
+      <div className="messageTop">
+        <p className={own ? "own-message" : "message-from-other"}>
+          {message.message}
+        </p>
+        {/* {console.log("Message : ", message, "Owned : ", own)} */}
+      </div>
+      {/* <div className="messageBottom">{format(message.createdAt)}</div> */}
+    </div>
+  );
+}
 
 function Chat() {
   const dispatch = useDispatch();
 
   const [socket, setSocket] = useState(null);
-  const [sendMessage, setSendMessage] = useState("");
-  const [receiveMessage, setReceiveMessage] = useState([]);
+  const [allMessages, setAllMessage] = useState("");
   const { user } = useSelector((state) => state.auth);
   const { messages } = useSelector((state) => state.clientChat);
 
-  let allMessages = [];
+  let messageArray = [];
+  const messageData = messages.messageData;
+  let conversationId = "";
+  let users = messages.users;
+  let senderId = "";
+  let receiverId = "";
 
-  messages.map((message) => allMessages.push(message));
+  users?.map((id) => {
+    if (user.user._id === id) {
+      senderId = id;
+    } else if (user.user._id !== id) {
+      receiverId = id;
+    }
+  });
+
+  messageData?.map((message) => {
+    messageArray.push(message);
+    conversationId = message.conversationId;
+  });
 
   useEffect(() => {
     if (user) {
       dispatch(fetchChat());
+      setAllMessage(messageData);
     }
-
-    console.log("Client Chat ", messages);
 
     const socketIO = io("ws://localhost:8888");
     setSocket(socketIO);
@@ -59,83 +88,57 @@ function Chat() {
     });
   }, []);
 
-  const handleMessageChanges = (e) => {
-    //
-  };
-
   const handleSendButton = async () => {
-    const message = document.getElementById("messageBox").value;
+    const messageValue = document.getElementById("messageBox").value;
 
-    // console.log(ref.current.value);
-    setSendMessage(message);
-    let fromBuyer, fromAdmin;
-
-    if (user.user.role === "buyer") {
-      fromBuyer = true;
-      fromAdmin = false;
-    } else if (user.user.role === "admin") {
-      fromBuyer = false;
-      fromAdmin = true;
-    }
-
-    const data = {
-      senderId: user.user._id,
-      fromBuyer,
-      fromAdmin,
-      text: message,
+    const message = {
+      conversationId: conversationId,
+      senderId: senderId,
+      receiverId: receiverId,
+      message: messageValue,
     };
 
-    const div = document.createElement("p");
-    div.textContent = message;
+    // console.log(
+    //   "User ID  : ",
+    //   user.user._id,
+    //   "Sender ID :",
+    //   senderId,
+    //   "Receiver Id : ",
+    //   receiverId
+    // );
 
-    if (user.user.role === "buyer") {
-      div.classList.add("message-from-buyer");
+    const div = document.createElement("div");
+    div.textContent = message.message;
+    div.classList.add("own-message");
+    document.getElementById("message-area-id").append(div);
+
+    socket.emit("sendMessage", message);
+
+    socket.on("privatemessage", (receivedMessage) => {
+      console.log("Received Message : ", receivedMessage.text);
+      const div = document.createElement("div");
+      div.textContent = receivedMessage.message;
+      div.classList.add("message-from-other");
       document.getElementById("message-area-id").append(div);
-    } else if (user.user.role === "admin") {
-      div.classList.add("message-from-buyer");
-      document.getElementById("message-area-id").append(div);
-    }
-
-    // if (user.user.role === "buyer") {
-    //   socket.emit("isAdminActive");
-
-    // } else if (user.user.role === "admin") {
-    // }
-
-    socket.emit("sendMessage", data);
-    // console.log("Sent Message :", sent);
-
-    socket.on("privatemessage", (data) => {
-      allMessages.push(data);
-      console.log("Received Message : ", data);
-      console.log("All Message : ", allMessages);
     });
-    // console.log("Sent Message :", user.user.role);
 
-    dispatch(saveChat(data));
+    dispatch(saveChat(message));
   };
 
   return (
     <>
       <div className="client-chat-area">
         <div className="message-area" id="message-area-id">
-          {allMessages.map((message) => {
-            return message.message.fromAdmin ? (
-              <>
-                <p className="message-from-admin" key={message.message.text}>
-                  {message.message.text}
-                </p>
-              </>
-            ) : message.message.fromBuyer ? (
-              <>
-                <p className="message-from-buyer" key={message.message.text}>
-                  {message.message.text}
-                </p>
-              </>
-            ) : (
-              <></>
-            );
-          })}
+          {messageArray.map((message) => (
+            <div>
+              <Message
+                message={message}
+                own={message.senderId === user.user._id}
+              />
+            </div>
+          ))}
+
+          {/* {console.log("All Messages : ", receiverId)} */}
         </div>
       </div>
       <div className="message-send-area">

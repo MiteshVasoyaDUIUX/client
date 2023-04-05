@@ -5,7 +5,7 @@ import usersReducer from "../features/users/usersSlice";
 import productsForClientReducers from "../features/productsForClient/productsForClientSlice";
 import orderReducers from "../features/order/orderSlice"; 
 import adminReducers from "../features/admin/adminSlice"
-import chatReducers from "../features/chat/client/clientChatSlice"
+import chatReducers from "../features/chat/client/chatSlice"
 
 export const store = configureStore({
   reducer: {

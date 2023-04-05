@@ -1,20 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import clientChatService from "./clientChatReducer";
+import chatService from "./chatReducer";
 
 const initialState = {
   messages: [],
+  conversations : [],
   activeSocketIds : [],
   isSaved: false,
   message: "",
 };
 
 export const fetchChat = createAsyncThunk(
-  "client/chat",
+  "client/fetchChat",
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       // console.log("CHAT IN SLICE  : ");
-      return await clientChatService.fetchChat(token);
+      return await chatService.fetchChat(token);
     } catch (error) {
       const message =
         (error.response &&
@@ -27,32 +28,13 @@ export const fetchChat = createAsyncThunk(
   }
 );
 
-export const insertSocketID = createAsyncThunk(
-  "client/insertSocketId",
-  async (socketIOData, thunkAPI) => {
+export const fetchAllConversation = createAsyncThunk(
+  "client/fetchAllConversations",
+  async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       // console.log("CHAT IN SLICE  : ");
-      return await clientChatService.insertSocketID(socketIOData, token);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const deleteSocketID = createAsyncThunk(
-  "client/deleteSocketId",
-  async (socketIOData, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().auth.user.token;
-      // console.log("CHAT IN SLICE  : ");
-      return await clientChatService.deleteSocketID(socketIOData, token);
+      return await chatService.fetchAllConversation(token);
     } catch (error) {
       const message =
         (error.response &&
@@ -70,7 +52,7 @@ export const saveChat = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      return await clientChatService.saveChat(data, token);
+      return await chatService.saveChat(data, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -106,19 +88,14 @@ const clientChatSlice = createSlice({
       })
       .addCase(saveChat.rejected, (state, action) => {
       })
-      .addCase(insertSocketID.pending, (state) => {
+      .addCase(fetchAllConversation.pending, (state) => {
       })
-      .addCase(insertSocketID.fulfilled, (state, action) => {
-        console.log("SocketID Insterted Successsfully")
+      .addCase(fetchAllConversation.fulfilled, (state, action) => {
+        state.conversations = action.payload;
+        // console.log("ACTIOND PAYL  OAD  :", action.payload);
+        state.isSaved = true;
       })
-      .addCase(insertSocketID.rejected, (state, action) => {
-      })
-      .addCase(deleteSocketID.pending, (state) => {
-      })
-      .addCase(deleteSocketID.fulfilled, (state, action) => {
-        console.log("SocketID Deleted Successsfully")
-      })
-      .addCase(deleteSocketID.rejected, (state, action) => {
+      .addCase(fetchAllConversation.rejected, (state, action) => {
       });
   },
 });
