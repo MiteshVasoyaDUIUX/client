@@ -1,7 +1,7 @@
 .buyers-orders-table-title {
       margin-top: 1%;
       margin-left: 4%;
-      padding : 1%;
+      padding: 1%;
       text-align: center;
       font-size: 35px;
       cursor: pointer;
@@ -30,4 +30,22 @@
       width: 50%;
       bottom: 1px;
       right: 1px;
+}
+
+.message-seller-button {
+      border: 1px solid black;
+      border-radius: 4px;
+      background-color: white;
+      height: 45px;
+      width: 90px;
+      transition: ease-in-out 0.1s;
+}
+
+.message-seller-button:hover {
+      background-color: #1d2133;
+      color: white;
+}
+
+.message-seller-button:active {
+      transform: scale(0.95);
 }

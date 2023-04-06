@@ -20,7 +20,7 @@ function ImageSlider() {
   ];
   return (
     <>
-      <div className="image-slider" style={{ marginTop: "20px" }}>
+      <div className="image-slider" style={{ marginTop: "0px" }}>
         <Slider image={Array} />
       </div>
     </>
@@ -37,7 +37,7 @@ function Slider(props) {
             <div>
               <img
                 src={images.image[0].url}
-                style={{ height: "500px", width: "100%", borderRadius: "15px" }}
+                style={{ height: "550px", width: "100%", borderRadius: "0" }}
                 alt=""
               />
             </div>
@@ -46,7 +46,7 @@ function Slider(props) {
             <div>
               <img
                 src={images.image[1].url}
-                style={{ height: "500px", width: "100%", borderRadius: "15px" }}
+                style={{ height: "550px", width: "100%", borderRadius: "0" }}
                 alt=""
               />
             </div>
@@ -55,7 +55,7 @@ function Slider(props) {
             <div>
               <img
                 src={images.image[2].url}
-                style={{ height: "500px", width: "100%", borderRadius: "15px" }}
+                style={{ height: "550px", width: "100%", borderRadius: "0" }}
                 alt=""
               />
             </div>

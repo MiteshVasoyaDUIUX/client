@@ -2,22 +2,24 @@ import React, { useEffect, useState, useRef } from "react";
 import "./Chat.css";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchChat,
-  saveChat,
-} from "../../features/chat/client/chatSlice";
+import { fetchChat, saveChat } from "../../features/chat/client/chatSlice";
 import Messages from "../Admin Pages/Messages";
 
 function Message({ message, own }) {
   return (
     <div>
-      <div className="messageTop">
-        <p className={own ? "own-message" : "message-from-other"}>
-          {message.message}
-        </p>
-        {/* {console.log("Message : ", message, "Owned : ", own)} */}
+      <div className={own ? "own-message" : "message-from-other"}>
+        <div>{message.message}</div>
+        <div
+          className={
+            own
+              ? "client-time-of-sent-message"
+              : "client-time-of-received-message"
+          }
+        >
+          {message.time.slice(4, 21)}
+        </div>
       </div>
-      {/* <div className="messageBottom">{format(message.createdAt)}</div> */}
     </div>
   );
 }
@@ -73,10 +75,29 @@ function Chat() {
       }
     });
 
-    socketIO.on("privatemessage", (data) => {
-      // allMessages.push(data);
-      console.log("Received Message : ", data);
-      // console.log("All Message : ", allMessages);
+    socketIO.on("privatemessage", (receivedMessage) => {
+      // console.log("Received Message : ", receivedMessage.message);
+      const date = new Date();
+      const time = String(date).slice(4, 21);
+      const messageArea = document.getElementById("message-area-id");
+
+      const div = document.createElement("div");
+      div.classList.add("message-from-other");
+
+      const messageDiv = document.createElement("div");
+      messageDiv.textContent = receivedMessage.message;
+
+      const timeDiv = document.createElement("div");
+      timeDiv.classList.add("client-time-of-received-message");
+      timeDiv.textContent = time;
+
+      div.append(messageDiv, timeDiv);
+
+      messageArea.append(div);
+    });
+
+    socketIO.on("save-chat", (data) => {
+      dispatch(saveChat(data));
     });
 
     socketIO.on("disconnect", () => {
@@ -89,7 +110,9 @@ function Chat() {
   }, []);
 
   const handleSendButton = async () => {
-    const messageValue = document.getElementById("messageBox").value;
+    const messageValue = document.getElementById("message-box-id").value;
+    const date = new Date();
+    const time = String(date).slice(4, 21);
 
     const message = {
       conversationId: conversationId,
@@ -98,54 +121,56 @@ function Chat() {
       message: messageValue,
     };
 
-    // console.log(
-    //   "User ID  : ",
-    //   user.user._id,
-    //   "Sender ID :",
-    //   senderId,
-    //   "Receiver Id : ",
-    //   receiverId
-    // );
+    const messageArea = document.getElementById("message-area-id");
 
     const div = document.createElement("div");
-    div.textContent = message.message;
     div.classList.add("own-message");
-    document.getElementById("message-area-id").append(div);
+
+    const messageDiv = document.createElement("div");
+    messageDiv.textContent = message.message;
+
+    const timeDiv = document.createElement("div");
+    timeDiv.classList.add("client-time-of-sent-message");
+    timeDiv.textContent = time;
+
+    div.append(messageDiv, timeDiv);
+
+    messageArea.append(div);
 
     socket.emit("sendMessage", message);
 
-    socket.on("privatemessage", (receivedMessage) => {
-      console.log("Received Message : ", receivedMessage.text);
-      const div = document.createElement("div");
-      div.textContent = receivedMessage.message;
-      div.classList.add("message-from-other");
-      document.getElementById("message-area-id").append(div);
-    });
-
-    dispatch(saveChat(message));
+    document.getElementById("message-box-id").value = "";
   };
 
   return (
     <>
-      <div className="client-chat-area">
-        <div className="message-area" id="message-area-id">
-          {messageArray.map((message) => (
-            <div>
-              <Message
-                message={message}
-                own={message.senderId === user.user._id}
-              />
-            </div>
-          ))}
-
-          {/* {console.log("All Messages : ", receiverId)} */}
+      <div>
+        <div className="client-chat-area">
+          <div className="message-area" id="message-area-id">
+            {messageArray.map((message) => (
+              <div>
+                <Message
+                  message={message}
+                  own={message.senderId === user.user._id}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="message-send-area">
-        <input type="text" className="chat-text-box" id="messageBox" />
-        <button onClick={handleSendButton} className="chat-send-button">
-          Send
-        </button>
+        <div className="client-chat-box-button">
+          <input
+            type="text"
+            name="message"
+            className="client-message-box"
+            id="message-box-id"
+          />
+          <button
+            className="client-send-message-button"
+            onClick={handleSendButton}
+          >
+            Send
+          </button>
+        </div>
       </div>
     </>
   );

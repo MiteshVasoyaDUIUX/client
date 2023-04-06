@@ -242,17 +242,6 @@ function Header() {
                     </Link>
                   </MenuItem>
                   <MenuItem
-                    key={optionsForClient[2]}
-                    onClick={handleCloseUserMenu}
-                  >
-                    <Link
-                      style={{ textDecoration: "None", color: "black" }}
-                      to="/buyer/chat"
-                    >
-                      {optionsForClient[2]}
-                    </Link>
-                  </MenuItem>
-                  <MenuItem
                     key={optionsForClient[3]}
                     onClick={handleCloseUserMenu}
                   >

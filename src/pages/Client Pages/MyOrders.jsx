@@ -12,23 +12,27 @@ import { fetchAllOrders } from "../../features/order/orderSlice";
 import "./MyOrders.css";
 import { styled } from "@mui/material/styles";
 import { reset } from "../../features/admin/adminSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { IconButton } from "@mui/material";
 
 const columns = [
   {
     id: "_id",
     label: "Order ID",
-    titleAlign: "center",
+    align: "center",
   },
   {
     id: "prodName",
     label: "Product Name",
-    titleAlign: "center",
+    align: "center",
+    textAlign: "left",
+    width: "50%",
   },
   {
     id: "createdAt",
     label: "Order Date",
-    titleAlign: "center",
+    align: "center",
+    textAlign: "center",
     format: (value) => value.split("T")[0],
   },
   {
@@ -38,32 +42,72 @@ const columns = [
   {
     id: "quantity",
     label: "Quantity",
-    titleAlign: "center",
+    align: "center",
+    textAlign: "center",
     valueAlign: "center",
   },
   {
     id: "totalAmount",
     label: "Amount",
-    titleAlign: "center",
+    align: "center",
     valueAlign: "right",
+    textAlign: "center",
     format: (value) => value + " ₹",
   },
   {
     id: "paymentType",
     label: "Payment Method",
-    valueAlign: "center",
+    align: "center",
+    textAlign: "center",
+  },
+  {
+    id: "messageAdmin",
+    label: "",
+    align: "center",
+    textAlign: "center",
   },
 ];
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 1,
-  },
-}));
+function Row(props) {
+  const { row } = props;
+  let status = "";
+
+  return (
+    <>
+      <TableRow
+        hover
+        role="checkbox"
+        tabIndex={-1}
+        sx={{ margin: "2px", padding: "0px" }}
+      >
+        {columns.map((column) => {
+          const value = row[column.id];
+
+          if (column.id === "status") {
+            status = value;
+          }
+          return (
+            <TableCell key={value} align={column.textAlign}>
+              {column.id !== "messageAdmin" ? (
+                String(value)
+              ) : status === "Success" ? (
+                <>
+                  <Link to="/buyer/chat">
+                    <button className="message-seller-button">
+                      Mesage Seller
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                <></>
+              )}
+            </TableCell>
+          );
+        })}
+      </TableRow>
+    </>
+  );
+}
 
 export default function MyOrders() {
   const [page, setPage] = React.useState(0);
@@ -107,62 +151,76 @@ export default function MyOrders() {
 
   return (
     <>
-      <div className="buyers-orders-table-title">Orders</div>
-      <Paper className="buyers-orders-table">
-        <TableContainer>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead className="buyers-orders-table-header">
-              <TableRow>
-                {columns.map((column) => (
-                  <StyledTableCell
-                    key={column.id}
-                    align={column.titleAlign}
-                    style={{
-                      minWidth: column.minWidth,
-                      backgroundColor: "#1d2133",
-                    }}
-                  >
-                    {column.label}
-                  </StyledTableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {orders
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((order) => {
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={order.id}
-                    >
-                      {columns.map((column) => {
-                        const value = order[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.valueAlign}>
-                            {column.format ? column.format(value) : value}
-                          </TableCell>
-                        );
-                      })}
+      <section className="content" style={{ marginTop: "55px" }}>
+        {orders.length > 0 ? (
+          <div className="users">
+            <Paper
+              sx={{
+                width: "95%",
+                overflow: "hidden",
+                marginLeft: "2.3%",
+                border: "0.1px solid black",
+              }}
+            >
+              <TableContainer sx={{ height: "750px" }}>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    {/* Print Titles... */}
+                    <TableRow>
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column._id}
+                          align={column.align}
+                          style={{
+                            width: column.width,
+                            fontWeight: "bold",
+                            borderBottom: "1px solid black",
+                            zIndex: "0",
+                            backgroundColor: "#1d2133",
+                            color: "#f0f3ed",
+                          }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ))}
                     </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={orders.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          className="buyer-orders-table-pagination"
-        />
-      </Paper>
+                  </TableHead>
+                  <TableBody>
+                    {orders
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((row) => {
+                        return <Row row={row} />;
+                      })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={orders.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+          </div>
+        ) : (
+          <div
+            style={{
+              textAlign: "center",
+              fontFamily: "sans-serif",
+              fontSize: "35px",
+              fontWeight: "bold",
+            }}
+          >
+            No Users Found
+          </div>
+        )}
+      </section>
     </>
   );
 }
