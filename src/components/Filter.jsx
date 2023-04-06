@@ -33,8 +33,6 @@ function Filter({
   includeOutOfStock,
   setIncludeOutOfStock,
 }) {
-  // console.log({ setPriceSliderValue });
-
   const handleSliderChange = (event, newValue) => {
     setPriceSliderValue(newValue);
   };

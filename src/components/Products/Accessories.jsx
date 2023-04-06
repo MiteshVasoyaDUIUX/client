@@ -163,11 +163,15 @@ function ProductCard({ product }) {
 function ProductCards({ newProdArray }) {
   return (
     <>
-      {newProdArray.map((product) => (
-        <Grid>
-          <ProductCard product={product} />
-        </Grid>
-      ))}
+      {newProdArray.map((product) => {
+        // if (product.prodQuantity > 0) {
+        return (
+          <Grid>
+            <ProductCard product={product} />
+          </Grid>
+        );
+        // }
+      })}
     </>
   );
 }
