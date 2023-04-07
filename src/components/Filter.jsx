@@ -57,6 +57,10 @@ function Filter({
     setRatingValue();
   };
 
+  const handleClearDiscount = () => {
+    setDiscount();
+  };
+
   const handleMinValueBox = (e) => {
     const minValue = e.target.value;
   };
@@ -69,7 +73,7 @@ function Filter({
           <div id="customer-rating-div-content">
             {ratingValue !== undefined ? (
               <>
-                <p id="clear-rating-button" onClick={handleClearRating}>
+                <p id="clear-rating-discount-button" onClick={handleClearRating}>
                   Clear
                 </p>
               </>
@@ -184,6 +188,15 @@ function Filter({
         <div id="discount-div">
           <div id="discount-div-title">Discount :</div>
           <div id="discount-div-content">
+          {discount !== undefined ? (
+              <>
+                <p id="clear-rating-discount-button" onClick={handleClearDiscount}>
+                  Clear
+                </p>
+              </>
+            ) : (
+              ""
+            )}
             <RadioGroup
               name="discount-buttons-group"
               onChange={handleDiscountRadios}

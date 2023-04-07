@@ -151,7 +151,7 @@ function ProductCard({ trendingProduct }) {
             align="justify"
             style={{ fontSize: "17px", marginTop: "10px" }}
           >
-            Price : {trendingProduct.prodPrice}
+            Price : {trendingProduct.prodPrice} ₹
           </Typography>
         </CardContent>
         <CardActions>

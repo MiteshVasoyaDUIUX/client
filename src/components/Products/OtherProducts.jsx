@@ -134,7 +134,7 @@ function ProductCard({ product }) {
             align="justify"
             style={{ fontSize: "17px", marginTop: "10px" }}
           >
-            Price : {product.prodPrice}
+            Price : {product.prodPrice} ₹
           </Typography>
         </CardContent>
         <CardActions>

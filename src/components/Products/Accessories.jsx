@@ -136,7 +136,7 @@ function ProductCard({ product }) {
             align="justify"
             style={{ fontSize: "17px", marginTop: "10px" }}
           >
-            Price : {product.prodPrice}
+            Price : {product.prodPrice} ₹
           </Typography>
         </CardContent>
         <CardActions>
@@ -163,20 +163,20 @@ function ProductCard({ product }) {
 function ProductCards({ newProdArray }) {
   return (
     <>
-      {newProdArray.map((product) => {
-        // if (product.prodQuantity > 0) {
-        return (
-          <Grid>
-            <ProductCard product={product} />
-          </Grid>
-        );
-        // }
-      })}
+      <Grid container spacing={3}>
+        {newProdArray.map((product) => {
+          return (
+            <Grid item xs={4}>
+              <ProductCard product={product} />
+            </Grid>
+          );
+        })}
+      </Grid>
     </>
   );
 }
 
-function AccessoriesItems({ newProdArray }) {
+function AccessoriesItems({ newProdArray, includeOutOfStock }) {
   return (
     <>
       <div>
@@ -186,15 +186,52 @@ function AccessoriesItems({ newProdArray }) {
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        <Grid container spacing={0}>
-          <Grid container item spacing={0}>
-            <ProductCards newProdArray={newProdArray} />
-          </Grid>
-        </Grid>
+        <ProductCards newProdArray={newProdArray} />
       </div>
     </>
   );
 }
+
+const filterByRating = (ratingValue, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.rating >= ratingValue) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByPrice = (lower, upper, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.prodPrice > lower && product.prodPrice < upper) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByPODEligibility = (prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    let deliveryType = product.deliveryType;
+    if (deliveryType.includes("COD")) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByDiscount = (discount, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.discount > discount) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
 
 function Accessories() {
   const dispatch = useDispatch();
@@ -213,24 +250,63 @@ function Accessories() {
     };
   }, [isError, dispatch]);
 
-  const [priceSliderValue, setPriceSliderValue] = useState([100, 5000]);
-  const [ratingValue, setRatingValue] = useState();
+  const [priceSliderValue, setPriceSliderValue] = useState([100, 50000]);
+  const [ratingValue, setRatingValue] = useState(null);
   const [PODEligibility, setPODEligibility] = useState(false);
-  const [discount, setDiscount] = useState();
+  const [discount, setDiscount] = useState(null);
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+  let accessories = [];
   let newProdArray = [];
 
   if (products.length > 0) {
     products.map((product) => {
       let category = product.prodCategory;
-      if (
-        category.includes("Accessories") ||
-        category.includes("accessories")
-      ) {
-        newProdArray.push(product);
-        // console.log("category : ", category);
+
+      if (includeOutOfStock) {
+        if (
+          category.includes("Accessories") ||
+          category.includes("accessories")
+        ) {
+          accessories.push(product);
+        }
+      } else {
+        if (
+          (category.includes("Accessories") ||
+            category.includes("accessories")) &&
+          product.prodQuantity > 0
+        ) {
+          accessories.push(product);
+        }
       }
     });
+
+    console.log("ORIGINAL ARRAY : ", accessories);
+
+    if (ratingValue) {
+      newProdArray = filterByRating(ratingValue, accessories);
+      console.log("Array After Filter by Rating : ", newProdArray);
+    } else {
+      newProdArray = accessories;
+    }
+
+    if (priceSliderValue) {
+      newProdArray = filterByPrice(
+        priceSliderValue[0],
+        priceSliderValue[1],
+        newProdArray
+      );
+      console.log("Array After Filter by Price : ", newProdArray);
+    }
+
+    if (PODEligibility) {
+      newProdArray = filterByPODEligibility(newProdArray);
+      console.log("Filter by COD : ", PODEligibility);
+    }
+
+    if (discount) {
+      newProdArray = filterByDiscount(discount, newProdArray);
+      console.log("Filter by Discount : ", discount);
+    }
   }
 
   return (
@@ -249,7 +325,9 @@ function Accessories() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <AccessoriesItems newProdArray={newProdArray} />
+          <AccessoriesItems
+            newProdArray={newProdArray}
+          />
         </div>
       </div>
     </>
