@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import SearchIcon from "@mui/icons-material/Search";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
@@ -27,6 +28,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import MessageIcon from "@mui/icons-material/Message";
 import "./Header.css";
+import { searchProduct } from "../features/productsForClient/productsForClientSlice";
 
 const pagesForAdmin = [
   "Dashboard",
@@ -41,11 +43,10 @@ const optionsForAdmin = ["Profile", "Logout"];
 const optionIfNotLoggedIn = ["Login", "Register"];
 
 function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  // const [isUserLoggedIn, setUserLoggedIn] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { user } = useSelector((state) => state.auth);
 
   const [sidebar, setSideBar] = useState(false);
@@ -72,6 +73,11 @@ function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleSearchBar = (e) => {
+    const quary = document.getElementById("header-searchbar-input").value;
+    dispatch(searchProduct(quary));
   };
 
   useEffect(() => {
@@ -130,6 +136,17 @@ function Header() {
               </Link>
             </>
           )}
+        </div>
+
+        <div className="header-searchbar">
+          <input
+            type="text"
+            name="header-searchbar-input"
+            id="header-searchbar-input"
+          />
+          <button onClick={handleSearchBar}>
+            <SearchIcon />
+          </button>
         </div>
 
         <div className="header-signin">

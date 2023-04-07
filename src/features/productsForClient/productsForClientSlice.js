@@ -6,6 +6,7 @@ const initialState = {
   products: [],
   product: [],
   wishlist: [],
+  searchedProducts: [],
   cart: [],
   isError: false,
   isFetching: false,
@@ -20,6 +21,25 @@ export const fetchProducts = createAsyncThunk(
       const products = await productServiceForClient.fetchProducts();
       // console.log(products);
       return products;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const searchProduct = createAsyncThunk(
+  "productsForClient/searchProduct",
+  async (quary, thunkAPI) => {
+    try {
+      const products = await productServiceForClient.searchProduct(quary);
+      console.log("Searched Products : ", quary);
+      // return products;
     } catch (error) {
       const message =
         (error.response &&
@@ -194,6 +214,24 @@ const productForClientSlice = createSlice({
         state.products = action.payload;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
+        state.isError = true;
+        state.isFetching = false;
+        state.isFetched = false;
+        state.message = action.payload;
+      })
+      .addCase(searchProduct.pending, (state) => {
+        state.isError = false;
+        state.isFetching = true;
+        state.isFetched = false;
+        state.message = "";
+      })
+      .addCase(searchProduct.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isFetching = false;
+        state.isFetched = true;
+        state.searchedProducts = action.payload;
+      })
+      .addCase(searchProduct.rejected, (state, action) => {
         state.isError = true;
         state.isFetching = false;
         state.isFetched = false;

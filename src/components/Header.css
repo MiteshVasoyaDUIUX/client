@@ -61,13 +61,56 @@ body {
 
 .header-logo {
       margin-left: 20px;
-      margin-top: 0;
+      margin-top: 1px;
       margin-bottom: auto;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 40px;
       text-decoration: none;
       color: #1d2133;
       width: fit-content;
+}
+
+.header-searchbar {
+      height: fit-content;
+      width: 40%;
+      border: 1px solid rgb(189, 189, 189);
+      border-radius: 4px;
+      margin-left: 3%;
+      margin-top: auto;
+      margin-bottom: auto;
+      display: flex;
+}
+
+.header-searchbar input {
+      height: 33px;
+      width: 92%;
+      outline: none;
+      background-color: #fbfff8;
+      border: 0px solid rgb(189, 189, 189);
+      border-radius: 4px 0px 0px 4px;
+      font-size: 18px;
+      padding-left: 8px;
+      padding-right: 8px;
+}
+
+.header-searchbar button {
+      height: 35px;
+      padding-top: 7px;
+      padding-left: 5px;
+      width: 8%;
+      outline: none;
+      font-size: 10px;
+      background-color: #e0e0e0;
+      border: 0px solid rgb(189, 189, 189);
+      font-size: 18px;
+      transition: 0.18s ease-in-out;
+}
+.header-searchbar button:hover {
+      background-color: #b1b1b1;
+}
+
+.header-searchbar button:active {
+      transform: scale(0.9);
 }
 
 .header-signin {

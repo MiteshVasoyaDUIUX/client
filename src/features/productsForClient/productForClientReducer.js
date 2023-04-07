@@ -13,6 +13,12 @@ const fetchOneProduct = async (productId) => {
   return response.data;
 };
 
+const searchProduct = async (quary) => {
+  const response = await axios.get(API_URL + "/search/");
+  console.log("Searched Quary : ", quary);
+  // return response.data;
+};
+
 const addToCart = async (data, token) => {
   // console.log("Token : ", data.userId);
   const config = {
@@ -116,7 +122,8 @@ const productServiceForClient = {
   addToWishList,
   fetchOneProduct,
   updateCart,
-  removeFromCart
+  removeFromCart,
+  searchProduct,
 };
 
 export default productServiceForClient;
