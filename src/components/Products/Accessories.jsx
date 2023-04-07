@@ -25,7 +25,6 @@ import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 
 function ProductCard({ product }) {
   const [wishList, setWishList] = useState(false);
-  // console.log("Products : ", product.prodImage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -54,7 +53,6 @@ function ProductCard({ product }) {
         userId,
         productId,
       };
-      console.log("Data : ", data);
       dispatch(addToCart(data));
     } else {
       toast.error("Not Logged In");
@@ -62,7 +60,7 @@ function ProductCard({ product }) {
   };
 
   const handleCardClick = () => {
-    console.log(product._id);
+    // console.log(product._id);
     navigate(`/product/${product._id}`);
   };
 
@@ -78,7 +76,7 @@ function ProductCard({ product }) {
         userId,
         productId,
       };
-      console.log("Data : ", data);
+      // console.log("Data : ", data);
       dispatch(addToWishList(data));
     } else {
       toast.error("Not Logged In");
@@ -176,7 +174,7 @@ function ProductCards({ newProdArray }) {
   );
 }
 
-function AccessoriesItems({ newProdArray, includeOutOfStock }) {
+function AccessoriesItems({ newProdArray }) {
   return (
     <>
       <div>
@@ -251,9 +249,9 @@ function Accessories() {
   }, [isError, dispatch]);
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 50000]);
-  const [ratingValue, setRatingValue] = useState(null);
+  const [ratingValue, setRatingValue] = useState();
   const [PODEligibility, setPODEligibility] = useState(false);
-  const [discount, setDiscount] = useState(null);
+  const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
   let accessories = [];
   let newProdArray = [];
@@ -280,11 +278,8 @@ function Accessories() {
       }
     });
 
-    console.log("ORIGINAL ARRAY : ", accessories);
-
     if (ratingValue) {
       newProdArray = filterByRating(ratingValue, accessories);
-      console.log("Array After Filter by Rating : ", newProdArray);
     } else {
       newProdArray = accessories;
     }
@@ -295,17 +290,14 @@ function Accessories() {
         priceSliderValue[1],
         newProdArray
       );
-      console.log("Array After Filter by Price : ", newProdArray);
     }
 
     if (PODEligibility) {
       newProdArray = filterByPODEligibility(newProdArray);
-      console.log("Filter by COD : ", PODEligibility);
     }
 
     if (discount) {
       newProdArray = filterByDiscount(discount, newProdArray);
-      console.log("Filter by Discount : ", discount);
     }
   }
 
@@ -325,9 +317,7 @@ function Accessories() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <AccessoriesItems
-            newProdArray={newProdArray}
-          />
+          <AccessoriesItems newProdArray={newProdArray} />
         </div>
       </div>
     </>

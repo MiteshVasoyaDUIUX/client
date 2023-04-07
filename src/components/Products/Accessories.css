@@ -7,12 +7,6 @@
       cursor: default;
 }
 
-#accessories-title:hover {
-      border-bottom: 1px solid rgb(39, 105, 181);
-      color: rgb(39, 105, 181);
-      cursor: default;
-}
-
 .product-card:hover {
       border: 1px solid rgb(209, 209, 209);
       box-shadow: 1px 1px 40px 0.01px rgb(192, 192, 192);

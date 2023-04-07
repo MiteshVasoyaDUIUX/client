@@ -39,15 +39,6 @@ function ProductCard({ product }) {
       dispatch(fetchWishList(userId));
     }
 
-    // if (isAddedCart) {
-    //   console.log("Added To Cart...");
-    //   toast.success("Added to cart...");
-    // }
-
-    // if (isError && message) {
-    //   toast.error("Error : " + message);
-    // }
-
     return () => {
       reset();
     };
@@ -63,7 +54,7 @@ function ProductCard({ product }) {
         userId,
         productId,
       };
-      console.log("Data : ", data);
+      // console.log("Data : ", data);
       dispatch(addToCart(data));
     } else {
       toast.error("Not Logged In");
@@ -71,7 +62,7 @@ function ProductCard({ product }) {
   };
 
   const handleCardClick = () => {
-    console.log(product._id);
+    // console.log(product._id);
     navigate(`/product/${product._id}`);
   };
 
@@ -87,7 +78,7 @@ function ProductCard({ product }) {
         userId,
         productId,
       };
-      console.log("Data : ", data);
+      // console.log("Data : ", data);
       dispatch(addToWishList(data));
     } else {
       toast.error("Not Logged In");
@@ -113,7 +104,7 @@ function ProductCard({ product }) {
         className="product-card"
         onClick={handleCardClick}
       >
-       <div className="detailed-page-image">
+        <div className="detailed-page-image">
           <ImageForCard prodImage={product.prodImage} />
         </div>
         <CardContent>
@@ -172,11 +163,15 @@ function ProductCard({ product }) {
 function ProductCards({ newProdArray }) {
   return (
     <>
-      {newProdArray.map((product) => (
-        <Grid>
-          <ProductCard product={product} />
-        </Grid>
-      ))}
+      <Grid container spacing={3}>
+        {newProdArray.map((product) => {
+          return (
+            <Grid item xs={4}>
+              <ProductCard product={product} />
+            </Grid>
+          );
+        })}
+      </Grid>
     </>
   );
 }
@@ -189,17 +184,54 @@ function ClothesItem({ newProdArray }) {
       </div>
       <div
         className="productCards"
-        style={{ width: "90%", marginLeft: "6.8%", marginTop: "40px" }}
+        style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        <Grid container spacing={0}>
-          <Grid container item spacing={0}>
-            <ProductCards newProdArray={newProdArray} />
-          </Grid>
-        </Grid>
+        <ProductCards newProdArray={newProdArray} />
       </div>
     </>
   );
 }
+
+const filterByRating = (ratingValue, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.rating >= ratingValue) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByPrice = (lower, upper, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.prodPrice > lower && product.prodPrice < upper) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByPODEligibility = (prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    let deliveryType = product.deliveryType;
+    if (deliveryType.includes("COD")) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByDiscount = (discount, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.discount > discount) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
 
 function Clothes() {
   const dispatch = useDispatch();
@@ -208,12 +240,9 @@ function Clothes() {
   );
 
   useEffect(() => {
+    dispatch(fetchProducts());
     if (isError) {
       // toast.error(message);
-    }
-
-    if (products) {
-      dispatch(fetchProducts());
     }
 
     return () => {
@@ -221,26 +250,61 @@ function Clothes() {
     };
   }, [isError, dispatch]);
 
-  const [priceSliderValue, setPriceSliderValue] = useState([100, 5000]);
-  const [ratingValue, setRatingValue] = useState();
+  const [priceSliderValue, setPriceSliderValue] = useState([100, 50000]);
+  const [ratingValue, setRatingValue] = useState(null);
   const [PODEligibility, setPODEligibility] = useState(false);
-  const [discount, setDiscount] = useState();
+  const [discount, setDiscount] = useState(null);
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-
+  let clothes = [];
   let newProdArray = [];
+
   if (products.length > 0) {
     products.map((product) => {
       let category = product.prodCategory;
-      if (
-        category.includes("clothes") ||
-        category.includes("Clothes") ||
-        category.includes("cloth") ||
-        category.includes("Cloth")
-      ) {
-        newProdArray.push(product);
-        // console.log("category : ", category);
+
+      if (includeOutOfStock) {
+        if (
+          category.includes("clothes") ||
+          category.includes("Clothes") ||
+          category.includes("cloth") ||
+          category.includes("Cloth")
+        ) {
+          clothes.push(product);
+        }
+      } else {
+        if (
+          (category.includes("clothes") ||
+            category.includes("Clothes") ||
+            category.includes("cloth") ||
+            category.includes("Cloth")) &&
+          product.prodQuantity > 0
+        ) {
+          clothes.push(product);
+        }
       }
     });
+
+    if (ratingValue) {
+      newProdArray = filterByRating(ratingValue, clothes);
+    } else {
+      newProdArray = clothes;
+    }
+
+    if (priceSliderValue) {
+      newProdArray = filterByPrice(
+        priceSliderValue[0],
+        priceSliderValue[1],
+        newProdArray
+      );
+    }
+
+    if (PODEligibility) {
+      newProdArray = filterByPODEligibility(newProdArray);
+    }
+
+    if (discount) {
+      newProdArray = filterByDiscount(discount, newProdArray);
+    }
   }
 
   return (

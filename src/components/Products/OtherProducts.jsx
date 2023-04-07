@@ -25,7 +25,6 @@ import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 
 function ProductCard({ product }) {
   const [wishList, setWishList] = useState(false);
-  // console.log("Products : ", product.prodImage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -37,9 +36,6 @@ function ProductCard({ product }) {
       const userId = user.user._id;
       dispatch(fetchWishList(userId));
     }
-    // if (isError && message) {
-    //   toast.error("Error : " + message);
-    // }
   }, [dispatch, isError]);
 
   const handleCartButton = (e) => {
@@ -52,7 +48,7 @@ function ProductCard({ product }) {
         userId,
         productId,
       };
-      console.log("Data : ", data);
+      // console.log("Data : ", data);
       dispatch(addToCart(data));
     } else {
       toast.error("Not Logged In");
@@ -60,7 +56,7 @@ function ProductCard({ product }) {
   };
 
   const handleCardClick = () => {
-    console.log(product._id);
+    // console.log(product._id);
     navigate(`/product/${product._id}`);
   };
 
@@ -76,7 +72,7 @@ function ProductCard({ product }) {
         userId,
         productId,
       };
-      console.log("Data : ", data);
+      // console.log("Data : ", data);
       dispatch(addToWishList(data));
     } else {
       toast.error("Not Logged In");
@@ -161,11 +157,15 @@ function ProductCard({ product }) {
 function ProductCards({ newProdArray }) {
   return (
     <>
-      {newProdArray.map((product) => (
-        <Grid>
-          <ProductCard product={product} />
-        </Grid>
-      ))}
+      <Grid container spacing={3}>
+        {newProdArray.map((product) => {
+          return (
+            <Grid item xs={4}>
+              <ProductCard product={product} />
+            </Grid>
+          );
+        })}
+      </Grid>
     </>
   );
 }
@@ -173,35 +173,70 @@ function ProductCards({ newProdArray }) {
 function OtherProductsItem({ newProdArray }) {
   return (
     <>
-      <div>
+     <div>
         <h1 id="other-products-title">
-          {/* Add Title According to the Category of the Products... */}
-          Add Title According to the Category of the Products...
+          Products
         </h1>
       </div>
       <div
         className="productCards"
-        style={{ width: "90%", marginLeft: "6.8%", marginTop: "60px" }}
+        style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        <Grid container spacing={0}>
-          <Grid container item spacing={0}>
-            <ProductCards newProdArray={newProdArray} />
-          </Grid>
-        </Grid>
+        <ProductCards newProdArray={newProdArray} />
       </div>
     </>
   );
 }
 
+const filterByRating = (ratingValue, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.rating >= ratingValue) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByPrice = (lower, upper, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.prodPrice > lower && product.prodPrice < upper) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByPODEligibility = (prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    let deliveryType = product.deliveryType;
+    if (deliveryType.includes("COD")) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
+const filterByDiscount = (discount, prodArray) => {
+  let filteredArray = [];
+  prodArray.map((product) => {
+    if (product.discount > discount) {
+      filteredArray.push(product);
+    }
+  });
+  return filteredArray;
+};
+
 function OtherProducts() {
-  const [priceSliderValue, setPriceSliderValue] = useState([100, 5000]);
+  const [priceSliderValue, setPriceSliderValue] = useState([100, 50000]);
   const [ratingValue, setRatingValue] = useState();
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-
-  // console.log("includeOutOfStock : ", includeOutOfStock);
-  // console.log("Discount : ", discount);
+  let otherProducts = [];
+  let newProdArray = [];
 
   const dispatch = useDispatch();
   const { products, isLoading, isError, message } = useSelector(
@@ -222,16 +257,46 @@ function OtherProducts() {
     };
   }, [isError, dispatch]);
 
-  let newProdArray = [];
-
   if (products.length > 0) {
     products.map((product) => {
       let category = product.prodCategory;
-      if (category.includes("Other") || category.includes("other")) {
-        newProdArray.push(product);
-        // console.log("category : ", category);
+
+      if (includeOutOfStock) {
+        if (category.includes("Other") || category.includes("other")) {
+          otherProducts.push(product);
+        }
+      } else {
+        if (
+          (category.includes("Other") || category.includes("other")) &&
+          product.prodQuantity > 0
+        ) {
+          otherProducts.push(product);
+        }
       }
     });
+
+    if (ratingValue) {
+      newProdArray = filterByRating(ratingValue, otherProducts);
+      // console.log("Rating Value");
+    } else {
+      newProdArray = otherProducts;
+    }
+
+    if (priceSliderValue) {
+      newProdArray = filterByPrice(
+        priceSliderValue[0],
+        priceSliderValue[1],
+        newProdArray
+      );
+    }
+
+    if (PODEligibility) {
+      newProdArray = filterByPODEligibility(newProdArray);
+    }
+
+    if (discount) {
+      newProdArray = filterByDiscount(discount, newProdArray);
+    }
   }
 
   return (
@@ -249,7 +314,7 @@ function OtherProducts() {
           includeOutOfStock={includeOutOfStock}
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div style={{ marginLeft: "80px", width: "fitContent" }}>
+        <div style={{ marginLeft: "100px", width: "fitContent" }}>
           <OtherProductsItem newProdArray={newProdArray} />
         </div>
       </div>

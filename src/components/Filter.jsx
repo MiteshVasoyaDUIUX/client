@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import {
+  Button,
   Checkbox,
   Divider,
   Drawer,
@@ -73,7 +74,10 @@ function Filter({
           <div id="customer-rating-div-content">
             {ratingValue !== undefined ? (
               <>
-                <p id="clear-rating-discount-button" onClick={handleClearRating}>
+                <p
+                  id="clear-rating-discount-button"
+                  onClick={handleClearRating}
+                >
                   Clear
                 </p>
               </>
@@ -81,68 +85,124 @@ function Filter({
               ""
             )}
             <div className="customer-rating-item">
-              <Box
-                sx={{
-                  width: 200,
-                  display: "flex",
-                  alignItems: "center",
-                  fontFamily: "sans-serif",
-                }}
+              <Button
+                sx={
+                  ratingValue === 4
+                    ? {
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        fontFamily: "sans-serif",
+                        color: "black",
+                        fontSize: "16px",
+                        backgroundColor: "rgba(66, 102, 122, 0.200)",
+                      }
+                    : {
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        fontFamily: "sans-serif",
+                        color: "black",
+                        fontSize: "16px",
+                      }
+                }
                 onClick={() => {
                   handleRatingButton(4);
                 }}
               >
                 <Rating name="read-only" value={4} readOnly />
                 <Box sx={{ ml: 1 }}>& Up</Box>
-              </Box>
+              </Button>
             </div>
             <div className="customer-rating-item">
-              <Box
-                sx={{
-                  width: 200,
-                  display: "flex",
-                  alignItems: "center",
-                  fontFamily: "sans-serif",
-                }}
+              <Button
+                sx={
+                  ratingValue === 3
+                    ? {
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        fontFamily: "sans-serif",
+                        color: "black",
+                        fontSize: "16px",
+                        backgroundColor: "rgba(66, 102, 122, 0.200)",
+                      }
+                    : {
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        fontFamily: "sans-serif",
+                        color: "black",
+                        fontSize: "16px",
+                      }
+                }
                 onClick={() => {
                   handleRatingButton(3);
                 }}
               >
                 <Rating name="read-only" value={3} readOnly />
                 <Box sx={{ ml: 1 }}>& Up</Box>
-              </Box>
+              </Button>
             </div>
             <div className="customer-rating-item">
-              <Box
-                sx={{
-                  width: 200,
-                  display: "flex",
-                  alignItems: "center",
-                  fontFamily: "sans-serif",
-                }}
+              <Button
+                sx={
+                  ratingValue ===2
+                    ? {
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        fontFamily: "sans-serif",
+                        color: "black",
+                        fontSize: "16px",
+                        backgroundColor: "rgba(66, 102, 122, 0.200)",
+                      }
+                    : {
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        fontFamily: "sans-serif",
+                        color: "black",
+                        fontSize: "16px",
+                      }
+                }
                 onClick={() => {
                   handleRatingButton(2);
                 }}
               >
                 <Rating name="read-only" value={2} readOnly />
                 <Box sx={{ ml: 1 }}>& Up</Box>
-              </Box>
+              </Button>
             </div>
             <div className="customer-rating-item">
-              <Box
-                sx={{
-                  width: 200,
-                  display: "flex",
-                  alignItems: "center",
-                  fontFamily: "sans-serif",
-                }}
+              <Button
+                sx={
+                  ratingValue ===1
+                    ? {
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        fontFamily: "sans-serif",
+                        color: "black",
+                        fontSize: "16px",
+                        backgroundColor: "rgba(66, 102, 122, 0.200)",
+                      }
+                    : {
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        fontFamily: "sans-serif",
+                        color: "black",
+                        fontSize: "16px",
+                      }
+                }
                 onClick={() => {
                   handleRatingButton(1);
                 }}
               >
                 <Rating name="read-only" value={1} readOnly />
                 <Box sx={{ ml: 1 }}>& Up</Box>
-              </Box>
+              </Button>
             </div>
           </div>
         </div>
@@ -188,9 +248,12 @@ function Filter({
         <div id="discount-div">
           <div id="discount-div-title">Discount :</div>
           <div id="discount-div-content">
-          {discount !== undefined ? (
+            {discount !== undefined ? (
               <>
-                <p id="clear-rating-discount-button" onClick={handleClearDiscount}>
+                <p
+                  id="clear-rating-discount-button"
+                  onClick={handleClearDiscount}
+                >
                   Clear
                 </p>
               </>
@@ -203,22 +266,22 @@ function Filter({
             >
               <FormControlLabel
                 value="10"
-                control={<Radio />}
+                control={<Radio checked={discount === "10"} />}
                 label="10% Off or more"
               />
               <FormControlLabel
                 value="20"
-                control={<Radio />}
+                control={<Radio checked={discount === "20"} />}
                 label="20% Off or more"
               />
               <FormControlLabel
                 value="50"
-                control={<Radio />}
+                control={<Radio checked={discount === "50"} />}
                 label="50% Off or more"
               />
               <FormControlLabel
                 value="70"
-                control={<Radio />}
+                control={<Radio checked={discount === "70"} />}
                 label="70% Off or more"
               />
             </RadioGroup>

@@ -26,9 +26,10 @@
       margin-left: 35px;
 }
 
-.customer-rating-item:hover {
-      color: rgb(231, 145, 40);
+.customer-rating-item Button:hover {
+      color: rgb(66, 102, 122);
       cursor: pointer;
+      background-color: rgb(148, 216, 255),
 }
 
 #customer-rating-div-title {
@@ -46,7 +47,7 @@
       background-color: rgb(240, 246, 248);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-weight: 600;
-      font-size:16px;
+      font-size: 16px;
       cursor: pointer;
 }
 
@@ -180,4 +181,26 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-weight: 600;
       font-size: 14px;
+}
+
+.discount-radio-button {
+      width: 17px;
+      height: 17px;
+}
+
+.discount-button {
+      border: 1px solid black;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+height: 50px;
+}
+
+.discount-button label {
+      font-size: 15px;
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      font-weight: 400;
+      margin-left: 8px;
+      margin-bottom: 10px;
+      border: 1px solid black;
 }
