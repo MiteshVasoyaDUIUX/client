@@ -77,7 +77,11 @@ function Header() {
 
   const handleSearchBar = (e) => {
     const quary = document.getElementById("header-searchbar-input").value;
-    dispatch(searchProduct(quary));
+
+    if (quary !== "") {
+      navigate(`/search/${quary}`);
+    }
+    // dispatch(searchProduct(quary));
   };
 
   useEffect(() => {

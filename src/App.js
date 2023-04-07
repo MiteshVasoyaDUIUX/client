@@ -25,6 +25,7 @@ import Orders from "./pages/Admin Pages/Orders";
 import Messages from "./pages/Admin Pages/Messages";
 import ChatAdmin from "./pages/Admin Pages/ChatAdmin";
 import Chat from "./pages/Client Pages/Chat";
+import SearchedQuary from "./pages/Client Pages/SearchedQuary";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/search/:params" element={<SearchedQuary />} />
             <Route path="/myorders" element={<MyOrders />} />
             <Route path="/buyer/chat" element={<Chat />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
