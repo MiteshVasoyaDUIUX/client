@@ -235,7 +235,7 @@ function TrendingProducts() {
   return (
     <>
       <div>
-        <h1 id="trending-product-title">Tranding Products</h1>
+        <h1 id="trending-product-title">Trending Products</h1>
       </div>
       <div
         className="productCards"

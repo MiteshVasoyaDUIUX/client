@@ -14,9 +14,9 @@ const fetchOneProduct = async (productId) => {
 };
 
 const searchProduct = async (quary) => {
-  const response = await axios.get(API_URL + "/search/");
-  console.log("Searched Quary : ", quary);
-  // return response.data;
+  const response = await axios.get(API_URL + "/search/" + quary);
+  console.log("Searched Quary response : ", response);
+  return response.data;
 };
 
 const addToCart = async (data, token) => {

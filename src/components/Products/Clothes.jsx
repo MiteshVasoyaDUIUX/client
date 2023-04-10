@@ -251,9 +251,9 @@ function Clothes() {
   }, [isError, dispatch]);
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 50000]);
-  const [ratingValue, setRatingValue] = useState(null);
+  const [ratingValue, setRatingValue] = useState();
   const [PODEligibility, setPODEligibility] = useState(false);
-  const [discount, setDiscount] = useState(null);
+  const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
   let clothes = [];
   let newProdArray = [];

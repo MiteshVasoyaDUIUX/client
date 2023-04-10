@@ -296,19 +296,19 @@ function DetailedProductPage() {
             </div>
           </div>
         </div>
-        <hr />
-        <div className="customer-reviews">
+        {/* <hr /> */}
+        {/* <div className="customer-reviews">
           <div className="customer-reviews-title">
-            {/* From DB... */}
+            From DB...
             Customer's Reviews
           </div>
           <div style={{ marginTop: "30px" }}>
             <div className="customer-name">
-              {/* From DB... */}
+              From DB...
               Mitesh
             </div>
             <div className="customer-review-description">
-              {/* From DB... */}
+              From DB...
               Apple hasn’t made any bones about the fact that there are certain
               products it has that aren’t meant for everyone. Some of these —
               like the Mac Studio or even the Mac mini — are way too niche and
@@ -328,33 +328,8 @@ function DetailedProductPage() {
               and get one.
             </div>
           </div>
-          <div style={{ marginTop: "30px" }}>
-            <div className="customer-name">
-              {/* From DB... */}
-              Mitesh
-            </div>
-            <div className="customer-review-description">
-              {/* From DB... */}
-              Apple hasn’t made any bones about the fact that there are certain
-              products it has that aren’t meant for everyone. Some of these —
-              like the Mac Studio or even the Mac mini — are way too niche and
-              will be sought by those who really need them. And then there are
-              those that bring the best of Apple at an expensive — very
-              expensive — price point but are desired by many. The iPhone’s Pro
-              models have always been in the category — the coveted one, the
-              desirable one, the one that makes you want to junk that financial
-              prudence that has been drilled in you. The iPhone 14 Pro Max is
-              very much that phone — the best of Apple and by now you know that
-              it is an expensive phone. Rs 1,39,900 is the starting price and
-              there’s little point in debating on why it’s so expensive and
-              whether it’s value for money or not. It’s an Apple product, it is
-              an iPhone, and it is the Pro Max variant — of course it will be
-              expensive. Apple wants your money and the iPhone 14 Pro Max is
-              that dangling proposition that may just want you to break the bank
-              and get one.
-            </div>
-          </div>
-        </div>
+          
+        </div> */}
       </ErrorBoundary>
     </>
   );

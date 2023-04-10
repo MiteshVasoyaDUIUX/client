@@ -78,7 +78,11 @@ function Header() {
   const handleSearchBar = (e) => {
     const quary = document.getElementById("header-searchbar-input").value;
 
-    if (quary !== "") {
+    if (quary !== "" && e.type === "click") {
+      navigate(`/search/${quary}`);
+      // console.log("Key Code : ", e.type);
+    } else if (quary !== "" && e.keyCode == 13) {
+      // console.log("Key Code : ", e.keyCode);
       navigate(`/search/${quary}`);
     }
     // dispatch(searchProduct(quary));
@@ -142,16 +146,21 @@ function Header() {
           )}
         </div>
 
-        <div className="header-searchbar">
-          <input
-            type="text"
-            name="header-searchbar-input"
-            id="header-searchbar-input"
-          />
-          <button onClick={handleSearchBar}>
-            <SearchIcon />
-          </button>
-        </div>
+        {!user || user.role === "buyer" ? (
+          <div className="header-searchbar">
+            <input
+              type="text"
+              name="header-searchbar-input"
+              id="header-searchbar-input"
+              onKeyUp={handleSearchBar}
+            />
+            <button onClick={handleSearchBar}>
+              <SearchIcon />
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
 
         <div className="header-signin">
           {user ? (

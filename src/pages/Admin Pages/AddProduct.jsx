@@ -31,9 +31,12 @@ function AddProduct() {
     prodPrice: "",
     prodImage: [],
   });
+
   const [selectedCategory, setSelectedCategory] = useState("Select Category");
   const [image, setImage] = useState([]);
-
+  let imgArr = [];
+  let binaryData = "";
+  let imageByteArray = "";
 
   const { products, isError, isLoading, isSuccess, message } = useSelector(
     (state) => state.product
@@ -78,12 +81,12 @@ function AddProduct() {
         style={{
           position: "absolute",
           top: "50%",
-          left : "48%",
+          left: "48%",
           transform: "translate(0, -50%)",
           padding: "10px",
         }}
       >
-        <GridLoader color="#000000" speedMultiplier="0.75"/>
+        <GridLoader color="#000000" speedMultiplier="0.75" />
       </div>
     );
   }
@@ -95,7 +98,6 @@ function AddProduct() {
     "Accessories",
     "Other",
   ];
-
 
   const {
     prodName,
@@ -117,9 +119,10 @@ function AddProduct() {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
       URL.createObjectURL(e[1])
     );
-    // console.log("New Image : ", ImagesArray);
+    console.log("New Image : ", ImagesArray);
 
     setImage([...image, ...ImagesArray]);
+
     // console.log("All Image Array : ", image);
   };
 
@@ -128,7 +131,7 @@ function AddProduct() {
       return;
     } else {
       setSelectedCategory(e.target.value);
-      console.log(e.target.value);
+      // console.log(e.target.value);
     }
   };
 
@@ -140,8 +143,22 @@ function AddProduct() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // const url = URL.createObjectURL(image[0].slice(5));
-    console.log("URL.createObjectURL : ", image.files);
+    // const reader = new FileReader();
+
+    // // const element = image[index];
+    // // console.log("Element : ", element)
+
+    // const blob = new Blob([image[0]]);
+
+    // reader.onload = async (event) => {
+    //   binaryData = event.target.result;
+    //   imageByteArray = await new Uint8Array(binaryData);
+
+    //   imgArr.push(imageByteArray);
+
+    //   console.log("URL : imgArr : ", productData);
+    // };
+    // reader.readAsArrayBuffer(blob);
 
     const productData = {
       prodName,
@@ -151,8 +168,19 @@ function AddProduct() {
       prodPrice,
       prodImage: image,
     };
+
+    const formData = new FormData();
+    formData.append("prodName", prodName);
+    formData.append("prodDesc", prodDesc);
+    formData.append("prodCategory", selectedCategory);
+    formData.append("prodQuantity", prodQuantity);
+    formData.append("prodPrice", prodPrice);
+    formData.append("prodImage", image);
+
+    console.log("URL : imageByteArray : ", formData);
+    dispatch(uploadProduct(formData));
+
     // console.log("In Product Upload Page...", productData);
-    dispatch(uploadProduct(productData));
   };
 
   return (
@@ -169,7 +197,7 @@ function AddProduct() {
           width: "fit-content",
           color: "#1d2133",
           backgroundColor: "#f0f3ed",
-          cursor : "default"
+          cursor: "default",
         }}
       >
         Add Product
@@ -280,6 +308,7 @@ function AddProduct() {
               borderRadius: "5px",
               padding: "15px",
             }}
+            name="prodImage"
             onChange={handleImageChange}
             disabled={image.length === 6}
             multiple
@@ -290,6 +319,7 @@ function AddProduct() {
                 return (
                   <div className="image-div" key={item}>
                     <img src={item} className="image" alt="" />
+                    {}
                     <button
                       type="button"
                       className="delete-image"

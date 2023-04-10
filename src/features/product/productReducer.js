@@ -5,16 +5,17 @@ const API_URL = "http://localhost:5555";
 
 const API_URL_TO_REMOVE_PRODUCT = "http://localhost:5555/admin/product";
 
-const uploadProduct = async (productData, token) => {
+const uploadProduct = async (formData, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data; boundary=something",
     },
   };
 
   const response = await axios.post(
     API_URL + "/admin/addproducts",
-    productData,
+    formData,
     config
   );
 
@@ -42,7 +43,10 @@ const removeProduct = async (productId, token) => {
     },
   };
 
-  const response = await axios.delete(API_URL_TO_REMOVE_PRODUCT + productId, config);
+  const response = await axios.delete(
+    API_URL_TO_REMOVE_PRODUCT + productId,
+    config
+  );
 
   // console.log("Response : ", response.data);
   return response.data;
@@ -55,7 +59,11 @@ const updateProduct = async (productData, token) => {
     },
   };
 
-  const response = await axios.put(API_URL + "/admin/product/" + productData.productId, productData, config);
+  const response = await axios.put(
+    API_URL + "/admin/product/" + productData.productId,
+    productData,
+    config
+  );
 
   // console.log("Response : ", response.data);
   return response.data;
@@ -65,7 +73,7 @@ const productService = {
   uploadProduct,
   fetchProducts,
   removeProduct,
-  updateProduct
+  updateProduct,
 };
 
 export default productService;

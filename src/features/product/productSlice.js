@@ -13,12 +13,12 @@ const initialState = {
 
 export const uploadProduct = createAsyncThunk(
   "prouduct/upload",
-  async (productData, thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
 
-      return await productService.uploadProduct(productData, token);
+      return await productService.uploadProduct(formData, token);
     } catch (error) {
       const message =
         (error.response &&

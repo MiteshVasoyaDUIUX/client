@@ -38,8 +38,8 @@ export const searchProduct = createAsyncThunk(
   async (quary, thunkAPI) => {
     try {
       const products = await productServiceForClient.searchProduct(quary);
-      console.log("Searched Products : ", quary);
-      // return products;
+      console.log("Searched Products : ", products);
+      return products;
     } catch (error) {
       const message =
         (error.response &&
