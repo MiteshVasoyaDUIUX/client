@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "@mui/material";
 import { CardActions } from "@mui/material";
 import { CardContent } from "@mui/material";
@@ -8,37 +8,104 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { IconButton } from "@mui/material";
-
+import { ImageForCard } from "./DetailedProductPage.jsx/Images";
+import { toast } from "react-toastify";
+import {
+  addToCart,
+  addToWishList,
+  fetchWishList,
+  reset,
+} from "../features/productsForClient/productsForClientSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "./ProductCard.css";
 
 export default function ProductCard({ product }) {
-  const [wishlist, setWishlist] = useState(false);
-  const [addToCart, setAddToCart] = useState(false);
+  console.log("ProductCard");
+
+  const [wishList, setWishList] = useState(false);
   // console.log("Products : ", product.prodImage);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.auth);
+  const { wishlist, isAddedCart, isError, message } = useSelector(
+    (state) => state.productsForClient
+  );
+  useEffect(() => {
+    if (user) {
+      const userId = user.user._id;
+      dispatch(fetchWishList(userId));
+    }
+
+    return () => {
+      reset();
+    };
+  }, [dispatch, isError]);
+
+  const handleCartButton = (e) => {
+    e.stopPropagation();
+    if (user) {
+      const productId = product._id;
+      const userData = user;
+      const userId = userData.user._id;
+      const data = {
+        userId,
+        productId,
+      };
+      // console.log("Data : ", data);
+      dispatch(addToCart(data));
+    } else {
+      toast.error("Not Logged In");
+    }
+  };
+
+  const handleCardClick = () => {
+    // console.log(product._id);
+    navigate(`/product/${product._id}`);
+  };
+
+  const handleWishListButton = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (user) {
+      setWishList(!wishList);
+      const productId = product._id;
+      const userData = user;
+      const userId = userData.user._id;
+      const data = {
+        userId,
+        productId,
+      };
+      // console.log("Data : ", data);
+      dispatch(addToWishList(data));
+    } else {
+      toast.error("Not Logged In");
+    }
+  };
+
   return (
     <>
       <Card
         sx={{
-          maxWidth: 400,
+          width: 390,
+          height: 650,
+          paddingBottom: "10px",
           textAlign: "center",
           marginBottom: "30px",
           marginRight: "30px",
           border: "0.5px solid white",
           boxShadow: "none",
           borderRadius: "15px",
+          cursor: "pointer",
         }}
-        key = {product._id}
+        key={product._id}
         className="product-card"
+        onClick={handleCardClick}
       >
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          image={product.prodImage[0]}
-          sx={{
-            height: "fitContent",
-            width: "fitContent",
-            minHeight: "300px",
-          }}
-        />
+        <div className="detailed-page-image">
+          <ImageForCard prodImage={product.prodImage} />
+        </div>
         <CardContent>
           <Typography
             variant="h6"
@@ -49,41 +116,45 @@ export default function ProductCard({ product }) {
               whiteSpace: "wrap",
               textOverflow: "ellipsis",
               height: "60px",
-              marginBottom: "8px",
+              marginBottom: "10px",
             }}
           >
             {product.prodName}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            className="products-card-desc"
+          >
+            {product.prodDesc}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="justify"
+            style={{ fontSize: "17px", marginTop: "13px" }}
+          >
+            Price : {product.prodPrice} ₹
           </Typography>
         </CardContent>
         <CardActions>
-              <IconButton onClick={() => setAddToCart(!addToCart)}> 
-              {addToCart ? (
-                  <AddShoppingCartIcon
-                    color="primary"
-                  />
-                ) : (
-                  <AddShoppingCartIcon
-                  />
-                )}
-              </IconButton>
-              <IconButton onClick={() => setWishlist(!wishlist)}>
-                {wishlist ? (
-                  <FavouriteRoundedIcon
-                    color="error"
-                  />
-                ) : (
-                  <FavoriteBorderIcon
-                    color="error"
-                  />
-                )}
-              </IconButton>
-            </CardActions>
+          <IconButton onClick={handleCartButton}>
+            {!addToCart ? (
+              <AddShoppingCartIcon color="primary" />
+            ) : (
+              <AddShoppingCartIcon />
+            )}
+          </IconButton>
+          <IconButton onClick={handleWishListButton}>
+            {wishlist.includes(product._id) ? (
+              <FavouriteRoundedIcon color="error" />
+            ) : (
+              <FavoriteBorderIcon color="error" />
+            )}
+          </IconButton>
+        </CardActions>
       </Card>
     </>
   );
 }
-

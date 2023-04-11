@@ -22,167 +22,20 @@ import {
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ImageForCard } from "../DetailedProductPage.jsx/Images";
-
-function ProductCard({ product }) {
-  const [wishList, setWishList] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
-  const { wishlist, isAddedCart, isError, message } = useSelector(
-    (state) => state.productsForClient
-  );
-  useEffect(() => {
-    if (user) {
-      const userId = user.user._id;
-      dispatch(fetchWishList(userId));
-    }
-  }, [dispatch, isError]);
-
-  const handleCartButton = (e) => {
-    e.stopPropagation();
-    if (user) {
-      const productId = product._id;
-      const userData = user;
-      const userId = userData.user._id;
-      const data = {
-        userId,
-        productId,
-      };
-      // console.log("Data : ", data);
-      dispatch(addToCart(data));
-    } else {
-      toast.error("Not Logged In");
-    }
-  };
-
-  const handleCardClick = () => {
-    // console.log(product._id);
-    navigate(`/product/${product._id}`);
-  };
-
-  const handleWishListButton = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (user) {
-      setWishList(!wishList);
-      const productId = product._id;
-      const userData = user;
-      const userId = userData.user._id;
-      const data = {
-        userId,
-        productId,
-      };
-      // console.log("Data : ", data);
-      dispatch(addToWishList(data));
-    } else {
-      toast.error("Not Logged In");
-    }
-  };
-
-  return (
-    <>
-      <Card
-        sx={{
-          width: 390,
-          height: 650,
-          paddingBottom: "10px",
-          textAlign: "center",
-          marginBottom: "30px",
-          marginRight: "30px",
-          border: "0.5px solid white",
-          boxShadow: "none",
-          borderRadius: "15px",
-          cursor: "pointer",
-        }}
-        key={product._id}
-        className="product-card"
-        onClick={handleCardClick}
-      >
-        <div className="detailed-page-image">
-          <ImageForCard prodImage={product.prodImage} />
-        </div>
-        <CardContent>
-          <Typography
-            variant="h6"
-            component="div"
-            style={{
-              textAlign: "left",
-              overflow: "hidden",
-              whiteSpace: "wrap",
-              textOverflow: "ellipsis",
-              height: "60px",
-              marginBottom: "8px",
-            }}
-          >
-            {product.prodName}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="justify"
-            style={{ marginTop: "10px" }}
-          >
-            {product.prodDesc}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="justify"
-            style={{ fontSize: "17px", marginTop: "10px" }}
-          >
-            Price : {product.prodPrice} ₹
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <IconButton onClick={handleCartButton}>
-            {!addToCart ? (
-              <AddShoppingCartIcon color="primary" />
-            ) : (
-              <AddShoppingCartIcon />
-            )}
-          </IconButton>
-          <IconButton onClick={handleWishListButton}>
-            {wishlist.includes(product._id) ? (
-              <FavouriteRoundedIcon color="error" />
-            ) : (
-              <FavoriteBorderIcon color="error" />
-            )}
-          </IconButton>
-        </CardActions>
-      </Card>
-    </>
-  );
-}
-
-function ProductCards({ newProdArray }) {
-  return (
-    <>
-      <Grid container spacing={3}>
-        {newProdArray.map((product) => {
-          return (
-            <Grid item xs={4}>
-              <ProductCard product={product} />
-            </Grid>
-          );
-        })}
-      </Grid>
-    </>
-  );
-}
+import ProductCard from "../ProductCard";
+import { ProductCardsGrid } from "../ProductCardGrid";
 
 function OtherProductsItem({ newProdArray }) {
   return (
     <>
-     <div>
-        <h1 id="other-products-title">
-          Products
-        </h1>
+      <div>
+        <h1 id="other-products-title">Products</h1>
       </div>
       <div
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        <ProductCards newProdArray={newProdArray} />
+        <ProductCardsGrid products={newProdArray} />
       </div>
     </>
   );
@@ -230,7 +83,7 @@ const filterByDiscount = (discount, prodArray) => {
 };
 
 function OtherProducts() {
-  const [priceSliderValue, setPriceSliderValue] = useState([100, 50000]);
+  const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState();
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
@@ -262,12 +115,22 @@ function OtherProducts() {
       let category = product.prodCategory;
 
       if (includeOutOfStock) {
-        if (category.includes("Other") || category.includes("other")) {
+        if (
+          category.includes("Phone") ||
+          category.includes("phones") ||
+          category.includes("Other") ||
+          category.includes("accessories") ||
+          category.includes("Accessories")
+        ) {
           otherProducts.push(product);
         }
       } else {
         if (
-          (category.includes("Other") || category.includes("other")) &&
+          (category.includes("Phone") ||
+            category.includes("phones") ||
+            category.includes("Other") ||
+            category.includes("accessories") ||
+            category.includes("Accessories")) &&
           product.prodQuantity > 0
         ) {
           otherProducts.push(product);

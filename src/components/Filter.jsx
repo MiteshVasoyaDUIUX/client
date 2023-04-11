@@ -230,7 +230,7 @@ function Filter({
                 valueLabelDisplay="auto"
                 color="primary"
                 min={100}
-                max={50000}
+                max={200000}
               />
             </Box>
           </div>
