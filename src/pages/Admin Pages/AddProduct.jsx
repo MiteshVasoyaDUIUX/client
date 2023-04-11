@@ -12,6 +12,9 @@ import {
   TextField,
   Select,
   MenuItem,
+  OutlinedInput,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -27,13 +30,16 @@ function AddProduct() {
     prodName: "",
     prodDesc: "",
     prodCategory: "",
+    prodMRP: "",
     prodQuantity: "",
     prodPrice: "",
+    paymentType: "",
     prodImage: [],
   });
 
   const [selectedCategory, setSelectedCategory] = useState("Select Category");
   const [image, setImage] = useState([]);
+  const [paymentType, setPaymentType] = React.useState([]);
   let imgArr = [];
   let binaryData = "";
   let imageByteArray = "";
@@ -64,6 +70,7 @@ function AddProduct() {
         prodDesc: "",
         prodCategory: "",
         prodQuantity: "",
+        prodMRP: "",
         prodPrice: "",
         prodImage: [],
       });
@@ -96,8 +103,11 @@ function AddProduct() {
     "Cloths",
     "Footware",
     "Accessories",
+    "Smart Phones",
     "Other",
   ];
+
+  const paymentTypeOptions = ["COD", "UPI", "CARD"];
 
   const {
     prodName,
@@ -105,6 +115,7 @@ function AddProduct() {
     prodCategory,
     prodQuantity,
     prodPrice,
+    prodMRP,
     prodImage,
   } = productData;
 
@@ -135,6 +146,15 @@ function AddProduct() {
     }
   };
 
+  const handlePaymentChanges = (e) => {
+    if (e.target.value === "Select Payment Options") {
+      return;
+    } else {
+      setPaymentType(e.target.value);
+      // console.log(e.target.value);
+    }
+  };
+
   const deleteFile = (e) => {
     const s = image.filter((item, index) => index !== e);
     setImage(s);
@@ -143,48 +163,40 @@ function AddProduct() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // const reader = new FileReader();
+    if (prodName === "") {
+      alert("Enter Product Name");
+    } else if (prodDesc === "") {
+      alert("Enter Product Description");
+    } else if (prodQuantity === "") {
+      alert("Enter Product Quantity");
+    } else if (prodPrice === "") {
+      alert("Enter Product Price");
+    } else if (prodMRP === "") {
+      alert("Enter Product MRP");
+    } else if (Number(prodMRP) < Number(prodPrice)) {
+      alert("MRP must be greater than Price");
+    } else if (selectedCategory === "") {
+      alert("Enter Product Category");
+    } else if (paymentType === "") {
+      alert("Enter Product Payment Type");
+    } else {
+      const form = document.getElementById("add-product-form");
 
-    // // const element = image[index];
-    // // console.log("Element : ", element)
+      const formData = new FormData(form);
+      formData.append("prodName", prodName);
+      formData.append("prodDesc", prodDesc);
+      formData.append("prodCategory", selectedCategory);
+      formData.append("prodMRP", prodMRP);
+      formData.append("paymentType", paymentType);
+      formData.append("prodQuantity", prodQuantity);
+      formData.append("prodPrice", prodPrice);
+      formData.append("prodImage", image);
 
-    // const blob = new Blob([image[0]]);
+      // console.log("prodPaymentType : ", );
+      dispatch(uploadProduct(formData));
 
-    // reader.onload = async (event) => {
-    //   binaryData = event.target.result;
-    //   imageByteArray = await new Uint8Array(binaryData);
-
-    //   imgArr.push(imageByteArray);
-
-    //   console.log("URL : imgArr : ", productData);
-    // };
-    // reader.readAsArrayBuffer(blob);
-
-    const productData = {
-      prodName,
-      prodDesc,
-      prodCategory: selectedCategory,
-      prodQuantity,
-      prodPrice,
-      prodImage: image,
-    };
-
-    const form = document.getElementById("add-product-form")
-
-    // console.log("FORM :", form);
-
-    const formData = new FormData(form);
-    formData.append("prodName", prodName);
-    formData.append("prodDesc", prodDesc);
-    formData.append("prodCategory", selectedCategory);
-    formData.append("prodQuantity", prodQuantity);
-    formData.append("prodPrice", prodPrice);
-    formData.append("prodImage", image);
-
-    console.log("URL : imageByteArray : ", image);
-    dispatch(uploadProduct(formData));
-
-    // console.log("In Product Upload Page...", productData);
+      // console.log("In Product Upload Page...", productData);
+    }
   };
 
   return (
@@ -222,7 +234,6 @@ function AddProduct() {
             backgroundColor: "white",
           }}
         >
-          {/* Change color of border of the box */}
           <FormControl>
             <TextField
               type="text"
@@ -247,44 +258,24 @@ function AddProduct() {
             />
           </FormControl>
           <br />
-          {/* <TextField
-              type="text"
-              value={prodCategory}
-              onChange={handleChanges}
-              name="prodCategory"
-              placeholder="Product Category"
-              required
-            /> */}
 
-          <Select
-            value={selectedCategory}
-            onChange={handleCategoryChange}
-            placeholder="Select Category"
-            name="prodCategory"
+          <div
+            style={{
+              display: "flex",
+              border: "0px solid black",
+              width: "100%",
+            }}
           >
-            {categories.map((category, index) => {
-              return (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              );
-            })}
-          </Select>
-
-          <br />
-          <FormControl>
             <TextField
               type="number"
               value={prodQuantity}
               onChange={handleChanges}
               name="prodQuantity"
               placeholder="Quantity"
+              style={{ width: "30%", marginLeft: "0%", marginRight: "auto" }}
               required
             />
-          </FormControl>
-          <br />
 
-          <FormControl>
             <TextField
               type="text"
               value={prodPrice}
@@ -292,9 +283,71 @@ function AddProduct() {
               name="prodPrice"
               variant="outlined"
               placeholder="Price"
+              style={{
+                width: "30%",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
               required
             />
-          </FormControl>
+
+            <TextField
+              type="text"
+              value={prodMRP}
+              onChange={handleChanges}
+              name="prodMRP"
+              variant="outlined"
+              placeholder="MRP"
+              style={{ width: "30%", marginLeft: "auto", marginRight: "0%" }}
+              required
+            />
+          </div>
+          <br />
+
+          <div style={{ display: "flex" }}>
+            <Select
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+              placeholder="Select Category"
+              name="prodCategory"
+              style={{ width: "49%", marginLeft: "0px", marginRight: "auto" }}
+            >
+              {categories.map((category, index) => {
+                return (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+
+            <Select
+              multiple
+              displayEmpty
+              value={paymentType}
+              onChange={handlePaymentChanges}
+              input={<OutlinedInput />}
+              style={{ width: "49%", marginLeft: "0px", marginRight: "auto" }}
+              renderValue={(selected) => {
+                if (selected.length === 0) {
+                  return <>Payment Options</>;
+                }
+
+                return selected.join(", ");
+              }}
+              inputProps={{ "aria-label": "Without label" }}
+            >
+              <MenuItem disabled value="">
+                <>Payment Options</>
+              </MenuItem>
+              {paymentTypeOptions.map((paymentTypeOption) => (
+                <MenuItem key={paymentTypeOption} value={paymentTypeOption}>
+                  {paymentTypeOption}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
+          <br />
 
           <FormControl>
             <InputLabel>
