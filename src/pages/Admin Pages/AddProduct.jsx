@@ -119,7 +119,7 @@ function AddProduct() {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
       URL.createObjectURL(e[1])
     );
-    console.log("New Image : ", ImagesArray);
+    // console.log("New Image : ", ImagesArray);
 
     setImage([...image, ...ImagesArray]);
 
@@ -169,7 +169,11 @@ function AddProduct() {
       prodImage: image,
     };
 
-    const formData = new FormData();
+    const form = document.getElementById("add-product-form")
+
+    // console.log("FORM :", form);
+
+    const formData = new FormData(form);
     formData.append("prodName", prodName);
     formData.append("prodDesc", prodDesc);
     formData.append("prodCategory", selectedCategory);
@@ -177,7 +181,7 @@ function AddProduct() {
     formData.append("prodPrice", prodPrice);
     formData.append("prodImage", image);
 
-    console.log("URL : imageByteArray : ", formData);
+    console.log("URL : imageByteArray : ", image);
     dispatch(uploadProduct(formData));
 
     // console.log("In Product Upload Page...", productData);
@@ -202,7 +206,7 @@ function AddProduct() {
       >
         Add Product
       </h1>
-      <form>
+      <form id="add-product-form">
         <FormGroup
           style={{
             width: "50%",
@@ -294,7 +298,7 @@ function AddProduct() {
 
           <FormControl>
             <InputLabel>
-              Upload Product Image : <small> (Max. 6 Images) </small>
+              Upload Product Image : <small> (Max. 5 Images) </small>
             </InputLabel>
             <br />
             <br />
@@ -319,7 +323,6 @@ function AddProduct() {
                 return (
                   <div className="image-div" key={item}>
                     <img src={item} className="image" alt="" />
-                    {}
                     <button
                       type="button"
                       className="delete-image"
