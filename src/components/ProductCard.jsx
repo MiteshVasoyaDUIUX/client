@@ -24,7 +24,6 @@ export default function ProductCard({ product }) {
   console.log("ProductCard");
 
   const [wishList, setWishList] = useState(false);
-  // console.log("Products : ", product.prodImage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -135,7 +134,7 @@ export default function ProductCard({ product }) {
             align="justify"
             style={{ fontSize: "17px", marginTop: "13px" }}
           >
-            Price : {product.prodPrice} ₹
+            Price : {product.prodPrice.toLocaleString()} ₹
           </Typography>
         </CardContent>
         <CardActions>

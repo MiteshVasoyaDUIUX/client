@@ -17,7 +17,6 @@ import {
   fetchWishList,
   reset,
 } from "../../features/productsForClient/productsForClientSlice";
-import { GridLoader } from "react-spinners";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
@@ -26,6 +25,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 import ProductCard from "../ProductCard";
+import Spinner from "../Spinner";
 
 function ProductCards({ trendingProducts }) {
   return (
@@ -69,19 +69,7 @@ function TrendingProducts() {
   }, [isError, dispatch]);
 
   if (isFetching) {
-    return (
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "48%",
-          transform: "translate(0, -50%)",
-          padding: "10px",
-        }}
-      >
-        <GridLoader color="#437b9f" speedMultiplier="0.75" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (

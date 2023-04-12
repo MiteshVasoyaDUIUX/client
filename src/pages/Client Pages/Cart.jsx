@@ -1,24 +1,13 @@
 /* eslint-disable no-lone-blocks */
 import React, { useEffect, useState } from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+
 import { useDispatch, useSelector } from "react-redux";
-import { styled } from "@mui/material/styles";
-import { Box } from "@mui/system";
 import {
   Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
   Grid,
   MenuItem,
   Select,
+  TextField,
   Typography,
 } from "@mui/material";
 import "./Cart.css";
@@ -42,7 +31,7 @@ function PaymentDeliveryPage({
   const { product } = useSelector((state) => state.productsForClient);
   const { user } = useSelector((state) => state.auth);
 
-  const handleChange = (event) => {
+  const handlePaymentOptionChanges = (event) => {
     setPaymentOption(event.target.value);
   };
 
@@ -50,11 +39,11 @@ function PaymentDeliveryPage({
     <>
       <div
         style={{
-          border: "1px solid black",
           width: "99.9%",
           height: "fit-content",
           paddingBottom: "20px",
           display: "flex",
+          marginTop: "20px",
         }}
       >
         <div className="delivery-address-div">
@@ -143,56 +132,62 @@ function PaymentDeliveryPage({
             <div className="payment-type-payment-page">
               <Select
                 value={paymentOption}
-                onChange={handleChange}
+                onChange={handlePaymentOptionChanges}
                 className="payment-select-payment-page"
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
               >
-                <MenuItem value="COD">Cash On Delivery</MenuItem>
-                <MenuItem value="UPI">UPI ID</MenuItem>
-                <MenuItem value="CARD">
+                <MenuItem value="">Select Payment Option</MenuItem>
+                <MenuItem value="cod">Cash On Delivery</MenuItem>
+                <MenuItem value="upi">UPI ID</MenuItem>
+                <MenuItem value="card">
                   Pay with Credit Card/Debit Card/ ATM Card
                 </MenuItem>
               </Select>
             </div>
-            <div style={{ marginTop: "21px" }}>
-              {paymentOption === "CARD" ? (
+            <div style={{ marginTop: "25px", marginLeft: "10%" }}>
+              {paymentOption === "card" ? (
                 <>
-                  <div style={{ display: "flex" }}>
-                    <div className="card-holder-name">
-                      Card Holder Name
-                      <br />
-                      <input type="text" />
-                    </div>
-                    <div className="card-number">
-                      Card Number
-                      <br />
-                      <input type="text" />
-                    </div>
-                  </div>
-                  <div style={{ display: "flex" }}>
-                    <div className="card-expiry-date-year">
-                      Enter Exp Month & Year (mm/yyyy)
-                      <br />
-                      <input type="text" />
-                    </div>
-                    <div className="card-cvv-number">
-                      Enter CVV
-                      <br />
-                      <input type="text" />
-                    </div>
-                  </div>
+                  <TextField
+                    className="cart-payment-select"
+                    variant="standard"
+                    placeholder="Card Holder Name"
+                    style={{ width: "300px" }}
+                  />
+                  <TextField
+                    className="cart-payment-select"
+                    variant="standard"
+                    placeholder="Card Number"
+                    style={{ marginLeft: "50px", width: "300px" }}
+                  />
+                  <TextField
+                    className="cart-payment-select"
+                    variant="standard"
+                    placeholder="Enter CVV"
+                    style={{ width: "300px", marginTop: "70px" }}
+                  />
+                  <TextField
+                    className="cart-payment-select"
+                    variant="standard"
+                    placeholder="Enter Expiry Date & Year"
+                    style={{
+                      marginLeft: "50px",
+                      width: "300px",
+                      marginTop: "70px",
+                    }}
+                  />
                 </>
-              ) : paymentOption === "COD" ? (
+              ) : paymentOption === "cod" ? (
                 <></>
-              ) : paymentOption === "UPI" ? (
-                <div>
-                  <div className="upi-payment-info">
-                    Enter UPI ID :
-                    <br />
-                    <input type="text" />
-                  </div>
-                </div>
+              ) : paymentOption === "upi" ? (
+                <>
+                  <TextField
+                    className="upi-payment-info"
+                    variant="standard"
+                    placeholder="Enter UPI Id"
+                    style={{ width: "500px", marginLeft: "100px" }}
+                  />
+                </>
               ) : (
                 <></>
               )}
@@ -265,7 +260,7 @@ function ProductCard({ item }) {
   };
 
   return (
-    <Grid item xl={9} style={{ marginLeft: "11.5%" }}>
+    <Grid item xl={10} style={{ marginLeft: "7%" }}>
       <Card>
         <div style={{ display: "flex" }}>
           <div
@@ -430,7 +425,7 @@ export default function Cart() {
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
-  const [paymentOption, setPaymentOption] = useState("COD");
+  const [paymentOption, setPaymentOption] = useState("cod");
 
   const { user } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.productsForClient);
@@ -460,26 +455,29 @@ export default function Cart() {
     // const userId = user.user._id;
 
     let checkoutData = [];
-
-    for (let index = 0; index < cart.length; index++) {
-      if (cart[index].prodQuantity !== 0) {
-        const newData = {
-          userId,
-          productId: cart[index]._id,
-          prodImage: cart[index].prodImage,
-          prodName: cart[index].prodName,
-          quantity: cart[index].quantity,
-          productPrice: cart[index].prodPrice,
-          paymentOption,
-        };
-        checkoutData.push(newData);
+    if (paymentOption === "") {
+      alert("Select Payment Option");
+    } else {
+      for (let index = 0; index < cart.length; index++) {
+        if (cart[index].prodQuantity !== 0) {
+          const newData = {
+            userId,
+            productId: cart[index]._id,
+            prodImage: cart[index].prodImage,
+            prodName: cart[index].prodName,
+            quantity: cart[index].quantity,
+            productPrice: cart[index].prodPrice,
+            paymentOption,
+          };
+          checkoutData.push(newData);
+        }
       }
+
+      console.log("User CheckOut : ", checkoutData);
+
+      dispatch(placeOrder(checkoutData));
+      console.log("Clicked Payment Button in Payment Page...");
     }
-
-    console.log("User CheckOut : ", checkoutData);
-
-    dispatch(placeOrder(checkoutData));
-    console.log("Clicked Payment Button in Payment Page...");
   };
 
   useEffect(() => {
@@ -505,32 +503,34 @@ export default function Cart() {
         page ? (
           <>
             <div className="cart-table-title">Cart</div>
-            <Box sx={{ width: "100%", marginTop: "20px" }}>
-              <Grid container rowSpacing={1}>
-                {cart.map((item) => {
-                  return <ProductCard item={item} />;
-                })}
-              </Grid>
-            </Box>
-            <div className="cart-grand-total">
-              <div className="grand-total-summary-title">Summary :</div>
-              <div style={{ display: "flex", marginTop: "10px" }}>
-                <div className="total-title">Total :</div>
-                <div className="total-value">{totalAmount} ₹</div>
+            <div style={{ border: "0px solid black", display: "flex" }}>
+              <div className="cart-product-card">
+                <Grid container rowSpacing={1}>
+                  {cart.map((item) => {
+                    return <ProductCard item={item} />;
+                  })}
+                </Grid>
               </div>
-              <div style={{ display: "flex" }}>
-                <div className="shipping-charge-title">Shipping Charge :</div>
-                <div className="shipping-charge-value">0 ₹</div>
-              </div>
-              <hr style={{ marginTop: "20px" }} />
-              <div style={{ display: "flex" }}>
-                <div className="grand-total-title">Total Amount :</div>
-                <div className="grand-total-value">{totalAmount} ₹</div>
-              </div>
-              <div className="cart-page-checkout-button">
-                <button className="checkout-button" onClick={handleCheckout}>
-                  CHECKOUT
-                </button>
+              <div className="cart-grand-total">
+                <div className="grand-total-summary-title">Summary :</div>
+                <div style={{ display: "flex", marginTop: "10px" }}>
+                  <div className="total-title">Total :</div>
+                  <div className="total-value">{totalAmount} ₹</div>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <div className="shipping-charge-title">Shipping Charge :</div>
+                  <div className="shipping-charge-value">0 ₹</div>
+                </div>
+                <hr style={{ marginTop: "20px" }} />
+                <div style={{ display: "flex" }}>
+                  <div className="grand-total-title">Total Amount :</div>
+                  <div className="grand-total-value">{totalAmount} ₹</div>
+                </div>
+                <div className="cart-page-checkout-button">
+                  <button className="checkout-button" onClick={handleCheckout}>
+                    CHECKOUT
+                  </button>
+                </div>
               </div>
             </div>
           </>
@@ -546,7 +546,7 @@ export default function Cart() {
                 width: "fit-content",
                 marginLeft: "auto",
                 marginRight: "20px",
-                marginTop: "50px",
+                marginTop: "35px",
               }}
             >
               <button

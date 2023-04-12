@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
-import { GridLoader } from "react-spinners";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -45,17 +44,7 @@ export default function Login() {
 
   if(isLoading) {
     return (
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left : "48%",
-          transform: "translate(0, -50%)",
-          padding: "10px",
-        }}
-      >
-        <GridLoader color="#437b9f" speedMultiplier="0.75"/>
-      </div>
+      <Spinner />
     );
   };
 

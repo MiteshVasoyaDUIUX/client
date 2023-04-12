@@ -37,7 +37,7 @@ const optionsForLineChart = {
   fontSize: 12,
   pieHole: 0.4,
   is3D: false,
-  width: 800,
+  width: 780,
   height: 400,
   vAxis: {
     title: "Orders",
@@ -337,7 +337,7 @@ function AdminDashboard() {
               marginTop: "0",
             }}
           >
-            <div className="customer-review-div">
+            {/* <div className="customer-review-div">
               <div className="customer-review-div-desc">Customer Review</div>
               <div className="customer-review-div-details">
                 <Rating
@@ -374,7 +374,7 @@ function AdminDashboard() {
                   </Typography>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="top-selling-products">
               <div className="top-selling-prod-desc">Top Selling Products</div>
               <div className="top-selling-prod-list">

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Orders.css";
 import { useDispatch, useSelector } from "react-redux";
-import { GridLoader } from "react-spinners";
 import {
   Button,
   Paper,
@@ -19,6 +18,7 @@ import {
   cancelOrder,
   fetchAllOrders,
 } from "../../features/admin/adminSlice";
+import Spinner from "../../components/Spinner";
 
 const columns = [
   {
@@ -179,19 +179,7 @@ function Orders() {
 
   if (isLoading) {
     // console.log("Fetching Products...");
-    return (
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "48%",
-          transform: "translate(0, -50%)",
-          padding: "10px",
-        }}
-      >
-        <GridLoader color="#000000" speedMultiplier="0.75" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   const handleChangePage = (event, newPage) => {

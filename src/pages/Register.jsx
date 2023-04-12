@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { reset, register } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
-import { GridLoader } from "react-spinners";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -50,17 +49,7 @@ export default function Register() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left : "48%",
-          transform: "translate(0, -50%)",
-          padding: "10px",
-        }}
-      >
-        <GridLoader color="#437b9f" speedMultiplier="0.75"/>
-      </div>
+      <Spinner />
     );
   }
 

@@ -32,8 +32,8 @@ import DeleteIcon from "@mui/icons-material/DeleteRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
-import { GridLoader } from "react-spinners";
 import { ImageForList } from "../../components/DetailedProductPage.jsx/Images";
+import Spinner from "../../components/Spinner";
 
 const columns = [
   {
@@ -279,24 +279,12 @@ function AllProduct() {
 
   if (isLoading) {
     // console.log("Fetching Products...");
-    return (
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "48%",
-          transform: "translate(0, -50%)",
-          padding: "10px",
-        }}
-      >
-        <GridLoader color="#000000" speedMultiplier="0.75" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (
     <>
-      <section className="content" style={{ marginTop: "55px", zIndex: "0"}}>
+      <section className="content" style={{ marginTop: "55px", zIndex: "0" }}>
         {products.length > 0 ? (
           <div className="product">
             <Paper
@@ -307,7 +295,7 @@ function AllProduct() {
                 border: "0.1px solid black",
               }}
             >
-              <TableContainer sx={{ height: "750px", }}>
+              <TableContainer sx={{ height: "750px" }}>
                 <Table stickyHeader aria-label="sticky table">
                   <TableHead>
                     <TableRow>

@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { uploadProduct, reset } from "../../features/product/productSlice";
-import { GridLoader } from "react-spinners";
+import Spinner from "../../components/Spinner";
 
 function AddProduct() {
   const dispatch = useDispatch();
@@ -83,19 +83,7 @@ function AddProduct() {
   }, [isSuccess, isError, message, navigate, dispatch]);
 
   if (isLoading) {
-    return (
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "48%",
-          transform: "translate(0, -50%)",
-          padding: "10px",
-        }}
-      >
-        <GridLoader color="#000000" speedMultiplier="0.75" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   const categories = [
@@ -106,8 +94,6 @@ function AddProduct() {
     "Smart Phones",
     "Other",
   ];
-
-  const paymentTypeOptions = ["COD", "UPI", "CARD"];
 
   const {
     prodName,
@@ -310,7 +296,7 @@ function AddProduct() {
               onChange={handleCategoryChange}
               placeholder="Select Category"
               name="prodCategory"
-              style={{ width: "49%", marginLeft: "0px", marginRight: "auto" }}
+              style={{ width: "100%", marginLeft: "0px", marginRight: "auto" }}
             >
               {categories.map((category, index) => {
                 return (
@@ -319,32 +305,6 @@ function AddProduct() {
                   </MenuItem>
                 );
               })}
-            </Select>
-
-            <Select
-              multiple
-              displayEmpty
-              value={paymentType}
-              onChange={handlePaymentChanges}
-              input={<OutlinedInput />}
-              style={{ width: "49%", marginLeft: "0px", marginRight: "auto" }}
-              renderValue={(selected) => {
-                if (selected.length === 0) {
-                  return <>Payment Options</>;
-                }
-
-                return selected.join(", ");
-              }}
-              inputProps={{ "aria-label": "Without label" }}
-            >
-              <MenuItem disabled value="">
-                <>Payment Options</>
-              </MenuItem>
-              {paymentTypeOptions.map((paymentTypeOption) => (
-                <MenuItem key={paymentTypeOption} value={paymentTypeOption}>
-                  {paymentTypeOption}
-                </MenuItem>
-              ))}
             </Select>
           </div>
           <br />

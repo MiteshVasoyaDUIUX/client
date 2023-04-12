@@ -53,30 +53,34 @@ function BuyProduct() {
     <Spinner />;
   }
 
-  const handleChange = (event) => {
+  const handlePaymentOptionChanges = (event) => {
     setPaymentOption(event.target.value);
   };
   // console.log(paymentOption);
 
   const handlePayNowButton = () => {
-    const userId = user.user._id;
+    if (paymentOption === "") {
+      alert("Select Payment Option");
+    } else {
+      const userId = user.user._id;
 
-    const newData = {
-      userId,
-      productId,
-      prodImage: product.prodImage,
-      prodName: product.prodName,
-      quantity,
-      productPrice: product.prodPrice,
-      paymentOption,
-      buypage : 1
-    };
+      const newData = {
+        userId,
+        productId,
+        prodImage: product.prodImage,
+        prodName: product.prodName,
+        quantity,
+        productPrice: product.prodPrice,
+        paymentOption,
+        buypage: 1,
+      };
 
-    let checkoutData = [];
-    checkoutData.push(newData);
-    console.log("User Checkout : ", checkoutData);
+      let checkoutData = [];
+      checkoutData.push(newData);
+      console.log("User Checkout : ", checkoutData);
 
-    dispatch(placeOrder(checkoutData));
+      dispatch(placeOrder(checkoutData));
+    }
   };
   return (
     <>
@@ -85,14 +89,10 @@ function BuyProduct() {
           <>
             <div className="place-order-page">
               <div className="product-detail-page">
-              <Image prodImage={product.prodImage} />
-                {/* <img src={product.prodImage[0]} className="product-image" alt="asas"/> */}
+                <Image prodImage={product.prodImage} />
                 <div className="buy-product-page-name">{product.prodName}</div>
-                <div className="buy-product-page-quantity">
-                  Quantity : {quantity}
-                </div>
                 <div className="buy-product-page-amount">
-                  ₹ {product.prodPrice}
+                  ₹ {product.prodPrice.toLocaleString("en-IN")}
                 </div>
               </div>
 
@@ -108,22 +108,16 @@ function BuyProduct() {
                         marginTop: "30px",
                       }}
                     >
-                      <div
-                        style={{
-                          width: "100%",
-                        }}
-                      >
+                      <div className="summary-product-title">
                         {product.prodName}
                       </div>
                       <div style={{ marginLeft: "100px", width: "70px" }}>
                         x{quantity}
                       </div>
-                      <div style={{ marginLeft: "100px", width: "100px" }}>
-                        ₹ {quantity * product.prodPrice}
-                      </div>
                     </div>
                     <div className="products-total-amount">
-                      Total : {quantity * product.prodPrice} ₹
+                      Total :{" "}
+                      {(quantity * product.prodPrice).toLocaleString("en-IN")} ₹
                     </div>
                   </div>
                 </div>
@@ -180,11 +174,12 @@ function BuyProduct() {
                   <div className="payment-type">
                     <Select
                       value={paymentOption}
-                      onChange={handleChange}
+                      onChange={handlePaymentOptionChanges}
                       className="payment-select"
                       displayEmpty
                       inputProps={{ "aria-label": "Without label" }}
                     >
+                      <MenuItem value="">Select Payment Option</MenuItem>
                       <MenuItem value="cod">Cash On Delivery</MenuItem>
                       <MenuItem value="upi">UPI ID</MenuItem>
                       <MenuItem value="card">
@@ -192,31 +187,30 @@ function BuyProduct() {
                       </MenuItem>
                     </Select>
                   </div>
-                  {/* <div className="payment-details-form" dangerouslySetInnerHTML={{__html: paymentDetailsForm}} /> */}
 
                   <div className="payment-details-form">
                     {paymentOption === "card" ? (
                       <>
                         <TextField
-                          id="credit-debit-atm-card"
+                          className="credit-debit-atm-card"
                           variant="standard"
                           placeholder="Card Number"
                           style={{ width: "300px" }}
                         />
                         <TextField
-                          id="credit-debit-atm-card"
+                          className="credit-debit-atm-card"
                           variant="standard"
                           placeholder="Card Holder Name"
                           style={{ marginLeft: "50px", width: "300px" }}
                         />
                         <TextField
-                          id="credit-debit-atm-card"
+                          className="credit-debit-atm-card"
                           variant="standard"
                           placeholder="CVV"
                           style={{ width: "300px", marginTop: "70px" }}
                         />
                         <TextField
-                          id="credit-debit-atm-card"
+                          className="credit-debit-atm-card"
                           variant="standard"
                           placeholder="Enter Card Holder Name"
                           style={{
@@ -244,7 +238,7 @@ function BuyProduct() {
 
                   <div>
                     <button
-                      className="payment-button"
+                      className="payment-button-placeorder-page"
                       onClick={handlePayNowButton}
                     >
                       Pay Now

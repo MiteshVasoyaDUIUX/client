@@ -252,7 +252,7 @@
       font-size: 17px;
       font-weight: 700;
       background-position: center;
-      transition: background 0.1s;
+      transition: background 0.15s;
 }
 
 .payment-button:hover {

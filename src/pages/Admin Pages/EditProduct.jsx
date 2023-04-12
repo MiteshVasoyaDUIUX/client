@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { updateProduct, reset } from "../../features/product/productSlice";
 import { toast } from "react-toastify";
-import { GridLoader } from "react-spinners";
+import Spinner from "../../components/Spinner";
 
 function EditProduct() {
   const location = useLocation();
@@ -81,19 +81,7 @@ function EditProduct() {
   }, [isUpdated, isError, message, navigate, dispatch]);
 
   if (isLoading) {
-    return (
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "48%",
-          transform: "translate(0, -50%)",
-          padding: "10px",
-        }}
-      >
-        <GridLoader color="#437b9f" speedMultiplier="0.75" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   const {

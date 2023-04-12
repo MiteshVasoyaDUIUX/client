@@ -168,7 +168,7 @@ function Header() {
               <>
                 <div style={{ display: "flex" }}>
                   <div className="header-user-name" sx={{ color: "#f4ede2" }}>
-                    Hello, {user.role}
+                    Hello, {user.user.name}
                   </div>
                   <Tooltip>
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -224,15 +224,16 @@ function Header() {
               </>
             ) : (
               <>
-                <Tooltip>
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="P Image"
-                      src="#"
-                      sx={{ backgroundColor: " #1d2133" }}
-                    />
-                  </IconButton>
-                </Tooltip>
+               <div style={{ display: "flex" }}>
+                  <div className="header-user-name" sx={{ color: "#f4ede2" }}>
+                    Hello, {user.user.name}
+                  </div>
+                  <Tooltip>
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar />
+                    </IconButton>
+                  </Tooltip>
+                </div>
                 <Menu
                   sx={{ mt: "45px" }}
                   id="menu-appbar"
