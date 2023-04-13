@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import "./ProductCard.css";
 
 export default function ProductCard({ product }) {
-  console.log("ProductCard");
+  // console.log("ProductCard");
 
   const [wishList, setWishList] = useState(false);
   const dispatch = useDispatch();

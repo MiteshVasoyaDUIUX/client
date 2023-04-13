@@ -431,6 +431,25 @@ export default function Cart() {
   const { cart } = useSelector((state) => state.productsForClient);
   const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+
+    if (user) {
+      dispatch(fetchCart(userId));
+    }
+
+    if (isPlaced) {
+      alert("Order Placed Successfully");
+      navigate("/myorders");
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, isPlaced]);
+
   let totalAmount = 0;
 
   for (let index = 0; index < cart.length; index++) {
@@ -443,7 +462,7 @@ export default function Cart() {
 
   // console.log(paymentOption);
 
-  const userId = user.user._id;
+  const userId = user?.user._id;
 
   console.log("cart :", cart.length);
 
@@ -480,22 +499,7 @@ export default function Cart() {
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      // console.log("User : ", user)
-      dispatch(fetchCart(userId));
-    }
-
-    if (isPlaced) {
-      alert("Order Placed Successfully");
-      // console.log("Your Order Id is ", orderId.orderId)
-      navigate("/myorders");
-    }
-
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch, isPlaced]);
+  
 
   return (
     <>

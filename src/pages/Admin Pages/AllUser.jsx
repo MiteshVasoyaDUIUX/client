@@ -70,42 +70,49 @@ const subColumns = [
   //   align: "center",
   // },
   {
-    id: "orderDate",
+    id: "createdAt",
     label: "Order Date",
     width: "120px",
     align: "center",
     format: (value) => value.slice(0, 10),
+    textAlign: "center",
+  },
+  {
+    id: "prodName",
+    label: "Product Name",
+    width: "650px",
+    align: "center",
+    textAlign: "left",
   },
   {
     id: "status",
     label: "Status",
-    width: "220px",
+    width: "100px",
     align: "center",
+    textAlign: "center",
   },
   {
     id: "quantity",
     label: "Quantity",
-    width: "120px",
+    width: "80px",
     align: "center",
+    textAlign: "center",
   },
 
   {
-    id: "price",
-    label: "Product Price (₹)",
-    width: "120px",
-    align: "center",
-  },
-  {
-    id: "billAmount",
+    id: "totalAmount",
     label: "Total Amount (₹)",
-    width: "120px",
-    align: "center",
+    width: "80px",
+    align: "right",
+    textAlign: "right",
+    format: (value) => value.toLocaleString("en-IN"),
   },
   {
-    id: "deliveryType",
+    id: "paymentType",
     label: "Delivery Type",
-    width: "60px",
+    width: "80px",
     align: "center",
+    textAlign: "center",
   },
 ];
 
@@ -130,8 +137,12 @@ function OrderRow(props) {
       {subColumns.map((column) => {
         const value = order[column.id];
         return (
-          <TableCell align={column.align}>
-            {column.format ? column.format(value) : value}
+          <TableCell align={column.textAlign}>
+            {column.id === "totalAmount" ? (
+              <>{column.format ? column.format(value) + " ₹" : value + " ₹"}</>
+            ) : (
+              <>{column.format ? column.format(value) : value}</>
+            )}
           </TableCell>
         );
       })}
@@ -152,8 +163,8 @@ function Row(props) {
   const handleOrdersButton = () => {
     console.log(row._id);
     // Fetch Order of Particular User...
-    setOpen(!open);
     // dispatch(fetchOrderUserwise({ userId }));
+    setOpen(!open);
   };
 
   return (
@@ -260,6 +271,7 @@ function AllUser() {
 
     if (ordersUserwise) {
       dispatch(fetchOrderUserwise());
+      console.log("Orders Userwise : ", ordersUserwise);
     }
 
     return () => {

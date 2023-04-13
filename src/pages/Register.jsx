@@ -48,17 +48,14 @@ export default function Register() {
   }, [user, isSuccess, isError, message, navigate, dispatch]);
 
   if (isLoading) {
-    return (
-      <Spinner />
-    );
+    return <Spinner />;
   }
 
   const handleChanges = (e) => {
-    setFormData((prevState) => ({ 
+    setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-
   };
 
   const handleSubmit = (e) => {
@@ -109,8 +106,8 @@ export default function Register() {
               paddingBottom: "110px",
               paddingLeft: "60px",
               paddingRight: "60px",
-              border: "1px solid #1d2133",
-              boxShadow: "7px 7px 29px 1px  rgba(50, 100, 100, 0.6) ",
+              border: "1px solid #1d21338F",
+              boxShadow: "3px 3px 20px -1px #0C2D488F",
               borderRadius: "30px",
               backgroundColor: "#f0f3ed",
             }}
@@ -124,7 +121,7 @@ export default function Register() {
                 name="name"
                 required
               />
-            </FormControl> 
+            </FormControl>
             <br />
             <FormControl>
               <InputLabel> Enter Email :</InputLabel>
@@ -156,7 +153,7 @@ export default function Register() {
                 name="password"
                 required
               />
-            </FormControl>{" "}
+            </FormControl>
             <br />
             <FormControl>
               <InputLabel> Re-Enter Password :</InputLabel>
@@ -167,11 +164,18 @@ export default function Register() {
                 name="password2"
                 required
               />
-            </FormControl>{" "}
+            </FormControl>
             <br />
+            
             <Button
               variant="contained"
-              style={{ backgroundColor: "#1d2133", color: "#f0f3ed", fontWeight : "bold", fontSize : "15px" }}
+              style={{
+                backgroundColor: "#1d2133",
+                color: "#f0f3ed",
+                fontWeight: "bold",
+                fontSize: "15px",
+                marginTop: "20px",
+              }}
               onClick={handleSubmit}
             >
               Register

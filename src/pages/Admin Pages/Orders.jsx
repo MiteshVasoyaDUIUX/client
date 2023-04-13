@@ -178,7 +178,6 @@ function Orders() {
   }, [dispatch]);
 
   if (isLoading) {
-    // console.log("Fetching Products...");
     return <Spinner />;
   }
 

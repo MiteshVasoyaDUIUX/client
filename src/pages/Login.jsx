@@ -32,21 +32,19 @@ export default function Login() {
     }
     if (isSuccess || user) {
       // console.log("User : ", user.role);
-      if(user.role === "buyer"){
+      if (user.role === "buyer") {
         navigate("/");
-      } else if (user.role === "admin"){
-        navigate("/admin/dashboard");  
+      } else if (user.role === "admin") {
+        navigate("/admin/dashboard");
       }
     }
 
     dispatch(reset());
   }, [user, isSuccess, isError, message, navigate, dispatch]);
 
-  if(isLoading) {
-    return (
-      <Spinner />
-    );
-  };
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   const handleChanges = (e) => {
     setFormData((prevState) => ({
@@ -83,7 +81,7 @@ export default function Login() {
             width: "fit-content",
             color: "#000000",
             backgroundColor: "#f0f3ed",
-            cursor : "default"
+            cursor: "default",
           }}
         >
           Login
@@ -97,8 +95,8 @@ export default function Login() {
             paddingBottom: "110px",
             paddingLeft: "60px",
             paddingRight: "60px",
-            border: "1px solid #1d2133",
-            boxShadow: "10px 10px 50px 1px rgba(50, 100, 100, 0.6)",
+            border: "1px solid #1d21338F",
+            boxShadow: "3px 3px 20px -1px #0C2D488F",
             borderRadius: "30px",
             backgroundColor: "#f0f3ed",
           }}
@@ -129,7 +127,13 @@ export default function Login() {
           <br />
           <Button
             variant="contained"
-            style={{ backgroundColor: "#1d2133", color: "White", fontWeight : "bold", fontSize : "15px" }}
+            style={{
+              backgroundColor: "#1d2133",
+              color: "White",
+              fontWeight: "bold",
+              fontSize: "15px",
+              marginTop : "20px"
+            }}
             onClick={handleSubmit}
           >
             Login

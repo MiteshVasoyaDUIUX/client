@@ -46,12 +46,24 @@ const fetchMonthlyOrders = async (userId, token) => {
   return response.data;
 };
 
+const verifyUser = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
+  console.log("Reducers :");
+  const response = await axios.get(API_URL + "/buyer/verification", config);
+
+  // return response.data;
+};
 
 const usersService = {
   fetchUsers,
   fetchOrderUserwise,
   fetchMonthlyOrders,
+  verifyUser,
 };
 
 export default usersService;

@@ -11,23 +11,27 @@ import {
   TextField,
 } from "@mui/material";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import { fetchOneProduct } from "../../features/productsForClient/productsForClientSlice";
-import "./BuyProduct.css";
 import { placeOrder } from "../../features/order/orderSlice";
 import Spinner from "../../components/Spinner";
 import { reset } from "../../features/auth/authSlice";
 import { Image } from "../../components/DetailedProductPage.jsx/Images";
+import EmailVerification from "../../components/EmailVerification";
+
+import "./BuyProduct.css";
 
 function BuyProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
-  const [paymentOption, setPaymentOption] = React.useState("cod");
+  const [emailVerPage, setEmailVerPage] = useState(false);
+  const [paymentOption, setPaymentOption] = useState("cod");
 
+  const [mainClass, setMainClass] = useState("place-order-page");
   const { product } = useSelector((state) => state.productsForClient);
   const { user } = useSelector((state) => state.auth);
   const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
@@ -72,14 +76,23 @@ function BuyProduct() {
         quantity,
         productPrice: product.prodPrice,
         paymentOption,
-        buypage: 1,
       };
 
       let checkoutData = [];
       checkoutData.push(newData);
       console.log("User Checkout : ", checkoutData);
 
-      dispatch(placeOrder(checkoutData));
+      if (!user.emailVerified) {
+        setEmailVerPage(!emailVerPage);
+        console.log("User is not verified...", !emailVerPage);
+
+        if (!emailVerPage) {
+          setMainClass("blur-place-order-page");
+        }
+        // navigate(`/user/verification/${user}`);
+      } else {
+        dispatch(placeOrder(checkoutData));
+      }
     }
   };
   return (
@@ -87,7 +100,7 @@ function BuyProduct() {
       <ErrorBoundary>
         {Object.keys(product).length > 0 ? (
           <>
-            <div className="place-order-page">
+            <div className={mainClass}>
               <div className="product-detail-page">
                 <Image prodImage={product.prodImage} />
                 <div className="buy-product-page-name">{product.prodName}</div>
@@ -247,6 +260,18 @@ function BuyProduct() {
                 </div>
               </div>
             </div>
+            {emailVerPage ? (
+              <div className="email-verification">
+                <EmailVerification
+                  email={user.user.email}
+                  emailVerPage={emailVerPage}
+                  setEmailVerPage={setEmailVerPage}
+                  setMainClass={setMainClass}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
           </>
         ) : (
           ""
