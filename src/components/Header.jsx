@@ -57,7 +57,7 @@ function Header() {
     dispatch(logout());
     dispatch(reset());
 
-    console.log("OnLogOUT");
+    // console.log("OnLogOUT");
   };
 
   const handleOpenNavMenu = (event) => {
@@ -224,9 +224,9 @@ function Header() {
               </>
             ) : (
               <>
-               <div style={{ display: "flex" }}>
+                <div style={{ display: "flex" }}>
                   <div className="header-user-name" sx={{ color: "#f4ede2" }}>
-                    Hello, {user.user.name}
+                    Hello, {user.user?.name}
                   </div>
                   <Tooltip>
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

@@ -17,16 +17,30 @@ export default function Register() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    mono: "",
+    phoneNumber: "",
     password: "",
     password2: "",
+    street: "",
+    city: "",
+    state: "",
+    pincode: null,
     role: "",
   });
 
   //Default Role...
   const role = "buyer";
 
-  const { name, email, password, phoneNumber, password2 } = formData;
+  const {
+    name,
+    email,
+    password,
+    phoneNumber,
+    password2,
+    street,
+    city,
+    state,
+    pincode,
+  } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -69,9 +83,15 @@ export default function Register() {
         email,
         password,
         phoneNumber,
+        address : {
+          street,
+          city,
+          state,
+          pincode
+        },
         role,
       };
-      console.log("In register Page...");
+      console.log("In register Page User Data : ", userData);
       dispatch(register(userData));
     }
   };
@@ -99,7 +119,7 @@ export default function Register() {
         <form>
           <FormGroup
             style={{
-              width: "50%",
+              width: "40%",
               marginLeft: "auto",
               marginRight: "auto",
               paddingTop: "110px",
@@ -114,7 +134,7 @@ export default function Register() {
           >
             {/* Change color of border of the box */}
             <FormControl>
-              <InputLabel> Enter Name :</InputLabel>
+              <InputLabel> Enter Name </InputLabel>
               <Input
                 value={name}
                 onChange={handleChanges}
@@ -124,7 +144,7 @@ export default function Register() {
             </FormControl>
             <br />
             <FormControl>
-              <InputLabel> Enter Email :</InputLabel>
+              <InputLabel> Enter Email </InputLabel>
               <Input
                 type="email"
                 value={email}
@@ -135,7 +155,7 @@ export default function Register() {
             </FormControl>
             <br />
             <FormControl>
-              <InputLabel> Enter Mobile No. :</InputLabel>
+              <InputLabel> Enter Mobile No. </InputLabel>
               <Input
                 value={phoneNumber}
                 onChange={handleChanges}
@@ -144,29 +164,77 @@ export default function Register() {
               />
             </FormControl>
             <br />
+            <div style={{ display: "flex" }}>
+              <FormControl
+                style={{ width: "48%", marginLeft: "0px", marginRight: "auto" }}
+              >
+                <InputLabel> Enter Password </InputLabel>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={handleChanges}
+                  name="password"
+                  required
+                />
+              </FormControl>
+              <FormControl style={{ width: "48%", marginRight: "0px" }}>
+                <InputLabel> Re-Enter Password </InputLabel>
+                <Input
+                  type="password"
+                  value={password2}
+                  onChange={handleChanges}
+                  name="password2"
+                  required
+                />
+              </FormControl>
+            </div>
+            <br />
             <FormControl>
-              <InputLabel> Enter Password :</InputLabel>
+              <InputLabel> Enter Street Address </InputLabel>
               <Input
-                type="password"
-                value={password}
+                type="text"
+                value={street}
                 onChange={handleChanges}
-                name="password"
+                name="street"
                 required
               />
             </FormControl>
             <br />
-            <FormControl>
-              <InputLabel> Re-Enter Password :</InputLabel>
-              <Input
-                type="password"
-                value={password2}
-                onChange={handleChanges}
-                name="password2"
-                required
-              />
-            </FormControl>
-            <br />
-            
+            <div style={{ display: "flex" }}>
+              <FormControl
+                style={{ width: "32%", marginLeft: "0px", marginRight: "auto" }}
+              >
+                <InputLabel> City </InputLabel>
+                <Input
+                  type="text"
+                  value={city}
+                  onChange={handleChanges}
+                  name="city"
+                  required
+                />
+              </FormControl>
+              <FormControl style={{ width: "32%", marginRight: "auto", marginLeft : "auto" }}>
+                <InputLabel> State </InputLabel>
+                <Input
+                  type="text"
+                  value={state}
+                  onChange={handleChanges}
+                  name="state"
+                  required
+                />
+              </FormControl>
+              <FormControl style={{ width: "32%", marginRight: "0px", marginLeft : "auto" }}>
+                <InputLabel> Pin Code</InputLabel>
+                <Input
+                  type="text"
+                  value={pincode}
+                  onChange={handleChanges}
+                  name="pincode"
+                  required
+                />
+              </FormControl>
+            </div>
+
             <Button
               variant="contained"
               style={{

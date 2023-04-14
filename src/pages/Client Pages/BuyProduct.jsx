@@ -35,12 +35,23 @@ function BuyProduct() {
   const { product } = useSelector((state) => state.productsForClient);
   const { user } = useSelector((state) => state.auth);
   const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
+  const { isVerified } = useSelector((state) => state.auth);
 
   let productId = params.id.split("&")[0];
   let quantity = params.id.split("&")[1];
 
   useEffect(() => {
     dispatch(fetchOneProduct(productId));
+
+    if (!user) {
+      navigate("/");
+    }
+
+    if (isVerified) {
+      setEmailVerPage(false);
+      setMainClass("place-order-page");
+      reset();
+    }
 
     if (isPlaced) {
       alert(`Your Order is Placed...`);
@@ -51,7 +62,11 @@ function BuyProduct() {
     return () => {
       reset();
     };
-  }, [isPlaced]);
+  }, [isPlaced, isVerified, user]);
+
+  // if(isVerified === true) {
+  //   verificationStatus = false
+  // }
 
   if (isPlacing) {
     <Spinner />;
@@ -82,9 +97,9 @@ function BuyProduct() {
       checkoutData.push(newData);
       console.log("User Checkout : ", checkoutData);
 
-      if (!user.emailVerified) {
-        setEmailVerPage(!emailVerPage);
-        console.log("User is not verified...", !emailVerPage);
+      if (!user.user.emailVerified) {
+        setEmailVerPage(true);
+        console.log("User is not verified...", user.emailVerified);
 
         if (!emailVerPage) {
           setMainClass("blur-place-order-page");

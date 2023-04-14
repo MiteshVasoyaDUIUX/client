@@ -25,18 +25,39 @@ const login = async (userData) => {
     // alert(response.data);
   }
 
-  console.log("Merge Response : ", userCartResponse);
+  // console.log("Merge Response : ", userCartResponse);
   return userCartResponse;
 };
 
 const logout = async (userData) => {
-  localStorage.removeItem("user");
+  console.log("Log Out Red ");
+  const response = await axios.post(API_URL + "/logout");
+  console.log("Response : ", response.data);
+
+  if (response.data.message === "Signed Out") {
+    localStorage.removeItem("user");
+  }
+};
+
+const verifyUser = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  console.log("Reducers :", config);
+  const response = await axios.get(API_URL + "/user/verification", config);
+
+  console.log("RRESPONSE : ", response.data);
+  return response.data;
 };
 
 const authService = {
   register,
   login,
   logout,
+  verifyUser,
 };
 
 export default authService;

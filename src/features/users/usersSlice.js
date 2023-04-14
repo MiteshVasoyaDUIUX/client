@@ -68,24 +68,7 @@ export const fetchMonthlyOrders = createAsyncThunk(
   }
 );
 
-export const verifyUser = createAsyncThunk(
-  "user/email/verification",
-  async (userEmail, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().auth.user.token;
 
-      return await usersService.verifyUser(token);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
 
 const usersSlice = createSlice({
   name: "product",
@@ -132,18 +115,6 @@ const usersSlice = createSlice({
       .addCase(fetchMonthlyOrders.rejected, (state, action) => {
         state.isError = true;
         state.isMonthlyOrdersFetching = false;
-        state.message = action.payload;
-      })
-      .addCase(verifyUser.pending, (state) => {
-        state.isVerifying = true;
-      })
-      .addCase(verifyUser.fulfilled, (state, action) => {
-        state.isVerifying = false;
-        state.isVerified = true;
-      })
-      .addCase(verifyUser.rejected, (state, action) => {
-        state.isVerifying = false;
-        state.isVerified = false;
         state.message = action.payload;
       });
   },

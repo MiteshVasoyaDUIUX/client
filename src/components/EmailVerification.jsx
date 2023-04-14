@@ -1,7 +1,7 @@
 import React from "react";
 import "./EmailVerification.css";
 import { useDispatch } from "react-redux";
-import { verifyUser } from "../features/users/usersSlice";
+import { verifyUser } from "../features/auth/authSlice";
 
 function EmailVerification({
   email,
@@ -13,6 +13,7 @@ function EmailVerification({
   //   console.log("Email ", email);
 
   const sendLinkBtn = () => {
+    console.log("Send Btn")
       dispatch(verifyUser());
   };
 

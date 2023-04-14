@@ -76,7 +76,6 @@ function TopSellingProducts({ products }) {
           marginBottom: "19px",
           marginTop: "15px",
         }}
-
       >
         <div style={{ display: "flex" }}>
           <div
@@ -114,7 +113,6 @@ function TopSellingProducts({ products }) {
           marginLeft: "20px",
           marginRight: "0px",
           marginBottom: "24px",
-          
         }}
       >
         <div style={{ display: "flex" }}>
@@ -160,9 +158,7 @@ function AdminDashboard() {
   const { products } = useSelector((state) => state.product);
 
   const date = new Date();
-
-  const todaysDate =
-    date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+  let todaysDate = date.toISOString();
 
   useEffect(() => {
     if (user) {
@@ -201,9 +197,9 @@ function AdminDashboard() {
   for (let index = 0; index < allOrders.length; index++) {
     sales = sales + allOrders[index].totalAmount;
 
-    if (allOrders.orderDate === todaysDate) {
+    if (allOrders[index].createdAt.split("T")[0] === todaysDate.split("T")[0]) {
       todaysOrders += 1;
-      todaysSales = todaysSales + allOrders.totalAmount;
+      todaysSales = todaysSales + allOrders[index].totalAmount;
     }
 
     if (allOrders[index].status === "pending") {
@@ -259,7 +255,9 @@ function AdminDashboard() {
 
           <div className="dashboard-todays-sales">
             <div className="dashboard-todays-sales-desc">
-              <span style={{ fontSize: "28px" }}>{todaysSales} ₹</span>
+              <span style={{ fontSize: "28px" }}>
+                {todaysSales.toLocaleString("en-IN")} ₹
+              </span>
               <br />
               Todays Sales
             </div>
@@ -325,7 +323,6 @@ function AdminDashboard() {
                 data={OrderStatusData}
                 options={optionsForPieChart}
               />
-              {console.log("Pie Chart : ", OrderStatusData)}
             </div>
           </div>
           <div

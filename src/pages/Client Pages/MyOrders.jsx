@@ -52,7 +52,7 @@ const columns = [
     align: "center",
     valueAlign: "right",
     textAlign: "center",
-    format: (value) => value + " ₹",
+    format: (value) => value.toLocaleString("en-IN") + " ₹",
   },
   {
     id: "paymentType",
@@ -89,7 +89,11 @@ function Row(props) {
           return (
             <TableCell key={value} align={column.textAlign}>
               {column.id !== "messageAdmin" ? (
-                String(value)
+                column.id === "totalAmount" || column.id === "createdAt" ? (
+                  column.format(value)
+                ) : (
+                  value
+                )
               ) : status === "Success" ? (
                 <>
                   <Link to="/buyer/chat">
