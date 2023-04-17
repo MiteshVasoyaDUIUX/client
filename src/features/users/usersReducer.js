@@ -46,12 +46,44 @@ const fetchMonthlyOrders = async (userId, token) => {
   return response.data;
 };
 
+const deleteUser = async (userId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
+  const response = await axios.post(
+    API_URL + "/admin/deleteuser",
+    userId,
+    config
+  );
+
+  return response.data;
+};
+
+const blockUnblockUser = async (userData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.post(
+    API_URL + "/admin/blockunblockuser",
+    userData,
+    config
+  );
+
+  return response.data;
+};
 
 const usersService = {
   fetchUsers,
   fetchOrderUserwise,
   fetchMonthlyOrders,
+  deleteUser,
+  blockUnblockUser,
 };
 
 export default usersService;

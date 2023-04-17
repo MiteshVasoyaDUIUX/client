@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { reset, register } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 
 export default function Register() {
@@ -55,6 +56,7 @@ export default function Register() {
     }
 
     if (isSuccess || user) {
+      toast.success("Verification Email has been sent to you Email Address...")
       navigate("/");
     }
 

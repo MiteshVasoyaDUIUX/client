@@ -43,9 +43,9 @@ function BuyProduct() {
   useEffect(() => {
     dispatch(fetchOneProduct(productId));
 
-    if (!user) {
-      navigate("/");
-    }
+    // if (!user) {
+    //   navigate("/");
+    // }
 
     if (isVerified) {
       setEmailVerPage(false);

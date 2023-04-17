@@ -68,6 +68,8 @@ export const fetchAllOrders = createAsyncThunk(
   }
 );
 
+
+
 const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -83,7 +85,7 @@ const adminSlice = createSlice({
       .addCase(acceptOrder.fulfilled, (state, action) => {
         state.isAccepted = true;
         state.isRejected = false;
-      //   console.log("ACTION PAYLOAD : ", action.payload)
+        //   console.log("ACTION PAYLOAD : ", action.payload)
         state.allOrders = action.payload;
       })
       .addCase(acceptOrder.rejected, (state, action) => {
@@ -118,7 +120,8 @@ const adminSlice = createSlice({
         state.isAccepted = false;
         state.isRejected = false;
         state.isError = true;
-      });
+      })
+      
   },
 });
 

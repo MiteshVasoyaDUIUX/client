@@ -7,6 +7,8 @@ import {
   fetchUsers,
   fetchOrderUserwise,
   reset,
+  blockUnblockUser,
+  deleteUser,
 } from "../../features/users/usersSlice";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -23,11 +25,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { TablePagination } from "@mui/material";
+import { Button, TablePagination } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import Spinner from "../../components/Spinner";
+import "../Admin Pages/AllUser.css";
 
 const columns = [
   {
@@ -45,7 +48,7 @@ const columns = [
   {
     id: "phoneNumber",
     label: "Mobile No.",
-    width: "220px",
+    width: "120px",
     align: "center",
   },
   {
@@ -55,9 +58,21 @@ const columns = [
     align: "center",
   },
   {
+    id: "userStatus",
+    label: "User Status",
+    width: "100px",
+    align: "center",
+  },
+  {
     id: "orders",
     label: "Orders",
     width: "120px",
+    align: "center",
+  },
+  {
+    id: "buttons",
+    label: "",
+    width: "100px",
     align: "center",
   },
 ];
@@ -94,7 +109,7 @@ const subColumns = [
   {
     id: "quantity",
     label: "Quantity",
-    width: "80px",
+    width: "180px",
     align: "center",
     textAlign: "center",
   },
@@ -132,7 +147,7 @@ function OrderRow(props) {
       role="checkbox"
       tabIndex={-1}
       key={order._id}
-      sx={{ margin: "2px", padding: "0px" }}
+      sx={{ margin: "2px", padding: "0px", width: "100px" }}
     >
       {subColumns.map((column) => {
         const value = order[column.id];
@@ -160,11 +175,29 @@ function Row(props) {
     (state) => state.user
   );
 
+  const isBlocked = row.isBlocked;
+  const isDeleted = row.isDeleted;
+
+  // console.log("Deleted : ", row.isDeleted);
+
   const handleOrdersButton = () => {
-    console.log(row._id);
+    // console.log(row._id);
     // Fetch Order of Particular User...
     // dispatch(fetchOrderUserwise({ userId }));
     setOpen(!open);
+  };
+
+  const handleBlockButton = () => {
+    const userData = {
+      userId: row._id,
+      blocked: !row.isBlocked,
+    };
+    dispatch(blockUnblockUser(userData));
+  };
+
+  const handleDeleteButton = () => {
+    const userId = { userId: row._id };
+    dispatch(deleteUser(userId));
   };
 
   return (
@@ -180,7 +213,86 @@ function Row(props) {
           const value = row[column.id];
           return (
             <TableCell key={value} align={column.align}>
-              {column.id !== "orders" ? (
+              {column.id === "buttons" ? (
+                isDeleted === true ? (
+                  <></>
+                ) : isBlocked === false ? (
+                  <>
+                    <input
+                      type="button"
+                      value="Block User"
+                      id="block-user-btn"
+                      onClick={handleBlockButton}
+                    />
+                    <input
+                      type="button"
+                      value="Delete User"
+                      id="delete-user-btn"
+                      onClick={handleDeleteButton}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="button"
+                      value="Unblock User"
+                      id="block-user-btn"
+                      onClick={handleBlockButton}
+                    />
+                  </>
+                )
+              ) : column.id === "userStatus" ? (
+                row["isDeleted"] === true ? (
+                  <>
+                    <div
+                      style={{
+                        width: "100px",
+                        marginRight: "auto",
+                        marginLeft: "auto",
+                        backgroundColor: "#900000",
+                        color: "white",
+                        padding: "2px 0px",
+                      }}
+                    >
+                      Deleted
+                    </div>
+                  </>
+                ) : row["isBlocked"] === true ? (
+                  <>
+                    {" "}
+                    <div
+                      style={{
+                        width: "100px",
+                        marginRight: "auto",
+                        marginLeft: "auto",
+                        backgroundColor: "#E86A33",
+                        color: "white",
+                        padding: "2px 0px",
+                      }}
+                    >
+                      Blocked
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <>
+                      {" "}
+                      <div
+                        style={{
+                          width: "100px",
+                          marginRight: "auto",
+                          marginLeft: "auto",
+                          backgroundColor: "#41644A",
+                          color: "white",
+                          padding: "2px 0px",
+                        }}
+                      >
+                        Active
+                      </div>
+                    </>
+                  </>
+                )
+              ) : column.id !== "orders" ? (
                 String(value)
               ) : (
                 //Collapse Button...
@@ -199,7 +311,7 @@ function Row(props) {
       </TableRow>
 
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Table size="small" aria-label="purchases">
@@ -271,7 +383,7 @@ function AllUser() {
 
     if (ordersUserwise) {
       dispatch(fetchOrderUserwise());
-      console.log("Orders Userwise : ", ordersUserwise);
+      // console.log("Orders Userwise : ", ordersUserwise);
     }
 
     return () => {
@@ -290,11 +402,15 @@ function AllUser() {
             sx={{
               width: "95%",
               overflow: "hidden",
-              marginLeft: "2.3%",
+              marginLeft: "auto",
+              marginRight: "auto",
               border: "0.1px solid black",
             }}
           >
-            <TableContainer sx={{ height: "750px" }}>
+            <TableContainer
+              sx={{ height: "750px" }}
+              style={{ overflowY: "scroll" }}
+            >
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   {/* Print Titles... */}

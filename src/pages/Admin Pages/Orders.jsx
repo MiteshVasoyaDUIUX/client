@@ -115,7 +115,7 @@ function Row(props) {
                 }}
               >
                 {column.id === "userId" ? (
-                  value.name
+                  value?.name
                 ) : column.id === "prodStatus" ? (
                   <div>{value}</div>
                 ) : column.id === "createdAt" ? (

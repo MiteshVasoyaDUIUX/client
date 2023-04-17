@@ -34,8 +34,8 @@ const cancelOrder = async (orderId, token) => {
   console.log("ORDER ID REDUCERS  : ", orderId);
 
   const order = {
-      orderId: orderId,
-    };
+    orderId: orderId,
+  };
 
   const response = await axios.post(
     API_URL + "/admin/cancelorder",
@@ -59,10 +59,12 @@ const fetchAllOrders = async (token) => {
   return response.data;
 };
 
+
+
 const adminService = {
   acceptOrder,
   cancelOrder,
-  fetchAllOrders
+  fetchAllOrders,
 };
 
 export default adminService;

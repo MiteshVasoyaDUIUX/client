@@ -72,7 +72,7 @@ function Chat() {
 
     if (openConversation) {
       dispatch(fetchChat());
-      console.log("Clicked Conversaiton :", openConversation);
+      console.log("Open Conversation :", openConversation);
     }
 
     const socketIO = io("ws://localhost:8888");

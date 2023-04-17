@@ -1,0 +1,26 @@
+#block-user-btn {
+      border: 1px solid #1d2133;
+      height: 30px;
+      border-radius: 5px;
+      background-color: white;
+      transition: ease-in-out 0.15s;
+}
+
+#delete-user-btn {
+      border: 1px solid #1d2133;
+      height: 30px;
+      margin-left: 5px;
+      border-radius: 5px;
+      background-color: white;
+      transition: ease-in-out 0.15s;
+}
+
+#block-user-btn:hover {
+      background-color: #1d2133;
+      color: white;
+}
+
+#delete-user-btn:hover {
+      background-color: #1d2133;
+      color: white;
+}
