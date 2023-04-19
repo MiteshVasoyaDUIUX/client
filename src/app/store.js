@@ -15,6 +15,6 @@ export const store = configureStore({
     productsForClient : productsForClientReducers,
     order : orderReducers,
     admin : adminReducers,
-    clientChat : chatReducers
+    chat : chatReducers
   },
 });

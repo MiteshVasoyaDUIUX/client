@@ -4,19 +4,24 @@ import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllConversation,
-  fetchChat,
+  fetchChatAdmin,
   saveChat,
 } from "../../features/chat/client/chatSlice";
-import Messages from "../Admin Pages/Messages";
+import RefreshIcon from "@mui/icons-material/Refresh";
+
+let currentMsg = [];
+let newMsg = [];
 
 function Conversation({ conversation, openConversation, setOpenConversation }) {
   const handleOpenConversation = () => {
+    // emptyArray();
+    // console.log(" NEEEWWWWW ARRRRAAAAYYY : '", currentMsg);
     setOpenConversation(conversation.conversationId);
   };
   return (
     <>
       <div className="conversation-tab" onClick={handleOpenConversation}>
-        {conversation.conversationId}
+        {conversation.clientName}
       </div>
     </>
   );
@@ -24,14 +29,13 @@ function Conversation({ conversation, openConversation, setOpenConversation }) {
 
 function Message({ message, own }) {
   return (
-    <div>
-      <div className={own ? "own-message-admin" : "message-from-other-client"}>
-        <div>{message.message}</div>
-        <div
-          className={own ? "time-of-sent-message" : "time-of-received-message"}
-        >
-          {message.time.slice(4, 21)}
-        </div>
+    <div className={own ? "own-message-admin" : "message-from-other-client"}>
+      <div>{message.message}</div>
+      <div
+        className={own ? "time-of-sent-message" : "time-of-received-message"}
+      >
+        {/* {console.log(message.time)} */}
+        {message.time.slice(4, 21)}
       </div>
     </div>
   );
@@ -41,44 +45,37 @@ function Chat() {
   const dispatch = useDispatch();
 
   const [socket, setSocket] = useState(null);
-  const [openConversation, setOpenConversation] = useState(null);
+  const [openConversationId, setOpenConversationId] = useState(null);
   const { user } = useSelector((state) => state.auth);
-  const { messages, conversations } = useSelector((state) => state.clientChat);
+  const { messages, conversations } = useSelector((state) => state.chat);
+  // console.log("messages : ", messages);
+  const scrollRef = useRef();
+  const chatScrollRef = useRef();
 
-  let messageArray = [];
-  const messageData = messages.messageData;
+  let messageData = messages.messageData;
   let conversationId = "";
   let users = messages.users;
   let senderId = "";
   let receiverId = "";
-
-  users?.map((id) => {
-    if (user.user._id === id) {
-      senderId = id;
-    } else if (user.user._id !== id) {
-      receiverId = id;
-    }
-  });
-
-  messageData?.map((message) => {
-    messageArray.push(message);
-    conversationId = message.conversationId;
-  });
+  let msgStart = 1;
 
   useEffect(() => {
-    if (user) {
+    if (user && openConversationId === null) {
       dispatch(fetchAllConversation());
     }
 
-    if (openConversation) {
-      dispatch(fetchChat());
-      console.log("Open Conversation :", openConversation);
+    if (openConversationId) {
+      const chatFetchdata = {
+        conversationId: openConversationId,
+        msgStart: msgStart,
+      };
+      dispatch(fetchChatAdmin(chatFetchdata));
     }
 
     const socketIO = io("ws://localhost:8888");
     setSocket(socketIO);
     socketIO.on("connect", () => {
-      console.log("Connected with Id : ", socketIO.id);
+      // console.log("Connected with Id : ", socketIO.id);
 
       const socketIdData = {
         userId: user.user._id,
@@ -93,7 +90,6 @@ function Chat() {
     });
 
     socketIO.on("privatemessage", (receivedMessage) => {
-      // console.log("Received Message : ", receivedMessage.message);
       const date = new Date();
       const time = String(date).slice(4, 21);
       const messageArea = document.getElementById("admin-chat-area-id");
@@ -111,6 +107,8 @@ function Chat() {
       div.append(messageDiv, timeDiv);
 
       messageArea.append(div);
+
+      messageArea.scrollTop = messageArea.scrollHeight;
     });
 
     socketIO.on("save-chat", (data) => {
@@ -119,43 +117,91 @@ function Chat() {
 
     socketIO.on("disconnect", () => {
       console.log("Disconnect From....");
-      const socketIOData = {
-        userId: user.user._id,
-        socketId: socketIO.id,
-      };
     });
-  }, [openConversation]);
+  }, [openConversationId]);
 
-  const handleSendButton = async () => {
+  users?.map((id) => {
+    if (user.user._id === id) {
+      senderId = id;
+    } else if (user.user._id !== id) {
+      receiverId = id;
+    }
+  });
+
+  messageData?.map((message) => {
+    currentMsg.unshift(message);
+    conversationId = message.conversationId;
+    // console.log("AASASASA : ", currentMsg);
+  });
+
+  if (openConversationId !== messages.conversationId) {
+    // console.log("New Message : ", newMsg);
+    currentMsg = [];
+    newMsg = [];
+  }
+
+  const handleSendButton = async (e) => {
     const messageValue = document.getElementById("message-box-id").value;
-    const date = new Date();
-    const time = String(date).slice(4, 21);
-    const message = {
-      conversationId: conversationId,
-      senderId: senderId,
-      receiverId: receiverId,
-      message: messageValue,
-    };
 
-    const messageArea = document.getElementById("admin-chat-area-id");
+    if (
+      (messageValue !== "" && e.keyCode === 13) ||
+      (messageValue !== "" && e.type === "click")
+    ) {
+      const date = new Date();
+      const t = String(date).slice(4, 21);
+      const message = {
+        conversationId: conversationId,
+        senderId: senderId,
+        receiverId: receiverId,
+        message: messageValue,
+        time: date,
+      };
 
-    const div = document.createElement("div");
-    div.classList.add("own-message-admin");
+      const messageArea = document.getElementById("admin-chat-area-id");
 
-    const messageDiv = document.createElement("div");
-    messageDiv.textContent = message.message;
+      const div = document.createElement("div");
+      div.classList.add("own-message-admin");
 
-    const timeDiv = document.createElement("div");
-    timeDiv.classList.add("time-of-sent-message");
-    timeDiv.textContent = time;
+      const messageDiv = document.createElement("div");
+      messageDiv.textContent = message.message;
 
-    div.append(messageDiv, timeDiv);
+      const timeDiv = document.createElement("div");
+      timeDiv.classList.add("time-of-sent-message");
+      timeDiv.textContent = t;
 
-    messageArea.append(div);
+      div.append(messageDiv, timeDiv);
 
-    socket.emit("sendMessage", message);
+      console.log("Time : ", date, t);
 
-    document.getElementById("message-box-id").value = "";
+      // currentMsg.push(message);
+      // newMsg.push(message);
+
+      messageArea.append(div);
+
+      socket.emit("sendMessage", message);
+
+      document.getElementById("message-box-id").value = "";
+    }
+  };
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleChatScroll = () => {
+    if (chatScrollRef.current) {
+      const { scrollTop } = chatScrollRef.current;
+      if (scrollTop === 0 && messages.moreMsg === true) {
+        msgStart = messageData.length + 1;
+        //Dispatch Request to fethc new chat...
+        const chatFetchdata = {
+          conversationId: openConversationId,
+          msgStart: messages.nextMsgFrom,
+        };
+        console.log("Scrolled To The Top...", messages.moreMsg);
+        dispatch(fetchChatAdmin(chatFetchdata));
+      }
+    }
   };
 
   return (
@@ -166,16 +212,39 @@ function Chat() {
             return (
               <Conversation
                 conversation={conversation}
-                openConversation={openConversation}
-                setOpenConversation={setOpenConversation}
+                openConversation={openConversationId}
+                setOpenConversation={setOpenConversationId}
               />
             );
           })}
         </div>
         <div className="chat-message-div">
-          <div className="admin-chat-area" id="admin-chat-area-id">
-            {messageArray.map((message) => (
-              <div>
+          <div
+            className="admin-chat-area"
+            id="admin-chat-area-id"
+            ref={chatScrollRef}
+            onScroll={handleChatScroll}
+          >
+            {messages.moreMsg ? (
+              <>
+                <div className="refresh-chat-icon">
+                  <RefreshIcon sx={{ fontSize: "40px" }} />
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+
+            {currentMsg.map((message) => (
+              <div ref={scrollRef}>
+                <Message
+                  message={message}
+                  own={message.senderId === user.user._id}
+                />
+              </div>
+            ))}
+            {newMsg.map((message) => (
+              <div ref={scrollRef}>
                 <Message
                   message={message}
                   own={message.senderId === user.user._id}
@@ -189,6 +258,7 @@ function Chat() {
               name="message"
               className="message-box"
               id="message-box-id"
+              onKeyUp={handleSendButton}
             />
             <button className="send-message-button" onClick={handleSendButton}>
               Send
