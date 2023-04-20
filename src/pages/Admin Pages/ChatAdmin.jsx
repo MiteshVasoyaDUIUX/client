@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import "./ChatAdmin.css";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,12 +10,17 @@ import {
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 let currentMsg = [];
-let newMsg = [];
 
 function Conversation({ conversation, openConversation, setOpenConversation }) {
   const handleOpenConversation = () => {
-    // emptyArray();
-    // console.log(" NEEEWWWWW ARRRRAAAAYYY : '", currentMsg);
+    const myDiv = document.getElementById("new-message-container-id");
+
+    while (myDiv.firstChild) {
+      myDiv.removeChild(myDiv.firstChild);
+    }
+
+    // console.log("Child Nodes : ", myDiv.firstChild);
+
     setOpenConversation(conversation.conversationId);
   };
   return (
@@ -47,8 +52,8 @@ function Chat() {
   const [socket, setSocket] = useState(null);
   const [openConversationId, setOpenConversationId] = useState(null);
   const { user } = useSelector((state) => state.auth);
+  const [toScroll, setToScroll] = useState(0);
   const { messages, conversations } = useSelector((state) => state.chat);
-  // console.log("messages : ", messages);
   const scrollRef = useRef();
   const chatScrollRef = useRef();
 
@@ -69,6 +74,8 @@ function Chat() {
         conversationId: openConversationId,
         msgStart: msgStart,
       };
+
+      setToScroll(1);
       dispatch(fetchChatAdmin(chatFetchdata));
     }
 
@@ -76,7 +83,6 @@ function Chat() {
     setSocket(socketIO);
     socketIO.on("connect", () => {
       // console.log("Connected with Id : ", socketIO.id);
-
       const socketIdData = {
         userId: user.user._id,
         socketId: socketIO.id,
@@ -92,6 +98,9 @@ function Chat() {
     socketIO.on("privatemessage", (receivedMessage) => {
       const date = new Date();
       const time = String(date).slice(4, 21);
+      const newMessageArea = document.getElementById(
+        "new-message-container-id"
+      );
       const messageArea = document.getElementById("admin-chat-area-id");
 
       const div = document.createElement("div");
@@ -106,7 +115,7 @@ function Chat() {
 
       div.append(messageDiv, timeDiv);
 
-      messageArea.append(div);
+      newMessageArea.append(div);
 
       messageArea.scrollTop = messageArea.scrollHeight;
     });
@@ -131,13 +140,11 @@ function Chat() {
   messageData?.map((message) => {
     currentMsg.unshift(message);
     conversationId = message.conversationId;
-    // console.log("AASASASA : ", currentMsg);
   });
 
   if (openConversationId !== messages.conversationId) {
     // console.log("New Message : ", newMsg);
     currentMsg = [];
-    newMsg = [];
   }
 
   const handleSendButton = async (e) => {
@@ -154,11 +161,13 @@ function Chat() {
         senderId: senderId,
         receiverId: receiverId,
         message: messageValue,
-        time: date,
+        time: String(date),
       };
 
+      const newMessageArea = document.getElementById(
+        "new-message-container-id"
+      );
       const messageArea = document.getElementById("admin-chat-area-id");
-
       const div = document.createElement("div");
       div.classList.add("own-message-admin");
 
@@ -173,19 +182,25 @@ function Chat() {
 
       console.log("Time : ", date, t);
 
-      // currentMsg.push(message);
-      // newMsg.push(message);
+      currentMsg.push(message);
 
-      messageArea.append(div);
+      newMessageArea.append(div);
 
       socket.emit("sendMessage", message);
+
+      messageArea.scrollTop = messageArea.scrollHeight;
 
       document.getElementById("message-box-id").value = "";
     }
   };
 
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  useLayoutEffect(() => {
+    if (scrollRef.current && toScroll === 1) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      console.log("SCROLL VALUE : ", toScroll);
+      setToScroll(0);
+      console.log(" UPDATED SCROLL VALUE : ", toScroll);
+    }
   }, [messages]);
 
   const handleChatScroll = () => {
@@ -193,7 +208,7 @@ function Chat() {
       const { scrollTop } = chatScrollRef.current;
       if (scrollTop === 0 && messages.moreMsg === true) {
         msgStart = messageData.length + 1;
-        //Dispatch Request to fethc new chat...
+        //Dispatch Request to fetch new chat...
         const chatFetchdata = {
           conversationId: openConversationId,
           msgStart: messages.nextMsgFrom,
@@ -234,23 +249,22 @@ function Chat() {
             ) : (
               <></>
             )}
-
-            {currentMsg.map((message) => (
-              <div ref={scrollRef}>
-                <Message
-                  message={message}
-                  own={message.senderId === user.user._id}
-                />
-              </div>
-            ))}
-            {newMsg.map((message) => (
-              <div ref={scrollRef}>
-                <Message
-                  message={message}
-                  own={message.senderId === user.user._id}
-                />
-              </div>
-            ))}
+            <div className="message-container" id="message-container-id">
+              {currentMsg.map((message) => {
+                return (
+                  <div ref={scrollRef}>
+                    <Message
+                      message={message}
+                      own={message.senderId === user.user._id}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            <div
+              className="new-message-container"
+              id="new-message-container-id"
+            ></div>
           </div>
           <div className="chat-box-button">
             <input
