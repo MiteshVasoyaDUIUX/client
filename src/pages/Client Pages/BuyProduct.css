@@ -3,7 +3,7 @@
 }
 
 .blur-place-order-page {
-      visibility:hidden;
+      visibility: hidden;
       height: 100px;
 }
 
@@ -25,6 +25,8 @@
       font-weight: 500;
       font-family: 'Roboto', sans-serif;
 }
+
+
 
 .buy-product-page-amount {
       margin-left: 10%;
@@ -69,7 +71,7 @@
 
 .delivery-address {
       border-bottom: 1px solid rgb(190, 190, 190);
-      height: 21%;
+      height: fit-content;
       padding: 1%;
       width: 100%;
       margin-left: 2%;
@@ -118,15 +120,46 @@
       width: 80%;
 }
 
-.delivery-address-details {
-      margin-top: 2%;
+.order-address {
+      display: flex;
+      /* border: 1px solid blue; */
+      margin: 0 0 10px 0px;
+      background-color: #fbfff8;
+      padding: 8px 10px;
+      border-radius: 4px;
+      box-shadow: 0px 0px 10px -8px black;
+}
+
+.order-select-radio {
+      margin-top: 0.5%;
       font-family: 'Questrial', sans-serif;
       font-size: 18px;
       font-weight: 200;
-      padding-bottom: 2px;
+      padding: 10px 5px 10px 5px;
       width: fit-content;
       color: rgb(46, 46, 46);
-      width: 80%;
+      width: fit-content;
+      /* border: 1px solid salmon; */
+
+}
+
+.add-new-address-button {
+      border: 1px solid black;
+      width: fit-content;
+      height: fit-content;
+      padding: 8px 10px;
+      background-color: white;
+      border-radius: 5px;
+      transition: all 0.15s;
+}
+
+.add-new-address-button:hover {
+      background-color: #1d2133;
+      color: #fbfff8;
+}
+
+.add-new-address-button:active {
+      transform: scale(0.95);
 }
 
 .payment-details {

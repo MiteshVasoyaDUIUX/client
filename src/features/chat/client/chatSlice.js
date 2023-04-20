@@ -9,13 +9,13 @@ const initialState = {
   message: "",
 };
 
-export const fetchChat = createAsyncThunk(
-  "client/fetchChat",
-  async (thunkAPI) => {
+export const fetchChatAdmin = createAsyncThunk(
+  "admin/fetchChat",
+  async (chatFetchdata, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("CHAT IN SLICE  : ");
-      return await chatService.fetchChat(token);
+      console.log("CHAT IN SLICE  : ", thunkAPI.getState());
+      return await chatService.fetchChatAdmin(chatFetchdata, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -28,13 +28,13 @@ export const fetchChat = createAsyncThunk(
   }
 );
 
-export const fetchChatAdmin = createAsyncThunk(
-  "admin/fetchChat",
+export const fetchChatClient = createAsyncThunk(
+  "client/fetchChat",
   async (chatFetchdata, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("CHAT IN SLICE  : ", chatFetchdata);
-      return await chatService.fetchChatAdmin(chatFetchdata, token);
+      // console.log("THUNK API :", token);
+      return await chatService.fetchChatClient(chatFetchdata, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -84,7 +84,7 @@ export const saveChat = createAsyncThunk(
   }
 );
 
-const clientChatSlice = createSlice({
+const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
@@ -92,11 +92,11 @@ const clientChatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchChat.pending, (state) => {})
-      .addCase(fetchChat.fulfilled, (state, action) => {
+      .addCase(fetchChatClient.pending, (state) => {})
+      .addCase(fetchChatClient.fulfilled, (state, action) => {
         state.messages = action.payload;
       })
-      .addCase(fetchChat.rejected, (state, action) => {})
+      .addCase(fetchChatClient.rejected, (state, action) => {})
       .addCase(fetchChatAdmin.pending, (state) => {})
       .addCase(fetchChatAdmin.fulfilled, (state, action) => {
         state.messages = action.payload;
@@ -117,5 +117,5 @@ const clientChatSlice = createSlice({
   },
 });
 
-export const { reset } = clientChatSlice.actions;
-export default clientChatSlice.reducer;
+export const { reset } = chatSlice.actions;
+export default chatSlice.reducer;

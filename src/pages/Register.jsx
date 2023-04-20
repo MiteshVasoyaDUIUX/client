@@ -192,7 +192,7 @@ export default function Register() {
             </div>
             <br />
             <FormControl>
-              <InputLabel> Enter Street Address </InputLabel>
+              <InputLabel> Enter Address </InputLabel>
               <Input
                 type="text"
                 value={street}

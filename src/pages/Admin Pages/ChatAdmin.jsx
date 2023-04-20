@@ -18,9 +18,7 @@ function Conversation({ conversation, openConversation, setOpenConversation }) {
     while (myDiv.firstChild) {
       myDiv.removeChild(myDiv.firstChild);
     }
-
     // console.log("Child Nodes : ", myDiv.firstChild);
-
     setOpenConversation(conversation.conversationId);
   };
   return (
@@ -182,8 +180,6 @@ function Chat() {
 
       console.log("Time : ", date, t);
 
-      currentMsg.push(message);
-
       newMessageArea.append(div);
 
       socket.emit("sendMessage", message);
@@ -204,6 +200,8 @@ function Chat() {
   }, [messages]);
 
   const handleChatScroll = () => {
+
+    console.log("Scrolling...")
     if (chatScrollRef.current) {
       const { scrollTop } = chatScrollRef.current;
       if (scrollTop === 0 && messages.moreMsg === true) {

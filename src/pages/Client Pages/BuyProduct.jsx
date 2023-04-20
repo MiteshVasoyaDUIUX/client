@@ -5,6 +5,7 @@ import {
   FormControlLabel,
   FormGroup,
   FormHelperText,
+  Input,
   InputLabel,
   MenuItem,
   Select,
@@ -24,17 +25,50 @@ import EmailVerification from "../../components/EmailVerification";
 
 import "./BuyProduct.css";
 
+function DeliveryAddress({ address, setOrderAddress }) {
+  const handleAddressChange = () => {
+    setOrderAddress(address);
+  };
+  return (
+    <>
+      <div className="order-address" onClick={handleAddressChange}>
+        <div>
+          <input
+            type="radio"
+            name="address"
+            id={address.pincode}
+            onChange={handleAddressChange}
+          />
+        </div>
+        <div>
+          {address.street},
+          <br />
+          {address.city},
+          <br />
+          {address.state},
+          <br />
+          Pincode : {address.pincode}
+          <br />
+        </div>
+      </div>
+    </>
+  );
+}
+
 function BuyProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
   const [emailVerPage, setEmailVerPage] = useState(false);
   const [paymentOption, setPaymentOption] = useState("cod");
-
+  const [orderAddress, setOrderAddress] = useState({});
+  const [openNewAddress, setOpenNewAddress] = useState(false);
+  const [newAddress, setNewAddress] = useState({});
   const [mainClass, setMainClass] = useState("place-order-page");
   const { product } = useSelector((state) => state.productsForClient);
   const { user } = useSelector((state) => state.auth);
   const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
+  const { _id, email, emailVerified, address, name, phoneNumber } = user.user;
   const { isVerified } = useSelector((state) => state.auth);
 
   let productId = params.id.split("&")[0];
@@ -42,10 +76,6 @@ function BuyProduct() {
 
   useEffect(() => {
     dispatch(fetchOneProduct(productId));
-
-    // if (!user) {
-    //   navigate("/");
-    // }
 
     if (isVerified) {
       setEmailVerPage(false);
@@ -81,7 +111,7 @@ function BuyProduct() {
     if (paymentOption === "") {
       alert("Select Payment Option");
     } else {
-      const userId = user.user._id;
+      const userId = _id;
 
       const newData = {
         userId,
@@ -91,25 +121,31 @@ function BuyProduct() {
         quantity,
         productPrice: product.prodPrice,
         paymentOption,
+        orderAddress: orderAddress,
       };
 
       let checkoutData = [];
       checkoutData.push(newData);
       console.log("User Checkout : ", checkoutData);
 
-      if (!user.user.emailVerified) {
-        setEmailVerPage(true);
-        console.log("User is not verified...", user.emailVerified);
+      // if (!emailVerified) {
+      //   setEmailVerPage(true);
+      //   console.log("User is not verified...", user.emailVerified);
 
-        if (!emailVerPage) {
-          setMainClass("blur-place-order-page");
-        }
-        // navigate(`/user/verification/${user}`);
-      } else {
-        dispatch(placeOrder(checkoutData));
-      }
+      //   if (!emailVerPage) {
+      //     setMainClass("blur-place-order-page");
+      //   }
+      //   // navigate(`/user/verification/${user}`);
+      // } else {
+      //   // dispatch(placeOrder(checkoutData));
+      // }
     }
   };
+
+  const handleAddAddrButton = () => {
+    setOpenNewAddress(true);
+  };
+
   return (
     <>
       <ErrorBoundary>
@@ -144,7 +180,7 @@ function BuyProduct() {
                       </div>
                     </div>
                     <div className="products-total-amount">
-                      Total :{" "}
+                      Total :
                       {(quantity * product.prodPrice).toLocaleString("en-IN")} ₹
                     </div>
                   </div>
@@ -152,49 +188,79 @@ function BuyProduct() {
 
                 <div className="delivery-address">
                   <div className="delivery-address-title">Delivery Address</div>
-                  <div className="delivery-address-details">
-                    <div
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        marginLeft: "100px",
-                        marginTop: "30px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: "100%",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        <b> Address : </b> {user.user.address.street}
-                      </div>
-                      <div
-                        style={{
-                          width: "100%",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        <b> City : </b> {user.user.address.city}
-                      </div>
-                      <div style={{ display: "flex" }}>
-                        <div
-                          style={{
-                            width: "100%",
-                          }}
-                        >
-                          <b> State : </b> {user.user.address.state}
-                        </div>
-                        <div
-                          style={{
-                            width: "100%",
-                          }}
-                        >
-                          <b> Pin Code : </b> {user.user.address.pincode}
-                        </div>
-                      </div>
-                    </div>
+                  <div className="order-select-radio">
+                    {address.map((address) => {
+                      return (
+                        <>
+                          <DeliveryAddress
+                            address={address}
+                            setOrderAddress={setOrderAddress}
+                            phoneNumber={phoneNumber}
+                            userName={name}
+                          />
+                        </>
+                      );
+                    })}
+                    <input
+                      type="button"
+                      value="Add New Address"
+                      className="add-new-address-button"
+                      onClick={handleAddAddrButton}
+                    />
                   </div>
+                  {openNewAddress === true ? (
+                    <>
+                      <div className="new-address-form">
+                        <div>
+                          <FormControl>
+                            <InputLabel> Enter Address </InputLabel>
+                            <Input
+                              type="text"
+                              // value={street}
+                              // onChange={handleChanges}
+                              name="street"
+                              required
+                            />
+                          </FormControl>
+                        </div>
+                        <div style={{display : "flex"}}>
+                          <FormControl>
+                            <InputLabel> Enter City </InputLabel>
+                            <Input
+                              type="text"
+                              // value={street}
+                              // onChange={handleChanges}
+                              name="street"
+                              required
+                            />
+                          </FormControl>
+
+                          <FormControl>
+                            <InputLabel> Enter State </InputLabel>
+                            <Input
+                              type="text"
+                              // value={street}
+                              // onChange={handleChanges}
+                              name="street"
+                              required
+                            />
+                          </FormControl>
+                          <FormControl>
+                            <InputLabel> Enter Pincode </InputLabel>
+                            <Input
+                              type="text"
+                              // value={street}
+                              // onChange={handleChanges}
+                              name="street"
+                              required
+                            />
+                          </FormControl>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </div>
 
                 <div className="payment-details">
@@ -278,7 +344,7 @@ function BuyProduct() {
             {emailVerPage ? (
               <div className="email-verification">
                 <EmailVerification
-                  email={user.user.email}
+                  email={email}
                   emailVerPage={emailVerPage}
                   setEmailVerPage={setEmailVerPage}
                   setMainClass={setMainClass}

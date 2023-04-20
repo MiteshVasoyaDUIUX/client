@@ -1,9 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import "./Chat.css";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchChat, saveChat } from "../../features/chat/client/chatSlice";
-import Messages from "../Admin Pages/Messages";
+import {
+  fetchChat,
+  fetchChatAdmin,
+  fetchChatClient,
+  saveChat,
+} from "../../features/chat/client/chatSlice";
+import RefreshIcon from "@mui/icons-material/Refresh";
+
+let currentMsg = [];
 
 function Message({ message, own }) {
   return (
@@ -28,34 +35,30 @@ function Chat() {
   const dispatch = useDispatch();
 
   const [socket, setSocket] = useState(null);
-  const [allMessages, setAllMessage] = useState("");
   const { user } = useSelector((state) => state.auth);
-  const { messages } = useSelector((state) => state.clientChat);
-
+  const { messages } = useSelector((state) => state.chat);
+  const [toScroll, setToScroll] = useState(0);
+  const scrollRef = useRef();
+  const chatScrollRef = useRef();
   let messageArray = [];
   const messageData = messages.messageData;
   let conversationId = "";
   let users = messages.users;
   let senderId = "";
   let receiverId = "";
+  let msgStart = 1;
 
-  users?.map((id) => {
-    if (user.user._id === id) {
-      senderId = id;
-    } else if (user.user._id !== id) {
-      receiverId = id;
-    }
-  });
-
-  messageData?.map((message) => {
-    messageArray.push(message);
-    conversationId = message.conversationId;
-  });
+  console.log("Users from Messages : ", messages);
 
   useEffect(() => {
     if (user) {
-      dispatch(fetchChat());
-      setAllMessage(messageData);
+      const chatFetchdata = {
+        msgStart: msgStart,
+      };
+
+      dispatch(fetchChatClient(chatFetchdata));
+      console.log("Fetch Chat of User :", user);
+      setToScroll(1);
     }
 
     const socketIO = io("ws://localhost:8888");
@@ -79,7 +82,12 @@ function Chat() {
       // console.log("Received Message : ", receivedMessage.message);
       const date = new Date();
       const time = String(date).slice(4, 21);
-      const messageArea = document.getElementById("message-area-id");
+
+      const newMessageArea = document.getElementById(
+        "new-client-message-container-id"
+      );
+
+      const messageArea = document.getElementById("client-message-area-id");
 
       const div = document.createElement("div");
       div.classList.add("message-from-other");
@@ -93,11 +101,14 @@ function Chat() {
 
       div.append(messageDiv, timeDiv);
 
-      messageArea.append(div);
+      newMessageArea.append(div);
+      messageArea.scrollTop = messageArea.scrollHeight;
+
+      document.getElementById("message-box-id").value = "";
     });
 
     socketIO.on("save-chat", (data) => {
-      dispatch(saveChat(data));
+      // dispatch(saveChat(data));
     });
 
     socketIO.on("disconnect", () => {
@@ -109,52 +120,129 @@ function Chat() {
     });
   }, []);
 
-  const handleSendButton = async () => {
+  users?.map((id) => {
+    if (user.user._id === id) {
+      senderId = id;
+      console.log("Sender Id : ", senderId);
+    } else if (user.user._id !== id) {
+      receiverId = id;
+      console.log("Receiver Id : ", receiverId);
+    }
+  });
+
+  messageData?.map((message) => {
+    currentMsg.unshift(message);
+    conversationId = message.conversationId;
+  });
+
+  const handleSendButton = async (e) => {
     const messageValue = document.getElementById("message-box-id").value;
-    const date = new Date();
-    const time = String(date).slice(4, 21);
 
-    const message = {
-      conversationId: conversationId,
-      senderId: senderId,
-      receiverId: receiverId,
-      message: messageValue,
-    };
+    if (
+      (messageValue !== "" && e.keyCode === 13) ||
+      (messageValue !== "" && e.type === "click")
+    ) {
+      const date = new Date();
+      const t = String(date).slice(4, 21);
 
-    const messageArea = document.getElementById("message-area-id");
+      const message = {
+        conversationId: conversationId,
+        senderId: senderId,
+        receiverId: receiverId,
+        message: messageValue,
+        time: String(date),
+      };
 
-    const div = document.createElement("div");
-    div.classList.add("own-message");
+      const newMessageArea = document.getElementById(
+        "new-client-message-container-id"
+      );
 
-    const messageDiv = document.createElement("div");
-    messageDiv.textContent = message.message;
+      const messageArea = document.getElementById("client-message-area-id");
+      const div = document.createElement("div");
+      div.classList.add("own-message-admin");
 
-    const timeDiv = document.createElement("div");
-    timeDiv.classList.add("client-time-of-sent-message");
-    timeDiv.textContent = time;
+      const messageDiv = document.createElement("div");
+      messageDiv.textContent = message.message;
 
-    div.append(messageDiv, timeDiv);
+      const timeDiv = document.createElement("div");
+      timeDiv.classList.add("time-of-sent-message");
+      timeDiv.textContent = t;
 
-    messageArea.append(div);
+      div.append(messageDiv, timeDiv);
 
-    socket.emit("sendMessage", message);
+      newMessageArea.append(div);
 
-    document.getElementById("message-box-id").value = "";
+      socket.emit("sendMessage", message);
+
+      messageArea.scrollTop = messageArea.scrollHeight;
+
+      document.getElementById("message-box-id").value = "";
+    }
+  };
+
+  useEffect(() => {
+    if (scrollRef.current && toScroll === 1) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      console.log("SCROLL VALUE : ", toScroll);
+      setToScroll(0);
+      console.log(" UPDATED SCROLL VALUE : ", toScroll);
+    }
+  }, [messages]);
+
+  const handleChatScroll = () => {
+    console.log("Scrolling...");
+
+    if (chatScrollRef.current) {
+      const { scrollTop } = chatScrollRef.current;
+      if (scrollTop === 0 && messages.moreMsg === true) {
+        msgStart = messageData.length + 1;
+        //Dispatch Request to fetch new chat...
+        const chatFetchdata = {
+          msgStart: messages.nextMsgFrom,
+        };
+        console.log("Scrolled To The Top...", messages.moreMsg);
+        dispatch(fetchChatClient(chatFetchdata));
+      }
+    }
   };
 
   return (
     <>
       <div>
-        <div className="client-chat-area">
-          <div className="message-area" id="message-area-id">
-            {messageArray.map((message) => (
-              <div>
-                <Message
-                  message={message}
-                  own={message.senderId === user.user._id}
-                />
-              </div>
-            ))}
+        <div
+          className="client-chat-area"
+          ref={chatScrollRef}
+          onScroll={handleChatScroll}
+        >
+          <div className="client-message-area" id="client-message-area-id">
+            {messages.moreMsg ? (
+              <>
+                <div className="refresh-chat-icon">
+                  <RefreshIcon sx={{ fontSize: "40px" }} />
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+            <div
+              className="client-message-container"
+              id="client-message-container-id"
+            >
+              {currentMsg.map((message) => {
+                return (
+                  <div ref={scrollRef}>
+                    <Message
+                      message={message}
+                      own={message.senderId === user.user._id}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            <div
+              className="new-client-message-container"
+              id="new-client-message-container-id"
+            ></div>
           </div>
         </div>
         <div className="client-chat-box-button">
@@ -163,6 +251,7 @@ function Chat() {
             name="message"
             className="client-message-box"
             id="message-box-id"
+            onKeyUp={handleSendButton}
           />
           <button
             className="client-send-message-button"
