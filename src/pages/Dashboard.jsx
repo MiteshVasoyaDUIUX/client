@@ -26,7 +26,13 @@ function Dashboard() {
         navigate(`/admin/dashboard`);
       } else {
         // console.log("In Buyer Panel : ");
-        navigate(`/`);
+        if (user?.user.isDeleted) {
+          navigate("/deleteduser");
+        } else if (user?.user.isBlocked) {
+          navigate("/blockeduser");
+        } else {
+          navigate("/");
+        }
       }
     }
 

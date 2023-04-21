@@ -14,7 +14,7 @@ export const fetchChatAdmin = createAsyncThunk(
   async (chatFetchdata, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      console.log("CHAT IN SLICE  : ", thunkAPI.getState());
+      // console.log("CHAT IN SLICE  : ", thunkAPI.getState());
       return await chatService.fetchChatAdmin(chatFetchdata, token);
     } catch (error) {
       const message =

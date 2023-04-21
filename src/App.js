@@ -26,6 +26,8 @@ import Messages from "./pages/Admin Pages/Messages";
 import ChatAdmin from "./pages/Admin Pages/ChatAdmin";
 import Chat from "./pages/Client Pages/Chat";
 import SearchedQuary from "./pages/Client Pages/SearchedQuary";
+import DeletedUser from "./pages/Client Pages/DeletedUser";
+import BlockedUser from "./pages/Client Pages/BlockedUser";
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/blockeduser" element={<BlockedUser />} />
+            <Route path="/deleteduser" element={<DeletedUser />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />

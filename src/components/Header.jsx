@@ -146,7 +146,8 @@ function Header() {
           )}
         </div>
 
-        {!user || user.role === "buyer" ? (
+        {(!user || user.role === "buyer") &&
+        (!user?.user.isBlocked || !user?.user.isDeleted) ? (
           <div className="header-searchbar">
             <input
               type="text"
@@ -221,6 +222,20 @@ function Header() {
                     </Link>
                   </MenuItem>
                 </Menu>
+              </>
+            ) : user?.user.isBlocked || user?.user.isDeleted ? (
+              <>
+                <MenuItem
+                  key={optionsForClient[3]}
+                  onClick={handleCloseUserMenu}
+                >
+                  <Link
+                    style={{ textDecoration: "None", color: "black" }}
+                    onClick={onLogout}
+                  >
+                    {optionsForClient[3]}
+                  </Link>
+                </MenuItem>
               </>
             ) : (
               <>

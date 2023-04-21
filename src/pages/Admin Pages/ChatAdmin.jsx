@@ -18,7 +18,6 @@ function Conversation({ conversation, openConversation, setOpenConversation }) {
     while (myDiv.firstChild) {
       myDiv.removeChild(myDiv.firstChild);
     }
-    // console.log("Child Nodes : ", myDiv.firstChild);
     setOpenConversation(conversation.conversationId);
   };
   return (
@@ -31,8 +30,18 @@ function Conversation({ conversation, openConversation, setOpenConversation }) {
 }
 
 function Message({ message, own }) {
+  const onChatLoad = () => {
+    console.log("Chat Loaded...");
+    const messageArea = document.getElementById("admin-chat-area-id");
+    messageArea.scrollTop = messageArea.scrollHeight;
+    console.log("Scroll Height : ", messageArea.scrollTo);
+  };
   return (
-    <div className={own ? "own-message-admin" : "message-from-other-client"}>
+    <div
+      className={own ? "own-message-admin" : "message-from-other-client"}
+      onLoad={onChatLoad}
+    >
+      {onChatLoad()}
       <div>{message.message}</div>
       <div
         className={own ? "time-of-sent-message" : "time-of-received-message"}
@@ -190,18 +199,19 @@ function Chat() {
     }
   };
 
-  useLayoutEffect(() => {
-    if (scrollRef.current && toScroll === 1) {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
-      console.log("SCROLL VALUE : ", toScroll);
-      setToScroll(0);
-      console.log(" UPDATED SCROLL VALUE : ", toScroll);
-    }
-  }, [messages]);
+  // useLayoutEffect(() => {
+  //   if (scrollRef.current && toScroll === 1) {
+  //     scrollRef.current.scrollIntoView({ behavior: "smooth" });
+  //     console.log("SCROLL VALUE : ", toScroll);
+  //     setToScroll(0);
+  //     console.log(" UPDATED SCROLL VALUE : ", toScroll);
+  //   }
+  // }, [messages]);
+
+  console.log("Print Msg :", currentMsg);
 
   const handleChatScroll = () => {
-
-    console.log("Scrolling...")
+    console.log("Scrolling...");
     if (chatScrollRef.current) {
       const { scrollTop } = chatScrollRef.current;
       if (scrollTop === 0 && messages.moreMsg === true) {

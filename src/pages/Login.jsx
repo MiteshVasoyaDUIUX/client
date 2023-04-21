@@ -33,7 +33,16 @@ export default function Login() {
     if (isSuccess || user) {
       // console.log("User : ", user.role);
       if (user.role === "buyer") {
-        navigate("/");
+        if (user.user.isDeleted === true) {
+          console.log("isDeleted : ", user.user.isDeleted);
+          navigate("/deleteduser");
+        } else if (user.user.isBlocked === true) {
+          console.log("isBlocked : ", user.user.isBlocked);
+          navigate("/blockeduser");
+        } else {
+          console.log("Valid User...");
+          navigate("/");
+        }
       } else if (user.role === "admin") {
         navigate("/admin/dashboard");
       }
@@ -132,7 +141,7 @@ export default function Login() {
               color: "White",
               fontWeight: "bold",
               fontSize: "15px",
-              marginTop : "20px"
+              marginTop: "20px",
             }}
             onClick={handleSubmit}
           >
