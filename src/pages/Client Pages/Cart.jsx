@@ -4,7 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
+  FormControl,
   Grid,
+  Input,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -19,20 +22,93 @@ import {
 } from "../../features/productsForClient/productsForClientSlice";
 import { useNavigate } from "react-router-dom";
 import { placeOrder } from "../../features/order/orderSlice";
+import { createRoot } from "react-dom/client";
+import EmailVerification from "../../components/EmailVerification";
+
+function DeliveryAddress({ address, setDeliveryAddress }) {
+  const handleAddressChange = () => {
+    setDeliveryAddress(address);
+  };
+  return (
+    <>
+      <div className="cart-order-address" onClick={handleAddressChange}>
+        <div>
+          <input type="radio" name="address" onChange={handleAddressChange} />
+        </div>
+        <div style={{ marginLeft: "7px", marginTop: "1px" }}>
+          {address.street},
+          <br />
+          {address.city},
+          <br />
+          {address.state},
+          <br />
+          Pincode : {address.pincode}
+          <br />
+        </div>
+      </div>
+    </>
+  );
+}
 
 function PaymentDeliveryPage({
   handlePaymentButton,
   paymentOption,
   setPaymentOption,
+  address,
+  setDeliveryAddress,
+  setAddressNew,
+  newAddress,
+  mainClass,
 }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const { product } = useSelector((state) => state.productsForClient);
-  const { user } = useSelector((state) => state.auth);
-
   const handlePaymentOptionChanges = (event) => {
     setPaymentOption(event.target.value);
+  };
+  const { street, city, state, pincode } = newAddress;
+  const [openNewAddress, setOpenNewAddress] = useState(false);
+
+  const handleAddAddrButton = () => {
+    setOpenNewAddress(true);
+    setDeliveryAddress({});
+    var addressRadio = document.getElementsByName("address");
+    for (var i = 0; i < addressRadio.length; i++) {
+      if (addressRadio[i].checked) addressRadio[i].checked = false;
+    }
+  };
+
+  const handleSaveNewAddress = (e) => {
+    e.preventDefault();
+
+    if (street && city && state && pincode) {
+      const newAddress = { street, city, state, pincode };
+
+      const addrArea = document.getElementById("address-select-id");
+
+      const div = document.createElement("div");
+
+      div.innerHTML = createRoot(div).render(
+        DeliveryAddress({
+          address: newAddress,
+          setDeliveryAddress: setDeliveryAddress,
+        })
+      );
+
+      addrArea.append(div);
+      setDeliveryAddress(newAddress);
+      setOpenNewAddress(false);
+    } else {
+      window.alert("Fill all the Fields...");
+    }
+  };
+
+  const handleChanges = (e) => {
+    setAddressNew((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleCancelButton = () => {
+    setOpenNewAddress(false);
   };
 
   return (
@@ -45,42 +121,125 @@ function PaymentDeliveryPage({
           display: "flex",
           marginTop: "20px",
         }}
+        className={mainClass}
       >
-        <div className="delivery-address-div">
-          <div className="delivery-address-title-div">Shipping Details :</div>
-          <div className="delivery-address-content">
+        <div className="cart-delivery-address">
+          <div className="cart-delivery-all-address">
+            <div className="delivery-address-title">Delivery Address</div>
             <div
-              className="delivery-address-name"
-              style={{ marginTop: "10px", padding: "2px" }}
+              className="cart-address-select"
+              id="address-select-id"
             >
-              Name : {user.user.name}
+              {address.map((address) => {
+                return (
+                  <>
+                    <DeliveryAddress
+                      address={address}
+                      setDeliveryAddress={setDeliveryAddress}
+                    />
+                  </>
+                );
+              })}
+              {!openNewAddress ? (
+                <>
+                  <input
+                    type="button"
+                    value="Add New Address"
+                    className="add-new-address-button"
+                    onClick={handleAddAddrButton}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
             </div>
-            <div
-              className="delivery-address-email"
-              style={{ marginTop: "10px" }}
-            >
-              Email : {user.user.email}
-            </div>
-            <div
-              className="delivery-address-address"
-              style={{ marginTop: "10px" }}
-            >
-              Address : {user.user.address.street}
-            </div>
-            <div style={{ display: "flex" }}>
-              <div
-                className="delivery-address-city"
-                style={{ marginTop: "10px" }}
-              >
-                City : {user.user.address.city}
-              </div>
-              <div
-                className="delivery-address-state"
-                style={{ marginTop: "10px", marginLeft: "40px" }}
-              >
-                State : {user.user.address.state}
-              </div>
-            </div>
+          </div>
+          <div
+            style={{
+              marginTop: "40px",
+              marginLeft: "5%",
+            }}
+          >
+            {openNewAddress === true ? (
+              <>
+                <div className="new-address-form">
+                  <div
+                    style={{
+                      width: "fit-content",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  >
+                    <FormControl style={{ width: "600px" }}>
+                      <InputLabel> Enter Address </InputLabel>
+                      <Input
+                        type="text"
+                        value={street}
+                        onChange={handleChanges}
+                        name="street"
+                        required
+                      />
+                    </FormControl>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "600px",
+                      justifyContent: "space-between",
+                      marginTop: "20px",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  >
+                    <FormControl>
+                      <InputLabel> Enter City </InputLabel>
+                      <Input
+                        type="text"
+                        value={city}
+                        onChange={handleChanges}
+                        name="city"
+                        required
+                      />
+                    </FormControl>
+
+                    <FormControl>
+                      <InputLabel> Enter State </InputLabel>
+                      <Input
+                        type="text"
+                        value={state}
+                        onChange={handleChanges}
+                        name="state"
+                        required
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <InputLabel> Enter Pincode </InputLabel>
+                      <Input
+                        type="text"
+                        value={pincode}
+                        onChange={handleChanges}
+                        name="pincode"
+                        required
+                      />
+                    </FormControl>
+                  </div>
+                  <div className="new-address-form-button">
+                    <input
+                      type="button"
+                      value="Save"
+                      onClick={handleSaveNewAddress}
+                    />
+                    <input
+                      type="button"
+                      value="Cancel"
+                      onClick={handleCancelButton}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className="payment-info-div">
@@ -424,12 +583,25 @@ export default function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const userData = JSON.parse(localStorage.getItem("user"));
   const [page, setPage] = useState(1);
   const [paymentOption, setPaymentOption] = useState("cod");
+
+  const [emailVerPage, setEmailVerPage] = useState(false);
+  const [mainClass, setMainClass] = useState("cart-payment-details");
 
   const { user } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.productsForClient);
   const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
+  const { _id, email, emailVerified, address, name, phoneNumber } = user.user;
+  const [deliveryAddress, setDeliveryAddress] = useState({});
+
+  const [newAddress, setAddressNew] = useState({
+    street: "",
+    city: "",
+    state: "",
+    pincode: "",
+  });
 
   useEffect(() => {
     if (!user) {
@@ -464,16 +636,38 @@ export default function Cart() {
 
   const userId = user?.user._id;
 
-  console.log("cart :", cart.length);
+  // console.log("cart :", cart.length);
 
   const handleCheckout = () => {
     setPage(!page);
   };
 
   const handlePaymentButton = () => {
-    // const userId = user.user._id;
-
     let checkoutData = [];
+
+    let allAddress = userData.user.address;
+    let addressFound = false;
+
+    for (let index = 0; index < allAddress.length; index++) {
+      const element = allAddress[index];
+
+      if (
+        element.street === deliveryAddress.street &&
+        element.city === deliveryAddress.city &&
+        element.state === deliveryAddress.state &&
+        element.pincode === deliveryAddress.pincode
+      ) {
+        addressFound = true;
+      } else {
+        continue;
+      }
+    }
+
+    if (!addressFound) {
+      allAddress.push(deliveryAddress);
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
+
     if (paymentOption === "") {
       alert("Select Payment Option");
     } else {
@@ -487,6 +681,7 @@ export default function Cart() {
             quantity: cart[index].quantity,
             productPrice: cart[index].prodPrice,
             paymentOption,
+            deliveryAddress: deliveryAddress,
           };
           checkoutData.push(newData);
         }
@@ -494,12 +689,21 @@ export default function Cart() {
 
       console.log("User CheckOut : ", checkoutData);
 
-      dispatch(placeOrder(checkoutData));
+      if (!emailVerified) {
+        setEmailVerPage(true);
+        console.log("User is not verified...", user.emailVerified);
+
+        if (!emailVerPage) {
+          setMainClass("blur-cart-payment-details");
+        }
+      } else {
+        dispatch(placeOrder(checkoutData));
+      }
+
+      // dispatch(placeOrder(checkoutData));
       console.log("Clicked Payment Button in Payment Page...");
     }
   };
-
-  
 
   return (
     <>
@@ -544,30 +748,54 @@ export default function Cart() {
               handlePaymentButton={handlePaymentButton}
               paymentOption={paymentOption}
               setPaymentOption={setPaymentOption}
+              address={address}
+              setDeliveryAddress={setDeliveryAddress}
+              setAddressNew={setAddressNew}
+              newAddress={newAddress}
+              mainClass={mainClass}
             />
-            <div
-              style={{
-                width: "fit-content",
-                marginLeft: "auto",
-                marginRight: "20px",
-                marginTop: "35px",
-              }}
-            >
-              <button
-                style={{
-                  width: "70px",
-                  height: "30px",
-                  fontSize: "15px",
-                  border: "1px solid black",
-                  backgroundColor: "white",
-                  fontWeight: "bold",
-                  opacity: "0.7",
-                }}
-                onClick={handleCheckout}
-              >
-                Back
-              </button>
-            </div>
+            {mainClass === "blur-cart-payment-details" ? (
+              <></>
+            ) : (
+              <>
+                <div
+                  style={{
+                    width: "fit-content",
+                    marginLeft: "auto",
+                    marginRight: "20px",
+                    marginTop: "35px",
+                  }}
+                >
+                  <button
+                    style={{
+                      width: "70px",
+                      height: "30px",
+                      fontSize: "15px",
+                      border: "1px solid black",
+                      backgroundColor: "white",
+                      fontWeight: "bold",
+                      opacity: "0.7",
+                    }}
+                    onClick={handleCheckout}
+                  >
+                    Back
+                  </button>
+                </div>
+              </>
+            )}
+
+            {emailVerPage ? (
+              <div className="email-verification">
+                <EmailVerification
+                  email={email}
+                  emailVerPage={emailVerPage}
+                  setEmailVerPage={setEmailVerPage}
+                  setMainClass={setMainClass}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
           </>
         )
       ) : (

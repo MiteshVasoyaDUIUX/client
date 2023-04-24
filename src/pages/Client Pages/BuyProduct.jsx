@@ -33,7 +33,7 @@ function DeliveryAddress({ address, setDeliveryAddress }) {
         <div>
           <input type="radio" name="address" onChange={handleAddressChange} />
         </div>
-        <div>
+        <div style={{ marginLeft: "7px", marginTop: "1px" }}>
           {address.street},
           <br />
           {address.city},
@@ -53,6 +53,7 @@ function BuyProduct() {
   const navigate = useNavigate();
   const params = useParams();
   const [emailVerPage, setEmailVerPage] = useState(false);
+  const [mainClass, setMainClass] = useState("place-order-page");
   const [paymentOption, setPaymentOption] = useState("cod");
   const [deliveryAddress, setDeliveryAddress] = useState({});
   const [openNewAddress, setOpenNewAddress] = useState(false);
@@ -62,7 +63,6 @@ function BuyProduct() {
     state: "",
     pincode: "",
   });
-  const [mainClass, setMainClass] = useState("place-order-page");
   const { product } = useSelector((state) => state.productsForClient);
   const { user } = useSelector((state) => state.auth);
   const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
@@ -183,7 +183,7 @@ function BuyProduct() {
     if (street && city && state && pincode) {
       const newAddress = { street, city, state, pincode };
 
-      const addrArea = document.getElementById("order-select-id");
+      const addrArea = document.getElementById("address-select-id");
 
       const div = document.createElement("div");
 
@@ -247,7 +247,7 @@ function BuyProduct() {
                     <div className="delivery-address-title">
                       Delivery Address
                     </div>
-                    <div className="order-select" id="order-select-id">
+                    <div className="address-select" id="address-select-id">
                       {address.map((address) => {
                         return (
                           <>
@@ -273,86 +273,6 @@ function BuyProduct() {
                         <></>
                       )}
                     </div>
-                    {openNewAddress === true ? (
-                      <>
-                        <div className="new-address-form">
-                          <div
-                            style={{
-                              width: "fit-content",
-                              marginLeft: "auto",
-                              marginRight: "auto",
-                            }}
-                          >
-                            <FormControl style={{ width: "600px" }}>
-                              <InputLabel> Enter Address </InputLabel>
-                              <Input
-                                type="text"
-                                value={street}
-                                onChange={handleChanges}
-                                name="street"
-                                required
-                              />
-                            </FormControl>
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              width: "600px",
-                              justifyContent: "space-between",
-                              marginTop: "20px",
-                              marginLeft: "auto",
-                              marginRight: "auto",
-                            }}
-                          >
-                            <FormControl>
-                              <InputLabel> Enter City </InputLabel>
-                              <Input
-                                type="text"
-                                value={city}
-                                onChange={handleChanges}
-                                name="city"
-                                required
-                              />
-                            </FormControl>
-
-                            <FormControl>
-                              <InputLabel> Enter State </InputLabel>
-                              <Input
-                                type="text"
-                                value={state}
-                                onChange={handleChanges}
-                                name="state"
-                                required
-                              />
-                            </FormControl>
-                            <FormControl>
-                              <InputLabel> Enter Pincode </InputLabel>
-                              <Input
-                                type="text"
-                                value={pincode}
-                                onChange={handleChanges}
-                                name="pincode"
-                                required
-                              />
-                            </FormControl>
-                          </div>
-                          <div className="new-address-form-button">
-                            <input
-                              type="button"
-                              value="Save"
-                              onClick={handleSaveNewAddress}
-                            />
-                            <input
-                              type="button"
-                              value="Cancel"
-                              onClick={handleCancelButton}
-                            />
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <></>
-                    )}
                   </div>
                   <div className="payment-details">
                     <div className="payment-details-title">
@@ -375,60 +295,64 @@ function BuyProduct() {
                       </Select>
                     </div>
 
-                    <div className="payment-details-form">
+                    <div>
                       {paymentOption === "card" ? (
                         <>
-                          <TextField
-                            className="credit-debit-atm-card"
-                            variant="standard"
-                            placeholder="Card Number"
-                            style={{
-                              width: "45%",
-                              marginLeft: "2.5%",
-                              marginBottom: "20px",
-                            }}
-                          />
-                          <TextField
-                            className="credit-debit-atm-card"
-                            variant="standard"
-                            placeholder="Card Holder Name"
-                            style={{
-                              marginLeft: "5%",
-                              marginRight: "2.5%",
-                              width: "45%",
-                              marginBottom: "20px",
-                            }}
-                          />
-                          <TextField
-                            className="credit-debit-atm-card"
-                            variant="standard"
-                            placeholder="CVV"
-                            style={{
-                              width: "45%",
-                              marginLeft: "2.5%",
-                            }}
-                          />
-                          <TextField
-                            className="credit-debit-atm-card"
-                            variant="standard"
-                            placeholder="Enter Card Holder Name"
-                            style={{
-                              marginLeft: "5%",
-                              marginRight: "2.5%",
-                              width: "45%",
-                            }}
-                          />
+                          <div className="payment-details-form">
+                            <TextField
+                              className="credit-debit-atm-card"
+                              variant="standard"
+                              placeholder="Card Number"
+                              style={{
+                                width: "45%",
+                                marginLeft: "2.5%",
+                                marginBottom: "20px",
+                              }}
+                            />
+                            <TextField
+                              className="credit-debit-atm-card"
+                              variant="standard"
+                              placeholder="Card Holder Name"
+                              style={{
+                                marginLeft: "5%",
+                                marginRight: "2.5%",
+                                width: "45%",
+                                marginBottom: "20px",
+                              }}
+                            />
+                            <TextField
+                              className="credit-debit-atm-card"
+                              variant="standard"
+                              placeholder="CVV"
+                              style={{
+                                width: "45%",
+                                marginLeft: "2.5%",
+                              }}
+                            />
+                            <TextField
+                              className="credit-debit-atm-card"
+                              variant="standard"
+                              placeholder="Enter Card Holder Name"
+                              style={{
+                                marginLeft: "5%",
+                                marginRight: "2.5%",
+                                width: "45%",
+                              }}
+                            />
+                          </div>
                         </>
                       ) : paymentOption === "cod" ? (
                         <></>
                       ) : paymentOption === "upi" ? (
                         <>
-                          <TextField
-                            id="upi-id"
-                            variant="standard"
-                            placeholder="Enter UPI Id"
-                            style={{ width: "70%", marginLeft: "15%" }}
-                          />
+                          <div className="payment-details-form">
+                            <TextField
+                              id="upi-id"
+                              variant="standard"
+                              placeholder="Enter UPI Id"
+                              style={{ width: "70%", marginLeft: "15%" }}
+                            />
+                          </div>
                         </>
                       ) : (
                         <></>
@@ -444,6 +368,93 @@ function BuyProduct() {
                       </button>
                     </div>
                   </div>
+                </div>
+                <div
+                  style={{
+                    marginTop: "40px",
+                    marginLeft: "5%",
+                  }}
+                >
+                  {openNewAddress === true ? (
+                    <>
+                      <div className="new-address-form">
+                        <div
+                          style={{
+                            width: "fit-content",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                          }}
+                        >
+                          <FormControl style={{ width: "600px" }}>
+                            <InputLabel> Enter Address </InputLabel>
+                            <Input
+                              type="text"
+                              value={street}
+                              onChange={handleChanges}
+                              name="street"
+                              required
+                            />
+                          </FormControl>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            width: "600px",
+                            justifyContent: "space-between",
+                            marginTop: "20px",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                          }}
+                        >
+                          <FormControl>
+                            <InputLabel> Enter City </InputLabel>
+                            <Input
+                              type="text"
+                              value={city}
+                              onChange={handleChanges}
+                              name="city"
+                              required
+                            />
+                          </FormControl>
+
+                          <FormControl>
+                            <InputLabel> Enter State </InputLabel>
+                            <Input
+                              type="text"
+                              value={state}
+                              onChange={handleChanges}
+                              name="state"
+                              required
+                            />
+                          </FormControl>
+                          <FormControl>
+                            <InputLabel> Enter Pincode </InputLabel>
+                            <Input
+                              type="text"
+                              value={pincode}
+                              onChange={handleChanges}
+                              name="pincode"
+                              required
+                            />
+                          </FormControl>
+                        </div>
+                        <div className="new-address-form-button">
+                          <input
+                            type="button"
+                            value="Save"
+                            onClick={handleSaveNewAddress}
+                          />
+                          <input
+                            type="button"
+                            value="Cancel"
+                            onClick={handleCancelButton}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
             </div>
