@@ -395,7 +395,7 @@ function AllUser() {
     return <Spinner />;
   }
   return (
-    <section className="content" style={{ marginTop: "55px" }}>
+    <section className="all-users-table" style={{ marginTop: "55px" }}>
       {users.length > 0 ? (
         <div className="users">
           <Paper

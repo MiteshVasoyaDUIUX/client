@@ -142,8 +142,6 @@ export default function MyOrders() {
     userId = user.user._id;
   }
 
-  console.log("Orders : ", orders);
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };

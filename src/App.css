@@ -1,27 +1,4 @@
-/* .header-logo {
-    width: fit-content;
-    text-align: center;
-    display: block;
-    height: max-content;
-    z-index: 0;
-    color: yellowgreen;
-}
 
-.navbar {
-    height: 40px;
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-bottom: 10px;
-    z-index: 1;
-}
-
-.login-register-button {
-    width: fit-content;
-    text-align: center;
-    display: block;
-    float: left;
-} */
 
 .loginform {
     /* background-color: aqua; */
@@ -36,30 +13,5 @@
     height: 200px;
 }
 
-.image-container {
-    /* border: 3px solid #ad2929; */
-    padding: 20px;
-    content: "";
-    clear: both;
-    display: table;
-}
 
-.delete-image {
-    cursor: pointer;
-    width: 300px;
-    padding: 5px;
-    background: #457b9d;
-    color: white;
-    border: none;
-}
-
-.image-div {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    padding-top: 5px;
-    float: left;
-    width: 33.33%;
-}
 

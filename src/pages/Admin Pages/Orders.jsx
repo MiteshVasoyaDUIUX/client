@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./Orders.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -19,6 +18,7 @@ import {
   fetchAllOrders,
 } from "../../features/admin/adminSlice";
 import Spinner from "../../components/Spinner";
+import "./Orders.css";
 
 const columns = [
   {
@@ -193,7 +193,12 @@ function Orders() {
   // console.log("allOrders : ", allOrders);
   return (
     <>
-      <section className="content" style={{ marginTop: "55px", zIndex: "0" }}>
+      <section
+        className="all-orders-table"
+        style={{
+          
+        }}
+      >
         {allOrders.length > 0 ? (
           <div className="product">
             <Paper

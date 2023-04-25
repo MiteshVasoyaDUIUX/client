@@ -1,14 +1,12 @@
 .dashboard-body {
       /* border: 1px solid rgb(245, 0, 0); */
-      width: 99%;
+      width: calc(100% - 45px);
       height: fit-content;
       margin-left: auto;
-      margin-right: auto;
-
+      margin-right: 0;
 }
 
 .dashboard-quick-insights {
-      /* border: 1px solid rgb(48, 62, 255); */
       height: 170px;
       width: 95%;
       margin-left: auto;
@@ -220,14 +218,15 @@
 }
 
 .total-orders-line-chart {
-      height: 480px;
+      height: 460px;
       margin-top: 0;
       margin-bottom: auto;
       margin-right: auto;
       margin-left: 0px;
       /* border: 1px solid black; */
+      padding: 10px;
       border-radius: 10px;
-      width: 780px;
+      width: 720px;
       color: #f8f2e7;
       background-color: #1d2133;
       box-shadow: 0px 2px 5px 1px #282e46bd;

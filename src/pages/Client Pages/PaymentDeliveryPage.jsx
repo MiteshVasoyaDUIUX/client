@@ -1,16 +1,9 @@
-import { MenuItem, Select, TextField } from "@mui/material";
+import { MenuItem, Select, } from "@mui/material";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { placeOrder } from "../../features/order/orderSlice";
+import { useSelector } from "react-redux";
 import "./PaymentDeliveryPage.css";
-import Person2Icon from "@mui/icons-material/Person2";
 
 function PaymentDeliveryPage() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const { product } = useSelector((state) => state.productsForClient);
   const { user } = useSelector((state) => state.auth);
   const [paymentOption, setPaymentOption] = useState("COD");
 

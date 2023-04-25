@@ -29,6 +29,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import MessageIcon from "@mui/icons-material/Message";
 import "./Header.css";
 import { searchProduct } from "../features/productsForClient/productsForClientSlice";
+import SideBar from "./SideBar";
 
 const pagesForAdmin = [
   "Dashboard",
@@ -56,8 +57,8 @@ function Header() {
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
-
-    // console.log("OnLogOUT");
+    navigate("/");
+    console.log("OnLogOUT");
   };
 
   const handleOpenNavMenu = (event) => {
@@ -101,45 +102,23 @@ function Header() {
   return (
     <>
       <div className="header">
-        <div className="sidebar-toggle-button">
-          <IconButton onClick={() => setSideBar(!sidebar)}>
-            {user ? (
-              user.role === "admin" ? (
-                sidebar ? (
-                  <>
-                    <CloseIcon className="sidebar-close-button" />
-                  </>
-                ) : (
-                  <>
-                    <MenuIcon className="sidebar-menu-button" />
-                  </>
-                )
-              ) : (
-                <></>
-              )
-            ) : (
-              <></>
-            )}
-          </IconButton>
-        </div>
-
         <div className="header-logo">
           {user ? (
             user.role === "admin" ? (
               <Link
                 to="/admin/dashboard"
-                style={{ color: "#1d2133", textDecoration: "none" }}
+                style={{ color: "#f0f3ed", textDecoration: "none" }}
               >
                 LOGO
               </Link>
             ) : (
-              <Link to="/" style={{ color: "#1d2133", textDecoration: "none" }}>
+              <Link to="/" style={{ color: "#f0f3ed", textDecoration: "none" }}>
                 LOGO
               </Link>
             )
           ) : (
             <>
-              <Link to="/" style={{ color: "#1d2133", textDecoration: "none" }}>
+              <Link to="/" style={{ color: "#f0f3ed", textDecoration: "none" }}>
                 LOGO
               </Link>
             </>
@@ -168,7 +147,10 @@ function Header() {
             user.role === "admin" ? (
               <>
                 <div style={{ display: "flex" }}>
-                  <div className="header-user-name" sx={{ color: "#f4ede2" }}>
+                  <div
+                    className="header-user-name"
+                    style={{ color: "#f0f3ed" }}
+                  >
                     Hello, {user.user.name}
                   </div>
                   <Tooltip>
@@ -240,7 +222,10 @@ function Header() {
             ) : (
               <>
                 <div style={{ display: "flex" }}>
-                  <div className="header-user-name" sx={{ color: "#f4ede2" }}>
+                  <div
+                    className="header-user-name"
+                    style={{ color: "#f0f3ed" }}
+                  >
                     Hello, {user.user?.name}
                   </div>
                   <Tooltip>
@@ -351,81 +336,10 @@ function Header() {
           )}
         </div>
       </div>
-      {user ? (
-        sidebar && user.role === "admin" ? (
-          <>
-            <div className="sidebar-menu">
-              <Link
-                style={{ textDecoration: "None", color: "#f9f3ea" }}
-                to="/admin/dashboard"
-              >
-                <div className="sidebar-submenu">
-                  <div style={{ marginRight: "10px" }}>
-                    <DashboardIcon fontSize="medium" />
-                  </div>
-                  {pagesForAdmin[0]}
-                </div>
-              </Link>
-              <Link
-                style={{ textDecoration: "None", color: "#f9f3ea" }}
-                to="/admin/orders"
-              >
-                <div className="sidebar-submenu">
-                  <div style={{ marginRight: "10px" }}>
-                    <LocalMallIcon fontSize="medium" />
-                  </div>
-                  {pagesForAdmin[1]}
-                </div>
-              </Link>
-              <Link
-                style={{ textDecoration: "None", color: "#f9f3ea" }}
-                to="/admin/addproduct"
-              >
-                <div className="sidebar-submenu">
-                  <div style={{ marginRight: "10px" }}>
-                    <AddIcon fontSize="medium" />
-                  </div>
-                  {pagesForAdmin[2]}
-                </div>
-              </Link>
-              <Link
-                style={{ textDecoration: "None", color: "#f9f3ea" }}
-                to="/admin/allproduct"
-              >
-                <div className="sidebar-submenu">
-                  <div style={{ marginRight: "10px" }}>
-                    <InventoryIcon fontSize="medium" />
-                  </div>
-                  {pagesForAdmin[3]}
-                </div>
-              </Link>
-              <Link
-                style={{ textDecoration: "None", color: "#f9f3ea" }}
-                to="/admin/alluser"
-              >
-                <div className="sidebar-submenu">
-                  <div style={{ marginRight: "10px" }}>
-                    <PersonIcon fontSize="medium" />
-                  </div>
-                  {pagesForAdmin[4]}
-                </div>
-              </Link>
-              <Link
-                style={{ textDecoration: "None", color: "#f9f3ea" }}
-                to="/admin/messages"
-              >
-                <div className="sidebar-submenu">
-                  <div style={{ marginRight: "10px" }}>
-                    <MessageIcon fontSize="medium" />
-                  </div>
-                  {pagesForAdmin[5]}
-                </div>
-              </Link>
-            </div>
-          </>
-        ) : (
-          <></>
-        )
+      {user && user.role === "admin" ? (
+        <>
+          <SideBar />
+        </>
       ) : (
         <></>
       )}

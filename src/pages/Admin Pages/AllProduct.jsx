@@ -34,6 +34,7 @@ import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
 import { ImageForList } from "../../components/DetailedProductPage.jsx/Images";
 import Spinner from "../../components/Spinner";
+import "./AllProduct.css"
 
 const columns = [
   {
@@ -284,7 +285,7 @@ function AllProduct() {
 
   return (
     <>
-      <section className="content" style={{ marginTop: "55px", zIndex: "0" }}>
+      <section className="all-products-table" style={{ marginTop: "55px", zIndex: "0" }}>
         {products.length > 0 ? (
           <div className="product">
             <Paper

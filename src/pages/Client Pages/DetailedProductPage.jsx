@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable default-case */
 /* eslint-disable no-lone-blocks */
 import { IconButton, Rating } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import Images, { Image } from "../../components/DetailedProductPage.jsx/Images";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import Images from "../../components/DetailedProductPage.jsx/Images";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import {
   addToCart,
@@ -21,14 +22,13 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { toast } from "react-toastify";
 import { reset } from "../../features/auth/authSlice";
-import { display } from "@mui/system";
 
 function DetailedProductPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [wishList, setWishList] = useState(false);
   const params = useParams();
-  //Directly get Params from URLs...
 
   const { user } = useSelector((state) => state.auth);
   const { wishlist } = useSelector((state) => state.productsForClient);
@@ -37,8 +37,8 @@ function DetailedProductPage() {
   );
   const [quantity, setQuantity] = useState(1);
   const productId = params.id;
-  console.log("Product Id : ", productId);
   let outOfStock;
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     dispatch(fetchOneProduct(productId));
@@ -96,7 +96,6 @@ function DetailedProductPage() {
       // console.log("Data : ", data);
       dispatch(addToWishList(data));
     } else {
-      toast.error("Not Logged In");
     }
   };
 
@@ -120,7 +119,7 @@ function DetailedProductPage() {
       if (user) {
         navigate(`/product/placeorder/${productId}&${quantity}`);
       } else {
-        toast.error("Not Logged In");
+        navigate("/login", { state: { from: location.pathname } });
       }
     } else {
       alert("Currently Product is out of stock...");
@@ -139,7 +138,7 @@ function DetailedProductPage() {
             <div style={{ display: "flex" }}>
               <div className="detailed-page-title ">
                 {product.prodName}
-                <span class="title-tooltiptext">{product.prodName}</span>
+                <span className="title-tooltiptext">{product.prodName}</span>
               </div>
               <div className="detailed-page-wishlist-button">
                 <IconButton onClick={handleWishListButton}>
@@ -345,7 +344,7 @@ function DetailedProductPage() {
                 )}
               </div>
             </div>
-            <div style={{ marginTop: "20px" }}>
+            <div style={{ marginTop: "20px", marginBlock : "40px" }}>
               <button id="add-to-cart-button" onClick={handleCartButton}>
                 Add To Cart
               </button>
@@ -354,13 +353,14 @@ function DetailedProductPage() {
               </button>
             </div>
 
-            <div className="detailed-page-share-icons">
-              <div className="share-title">Share With : </div>
+            {/* <div className="detailed-page-share-icons">
+              <div className="share-title">Share Using : </div>
               <div className="share-icons">
                 <a
-                  href="whatsapp://send?text=asasa"
+                  href={`whatsapp://send?text=http://localhost:3000${location.pathname}`}
                   data-action="share/whatsapp/share"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <IconButton>
                     <WhatsAppIcon style={{ fontSize: "40px" }} />
@@ -376,7 +376,7 @@ function DetailedProductPage() {
                   <InstagramIcon style={{ fontSize: "40px" }} />
                 </IconButton>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </ErrorBoundary>

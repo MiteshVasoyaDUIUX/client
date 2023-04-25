@@ -5,7 +5,6 @@ import {
   fetchOrderUserwise,
   fetchUsers,
 } from "../../features/users/usersSlice";
-import "./AdminDashboard.css";
 import { ImCart } from "react-icons/im";
 import { MdPointOfSale, MdInventory } from "react-icons/md";
 import { fetchProducts } from "../../features/product/productSlice";
@@ -13,6 +12,7 @@ import { Chart } from "react-google-charts";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import { Card, Rating, Typography } from "@mui/material";
 import { fetchAllOrders } from "../../features/admin/adminSlice";
+import "./AdminDashboard.css";
 
 const optionsForPieChart = {
   legend: "none",
@@ -37,7 +37,7 @@ const optionsForLineChart = {
   fontSize: 12,
   pieHole: 0.4,
   is3D: false,
-  width: 780,
+  width: 720,
   height: 400,
   vAxis: {
     title: "Orders",
@@ -233,10 +233,6 @@ function AdminDashboard() {
     ["Success", successOrders],
     ["Cancelled", cancelledOrders],
   ];
-
-  //Sort orders by their selling quantities to show in Top SKUs...
-
-  // console.log("todaysOrders : ", orderMonthwise);
 
   return (
     <>

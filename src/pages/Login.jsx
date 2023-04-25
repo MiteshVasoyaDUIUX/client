@@ -8,13 +8,14 @@ import {
   Button,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -34,14 +35,11 @@ export default function Login() {
       // console.log("User : ", user.role);
       if (user.role === "buyer") {
         if (user.user.isDeleted === true) {
-          console.log("isDeleted : ", user.user.isDeleted);
           navigate("/deleteduser");
         } else if (user.user.isBlocked === true) {
-          console.log("isBlocked : ", user.user.isBlocked);
           navigate("/blockeduser");
         } else {
-          console.log("Valid User...");
-          navigate("/");
+          navigate(location.state?.from || "/");
         }
       } else if (user.role === "admin") {
         navigate("/admin/dashboard");

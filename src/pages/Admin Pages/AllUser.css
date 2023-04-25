@@ -1,3 +1,10 @@
+.all-users-table {
+      width: calc(100% - 45px);
+      margin-top: 55px;
+      margin-left: auto;
+      z-index: 0;
+}
+
 #block-user-btn {
       border: 1px solid #1d2133;
       height: 30px;
@@ -5,6 +12,7 @@
       background-color: white;
       transition: ease-in-out 0.15s;
 }
+
 
 #delete-user-btn {
       border: 1px solid #1d2133;

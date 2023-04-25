@@ -8,6 +8,7 @@ import {
   saveChat,
 } from "../../features/chat/client/chatSlice";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 let currentMsg = [];
 
@@ -15,9 +16,9 @@ function Conversation({ conversation, openConversation, setOpenConversation }) {
   const handleOpenConversation = () => {
     const myDiv = document.getElementById("new-message-container-id");
 
-    while (myDiv.firstChild) {
-      myDiv.removeChild(myDiv.firstChild);
-    }
+    // while (myDiv.firstChild) {
+    //   myDiv.removeChild(myDiv.firstChild);
+    // }
     setOpenConversation(conversation.conversationId);
   };
   return (
@@ -30,18 +31,11 @@ function Conversation({ conversation, openConversation, setOpenConversation }) {
 }
 
 function Message({ message, own }) {
-  const onChatLoad = () => {
-    console.log("Chat Loaded...");
-    const messageArea = document.getElementById("admin-chat-area-id");
-    messageArea.scrollTop = messageArea.scrollHeight;
-    console.log("Scroll Height : ", messageArea.scrollTo);
-  };
+
   return (
     <div
       className={own ? "own-message-admin" : "message-from-other-client"}
-      onLoad={onChatLoad}
     >
-      {onChatLoad()}
       <div>{message.message}</div>
       <div
         className={own ? "time-of-sent-message" : "time-of-received-message"}
@@ -105,11 +99,11 @@ function Chat() {
     socketIO.on("privatemessage", (receivedMessage) => {
       const date = new Date();
       const time = String(date).slice(4, 21);
+
       const newMessageArea = document.getElementById(
         "new-message-container-id"
       );
-      const messageArea = document.getElementById("admin-chat-area-id");
-
+      const messageArea = document.getElementById("adminScrollableDiv");
       const div = document.createElement("div");
       div.classList.add("message-from-other-client");
 
@@ -134,6 +128,13 @@ function Chat() {
     socketIO.on("disconnect", () => {
       console.log("Disconnect From....");
     });
+
+    if (scrollRef.current && toScroll === 1) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      console.log("SCROLL VALUE : ", toScroll);
+      setToScroll(0);
+      console.log(" UPDATED SCROLL VALUE : ", toScroll);
+    }
   }, [openConversationId]);
 
   users?.map((id) => {
@@ -145,7 +146,7 @@ function Chat() {
   });
 
   messageData?.map((message) => {
-    currentMsg.unshift(message);
+    currentMsg.push(message);
     conversationId = message.conversationId;
   });
 
@@ -174,7 +175,7 @@ function Chat() {
       const newMessageArea = document.getElementById(
         "new-message-container-id"
       );
-      const messageArea = document.getElementById("admin-chat-area-id");
+      const messageArea = document.getElementById("adminScrollableDiv");
       const div = document.createElement("div");
       div.classList.add("own-message-admin");
 
@@ -187,8 +188,6 @@ function Chat() {
 
       div.append(messageDiv, timeDiv);
 
-      console.log("Time : ", date, t);
-
       newMessageArea.append(div);
 
       socket.emit("sendMessage", message);
@@ -199,32 +198,14 @@ function Chat() {
     }
   };
 
-  // useLayoutEffect(() => {
-  //   if (scrollRef.current && toScroll === 1) {
-  //     scrollRef.current.scrollIntoView({ behavior: "smooth" });
-  //     console.log("SCROLL VALUE : ", toScroll);
-  //     setToScroll(0);
-  //     console.log(" UPDATED SCROLL VALUE : ", toScroll);
-  //   }
-  // }, [messages]);
-
-  console.log("Print Msg :", currentMsg);
-
-  const handleChatScroll = () => {
-    console.log("Scrolling...");
-    if (chatScrollRef.current) {
-      const { scrollTop } = chatScrollRef.current;
-      if (scrollTop === 0 && messages.moreMsg === true) {
-        msgStart = messageData.length + 1;
-        //Dispatch Request to fetch new chat...
-        const chatFetchdata = {
-          conversationId: openConversationId,
-          msgStart: messages.nextMsgFrom,
-        };
-        console.log("Scrolled To The Top...", messages.moreMsg);
-        dispatch(fetchChatAdmin(chatFetchdata));
-      }
-    }
+  const fetchMoreData = () => {
+    msgStart = messageData.length + 1;
+    //Dispatch Request to fetch new chat...
+    const chatFetchdata = {
+      conversationId: openConversationId,
+      msgStart: messages.nextMsgFrom,
+    };
+    dispatch(fetchChatAdmin(chatFetchdata));
   };
 
   return (
@@ -242,37 +223,28 @@ function Chat() {
           })}
         </div>
         <div className="chat-message-div">
-          <div
-            className="admin-chat-area"
-            id="admin-chat-area-id"
-            ref={chatScrollRef}
-            onScroll={handleChatScroll}
-          >
-            {messages.moreMsg ? (
-              <>
-                <div className="refresh-chat-icon">
-                  <RefreshIcon sx={{ fontSize: "40px" }} />
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-            <div className="message-container" id="message-container-id">
-              {currentMsg.map((message) => {
-                return (
-                  <div ref={scrollRef}>
-                    <Message
-                      message={message}
-                      own={message.senderId === user.user._id}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <div
-              className="new-message-container"
-              id="new-message-container-id"
-            ></div>
+          <div id="adminScrollableDiv">
+            <InfiniteScroll
+              dataLength={currentMsg.length}
+              next={fetchMoreData}
+              style={{
+                display: "flex",
+                flexDirection: "column-reverse",
+                overflow: "none",
+              }} //To put endMessage and loader to the top.
+              inverse={true} //
+              hasMore={messages.moreMsg}
+              loader={<h4>Loading...</h4>}
+              scrollableTarget="adminScrollableDiv"
+            >
+              <div id="new-message-container-id"></div>
+              {currentMsg.map((message) => (
+                <Message
+                  message={message}
+                  own={message.senderId === user.user._id}
+                />
+              ))}
+            </InfiniteScroll>
           </div>
           <div className="chat-box-button">
             <input

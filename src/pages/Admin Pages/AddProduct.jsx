@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { uploadProduct, reset } from "../../features/product/productSlice";
 import Spinner from "../../components/Spinner";
+import "./AddEditProduct.css"
 
 function AddProduct() {
   const dispatch = useDispatch();
@@ -116,11 +117,7 @@ function AddProduct() {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
       URL.createObjectURL(e[1])
     );
-    // console.log("New Image : ", ImagesArray);
-
     setImage([...image, ...ImagesArray]);
-
-    // console.log("All Image Array : ", image);
   };
 
   const handleCategoryChange = (e) => {
@@ -128,7 +125,6 @@ function AddProduct() {
       return;
     } else {
       setSelectedCategory(e.target.value);
-      // console.log(e.target.value);
     }
   };
 
@@ -137,7 +133,6 @@ function AddProduct() {
       return;
     } else {
       setPaymentType(e.target.value);
-      // console.log(e.target.value);
     }
   };
 

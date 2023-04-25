@@ -52,6 +52,7 @@ function BuyProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
+
   const [emailVerPage, setEmailVerPage] = useState(false);
   const [mainClass, setMainClass] = useState("place-order-page");
   const [paymentOption, setPaymentOption] = useState("cod");
@@ -65,7 +66,16 @@ function BuyProduct() {
   });
   const { product } = useSelector((state) => state.productsForClient);
   const { user } = useSelector((state) => state.auth);
-  const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
+
+  useEffect(() => {
+    if (!user) {
+      console.log("Log Out...");
+    } else{
+      console.log("Logged In")
+    }
+  }, [user]);
+
+  const { isPlaced, isPlacing } = useSelector((state) => state.order);
   const { _id, email, emailVerified, address, name, phoneNumber } = user.user;
   const { isVerified } = useSelector((state) => state.auth);
   const { street, city, state, pincode } = newAddress;
@@ -74,6 +84,10 @@ function BuyProduct() {
   let quantity = params.id.split("&")[1];
 
   useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+
     dispatch(fetchOneProduct(productId));
 
     if (isVerified) {
@@ -153,7 +167,6 @@ function BuyProduct() {
 
       if (!emailVerified) {
         setEmailVerPage(true);
-        console.log("User is not verified...", user.emailVerified);
 
         if (!emailVerPage) {
           setMainClass("blur-place-order-page");

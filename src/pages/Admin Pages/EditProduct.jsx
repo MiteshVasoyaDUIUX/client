@@ -18,6 +18,7 @@ import {
 import { updateProduct, reset } from "../../features/product/productSlice";
 import { toast } from "react-toastify";
 import Spinner from "../../components/Spinner";
+import "./AddEditProduct.css";
 
 function EditProduct() {
   const location = useLocation();
@@ -155,15 +156,14 @@ function EditProduct() {
       <h1
         style={{
           textAlign: "center",
-          marginTop: "80px",
+          marginTop: "20px",
           marginLeft: "auto",
           marginRight: "auto",
           padding: "20px",
           fontFamily: "sans-serif",
-          borderBottom: "1px solid #457b9d",
+          borderBottom: "1px solid #1d2133",
           width: "fit-content",
-          color: "#457b9d",
-          backgroundColor: "white",
+          color: "#1d2133",
         }}
       >
         Update Product Details
@@ -174,12 +174,13 @@ function EditProduct() {
             width: "50%",
             marginLeft: "auto",
             marginRight: "auto",
+            marginBottom: "30px",
             paddingTop: "80px",
             paddingBottom: "80px",
             paddingLeft: "60px",
             paddingRight: "60px",
-            border: "1px solid #457b9d",
-            boxShadow: "7px 7px 29px 1px rgba(69, 123, 157, 0.6) ",
+            border: "1px solid #1d2133",
+            boxShadow: "7px 7px 16px -1px rgba(0, 0, 0, 0.4) ",
             borderRadius: "30px",
             backgroundColor: "white",
           }}
@@ -299,8 +300,8 @@ function EditProduct() {
           <Button
             variant="contained"
             style={{
-              backgroundColor: "#457b9d",
-              color: "White",
+              backgroundColor: "#1d2133",
+              color: "#f0f3ed",
               fontSize: "15px",
               fontWeight: "bolder",
             }}

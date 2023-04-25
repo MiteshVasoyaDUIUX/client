@@ -1,0 +1,7 @@
+.all-products-table {
+      /* border: 1px solid red; */
+      width: calc(100% - 45px);
+      margin-top: 55px;
+      margin-left: auto;
+      z-index: 0;
+}

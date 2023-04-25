@@ -1,0 +1,26 @@
+.image-container {
+      /* border: 3px solid #ad2929; */
+      padding: 20px;
+      content: "";
+      clear: both;
+      display: table;
+  }
+  
+  .delete-image {
+      cursor: pointer;
+      width: 300px;
+      padding: 5px;
+      background: #1d2133;
+      color: white;
+      border: none;
+  }
+  
+  .image-div {
+      margin-top: 5px;
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      padding-top: 5px;
+      float: left;
+      width: 33.33%;
+  }

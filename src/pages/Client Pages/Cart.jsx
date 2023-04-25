@@ -126,10 +126,7 @@ function PaymentDeliveryPage({
         <div className="cart-delivery-address">
           <div className="cart-delivery-all-address">
             <div className="delivery-address-title">Delivery Address</div>
-            <div
-              className="cart-address-select"
-              id="address-select-id"
-            >
+            <div className="cart-address-select" id="address-select-id">
               {address.map((address) => {
                 return (
                   <>
@@ -632,11 +629,7 @@ export default function Cart() {
 
   totalAmount = totalAmount.toLocaleString("en-IN");
 
-  // console.log(paymentOption);
-
   const userId = user?.user._id;
-
-  // console.log("cart :", cart.length);
 
   const handleCheckout = () => {
     setPage(!page);
@@ -687,11 +680,8 @@ export default function Cart() {
         }
       }
 
-      console.log("User CheckOut : ", checkoutData);
-
       if (!emailVerified) {
         setEmailVerPage(true);
-        console.log("User is not verified...", user.emailVerified);
 
         if (!emailVerPage) {
           setMainClass("blur-cart-payment-details");
@@ -699,9 +689,6 @@ export default function Cart() {
       } else {
         dispatch(placeOrder(checkoutData));
       }
-
-      // dispatch(placeOrder(checkoutData));
-      console.log("Clicked Payment Button in Payment Page...");
     }
   };
 
