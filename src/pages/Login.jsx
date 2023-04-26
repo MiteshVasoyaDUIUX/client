@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -29,7 +30,8 @@ export default function Login() {
   );
 
   useEffect(() => {
-    if (isError) {
+    if (message) {
+      toast.error(message);
     }
     if (isSuccess || user) {
       // console.log("User : ", user.role);
@@ -135,7 +137,7 @@ export default function Login() {
           <Button
             variant="contained"
             style={{
-              backgroundColor: "#1d2133",
+              backgroundColor: "#2a3035",
               color: "White",
               fontWeight: "bold",
               fontSize: "15px",

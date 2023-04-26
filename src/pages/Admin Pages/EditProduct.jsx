@@ -161,9 +161,9 @@ function EditProduct() {
           marginRight: "auto",
           padding: "20px",
           fontFamily: "sans-serif",
-          borderBottom: "1px solid #1d2133",
+          borderBottom: "1px solid #2a3035",
           width: "fit-content",
-          color: "#1d2133",
+          color: "#2a3035",
         }}
       >
         Update Product Details
@@ -179,7 +179,7 @@ function EditProduct() {
             paddingBottom: "80px",
             paddingLeft: "60px",
             paddingRight: "60px",
-            border: "1px solid #1d2133",
+            border: "1px solid #2a3035",
             boxShadow: "7px 7px 16px -1px rgba(0, 0, 0, 0.4) ",
             borderRadius: "30px",
             backgroundColor: "white",
@@ -300,7 +300,7 @@ function EditProduct() {
           <Button
             variant="contained"
             style={{
-              backgroundColor: "#1d2133",
+              backgroundColor: "#2a3035",
               color: "#f0f3ed",
               fontSize: "15px",
               fontWeight: "bolder",

@@ -16,10 +16,6 @@ import {
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import "./DetailedProductPage.css";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
 import { toast } from "react-toastify";
 import { reset } from "../../features/auth/authSlice";
 
@@ -93,7 +89,6 @@ function DetailedProductPage() {
         userId,
         productId,
       };
-      // console.log("Data : ", data);
       dispatch(addToWishList(data));
     } else {
     }
@@ -156,12 +151,20 @@ function DetailedProductPage() {
             <div className="detailed-page-rating">
               <div style={{ marginRight: "10px", marginTop: "0px" }}>
                 {product.rating !== undefined ? (
-                  <Rating name="read-only" value={product.rating} readOnly />
+                  <>
+                    <div style = {{display : "flex"}}>
+                      <Rating
+                        name="read-only"
+                        value={product.rating}
+                        readOnly
+                      />{" "}
+                      <div style = {{ fontSize : "14px", marginTop : "auto", marginBottom : "auto", marginLeft : "7px"}}>({product.reviews.length} Reviews)</div>
+                    </div>
+                  </>
                 ) : (
                   ""
                 )}
               </div>
-              {/* <div style={{ fontSize: "17px" }}>(333 Reviews)</div> */}
             </div>
             <div style={{ display: "flex" }}>
               <div className="detailed-page-price">
@@ -344,7 +347,7 @@ function DetailedProductPage() {
                 )}
               </div>
             </div>
-            <div style={{ marginTop: "20px", marginBlock : "40px" }}>
+            <div style={{ marginTop: "20px", marginBlock: "40px" }}>
               <button id="add-to-cart-button" onClick={handleCartButton}>
                 Add To Cart
               </button>

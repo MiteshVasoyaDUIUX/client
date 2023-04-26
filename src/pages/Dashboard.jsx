@@ -1,16 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { reset } from "../features/auth/authSlice";
 import ImageSlider from "../components/ImageSlider";
 import NewArrivals from "../components/DashboardComponents/NewArrivals";
 import TrandingProducts from "../components/DashboardComponents/TrendingProducts";
 import "./Register.css";
+import { EmailVerificationReg } from "../components/EmailVerification";
+
 function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { user, isError, message } = useSelector((state) => state.auth);
+  const [blur, setBlur] = useState(false);
 
   useEffect(() => {
     if (isError) {
@@ -30,6 +34,9 @@ function Dashboard() {
           navigate("/deleteduser");
         } else if (user?.user.isBlocked) {
           navigate("/blockeduser");
+        } else if (location.state?.from === "/register") {
+          console.log("Verification Page...", user);
+          setBlur(true);
         } else {
           navigate("/");
         }
@@ -43,9 +50,19 @@ function Dashboard() {
 
   return (
     <>
-      <ImageSlider />
-      <NewArrivals />
-      <TrandingProducts />
+      {blur ? (
+        <>
+          {console.log("UnBlur")}
+          <EmailVerificationReg email={user.user.email} setBlur={setBlur} />
+        </>
+      ) : (
+        <>
+          {" "}
+          <ImageSlider />
+          <NewArrivals />
+          <TrandingProducts />
+        </>
+      )}
     </>
   );
 }

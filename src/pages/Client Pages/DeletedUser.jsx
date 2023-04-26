@@ -9,7 +9,7 @@ function DeletedUser() {
         <div
           className="deleted-user-box-icon"
         >
-          <RiDeleteBin5Fill fontSize="70px" color="#1d2133" />
+          <RiDeleteBin5Fill fontSize="70px" color="#2a3035" />
         </div>
         <div className="deleted-user-box-text">Your Account Has Been Deleted By Admin</div>
       </div>

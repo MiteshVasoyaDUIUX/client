@@ -6,6 +6,7 @@ const initialState = {
   products: [],
   product: [],
   wishlist: [],
+  wishlistProducts: [],
   searchedProducts: [],
   cart: [],
   isError: false,
@@ -173,6 +174,29 @@ export const fetchWishList = createAsyncThunk(
   }
 );
 
+export const fetchWishListProducts = createAsyncThunk(
+  "productsForClient/fetchWishListProducts",
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+
+      const message = await productServiceForClient.fetchWishListProducts(
+        data,
+        token
+      );
+      return message;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const fetchCart = createAsyncThunk(
   "productsForClient/fetchCart",
   async (data, thunkAPI) => {
@@ -325,6 +349,24 @@ const productForClientSlice = createSlice({
         state.isError = true;
         state.isFetchingWishList = false;
         state.isFetchedWishList = false;
+        state.message = action.payload;
+      })
+      .addCase(fetchWishListProducts.pending, (state) => {
+        // state.isError = false;
+        // state.isFetchingWishList = true;
+        // state.isFetchedWishList = false;
+        state.message = "";
+      })
+      .addCase(fetchWishListProducts.fulfilled, (state, action) => {
+        // state.isError = false;
+        // state.isFetchingWishList = false;
+        // state.isFetchedWishList = true;
+        state.wishlistProducts = action.payload;
+      })
+      .addCase(fetchWishListProducts.rejected, (state, action) => {
+        // state.isError = true;
+        // state.isFetchingWishList = false;
+        // state.isFetchedWishList = false;
         state.message = action.payload;
       })
       .addCase(fetchCart.pending, (state) => {

@@ -8,13 +8,14 @@ import {
   Button,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { reset, register } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 
 export default function Register() {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -51,13 +52,15 @@ export default function Register() {
   );
 
   useEffect(() => {
-    if (isError) {
-      // toast.error(message);
+    if (message) {
+      toast.error(message);
     }
 
     if (isSuccess || user) {
-      toast.success("Verification Email has been sent to you Email Address...")
-      navigate("/");
+      // toast.success("Verification Email has been sent to you Email Address...")
+      // navigate("/");
+      navigate("/", { state: { from: location.pathname } });
+      console.log("Location : ", location.pathname);
     }
 
     dispatch(reset());
@@ -85,11 +88,11 @@ export default function Register() {
         email,
         password,
         phoneNumber,
-        address : {
+        address: {
           street,
           city,
           state,
-          pincode
+          pincode,
         },
         role,
       };
@@ -112,7 +115,7 @@ export default function Register() {
             fontFamily: "sans-serif",
             borderBottom: "1px solid #000000",
             width: "fit-content",
-            color: "#1d2133",
+            color: "#2a3035",
             backgroundColor: "#f0f3ed",
           }}
         >
@@ -215,7 +218,13 @@ export default function Register() {
                   required
                 />
               </FormControl>
-              <FormControl style={{ width: "32%", marginRight: "auto", marginLeft : "auto" }}>
+              <FormControl
+                style={{
+                  width: "32%",
+                  marginRight: "auto",
+                  marginLeft: "auto",
+                }}
+              >
                 <InputLabel> State </InputLabel>
                 <Input
                   type="text"
@@ -225,7 +234,9 @@ export default function Register() {
                   required
                 />
               </FormControl>
-              <FormControl style={{ width: "32%", marginRight: "0px", marginLeft : "auto" }}>
+              <FormControl
+                style={{ width: "32%", marginRight: "0px", marginLeft: "auto" }}
+              >
                 <InputLabel> Pin Code</InputLabel>
                 <Input
                   type="text"
@@ -240,7 +251,7 @@ export default function Register() {
             <Button
               variant="contained"
               style={{
-                backgroundColor: "#1d2133",
+                backgroundColor: "#2a3035",
                 color: "#f0f3ed",
                 fontWeight: "bold",
                 fontSize: "15px",

@@ -222,7 +222,7 @@ function Orders() {
                             fontWeight: "bold",
                             borderBottom: "1px solid black",
                             zIndex: "1",
-                            backgroundColor: "#1d2133",
+                            backgroundColor: "#2a3035",
                             color: "#f0f3ed",
                           }}
                         >
@@ -232,7 +232,7 @@ function Orders() {
                       <TableCell
                         style={{
                           borderBottom: "1px solid black",
-                          backgroundColor: "#1d2133",
+                          backgroundColor: "#2a3035",
                           color: "#f0f3ed",
                         }}
                       ></TableCell>

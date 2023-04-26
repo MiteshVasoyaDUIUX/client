@@ -28,6 +28,7 @@ import Chat from "./pages/Client Pages/Chat";
 import SearchedQuary from "./pages/Client Pages/SearchedQuary";
 import DeletedUser from "./pages/Client Pages/DeletedUser";
 import BlockedUser from "./pages/Client Pages/BlockedUser";
+import Wishlist from "./pages/Client Pages/Wishlist";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/search/:params" element={<SearchedQuary />} />
             <Route path="/myorders" element={<MyOrders />} />
+            <Route path="/mywishlist" element={<Wishlist />} />
             <Route path="/buyer/chat" element={<Chat />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/addproduct" element={<AddProduct />} />

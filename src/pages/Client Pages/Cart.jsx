@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import {
   Card,
   FormControl,
@@ -20,7 +22,6 @@ import {
   reset,
   updateCartQuantity,
 } from "../../features/productsForClient/productsForClientSlice";
-import { useNavigate } from "react-router-dom";
 import { placeOrder } from "../../features/order/orderSlice";
 import { createRoot } from "react-dom/client";
 import EmailVerification from "../../components/EmailVerification";
@@ -47,6 +48,222 @@ function DeliveryAddress({ address, setDeliveryAddress }) {
         </div>
       </div>
     </>
+  );
+}
+
+function ProductCard({ item }) {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
+  const [quantity, setQuantity] = useState(item.quantity);
+  let subTotal = item.prodPrice * item.quantity;
+  subTotal = subTotal.toLocaleString("en-IN");
+
+  const handleRemoveButton = (id) => {
+    console.log("Remove Button is Clicked...", id);
+
+    dispatch(removeFromCart(id));
+  };
+
+  const handleQuantityChange = (sign, id) => {
+    switch (sign) {
+      case "+":
+        {
+          quantity < 10
+            ? setQuantity(quantity + 1)
+            : window.alert("You can Select Max 10 Quantity...");
+
+          //Update Cart Quantity...
+          if (quantity < 10) {
+            const newData = {
+              userId: user.user._id,
+              productId: id,
+              newQuantity: quantity + 1,
+            };
+            dispatch(updateCartQuantity(newData));
+            // console.log(quantity + 1);
+          }
+        }
+        break;
+      case "-":
+        {
+          quantity > 1 ? setQuantity(quantity - 1) : setQuantity(quantity);
+          console.log(sign, id);
+
+          if (quantity > 1) {
+            const newData = {
+              userId: user.user._id,
+              productId: id,
+              newQuantity: quantity - 1,
+            };
+            dispatch(updateCartQuantity(newData));
+          }
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  return (
+    <Grid item xl={10} style={{ marginLeft: "7%" }}>
+      <Card>
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              width: "auto",
+              height: "auto",
+              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
+              padding: "20px",
+            }}
+          >
+            <img
+              src={item.prodImage[0]}
+              className="card-image-content"
+              alt=""
+              style={{ width: "100px", height: "100px" }}
+            />
+          </div>
+          <div
+            style={{
+              width: "73%",
+              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
+              padding: "15px",
+            }}
+          >
+            <Typography variant="h6" component="div">
+              {item.prodName}
+            </Typography>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              style={{ marginTop: "5px" }}
+            >
+              Price : {item.prodPrice} ₹
+            </Typography>
+          </div>
+          <div
+            style={{ display: "block", position: "relative", padding: "15px" }}
+          >
+            {item.prodQuantity > 0 ? (
+              <>
+                <button
+                  className="cart-item-decrease-button"
+                  onClick={() => handleQuantityChange("-", item._id)}
+                  style={{
+                    marginLeft: "32%",
+                    width: "12%",
+                    marginTop: "1%",
+                    marginBottom: "4%",
+                  }}
+                >
+                  -
+                </button>
+                <input
+                  type="text"
+                  name="cart-quantity"
+                  id="cart-quantity"
+                  value={item.quantity}
+                  style={{
+                    width: "12%",
+                    height: "26px",
+                    outline: "none",
+                    border: "1px solid grey",
+                    fontSize: "18px",
+                    textAlign: "center",
+                  }}
+                  disabled
+                />
+                <button
+                  className="cart-item-icrease-button"
+                  onClick={() => handleQuantityChange("+", item._id)}
+                  style={{
+                    width: "12%",
+                  }}
+                >
+                  +
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="cart-item-decrease-button"
+                  onClick={() => handleQuantityChange("-", item._id)}
+                  style={{
+                    marginLeft: "32%",
+                    width: "12%",
+                    marginTop: "1%",
+                    marginBottom: "4%",
+                  }}
+                  disabled
+                >
+                  -
+                </button>
+                <input
+                  type="text"
+                  name="cart-quantity"
+                  id="cart-quantity"
+                  value={item.quantity}
+                  style={{
+                    width: "12%",
+                    height: "26px",
+                    outline: "none",
+                    border: "1px solid grey",
+                    fontSize: "18px",
+                    textAlign: "center",
+                  }}
+                  disabled
+                />
+                <button
+                  className="cart-item-icrease-button"
+                  onClick={() => handleQuantityChange("+", item._id)}
+                  style={{
+                    width: "12%",
+                  }}
+                  disabled
+                >
+                  +
+                </button>
+                <div
+                  style={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    width: "fit-content",
+                    marginTop: "1%",
+                    marginBottom: "4%",
+                    fontSize: "25px",
+                  }}
+                >
+                  Out Of Stock
+                </div>
+              </>
+            )}
+            <div>
+              <div
+                style={{
+                  width: "fitContent",
+                  marginTop: "10%",
+                  marginLeft: "2%",
+                  fontSize: "150%",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Subtotal : {subTotal} ₹
+              </div>
+            </div>
+            <button
+              className="remove-item-cart-button"
+              onClick={() => {
+                handleRemoveButton(item._id);
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </Card>
+    </Grid>
   );
 }
 
@@ -360,222 +577,6 @@ function PaymentDeliveryPage({
   );
 }
 
-function ProductCard({ item }) {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-
-  const [quantity, setQuantity] = useState(item.quantity);
-  let subTotal = item.prodPrice * item.quantity;
-  subTotal = subTotal.toLocaleString("en-IN");
-
-  const handleRemoveButton = (id) => {
-    console.log("Remove Button is Clicked...", id);
-
-    dispatch(removeFromCart(id));
-  };
-
-  const handleQuantityChange = (sign, id) => {
-    switch (sign) {
-      case "+":
-        {
-          quantity < 10
-            ? setQuantity(quantity + 1)
-            : window.alert("You can Select Max 10 Quantity...");
-
-          //Update Cart Quantity...
-          if (quantity < 10) {
-            const newData = {
-              userId: user.user._id,
-              productId: id,
-              newQuantity: quantity + 1,
-            };
-            dispatch(updateCartQuantity(newData));
-            // console.log(quantity + 1);
-          }
-        }
-        break;
-      case "-":
-        {
-          quantity > 1 ? setQuantity(quantity - 1) : setQuantity(quantity);
-          console.log(sign, id);
-
-          if (quantity > 1) {
-            const newData = {
-              userId: user.user._id,
-              productId: id,
-              newQuantity: quantity - 1,
-            };
-            dispatch(updateCartQuantity(newData));
-          }
-        }
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  return (
-    <Grid item xl={10} style={{ marginLeft: "7%" }}>
-      <Card>
-        <div style={{ display: "flex" }}>
-          <div
-            style={{
-              width: "auto",
-              height: "auto",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "20px",
-            }}
-          >
-            <img
-              src={item.prodImage[0]}
-              className="card-image-content"
-              alt=""
-              style={{ width: "100px", height: "100px" }}
-            />
-          </div>
-          <div
-            style={{
-              width: "73%",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "15px",
-            }}
-          >
-            <Typography variant="h6" component="div">
-              {item.prodName}
-            </Typography>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              style={{ marginTop: "5px" }}
-            >
-              Price : {item.prodPrice} ₹
-            </Typography>
-          </div>
-          <div
-            style={{ display: "block", position: "relative", padding: "15px" }}
-          >
-            {item.prodQuantity > 0 ? (
-              <>
-                <button
-                  className="cart-item-decrease-button"
-                  onClick={() => handleQuantityChange("-", item._id)}
-                  style={{
-                    marginLeft: "32%",
-                    width: "12%",
-                    marginTop: "1%",
-                    marginBottom: "4%",
-                  }}
-                >
-                  -
-                </button>
-                <input
-                  type="text"
-                  name="cart-quantity"
-                  id="cart-quantity"
-                  value={item.quantity}
-                  style={{
-                    width: "12%",
-                    height: "26px",
-                    outline: "none",
-                    border: "1px solid grey",
-                    fontSize: "18px",
-                    textAlign: "center",
-                  }}
-                  disabled
-                />
-                <button
-                  className="cart-item-icrease-button"
-                  onClick={() => handleQuantityChange("+", item._id)}
-                  style={{
-                    width: "12%",
-                  }}
-                >
-                  +
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="cart-item-decrease-button"
-                  onClick={() => handleQuantityChange("-", item._id)}
-                  style={{
-                    marginLeft: "32%",
-                    width: "12%",
-                    marginTop: "1%",
-                    marginBottom: "4%",
-                  }}
-                  disabled
-                >
-                  -
-                </button>
-                <input
-                  type="text"
-                  name="cart-quantity"
-                  id="cart-quantity"
-                  value={item.quantity}
-                  style={{
-                    width: "12%",
-                    height: "26px",
-                    outline: "none",
-                    border: "1px solid grey",
-                    fontSize: "18px",
-                    textAlign: "center",
-                  }}
-                  disabled
-                />
-                <button
-                  className="cart-item-icrease-button"
-                  onClick={() => handleQuantityChange("+", item._id)}
-                  style={{
-                    width: "12%",
-                  }}
-                  disabled
-                >
-                  +
-                </button>
-                <div
-                  style={{
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    width: "fit-content",
-                    marginTop: "1%",
-                    marginBottom: "4%",
-                    fontSize: "25px",
-                  }}
-                >
-                  Out Of Stock
-                </div>
-              </>
-            )}
-            <div>
-              <div
-                style={{
-                  width: "fitContent",
-                  marginTop: "10%",
-                  marginLeft: "2%",
-                  fontSize: "150%",
-                  fontFamily: "sans-serif",
-                }}
-              >
-                Subtotal : {subTotal} ₹
-              </div>
-            </div>
-            <button
-              className="remove-item-cart-button"
-              onClick={() => {
-                handleRemoveButton(item._id);
-              }}
-            >
-              Remove
-            </button>
-          </div>
-        </div>
-      </Card>
-    </Grid>
-  );
-}
-
 export default function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -788,7 +789,16 @@ export default function Cart() {
       ) : (
         <>
           <div align="center">
-            <h1>Cart is Empty</h1>
+            <h1
+              style={{
+                textAlign: "center",
+                fontFamily: "sans-serif",
+                fontSize: "35px",
+                fontWeight: "bold",
+              }}
+            >
+              Cart is Empty
+            </h1>
           </div>
         </>
       )}

@@ -30,20 +30,34 @@ const fetchAllOrders = async (userId, token) => {
             }
       }
 
-      // console.log("Config : ", config);
-
       const response = await axios.get(
             API_URL + "/buyer/fetchallorders/" + userId,
             config
           );
 
-      // console.log("Order Of User Id: ", response.data);
+      return response.data;
+};
+
+const giveRating = async (ratingData, token) => {
+      const config = {
+            headers : {
+                  Authorization : `Bearer ${token}`,
+            }
+      }
+
+      const response = await axios.post(
+            API_URL + "/buyer/rating/",
+            ratingData,
+            config
+          );
+
       return response.data;
 };
 
 const orderService = {
       placeOrder,
-      fetchAllOrders
+      fetchAllOrders,
+      giveRating
 };
 
 export default orderService;

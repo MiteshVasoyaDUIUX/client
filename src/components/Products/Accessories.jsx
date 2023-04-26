@@ -64,8 +64,8 @@ const filterByPrice = (lower, upper, prodArray) => {
 const filterByPODEligibility = (prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    let deliveryType = product.deliveryType;
-    if (deliveryType.includes("COD")) {
+    let paymentType = product.paymentType;
+    if (paymentType?.includes("COD")) {
       filteredArray.push(product);
     }
   });
@@ -75,7 +75,12 @@ const filterByPODEligibility = (prodArray) => {
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    if (product.discount > discount) {
+    const calculatedDisc = Math.floor(
+      ((product.prodMRP - product.prodPrice) * 100) / product.prodMRP
+    );
+
+    if (calculatedDisc > discount) {
+      console.log("Discount : ", calculatedDisc);
       filteredArray.push(product);
     }
   });
@@ -169,6 +174,7 @@ function Accessories() {
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
           <AccessoriesItems newProdArray={newProdArray} />
+          {console.log("Products : ", newProdArray)}
         </div>
       </div>
     </>

@@ -8,6 +8,7 @@ const initialState = {
   isError: false,
   isPlaced: false,
   isPlacing: false,
+  isRated : false,
   message: "",
 };
 
@@ -40,6 +41,27 @@ export const fetchAllOrders = createAsyncThunk(
       // console.log("Token : ", token);
 
       return await orderService.fetchAllOrders(userId, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const giveRating = createAsyncThunk(
+  "client/order/giveRating",
+  async (ratingData, thunkAPI) => {
+    try {
+      //'token' may be not use because only user can add the goal...
+      const token = thunkAPI.getState().auth.user.token;
+      console.log("ratingData : ", ratingData);
+
+      return await orderService.giveRating(ratingData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -101,6 +123,14 @@ const orderSlice = createSlice({
         state.isPlaced = false;
         state.isPlacing = false;
         state.isFetching = false;
+        state.message = action.payload;
+      })
+      .addCase(giveRating.pending, (state) => {})
+      .addCase(giveRating.fulfilled, (state, action) => {
+        state.isRated = true
+        console.log("Rating Done : ", state.isRated)
+      })
+      .addCase(giveRating.rejected, (state, action) => {
         state.message = action.payload;
       });
   },

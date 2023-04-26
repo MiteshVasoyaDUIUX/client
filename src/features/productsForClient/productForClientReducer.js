@@ -57,7 +57,22 @@ const fetchWishList = async (userId, token) => {
     },
   };
   const response = await axios.get(
-    API_URL + "/buyer/fetchwishlist/" + userId,
+    API_URL + "/buyer/fetchwishlistprodid/" + userId,
+    config
+  );
+  // console.log("Fetch Wishlist Initially : ", response.data);
+  return response.data;
+};
+
+const fetchWishListProducts = async (userId, token) => {
+  // console.log("Token : ", data.userId);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(
+    API_URL + "/buyer/fetchwishlistproducts/" + userId,
     config
   );
   // console.log("Fetch Wishlist Initially : ", response.data);
@@ -115,6 +130,7 @@ const productServiceForClient = {
   fetchProducts,
   addToCart,
   fetchWishList,
+  fetchWishListProducts,
   fetchCart,
   addToWishList,
   fetchOneProduct,

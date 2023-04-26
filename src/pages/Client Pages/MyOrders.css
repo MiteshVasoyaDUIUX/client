@@ -10,9 +10,8 @@
       transition: font-weight 500 ease-in-out;
       width: 90%;
       text-decoration: underline;
-      border: #1d2133;
+      border: #2a3035;
       cursor: default;
-      /* border: 1px solid black; */
 }
 
 
@@ -42,10 +41,16 @@
 }
 
 .message-seller-button:hover {
-      background-color: #1d2133;
+      background-color: #2a3035;
       color: white;
 }
 
 .message-seller-button:active {
       transform: scale(0.95);
+}
+
+.rate-text:hover {
+      text-decoration: underline;
+      cursor: pointer;
+      color: darkblue;
 }

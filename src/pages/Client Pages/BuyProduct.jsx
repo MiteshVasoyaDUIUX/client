@@ -15,13 +15,13 @@ import { ErrorBoundary } from "../../components/ErrorBoundary";
 import { fetchOneProduct } from "../../features/productsForClient/productsForClientSlice";
 import { placeOrder } from "../../features/order/orderSlice";
 import Spinner from "../../components/Spinner";
-import { reset } from "../../features/auth/authSlice";
+import { reset, updateUserData } from "../../features/auth/authSlice";
 import { Image } from "../../components/DetailedProductPage.jsx/Images";
 import EmailVerification from "../../components/EmailVerification";
 
 import "./BuyProduct.css";
 
-const userData = JSON.parse(localStorage.getItem("user"));
+let userData;
 
 function DeliveryAddress({ address, setDeliveryAddress }) {
   const handleAddressChange = () => {
@@ -67,16 +67,7 @@ function BuyProduct() {
   const { product } = useSelector((state) => state.productsForClient);
   const { user } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!user) {
-      console.log("Log Out...");
-    } else{
-      console.log("Logged In")
-    }
-  }, [user]);
-
   const { isPlaced, isPlacing } = useSelector((state) => state.order);
-  const { _id, email, emailVerified, address, name, phoneNumber } = user.user;
   const { isVerified } = useSelector((state) => state.auth);
   const { street, city, state, pincode } = newAddress;
 
@@ -86,6 +77,11 @@ function BuyProduct() {
   useEffect(() => {
     if (!user) {
       navigate("/");
+    }
+
+    if (user) {
+      // console.log("User Logged...")
+      userData = JSON.parse(localStorage.getItem("user"));
     }
 
     dispatch(fetchOneProduct(productId));
@@ -126,52 +122,52 @@ function BuyProduct() {
     if (paymentOption === "") {
       alert("Select Payment Option");
     } else {
-      const userId = _id;
-
-      const newData = {
-        userId,
-        productId,
-        prodImage: product.prodImage,
-        prodName: product.prodName,
-        quantity,
-        productPrice: product.prodPrice,
-        paymentOption,
-        deliveryAddress: deliveryAddress,
-      };
-
-      let allAddress = userData.user.address;
-      let addressFound = false;
-
-      for (let index = 0; index < allAddress.length; index++) {
-        const element = allAddress[index];
-
-        if (
-          element.street === deliveryAddress.street &&
-          element.city === deliveryAddress.city &&
-          element.state === deliveryAddress.state &&
-          element.pincode === deliveryAddress.pincode
-        ) {
-          addressFound = true;
-        } else {
-          continue;
-        }
-      }
-
-      if (!addressFound) {
-        allAddress.push(deliveryAddress);
-        localStorage.setItem("user", JSON.stringify(userData));
-      }
-
-      let checkoutData = [];
-      checkoutData.push(newData);
-
-      if (!emailVerified) {
+      if (!user.user.emailVerified) {
         setEmailVerPage(true);
 
         if (!emailVerPage) {
           setMainClass("blur-place-order-page");
         }
       } else {
+        const userId = user.user._id;
+
+        const newData = {
+          userId,
+          productId,
+          prodImage: product.prodImage,
+          prodName: product.prodName,
+          quantity,
+          productPrice: product.prodPrice,
+          paymentOption,
+          deliveryAddress: deliveryAddress,
+        };
+
+        let allAddress = userData.user.address;
+        console.log("Address : ", allAddress);
+        let addressFound = false;
+
+        for (let index = 0; index < allAddress.length; index++) {
+          const element = allAddress[index];
+
+          if (
+            element.street === deliveryAddress.street &&
+            element.city === deliveryAddress.city &&
+            element.state === deliveryAddress.state &&
+            element.pincode === deliveryAddress.pincode
+          ) {
+            addressFound = true;
+          } else {
+            continue;
+          }
+        }
+
+        if (!addressFound) {
+          allAddress.push(deliveryAddress);
+          localStorage.setItem("user", JSON.stringify(userData));
+        }
+
+        let checkoutData = [];
+        checkoutData.push(newData);
         dispatch(placeOrder(checkoutData));
       }
     }
@@ -261,14 +257,12 @@ function BuyProduct() {
                       Delivery Address
                     </div>
                     <div className="address-select" id="address-select-id">
-                      {address.map((address) => {
+                      {user?.user?.address.map((address) => {
                         return (
                           <>
                             <DeliveryAddress
                               address={address}
                               setDeliveryAddress={setDeliveryAddress}
-                              phoneNumber={phoneNumber}
-                              userName={name}
                             />
                           </>
                         );
@@ -474,7 +468,7 @@ function BuyProduct() {
             {emailVerPage ? (
               <div className="email-verification">
                 <EmailVerification
-                  email={email}
+                  email={user.user.email}
                   emailVerPage={emailVerPage}
                   setEmailVerPage={setEmailVerPage}
                   setMainClass={setMainClass}

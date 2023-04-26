@@ -7,7 +7,7 @@ function BlockedUser() {
     <>
       <div className="blocked-user-box">
         <div className="blocked-user-box-icon">
-          <TbLockAccessOff fontSize="70px" color="#1d2133" />
+          <TbLockAccessOff fontSize="70px" color="#2a3035" />
         </div>
         <div className="blocked-user-box-text">
           Your Account Has Been Blocked By Admin

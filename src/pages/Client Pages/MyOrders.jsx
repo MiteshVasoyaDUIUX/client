@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllOrders } from "../../features/order/orderSlice";
+import { fetchAllOrders, giveRating } from "../../features/order/orderSlice";
 import "./MyOrders.css";
-import { styled } from "@mui/material/styles";
 import { reset } from "../../features/admin/adminSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { IconButton } from "@mui/material";
+import { Rating } from "@mui/material";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -26,7 +26,7 @@ const columns = [
     label: "Product Name",
     align: "center",
     textAlign: "left",
-    width: "50%",
+    width: "40%",
   },
   {
     id: "createdAt",
@@ -61,6 +61,13 @@ const columns = [
     textAlign: "center",
   },
   {
+    id: "rating",
+    label: "Rating",
+    align: "center",
+    textAlign: "center",
+    width: "10%",
+  },
+  {
     id: "messageAdmin",
     label: "",
     align: "center",
@@ -68,10 +75,30 @@ const columns = [
   },
 ];
 
-function Row(props) {
-  const { row } = props;
+function Row({ row }) {
   let status = "";
 
+  const [openRating, setOpenRating] = useState(false);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [readOnly, setReadOnly] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleRatingChanges = (event, newValue) => {
+    setRatingValue(newValue);
+
+    const ratingData = {
+      orderId: row._id,
+      userId: row.userId,
+      productId: row.productId,
+      ratingValue: newValue,
+    };
+
+    setReadOnly(true);
+
+    dispatch(giveRating(ratingData));
+
+    toast.success("Thank You for Feedback...");
+  };
   return (
     <>
       <TableRow
@@ -82,15 +109,57 @@ function Row(props) {
       >
         {columns.map((column) => {
           const value = row[column.id];
+          let rate = false;
 
           if (column.id === "status") {
             status = value;
           }
+
+          if (status === "Success" && (!row.rating || row.rating === 0)) {
+            rate = true;
+          }
+
           return (
             <TableCell key={value} align={column.textAlign}>
               {column.id !== "messageAdmin" ? (
                 column.id === "totalAmount" || column.id === "createdAt" ? (
                   column.format(value)
+                ) : column.id === "rating" ? (
+                  <>
+                    {rate === true ? (
+                      <>
+                        {openRating === true ? (
+                          <>
+                            <Rating
+                              name="simple-controlled"
+                              value={ratingValue}
+                              onChange={handleRatingChanges}
+                              readOnly={readOnly}
+                              style={{ zIndex: 0 }}
+                            />
+                          </>
+                        ) : (
+                          <div
+                            className="rate-text"
+                            onClick={() => setOpenRating(true)}
+                          >
+                            Rate this Product
+                          </div>
+                        )}
+                      </>
+                    ) : status === "Success" && rate === false ? (
+                      <>
+                        <Rating
+                          name="read-only"
+                          value={row.rating}
+                          style={{ zIndex: 0 }}
+                          readOnly
+                        />
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </>
                 ) : (
                   value
                 )
@@ -114,13 +183,13 @@ function Row(props) {
 }
 
 export default function MyOrders() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { orders } = useSelector((state) => state.order);
+  const { orders, isRated } = useSelector((state) => state.order);
   let userId;
 
   useEffect(() => {
@@ -136,7 +205,7 @@ export default function MyOrders() {
     return () => {
       reset();
     };
-  }, [dispatch, user]);
+  }, [dispatch, user, isRated]);
 
   if (user) {
     userId = user.user._id;
@@ -154,7 +223,7 @@ export default function MyOrders() {
   return (
     <>
       <section className="content" style={{ marginTop: "55px" }}>
-        {orders.length > 0 ? (
+        {orders?.length > 0 ? (
           <div className="users">
             <Paper
               sx={{
@@ -177,8 +246,8 @@ export default function MyOrders() {
                             width: column.width,
                             fontWeight: "bold",
                             borderBottom: "1px solid black",
-                            zIndex: "0",
-                            backgroundColor: "#1d2133",
+                            zIndex: "1",
+                            backgroundColor: "#2a3035",
                             color: "#f0f3ed",
                           }}
                         >
@@ -219,7 +288,7 @@ export default function MyOrders() {
               fontWeight: "bold",
             }}
           >
-            No Users Found
+            No Orders Found
           </div>
         )}
       </section>

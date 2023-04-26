@@ -34,7 +34,7 @@ function SideBar() {
             to="/admin/addproduct"
           >
             <li>
-              <MdInventory /> <div>Add Products </div>
+              <SiAddthis /> <div>Add Products </div>
             </li>
           </Link>
           <Link
@@ -42,7 +42,8 @@ function SideBar() {
             to="/admin/allproduct"
           >
             <li>
-              <SiAddthis /> <div>Inventory </div>
+              <MdInventory />
+              <div>Inventory </div>
             </li>
           </Link>
           <Link

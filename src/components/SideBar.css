@@ -2,7 +2,7 @@
       /* border: 1px solid rgb(204, 30, 30); */
       width: 45px;
       color: #f0f3ed;
-      background-color: #1d2133;
+      background-color: #2a3035;
       height: calc(100vh - 52px);
       overflow: hidden;
       transition: ease-in-out 0.18s;
@@ -14,7 +14,7 @@
       /* border: 1px solid rgb(204, 30, 30); */
       width: 210px;
       color: #f0f3ed;
-      background-color: #1d2133;
+      background-color: #2a3035;
       height: calc(100vh - 52px);
 }
 
@@ -38,7 +38,7 @@
 
 .sidebar ul li:hover {
       background-color: #f0f3ed;
-      color: #1d2133;
+      color: #2a3035;
       cursor: pointer;
 }
 

@@ -39,7 +39,7 @@ const pagesForAdmin = [
   "All Users",
   "Messages",
 ];
-const optionsForClient = ["Cart", "My Orders", "Chat", "Logout"];
+const optionsForClient = ["Cart", "My Orders", "My Wishlist", "Logout"];
 const optionsForAdmin = ["Profile", "Logout"];
 const optionIfNotLoggedIn = ["Login", "Register"];
 
@@ -55,9 +55,9 @@ function Header() {
   // console.log("User Role : ", user);
 
   const onLogout = () => {
+    navigate("/");
     dispatch(logout());
     dispatch(reset());
-    navigate("/");
     console.log("OnLogOUT");
   };
 
@@ -270,6 +270,17 @@ function Header() {
                       to="/myorders"
                     >
                       {optionsForClient[1]}
+                    </Link>
+                  </MenuItem>
+                  <MenuItem
+                    key={optionsForClient[2]}
+                    onClick={handleCloseUserMenu}
+                  >
+                    <Link
+                      style={{ textDecoration: "None", color: "black" }}
+                      to="/mywishlist"
+                    >
+                      {optionsForClient[2]}
                     </Link>
                   </MenuItem>
                   <MenuItem
