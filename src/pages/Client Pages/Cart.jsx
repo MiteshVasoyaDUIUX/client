@@ -588,9 +588,10 @@ export default function Cart() {
   const [emailVerPage, setEmailVerPage] = useState(false);
   const [mainClass, setMainClass] = useState("cart-payment-details");
 
+
   const { user } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.productsForClient);
-  const { orderId, isPlaced, isPlacing } = useSelector((state) => state.order);
+  const { isPlaced } = useSelector((state) => state.order);
   const { _id, email, emailVerified, address, name, phoneNumber } = user.user;
   const [deliveryAddress, setDeliveryAddress] = useState({});
 

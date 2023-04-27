@@ -126,6 +126,22 @@ const addToWishList = async (data, token) => {
   return response.data;
 };
 
+const removeFromWishlist = async (data, token) => {
+  // console.log("Token : ", data.userId);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.put(
+    API_URL + "/buyer/removewishlist/" + data.userId,
+    data,
+    config
+  );
+  return response.data;
+};
+
+
 const productServiceForClient = {
   fetchProducts,
   addToCart,
@@ -137,6 +153,7 @@ const productServiceForClient = {
   updateCart,
   removeFromCart,
   searchProduct,
+  removeFromWishlist
 };
 
 export default productServiceForClient;

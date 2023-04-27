@@ -25,7 +25,7 @@ import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 import ProductCard from "../ProductCard";
 import { ProductCardsGrid } from "../ProductCardGrid";
 
-function OtherProductsItem({ newProdArray }) {
+function OtherProductsItem({ newProdArray, wishlist }) {
   return (
     <>
       <div>
@@ -35,7 +35,8 @@ function OtherProductsItem({ newProdArray }) {
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        <ProductCardsGrid products={newProdArray} />
+        {console.log("Wishlist  :", wishlist)}
+        <ProductCardsGrid products={newProdArray} wishlist={wishlist} />
       </div>
     </>
   );
@@ -92,7 +93,7 @@ function OtherProducts() {
   let newProdArray = [];
 
   const dispatch = useDispatch();
-  const { products, isLoading, isError, message } = useSelector(
+  const { products, wishlist, isLoading, isError, message } = useSelector(
     (state) => state.productsForClient
   );
 
@@ -178,7 +179,7 @@ function OtherProducts() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <OtherProductsItem newProdArray={newProdArray} />
+          <OtherProductsItem newProdArray={newProdArray} wishlist={wishlist} />
         </div>
       </div>
     </>

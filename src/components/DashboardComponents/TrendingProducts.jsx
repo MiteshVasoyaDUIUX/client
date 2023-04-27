@@ -27,21 +27,30 @@ import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 import ProductCard from "../ProductCard";
 import Spinner from "../Spinner";
 
-function ProductCards({ trendingProducts }) {
+function ProductCards({ trendingProducts, wishlist }) {
+  let inWishlist;
+
   return (
     <>
-      {trendingProducts.map((product) => (
-        <Grid>
-          <ProductCard product={product} />
-        </Grid>
-      ))}
+      {trendingProducts.map((product) => {
+        if (wishlist.includes(product._id)) {
+          inWishlist = true;
+        } else {
+          inWishlist = false;
+        }
+        return (
+          <Grid>
+            <ProductCard product={product} inWishlist={inWishlist} />
+          </Grid>
+        );
+      })}
     </>
   );
 }
 
 function TrendingProducts() {
   const dispatch = useDispatch();
-  const { products, isFetching, isError, message } = useSelector(
+  const { products, wishlist, isFetching, isError, message } = useSelector(
     (state) => state.productsForClient
   );
 
@@ -84,7 +93,10 @@ function TrendingProducts() {
         <ErrorBoundary>
           <Grid container spacing={0}>
             <Grid container item spacing={0}>
-              <ProductCards trendingProducts={trendingProducts} />
+              <ProductCards
+                trendingProducts={trendingProducts}
+                wishlist={wishlist}
+              />
             </Grid>
           </Grid>
         </ErrorBoundary>

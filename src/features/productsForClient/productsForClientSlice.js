@@ -140,6 +140,29 @@ export const addToWishList = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
 
       const message = await productServiceForClient.addToWishList(data, token);
+      return message;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const removeFromWishlist = createAsyncThunk(
+  "productsForClient/removeFromWishlist",
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+
+      const message = await productServiceForClient.removeFromWishlist(
+        data,
+        token
+      );
       // console.log("TOTKEOKE : ", message);
       return message;
     } catch (error) {
@@ -404,6 +427,30 @@ const productForClientSlice = createSlice({
         state.isError = true;
         state.isAddingToWishList = false;
         state.isAddedToWishList = false;
+        state.message = action.payload;
+      })
+      .addCase(removeFromWishlist.pending, (state) => {
+        state.isError = false;
+        state.isAddingToWishList = true;
+        state.isAddedToWishList = false;
+        state.message = "";
+      })
+      .addCase(removeFromWishlist.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isAddingToWishList = false;
+        state.isAddedToWishList = true;
+        state.wishlistProducts = state.wishlistProducts.filter(
+          (product) => product._id !== action.payload.productId
+        );
+        state.wishlist = state.wishlist.filter(
+          (product) => product._id !== action.payload.productId
+        );
+        console.log("Response Payload : ", action.payload);
+      })
+      .addCase(removeFromWishlist.rejected, (state, action) => {
+        state.isError = true;
+        state.isRemovingFromWishList = false;
+        state.isRemoveFromWishList = false;
         state.message = action.payload;
       });
   },
