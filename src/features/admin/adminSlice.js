@@ -16,7 +16,7 @@ export const acceptOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      console.log("ORDER ID SLICE  : ", orderId);
+      // console.log("ORDER ID SLICE  : ", orderId);
       return await adminService.acceptOrder(orderId, token);
     } catch (error) {
       const message =
@@ -36,7 +36,7 @@ export const cancelOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      console.log("ORDER ID SLICE  : ", orderId);
+      // console.log("ORDER ID SLICE  : ", orderId);
       return await adminService.cancelOrder(orderId, token);
     } catch (error) {
       const message =
@@ -101,7 +101,7 @@ const adminSlice = createSlice({
         state.isAccepted = false;
         state.isRejected = true;
         state.allOrders = action.payload;
-        console.log("New State : ", action.payload);
+        // console.log("New State : ", action.payload);
       })
       .addCase(fetchAllOrders.pending, (state) => {
         state.isOrderFetching = true;

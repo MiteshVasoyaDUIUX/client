@@ -146,7 +146,7 @@ export default function ProductCard({ product }) {
             )}
           </IconButton>
           <IconButton onClick={handleWishListButton}>
-            {wishlist.includes(product._id) ? (
+            {user && wishlist.includes(product._id) ? (
               <FavouriteRoundedIcon color="error" />
             ) : (
               <FavoriteBorderIcon color="error" />

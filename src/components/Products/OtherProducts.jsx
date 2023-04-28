@@ -35,7 +35,7 @@ function OtherProductsItem({ newProdArray, wishlist }) {
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        {console.log("Wishlist  :", wishlist)}
+        {/* {console.log("Wishlist  :", wishlist)} */}
         <ProductCardsGrid products={newProdArray} wishlist={wishlist} />
       </div>
     </>

@@ -18,10 +18,9 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { uploadProduct, reset } from "../../features/product/productSlice";
 import Spinner from "../../components/Spinner";
-import "./AddEditProduct.css"
+import "./AddEditProduct.css";
 
 function AddProduct() {
   const dispatch = useDispatch();
@@ -118,6 +117,7 @@ function AddProduct() {
       URL.createObjectURL(e[1])
     );
     setImage([...image, ...ImagesArray]);
+    // console.log("Image : ", image);
   };
 
   const handleCategoryChange = (e) => {
@@ -148,12 +148,12 @@ function AddProduct() {
       alert("Enter Product Name");
     } else if (prodDesc === "") {
       alert("Enter Product Description");
-    } else if (prodQuantity === "") {
-      alert("Enter Product Quantity");
-    } else if (prodPrice === "") {
-      alert("Enter Product Price");
-    } else if (prodMRP === "") {
-      alert("Enter Product MRP");
+    } else if (prodQuantity === "" || Number(prodQuantity) < 0) {
+      alert("Enter Valid Quantity");
+    } else if (prodPrice === "" || Number(prodPrice) < 0) {
+      alert("Enter Valid Product Price");
+    } else if (prodMRP === "" || Number(prodMRP) < 0) {
+      alert("Enter Valid MRP");
     } else if (Number(prodMRP) < Number(prodPrice)) {
       alert("MRP must be greater than Price");
     } else if (selectedCategory === "") {
@@ -173,7 +173,7 @@ function AddProduct() {
       formData.append("prodPrice", prodPrice);
       formData.append("prodImage", image);
 
-      // console.log("prodPaymentType : ", );
+      // console.log("image Array : ", Number(prodPrice));
       dispatch(uploadProduct(formData));
 
       // console.log("In Product Upload Page...", productData);
@@ -254,6 +254,7 @@ function AddProduct() {
               name="prodQuantity"
               placeholder="Quantity"
               style={{ width: "30%", marginLeft: "0%", marginRight: "auto" }}
+              InputProps={{ inputProps: { min: 0 } }}
               required
             />
 

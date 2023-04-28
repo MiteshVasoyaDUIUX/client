@@ -72,16 +72,6 @@
       border-radius: 3px;
 }
 
-.client-time-of-sent-message {
-      font-size: 9px;
-      float: right;
-}
-
-.client-time-of-received-message {
-      font-size: 9px;
-      float: left;
-}
-
 .client-message-box {
       width: 90%;
       height: 46px;
@@ -92,42 +82,45 @@
 }
 
 .message-from-other {
-      background-color: rgb(253, 253, 253);
-      box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.130);
-      color: rgb(8, 0, 0);
-      border-radius: 8px 8px 8px 1px;
-      margin-left: 10px;
-      margin-top: 7px;
-      margin-bottom: 7px;
-      min-height: 30px;
       height: fit-content;
-      padding: 7px 10px 15px 10px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 17px;
       width: fit-content;
+      margin: 8px auto 8px 10px;
+      background-color: rgb(253, 253, 253);
+      padding: 7px 10px 6px 10px;
+      border-radius: 8px 8px 1px 8px;
+      box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.130);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      color: rgb(8, 0, 0);
       max-width: 600px;
       word-break: break-all;
       overflow: visible;
-      /* overflow-anchor: '-'; */
 }
 
 .own-message {
-      background-color: rgb(193, 247, 192);
-      box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.130);
-      color: rgb(8, 0, 0);
-      /* border: 1px solid black; */
-      border-radius: 8px 8px 1px 8px;
-      margin-left: auto;
-      margin-right: 10px;
-      margin-top: 7px;
-      margin-bottom: 7px;
-      min-height: 50px;
       height: fit-content;
-      padding: 7px 10px 1px 10px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 17px;
       width: fit-content;
+      margin: 8px 10px 8px auto;
+      background-color: rgb(193, 247, 192);
+      padding: 7px 10px 6px 10px;
+      border-radius: 8px 8px 1px 8px;
+      box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.130);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      color: rgb(8, 0, 0);
       max-width: 600px;
       word-break: break-all;
       overflow: visible;
+}
+
+.client-sent-message-time {
+      font-size: 9px;
+      width: fit-content;
+      margin: 0 0 0 auto;
+}
+
+.client-time-of-received-message {
+      font-size: 9px;
+      width: fit-content;
+      margin: 0 auto 0 0;
 }

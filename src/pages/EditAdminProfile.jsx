@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 function EditAdminProfile() {
   const { users } = useSelector((state) => state.auth);
-  console.log("User Profile : ", users);
+  // console.log("User Profile : ", users);
   return <div style={{ margin: "150px" }}>EditAdminProfile</div>;
 }
 

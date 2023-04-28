@@ -80,7 +80,7 @@ const filterByDiscount = (discount, prodArray) => {
     );
 
     if (calculatedDisc > discount) {
-      console.log("Discount : ", calculatedDisc);
+      // console.log("Discount : ", calculatedDisc);
       filteredArray.push(product);
     }
   });
@@ -174,7 +174,7 @@ function Accessories() {
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
           <AccessoriesItems newProdArray={newProdArray} />
-          {console.log("Products : ", newProdArray)}
+          {/* {console.log("Products : ", newProdArray)} */}
         </div>
       </div>
     </>

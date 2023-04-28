@@ -12,6 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
+import "./Login.css";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -48,7 +49,9 @@ export default function Login() {
       }
     }
 
-    dispatch(reset());
+    return () => {
+      dispatch(reset());
+    }
   }, [user, isSuccess, isError, message, navigate, dispatch]);
 
   if (isLoading) {
@@ -66,6 +69,8 @@ export default function Login() {
     // window.alert(`Email : ${email}, Password : ${password}`);
     if (email === "" || password === "") {
       window.alert("Fill all the fields...");
+    } else if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      window.alert("Enter Valid Email Id")
     } else {
       const userData = {
         email,
@@ -77,40 +82,8 @@ export default function Login() {
   return (
     <>
       <div className="loginform">
-        <h1
-          style={{
-            textAlign: "center",
-            marginTop: "70px",
-            marginBottom: "50px",
-            marginLeft: "auto",
-            marginRight: "auto",
-            padding: "20px",
-            fontFamily: "sans-serif",
-            borderBottom: "1px solid #000000",
-            width: "fit-content",
-            color: "#000000",
-            backgroundColor: "#f0f3ed",
-            cursor: "default",
-          }}
-        >
-          Login
-        </h1>
-        <FormGroup
-          style={{
-            width: "50%",
-            marginLeft: "auto",
-            marginRight: "auto",
-            paddingTop: "110px",
-            paddingBottom: "110px",
-            paddingLeft: "60px",
-            paddingRight: "60px",
-            border: "1px solid #1d21338F",
-            boxShadow: "3px 3px 20px -1px #0C2D488F",
-            borderRadius: "30px",
-            backgroundColor: "#f0f3ed",
-          }}
-        >
-          {/* Change color of border of the box */}
+        <h1 className="login-title">Login</h1>
+        <FormGroup className="login-form">
           <FormControl>
             <InputLabel> Enter Email :</InputLabel>
             <Input
@@ -133,6 +106,14 @@ export default function Login() {
               required
             />
           </FormControl>
+          <div
+            className="forgot-link"
+            onClick={() => {
+              navigate("/resetpassword");
+            }}
+          >
+            Forgot Password ?
+          </div>
           <br />
           <Button
             variant="contained"
@@ -141,12 +122,21 @@ export default function Login() {
               color: "White",
               fontWeight: "bold",
               fontSize: "15px",
-              marginTop: "20px",
+              marginTop: "5px",
             }}
+            className="login-button"
             onClick={handleSubmit}
           >
             Login
           </Button>
+          <div
+            className="sign-up-link"
+            onClick={() => {
+              navigate("/register");
+            }}
+          >
+            Doesn't Have An Account ? Click Here To Sign Up
+          </div>
         </FormGroup>
       </div>
     </>

@@ -60,7 +60,7 @@ export default function Register() {
       // toast.success("Verification Email has been sent to you Email Address...")
       // navigate("/");
       navigate("/", { state: { from: location.pathname } });
-      console.log("Location : ", location.pathname);
+      // console.log("Location : ", location.pathname);
     }
 
     dispatch(reset());
@@ -81,7 +81,13 @@ export default function Register() {
     e.preventDefault();
 
     if (password !== password2) {
-      window.alert("Password doesn't match...");
+      window.alert("Password doesn't match");
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      window.alert("Enter Valid Email ID");
+    } else if (Number(phoneNumber) && phoneNumber.length !== 10) {
+      window.alert("Enter Valid Mobile Number" + phoneNumber);
+    } else if (!Number(pincode)) {
+      window.alert("Enter Valid PINCODE");
     } else {
       const userData = {
         name,
@@ -96,8 +102,8 @@ export default function Register() {
         },
         role,
       };
-      console.log("In register Page User Data : ", userData);
-      dispatch(register(userData));
+      // console.log("In register Page User Data : ");
+      // dispatch(register(userData));
     }
   };
 

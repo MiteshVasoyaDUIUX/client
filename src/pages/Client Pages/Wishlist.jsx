@@ -15,7 +15,7 @@ function ProductCard({ item, userId }) {
   const navigate = useNavigate();
 
   const handleRemoveButton = (id) => {
-    console.log("Remove Button is Clicked...", id);
+    // console.log("Remove Button is Clicked...", id);
 
     const data = {
       userId,
@@ -116,7 +116,7 @@ function Wishlist() {
     }
   }, []);
 
-  console.log("Wishlist : ", wishlistProducts);
+  // console.log("Wishlist : ", wishlistProducts);
   return (
     <>
       {wishlistProducts.length > 0 ? (
@@ -134,7 +134,7 @@ function Wishlist() {
           </div>
           <div>
             {wishlistProducts.map((wishlist) => {
-              return <ProductCard item={wishlist} userId={user.user._id} />;
+              return <ProductCard item={wishlist} userId={user?.user._id} />;
             })}
           </div>
         </>

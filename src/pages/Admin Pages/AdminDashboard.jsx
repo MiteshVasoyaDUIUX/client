@@ -152,8 +152,8 @@ function AdminDashboard() {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
-  const { users } = useSelector((state) => state.user);
-  const { orderMonthwise } = useSelector((state) => state.user);
+  const { users } = useSelector((state) => state.users);
+  const { orderMonthwise } = useSelector((state) => state.users);
   const { allOrders } = useSelector((state) => state.admin);
   const { products } = useSelector((state) => state.product);
 

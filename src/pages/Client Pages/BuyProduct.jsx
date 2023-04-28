@@ -65,10 +65,9 @@ function BuyProduct() {
     pincode: "",
   });
   const { product } = useSelector((state) => state.productsForClient);
-  const { user } = useSelector((state) => state.auth);
+  const { user,isVerified } = useSelector((state) => state.auth);
 
   const { isPlaced, isPlacing } = useSelector((state) => state.order);
-  const { isVerified } = useSelector((state) => state.auth);
   const { street, city, state, pincode } = newAddress;
 
   let productId = params.id.split("&")[0];
@@ -143,7 +142,7 @@ function BuyProduct() {
         };
 
         let allAddress = userData.user.address;
-        console.log("Address : ", allAddress);
+        // console.log("Address : ", allAddress);
         let addressFound = false;
 
         for (let index = 0; index < allAddress.length; index++) {

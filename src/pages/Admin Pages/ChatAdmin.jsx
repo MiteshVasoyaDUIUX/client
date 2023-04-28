@@ -126,14 +126,14 @@ function Chat() {
     });
 
     socketIO.on("disconnect", () => {
-      console.log("Disconnect From....");
+      // console.log("Disconnect From....");
     });
 
     if (scrollRef.current && toScroll === 1) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
-      console.log("SCROLL VALUE : ", toScroll);
+      // console.log("SCROLL VALUE : ", toScroll);
       setToScroll(0);
-      console.log(" UPDATED SCROLL VALUE : ", toScroll);
+      // console.log(" UPDATED SCROLL VALUE : ", toScroll);
     }
   }, [openConversationId]);
 

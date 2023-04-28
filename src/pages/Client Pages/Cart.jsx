@@ -60,7 +60,7 @@ function ProductCard({ item }) {
   subTotal = subTotal.toLocaleString("en-IN");
 
   const handleRemoveButton = (id) => {
-    console.log("Remove Button is Clicked...", id);
+    // console.log("Remove Button is Clicked...", id);
 
     dispatch(removeFromCart(id));
   };
@@ -88,7 +88,7 @@ function ProductCard({ item }) {
       case "-":
         {
           quantity > 1 ? setQuantity(quantity - 1) : setQuantity(quantity);
-          console.log(sign, id);
+          // console.log(sign, id);
 
           if (quantity > 1) {
             const newData = {

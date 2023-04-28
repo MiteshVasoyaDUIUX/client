@@ -22,7 +22,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 import ProductCard from "../ProductCard";
 import Spinner from "../Spinner";
@@ -50,6 +50,7 @@ function ProductCards({ trendingProducts, wishlist }) {
 
 function TrendingProducts() {
   const dispatch = useDispatch();
+
   const { products, wishlist, isFetching, isError, message } = useSelector(
     (state) => state.productsForClient
   );
@@ -61,11 +62,8 @@ function TrendingProducts() {
     trendingProducts[index] = products[randomProductIndex];
   }
 
-  // console.log(trendingProducts);
-
   useEffect(() => {
     if (isError) {
-      // toast.error(message);
     }
 
     if (products) {

@@ -91,6 +91,7 @@ function DetailedProductPage() {
       };
       dispatch(addToWishList(data));
     } else {
+      toast.error("Not LoggedIn");
     }
   };
 
@@ -102,7 +103,7 @@ function DetailedProductPage() {
         userId,
         productId,
       };
-      console.log("Data : ", data);
+      // console.log("Data : ", data);
       dispatch(addToCart(data));
     } else {
       toast.error("Not Logged In");
@@ -152,13 +153,22 @@ function DetailedProductPage() {
               <div style={{ marginRight: "10px", marginTop: "0px" }}>
                 {product.rating !== undefined ? (
                   <>
-                    <div style = {{display : "flex"}}>
+                    <div style={{ display: "flex" }}>
                       <Rating
                         name="read-only"
                         value={product.rating}
                         readOnly
                       />{" "}
-                      <div style = {{ fontSize : "14px", marginTop : "auto", marginBottom : "auto", marginLeft : "7px"}}>({product.reviews.length} Reviews)</div>
+                      <div
+                        style={{
+                          fontSize: "14px",
+                          marginTop: "auto",
+                          marginBottom: "auto",
+                          marginLeft: "7px",
+                        }}
+                      >
+                        ({product.reviews.length} Reviews)
+                      </div>
                     </div>
                   </>
                 ) : (

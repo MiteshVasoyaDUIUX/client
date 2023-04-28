@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./EmailVerification.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { verifyUser } from "../features/auth/authSlice";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 function EmailVerification({
   email,
@@ -14,13 +20,13 @@ function EmailVerification({
   const [timeout, setTimeout] = useState(false);
 
   const sendLinkBtn = () => {
-    console.log("Send Btn");
+    // console.log("Send Btn");
     dispatch(verifyUser());
 
     let time = 0;
 
     const interval = setInterval(() => {
-      console.log("Time : ", time);
+      // console.log("Time : ", time);
 
       if (time === 60) {
         setTimeout(true);
@@ -82,13 +88,26 @@ function EmailVerification({
 
 export function EmailVerificationReg({ email, setBlur }) {
   const dispatch = useDispatch();
+  const params = useLocation();
+  const navigate = useNavigate();
 
   const [timeout, setTimeout] = useState(false);
+
+  // console.log("Params : ", params);
+  const { isVerified } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isVerified) {
+      // console.log("User Verification Done, Redirecting...");
+      navigate("/");
+      // setBlur(false);
+    }
+  });
 
   let interval;
 
   const sendLinkBtn = () => {
-    console.log("Send Btn");
+    // console.log("Send Btn");
     dispatch(verifyUser());
 
     let time = 0;
@@ -118,7 +137,13 @@ export function EmailVerificationReg({ email, setBlur }) {
         />
       </div>
       <div className="email-text-box">
-        <input type="text" name="email" id="" defaultValue={email} disabled />
+        <input
+          type="text"
+          name="email"
+          id=""
+          defaultValue={params.state.email}
+          disabled
+        />
       </div>
       <div className="email-ver-buttons">
         <input

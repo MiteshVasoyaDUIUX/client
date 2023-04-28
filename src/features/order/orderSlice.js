@@ -18,8 +18,8 @@ export const placeOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
-      return await orderService.placeOrder(checkoutData, token);
+      console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
+      // return await orderService.placeOrder(checkoutData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -59,7 +59,7 @@ export const giveRating = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      console.log("ratingData : ", ratingData);
+      // console.log("ratingData : ", ratingData);
 
       return await orderService.giveRating(ratingData, token);
     } catch (error) {

@@ -62,7 +62,7 @@ const columns = [
   {
     id: "totalAmount",
     label: "Amount",
-    width: "5%",
+    width: "7%",
     align: "center",
   },
   {
@@ -80,11 +80,11 @@ function Row(props) {
   const dispatch = useDispatch();
 
   const handleConfirmButton = () => {
-    console.log("Confirm Button Clicked", row._id);
+    // console.log("Confirm Button Clicked", row._id);
     dispatch(acceptOrder(row._id));
   };
   const handleCancelButton = () => {
-    console.log("Cancel Button Clicked", row._id);
+    // console.log("Cancel Button Clicked", row._id);
     dispatch(cancelOrder(row._id));
   };
 
@@ -105,21 +105,24 @@ function Row(props) {
 
         return (
           <>
-            <TableCell key={column.id} align={column.align}>
-              <div
-                style={{
-                  whiteSpace: "wrap",
-                  textOverflow: "ellipsis",
-                  overflow: "clip",
-                  height: "50px",
-                }}
-              >
+            <TableCell
+              key={column.id}
+              align={column.align}
+              style={{ height: "20px" }}
+            >
+              <div>
                 {column.id === "userId" ? (
                   value?.name
                 ) : column.id === "prodStatus" ? (
                   <div>{value}</div>
                 ) : column.id === "createdAt" ? (
                   column.format(value)
+                ) : column.id === "totalAmount" ? (
+                  <>{value.toLocaleString("en-IN") + " ₹"}</>
+                ) : column.id === "prodName" ? (
+                  <>
+                    <div className="all-order-prod-name">{value}</div>
+                  </>
                 ) : (
                   value
                 )}
@@ -193,12 +196,7 @@ function Orders() {
   // console.log("allOrders : ", allOrders);
   return (
     <>
-      <section
-        className="all-orders-table"
-        style={{
-          
-        }}
-      >
+      <section className="all-orders-table" style={{}}>
         {allOrders.length > 0 ? (
           <div className="product">
             <Paper

@@ -19,7 +19,7 @@ function Message({ message, own }) {
         <div
           className={
             own
-              ? "client-time-of-sent-message"
+              ? "client-sent-message-time"
               : "client-time-of-received-message"
           }
         >
@@ -98,7 +98,7 @@ function Chat() {
     });
 
     socketIO.on("disconnect", () => {
-      console.log("Disconnected");
+      // console.log("Disconnected");
     });
   }, []);
 
@@ -142,7 +142,7 @@ function Chat() {
       const messageDiv = document.createElement("div");
       messageDiv.textContent = message.message;
       const timeDiv = document.createElement("div");
-      timeDiv.classList.add("time-of-sent-message");
+      timeDiv.classList.add("client-sent-message-time");
       timeDiv.textContent = t;
 
       div.append(messageDiv, timeDiv);

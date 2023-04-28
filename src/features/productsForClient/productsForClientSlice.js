@@ -39,7 +39,7 @@ export const searchProduct = createAsyncThunk(
   async (quary, thunkAPI) => {
     try {
       const products = await productServiceForClient.searchProduct(quary);
-      console.log("Searched Products : ", products);
+      // console.log("Searched Products : ", products);
       return products;
     } catch (error) {
       const message =
@@ -349,7 +349,7 @@ const productForClientSlice = createSlice({
         state.isError = false;
         state.isRemoved = true;
         // state.message = "Added to Cart";
-        console.log("NEW DAAATA : ", action.payload);
+        // console.log("NEW DAAATA : ", action.payload);
         state.cart = action.payload;
       })
       .addCase(removeFromCart.rejected, (state, action) => {
@@ -445,7 +445,7 @@ const productForClientSlice = createSlice({
         state.wishlist = state.wishlist.filter(
           (product) => product._id !== action.payload.productId
         );
-        console.log("Response Payload : ", action.payload);
+        // console.log("Response Payload : ", action.payload);
       })
       .addCase(removeFromWishlist.rejected, (state, action) => {
         state.isError = true;

@@ -49,7 +49,7 @@ function NewArrivals() {
     dispatch(fetchProducts());
 
     if (isError) {
-      console.log("Error : ", message);
+      // console.log("Error : ", message);
     }
 
     if (isAddedCart) {

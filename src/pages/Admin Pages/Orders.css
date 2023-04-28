@@ -5,3 +5,16 @@
       margin-left: auto;
       z-index: 0;
 }
+
+.all-order-prod-name {
+      white-space: normal;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-align: justify;
+      text-justify: inter-word;
+      height : 40px
+}
+

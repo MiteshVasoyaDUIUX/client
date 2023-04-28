@@ -172,7 +172,7 @@ function Row(props) {
   const { row } = props;
   const dispatch = useDispatch();
   const { ordersUserwise, isError, message } = useSelector(
-    (state) => state.user
+    (state) => state.users
   );
 
   const isBlocked = row.isBlocked;
@@ -358,7 +358,7 @@ function AllUser() {
     isUsersFetched,
     isError,
     message,
-  } = useSelector((state) => state.user);
+  } = useSelector((state) => state.users);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);

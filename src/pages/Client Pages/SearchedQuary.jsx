@@ -27,7 +27,7 @@ import ProductCard from "../../components/ProductCard";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 
 function SearchedItems({ newProdArray }) {
-  console.log("SearchedItems");
+  // console.log("SearchedItems");
   return (
     <>
       <div>
@@ -106,7 +106,7 @@ function SearchedQuary() {
   let searchProd = [];
   let newProdArray = [];
 
-  console.log("searchedProducts : ", searchedProducts);
+  // console.log("searchedProducts : ", searchedProducts);
 
   if (searchedProducts.length > 0) {
     searchedProducts.map((product) => {
@@ -161,7 +161,7 @@ function SearchedQuary() {
       <div style={{ marginLeft: "100px", width: "fitContent" }}>
         <SearchedItems newProdArray={newProdArray} />
       {
-        console.log("New Prod Array : ", newProdArray)
+        // console.log("New Prod Array : ", newProdArray)
       }
       </div>
     </div>

@@ -34,7 +34,7 @@ import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
 import { ImageForList } from "../../components/DetailedProductPage.jsx/Images";
 import Spinner from "../../components/Spinner";
-import "./AllProduct.css"
+import "./AllProduct.css";
 
 const columns = [
   {
@@ -52,7 +52,7 @@ const columns = [
   {
     id: "prodName",
     label: "Name",
-    width: "30%",
+    width: "55%",
     align: "center",
   },
   {
@@ -64,7 +64,7 @@ const columns = [
   {
     id: "prodDesc",
     label: "Description",
-    width: "99%",
+    width: "70%",
     align: "center",
   },
   {
@@ -75,9 +75,8 @@ const columns = [
   },
   {
     id: "prodPrice",
-    label: "Price (₹)",
-    width: "15%",
-    align: "right",
+    label: "Price",
+    align: "center",
   },
   {
     id: "discount",
@@ -92,7 +91,7 @@ const columns = [
     align: "center",
   },
   {
-    id: "deliveryType",
+    id: "paymentType",
     label: "Delivery Type",
     width: "8%",
     align: "center",
@@ -119,8 +118,8 @@ function Row(props) {
     // dispatch(updateProduct(row._id));
   };
   const handleRemoveButton = () => {
-    console.log("Remove Button Clicked", row._id);
-    dispatch(removeProduct(row._id));
+    // console.log("Remove Button Clicked", row._id);
+    // dispatch(removeProduct(row._id));
   };
 
   return (
@@ -197,6 +196,20 @@ function Row(props) {
                   </div>
                 ) : column.id === "prodStatus" ? (
                   <div>{status}</div>
+                ) : column.id === "prodName" ? (
+                  <>
+                    <div className="all-products-prod-name">{value}</div>
+                  </>
+                ) : column.id === "prodDesc" ? (
+                  <>
+                    <div className="all-products-prod-desc">{value}</div>
+                  </>
+                ) : column.id === "prodPrice" ? (
+                  <>
+                    <div style={{width: "90px" }}>
+                      {value.toLocaleString("en-IN") + " ₹"}
+                    </div>
+                  </>
                 ) : (
                   value
                 )}
@@ -263,7 +276,7 @@ function AllProduct() {
     setPage(0);
   };
 
-  console.log("Products : ", products);
+  // console.log("Products : ", products);
   useEffect(() => {
     if (isError) {
       toast.error(message);
@@ -285,7 +298,10 @@ function AllProduct() {
 
   return (
     <>
-      <section className="all-products-table" style={{ marginTop: "55px", zIndex: "0" }}>
+      <section
+        className="all-products-table"
+        style={{ marginTop: "55px", zIndex: "0" }}
+      >
         {products.length > 0 ? (
           <div className="product">
             <Paper

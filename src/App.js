@@ -3,7 +3,6 @@ import React from "react";
 import "./App.css";
 import Header from "./components/Header";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cart from "./pages/Client Pages/Cart";
@@ -29,6 +28,9 @@ import SearchedQuary from "./pages/Client Pages/SearchedQuary";
 import DeletedUser from "./pages/Client Pages/DeletedUser";
 import BlockedUser from "./pages/Client Pages/BlockedUser";
 import Wishlist from "./pages/Client Pages/Wishlist";
+import HomePage from "./pages/HomePage";
+import { EmailVerificationReg } from "./components/EmailVerification";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -37,14 +39,19 @@ function App() {
         <div className="container">
           <Header />
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/resetpassword" element={<ResetPassword />} />
             <Route path="/blockeduser" element={<BlockedUser />} />
             <Route path="/deleteduser" element={<DeletedUser />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/search/:params" element={<SearchedQuary />} />
             <Route path="/myorders" element={<MyOrders />} />
+            <Route
+              path="/user/verification"
+              element={<EmailVerificationReg />}
+            />
             <Route path="/mywishlist" element={<Wishlist />} />
             <Route path="/buyer/chat" element={<Chat />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

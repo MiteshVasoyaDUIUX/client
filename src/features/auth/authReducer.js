@@ -41,11 +41,19 @@ const verifyUser = async (token) => {
   return response.data;
 };
 
+const resetPassword = async (email) => {
+  const response = await axios.post(API_URL + "/resetpassword", email);
+  console.log("Reset Password Reducer's Response : ", response.data);
+
+  return response.data;
+};
+
 const authService = {
   register,
   login,
   logout,
   verifyUser,
+  resetPassword,
 };
 
 export default authService;

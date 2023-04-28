@@ -19,7 +19,7 @@ const uploadProduct = async (formData, token) => {
     config
   );
 
-  console.log("Response : ", response.data);
+  // console.log("Response : ", response.data);
   return response.data;
 };
 

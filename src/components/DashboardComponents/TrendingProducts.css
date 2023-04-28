@@ -7,8 +7,3 @@
       cursor: default;
 }
 
-#trending-product-title:hover {
-      border-bottom: 1px solid rgb(39, 105, 181);
-      color: rgb(39, 105, 181);
-      cursor: default;
-}

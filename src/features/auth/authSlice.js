@@ -32,6 +32,7 @@ export const register = createAsyncThunk(
   }
 );
 
+//User Login...
 export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
   try {
     return await authService.login(user);
@@ -51,6 +52,24 @@ export const verifyUser = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token;
       return await authService.verifyUser(token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "user/reset-password",
+  async (email, thunkAPI) => {
+    try {
+      console.log("___Reset Password Slice...", email);
+      return await authService.resetPassword(email);
     } catch (error) {
       const message =
         (error.response &&
@@ -111,7 +130,6 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.user = null;
         state.message = action.payload;
-        console.log("Message : ", state.message);
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
@@ -127,6 +145,12 @@ export const authSlice = createSlice({
       .addCase(verifyUser.rejected, (state, action) => {
         state.isVerifying = false;
         state.isVerified = false;
+        state.message = action.payload;
+      })
+      .addCase(resetPassword.pending, (state) => {})
+      .addCase(resetPassword.fulfilled, (state, action) => {})
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.isError = true;
         state.message = action.payload;
       });
   },

@@ -124,6 +124,10 @@ function Row({ row }) {
               {column.id !== "messageAdmin" ? (
                 column.id === "totalAmount" || column.id === "createdAt" ? (
                   column.format(value)
+                ) : column.id === "prodName" ? (
+                  <>
+                    <div className="client-order-prod-name">{value}</div>
+                  </>
                 ) : column.id === "rating" ? (
                   <>
                     {rate === true ? (
