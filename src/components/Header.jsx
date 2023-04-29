@@ -378,7 +378,15 @@ function Header() {
           )}
         </>
       ) : (
-        <></>
+        <>
+          <div className="header">
+            <div className="header-logo">
+              <Link to="/" style={{ color: "#f0f3ed", textDecoration: "none" }}>
+                LOGO
+              </Link>
+            </div>
+          </div>
+        </>
       )}
     </>
   );

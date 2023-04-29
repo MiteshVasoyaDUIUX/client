@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { reset, register } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
+import "./Register.css";
 
 export default function Register() {
   const location = useLocation();
@@ -110,39 +111,9 @@ export default function Register() {
   return (
     <>
       <div className="registerform">
-        <h1
-          style={{
-            textAlign: "center",
-            marginTop: "40px",
-            marginBottom: "50px",
-            marginLeft: "auto",
-            marginRight: "auto",
-            padding: "20px",
-            fontFamily: "sans-serif",
-            borderBottom: "1px solid #000000",
-            width: "fit-content",
-            color: "#2a3035",
-            backgroundColor: "#f0f3ed",
-          }}
-        >
-          Register
-        </h1>
+        <h1 className="register-form-title">Register</h1>
         <form>
-          <FormGroup
-            style={{
-              width: "40%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              paddingTop: "110px",
-              paddingBottom: "110px",
-              paddingLeft: "60px",
-              paddingRight: "60px",
-              border: "1px solid #1d21338F",
-              boxShadow: "3px 3px 20px -1px #0C2D488F",
-              borderRadius: "30px",
-              backgroundColor: "#f0f3ed",
-            }}
-          >
+          <FormGroup className="register-form">
             {/* Change color of border of the box */}
             <FormControl>
               <InputLabel> Enter Name </InputLabel>
@@ -261,12 +232,20 @@ export default function Register() {
                 color: "#f0f3ed",
                 fontWeight: "bold",
                 fontSize: "15px",
-                marginTop: "20px",
+                marginTop: "40px",
               }}
               onClick={handleSubmit}
             >
               Register
             </Button>
+            <div
+            className="login-link"
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            Already Have An Account ? Click Here To Login
+          </div>
           </FormGroup>
         </form>
       </div>
