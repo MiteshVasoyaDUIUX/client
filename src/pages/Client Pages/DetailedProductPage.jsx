@@ -5,19 +5,16 @@ import { IconButton, Rating } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import Images from "../../components/DetailedProductPage.jsx/Images";
+import Images from "../../components/Images/Images";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
-import {
-  addToCart,
-  addToWishList,
-  fetchOneProduct,
-  fetchWishList,
-} from "../../features/productsForClient/productsForClientSlice";
+
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import "./DetailedProductPage.css";
 import { toast } from "react-toastify";
-import { reset } from "../../features/auth/authSlice";
+import { fetchOneProduct } from "../../features/products/productsSlice";
+import { addToCart, addToWishList, fetchWishList, reset } from "../../features/user/userSlice";
+
 
 function DetailedProductPage() {
   const dispatch = useDispatch();
@@ -27,9 +24,9 @@ function DetailedProductPage() {
   const params = useParams();
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlist } = useSelector((state) => state.productsForClient);
+  const { wishlist } = useSelector((state) => state.user);
   const { product, isAddedCart, isError, message } = useSelector(
-    (state) => state.productsForClient
+    (state) => state.products
   );
   const [quantity, setQuantity] = useState(1);
   const productId = params.id;

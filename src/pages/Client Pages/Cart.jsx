@@ -16,15 +16,10 @@ import {
   Typography,
 } from "@mui/material";
 import "./Cart.css";
-import {
-  fetchCart,
-  removeFromCart,
-  reset,
-  updateCartQuantity,
-} from "../../features/productsForClient/productsForClientSlice";
-import { placeOrder } from "../../features/order/orderSlice";
+
 import { createRoot } from "react-dom/client";
 import EmailVerification from "../../components/EmailVerification";
+import { fetchCart, placeOrder, removeFromCart, reset, updateCartQuantity } from "../../features/user/userSlice";
 
 function DeliveryAddress({ address, setDeliveryAddress }) {
   const handleAddressChange = () => {
@@ -590,8 +585,8 @@ export default function Cart() {
 
 
   const { user } = useSelector((state) => state.auth);
-  const { cart } = useSelector((state) => state.productsForClient);
-  const { isPlaced } = useSelector((state) => state.order);
+  const { cart } = useSelector((state) => state.user);
+  const { isPlaced } = useSelector((state) => state.user);
   const { _id, email, emailVerified, address, name, phoneNumber } = user.user;
   const [deliveryAddress, setDeliveryAddress] = useState({});
 

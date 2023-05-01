@@ -8,12 +8,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllOrders, giveRating } from "../../features/order/orderSlice";
 import "./MyOrders.css";
 import { reset } from "../../features/admin/adminSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { Rating } from "@mui/material";
 import { toast } from "react-toastify";
+import { fetchAllOrders, giveRating } from "../../features/user/userSlice";
 
 const columns = [
   {
@@ -193,7 +193,7 @@ export default function MyOrders() {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { orders, isRated } = useSelector((state) => state.order);
+  const { orders, isRated } = useSelector((state) => state.user);
   let userId;
 
   useEffect(() => {
@@ -223,7 +223,7 @@ export default function MyOrders() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
+console.log("Order : ", orders)
   return (
     <>
       <section className="content" style={{ marginTop: "55px" }}>

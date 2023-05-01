@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
-import "./SearchedQuary.css";
-import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import { toast } from "react-toastify";
+import { fetchProducts, reset } from "../../features/products/productsSlice";
 
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
-import { searchProduct } from "../../features/products/productsSlice";
 
-function SearchedItems({ newProdArray }) {
-  // console.log("SearchedItems");
+import "./Accessories.css";
+
+function AccessoriesItems({ newProdArray }) {
   return (
     <>
       <div>
-        <h1 id="searched-results">Results</h1>
+        <h1 id="accessories-title">Trending Products</h1>
       </div>
       <div
         className="productCards"
@@ -50,7 +47,7 @@ const filterByPODEligibility = (prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
     let paymentType = product.paymentType;
-    if (paymentType.includes("COD")) {
+    if (paymentType?.includes("COD")) {
       filteredArray.push(product);
     }
   });
@@ -60,54 +57,69 @@ const filterByPODEligibility = (prodArray) => {
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    if (product.discount > discount) {
+    const calculatedDisc = Math.floor(
+      ((product.prodMRP - product.prodPrice) * 100) / product.prodMRP
+    );
+
+    if (calculatedDisc > discount) {
+      // console.log("Discount : ", calculatedDisc);
       filteredArray.push(product);
     }
   });
   return filteredArray;
 };
 
-function SearchedQuary() {
-  const params = useParams();
+function Accessories() {
   const dispatch = useDispatch();
-
-  const { searchedProducts, isLoading, isError, message } = useSelector(
-    (state) => state.products
+  const { products, isLoading, isError, message } = useSelector(
+    (state) => state.productsForClient
   );
 
-  const quary = params.params;
-
   useEffect(() => {
-    dispatch(searchProduct(quary));
-  }, [quary]);
+    dispatch(fetchProducts());
+    if (isError) {
+      // toast.error(message);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [isError, dispatch]);
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState();
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  let searchProd = [];
+  let accessories = [];
   let newProdArray = [];
 
-  // console.log("searchedProducts : ", searchedProducts);
-
-  if (searchedProducts.length > 0) {
-    searchedProducts.map((product) => {
+  if (products.length > 0) {
+    products.map((product) => {
       let category = product.prodCategory;
 
       if (includeOutOfStock) {
-        searchProd.push(product);
+        if (
+          category.includes("Accessories") ||
+          category.includes("accessories")
+        ) {
+          accessories.push(product);
+        }
       } else {
-        if (product.prodQuantity > 0) {
-          searchProd.push(product);
+        if (
+          (category.includes("Accessories") ||
+            category.includes("accessories")) &&
+          product.prodQuantity > 0
+        ) {
+          accessories.push(product);
         }
       }
     });
 
     if (ratingValue) {
-      newProdArray = filterByRating(ratingValue, searchProd);
+      newProdArray = filterByRating(ratingValue, accessories);
     } else {
-      newProdArray = searchProd;
+      newProdArray = accessories;
     }
 
     if (priceSliderValue) {
@@ -128,27 +140,25 @@ function SearchedQuary() {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <Filter
-        priceSliderValue={priceSliderValue}
-        setPriceSliderValue={setPriceSliderValue}
-        ratingValue={ratingValue}
-        setRatingValue={setRatingValue}
-        PODEligibility={PODEligibility}
-        setPODEligibility={setPODEligibility}
-        discount={discount}
-        setDiscount={setDiscount}
-        includeOutOfStock={includeOutOfStock}
-        setIncludeOutOfStock={setIncludeOutOfStock}
-      />
-      <div style={{ marginLeft: "100px", width: "fitContent" }}>
-        <SearchedItems newProdArray={newProdArray} />
-      {
-        // console.log("New Prod Array : ", newProdArray)
-      }
+    <>
+      <div style={{ display: "flex" }}>
+        <Filter
+          priceSliderValue={priceSliderValue}
+          setPriceSliderValue={setPriceSliderValue}
+          ratingValue={ratingValue}
+          setRatingValue={setRatingValue}
+          PODEligibility={PODEligibility}
+          setPODEligibility={setPODEligibility}
+          discount={discount}
+          setDiscount={setDiscount}
+          includeOutOfStock={includeOutOfStock}
+          setIncludeOutOfStock={setIncludeOutOfStock}
+        />
+        <div style={{ marginLeft: "100px", width: "fitContent" }}>
+          <AccessoriesItems newProdArray={newProdArray} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
-
-export default SearchedQuary;
+export default Accessories;

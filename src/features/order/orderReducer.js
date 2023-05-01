@@ -1,63 +1,63 @@
-import axios from "axios";
+// import axios from "axios";
 
-const API_URL = "http://localhost:5555";
+// const API_URL = "http://localhost:5555";
 
-const placeOrder = async (checkoutData, token) => {
-      const config = {
-            headers : {
-                  Authorization : `Bearer ${token}`,
-            }
-      }
+// const placeOrder = async (checkoutData, token) => {
+//       const config = {
+//             headers : {
+//                   Authorization : `Bearer ${token}`,
+//             }
+//       }
 
-      console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData)
-
-
-      const response = await axios.post(
-            API_URL + "/buyer/placeorder",
-            checkoutData,
-            config
-          );
-
-      console.log("Check Out Response: ", response.data);
-      return response.data;
-};
+//       console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData)
 
 
-const fetchAllOrders = async (userId, token) => {
-      const config = {
-            headers : {
-                  Authorization : `Bearer ${token}`,
-            }
-      }
+//       const response = await axios.post(
+//             API_URL + "/buyer/placeorder",
+//             checkoutData,
+//             config
+//           );
 
-      const response = await axios.get(
-            API_URL + "/buyer/fetchallorders/" + userId,
-            config
-          );
+//       console.log("Check Out Response: ", response.data);
+//       return response.data;
+// };
 
-      return response.data;
-};
 
-const giveRating = async (ratingData, token) => {
-      const config = {
-            headers : {
-                  Authorization : `Bearer ${token}`,
-            }
-      }
+// const fetchAllOrders = async (userId, token) => {
+//       const config = {
+//             headers : {
+//                   Authorization : `Bearer ${token}`,
+//             }
+//       }
 
-      const response = await axios.post(
-            API_URL + "/buyer/rating/",
-            ratingData,
-            config
-          );
+//       const response = await axios.get(
+//             API_URL + "/buyer/fetchallorders/" + userId,
+//             config
+//           );
 
-      return response.data;
-};
+//       return response.data;
+// };
 
-const orderService = {
-      placeOrder,
-      fetchAllOrders,
-      giveRating
-};
+// const giveRating = async (ratingData, token) => {
+//       const config = {
+//             headers : {
+//                   Authorization : `Bearer ${token}`,
+//             }
+//       }
 
-export default orderService;
+//       const response = await axios.post(
+//             API_URL + "/buyer/rating/",
+//             ratingData,
+//             config
+//           );
+
+//       return response.data;
+// };
+
+// const orderService = {
+//       placeOrder,
+//       fetchAllOrders,
+//       giveRating
+// };
+
+// export default orderService;

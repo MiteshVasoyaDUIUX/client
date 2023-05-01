@@ -2,23 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Card } from "@mui/material";
 import { CardActions } from "@mui/material";
 import { CardContent } from "@mui/material";
-import { CardMedia } from "@mui/material";
 import { Typography } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { IconButton } from "@mui/material";
-import { ImageForCard } from "./DetailedProductPage.jsx/Images";
+import { ImageForCard } from "./Images/Images";
 import { toast } from "react-toastify";
+
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "./ProductCard.css";
 import {
   addToCart,
   addToWishList,
   fetchWishList,
   reset,
-} from "../features/productsForClient/productsForClientSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import "./ProductCard.css";
+} from "../features/user/userSlice";
 
 export default function ProductCard({ product }) {
   // console.log("ProductCard");
@@ -28,8 +28,8 @@ export default function ProductCard({ product }) {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlist, isAddedCart, isError, message } = useSelector(
-    (state) => state.productsForClient
+  const { wishlist, isError, message } = useSelector(
+    (state) => state.user
   );
   useEffect(() => {
     if (user) {

@@ -67,7 +67,7 @@ export const fetchAllConversation = createAsyncThunk(
 );
 
 export const saveChat = createAsyncThunk(
-  "admin/saveChat",
+  "chat/saveChat",
   async (data, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;

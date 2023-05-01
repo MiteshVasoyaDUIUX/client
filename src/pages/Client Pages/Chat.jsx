@@ -7,7 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import {
   fetchChatClient,
   saveChat,
-} from "../../features/chat/client/chatSlice";
+} from "../../features/chat/chatSlice";
 
 let currentMsg = [];
 

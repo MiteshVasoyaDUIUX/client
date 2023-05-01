@@ -6,7 +6,7 @@ import {
   fetchAllConversation,
   fetchChatAdmin,
   saveChat,
-} from "../../features/chat/client/chatSlice";
+} from "../../features/chat/chatSlice";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import InfiniteScroll from "react-infinite-scroll-component";
 

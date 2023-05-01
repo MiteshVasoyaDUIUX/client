@@ -3,12 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./Wishlist.css";
-import {
-  addToWishList,
-  fetchWishListProducts,
-  removeFromWishlist,
-} from "../../features/productsForClient/productsForClientSlice";
+
 import { Card, Grid, Rating, Typography } from "@mui/material";
+import { fetchWishListProducts, removeFromWishlist } from "../../features/user/userSlice";
 
 function ProductCard({ item, userId }) {
   const dispatch = useDispatch();
@@ -102,7 +99,7 @@ function Wishlist() {
 
   const { user } = useSelector((state) => state.auth);
   const { wishlistProducts, isAddedCart, isError, message } = useSelector(
-    (state) => state.productsForClient
+    (state) => state.user
   );
 
   useEffect(() => {

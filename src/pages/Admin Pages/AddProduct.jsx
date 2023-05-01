@@ -18,9 +18,9 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { uploadProduct, reset } from "../../features/product/productSlice";
 import Spinner from "../../components/Spinner";
 import "./AddEditProduct.css";
+import { reset, uploadProduct } from "../../features/admin/adminSlice";
 
 function AddProduct() {
   const dispatch = useDispatch();

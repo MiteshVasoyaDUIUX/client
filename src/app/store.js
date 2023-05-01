@@ -3,10 +3,9 @@ import authReducer from "../features/auth/authSlice";
 import productReducer from "../features/product/productSlice";
 import userReducer from "../features/user/userSlice";
 import usersReducer from "../features/users/usersSlice";
-import productsForClientReducers from "../features/productsForClient/productsForClientSlice";
-import orderReducers from "../features/order/orderSlice";
 import adminReducers from "../features/admin/adminSlice";
-import chatReducers from "../features/chat/client/chatSlice";
+import chatReducers from "../features/chat/chatSlice";
+import productsReducers from "../features/products/productsSlice"
 
 export const store = configureStore({
   reducer: {
@@ -14,9 +13,8 @@ export const store = configureStore({
     product: productReducer,
     user: userReducer,
     users: usersReducer,
-    productsForClient: productsForClientReducers,
-    order: orderReducers,
     admin: adminReducers,
     chat: chatReducers,
+    products : productsReducers
   },
 });

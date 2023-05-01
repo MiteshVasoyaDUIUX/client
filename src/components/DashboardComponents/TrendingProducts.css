@@ -3,7 +3,12 @@
       margin-left: 30px;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       width: fit-content;
-      border-bottom: 0px solid rgb(0, 0, 0);
-      cursor: default;
+      border-bottom: 2px solid #f0f3ed;
+      transition: ease 0.2s;
 }
 
+#trending-product-title:hover {
+      cursor: pointer;
+      color: #2a3035;
+      border-bottom: 2px solid #2a3035;
+}

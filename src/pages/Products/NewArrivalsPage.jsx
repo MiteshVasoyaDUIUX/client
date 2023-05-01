@@ -1,36 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
-import { Card } from "@mui/material";
-import { CardActions } from "@mui/material";
-import { CardContent } from "@mui/material";
-import { CardMedia } from "@mui/material";
-import { Typography } from "@mui/material";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import { IconButton } from "@mui/material";
-import "../Products/Clothes.css";
-import {
-  addToWishList,
-  fetchProducts,
-  fetchWishList,
-  addToCart,
-  reset,
-} from "../../features/productsForClient/productsForClientSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Filter from "../Filter";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { ImageForCard } from "../DetailedProductPage.jsx/Images";
-import ProductCard from "../ProductCard";
-import { ProductCardsGrid } from "../ProductCardGrid";
+import { fetchProducts, reset } from "../../features/products/productsSlice";
 
+import Filter from "../../components/Filter";
+import { ProductCardsGrid } from "../../components/ProductCardGrid";
 
-function ClothesItem({ newProdArray }) {
+import "./Accessories.css";
+
+function AccessoriesItems({ newProdArray }) {
   return (
     <>
       <div>
-        <h1 id="menswear-title">Menswear</h1>
+        <h1 id="accessories-title">New Arrivals</h1>
       </div>
       <div
         className="productCards"
@@ -65,8 +46,8 @@ const filterByPrice = (lower, upper, prodArray) => {
 const filterByPODEligibility = (prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    let deliveryType = product.deliveryType;
-    if (deliveryType.includes("COD")) {
+    let paymentType = product.paymentType;
+    if (paymentType?.includes("COD")) {
       filteredArray.push(product);
     }
   });
@@ -76,17 +57,22 @@ const filterByPODEligibility = (prodArray) => {
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    if (product.discount > discount) {
+    const calculatedDisc = Math.floor(
+      ((product.prodMRP - product.prodPrice) * 100) / product.prodMRP
+    );
+
+    if (calculatedDisc > discount) {
+      // console.log("Discount : ", calculatedDisc);
       filteredArray.push(product);
     }
   });
   return filteredArray;
 };
 
-function Clothes() {
+function Accessories() {
   const dispatch = useDispatch();
   const { products, isLoading, isError, message } = useSelector(
-    (state) => state.productsForClient
+    (state) => state.products
   );
 
   useEffect(() => {
@@ -105,7 +91,7 @@ function Clothes() {
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  let clothes = [];
+  let accessories = [];
   let newProdArray = [];
 
   if (products.length > 0) {
@@ -114,30 +100,26 @@ function Clothes() {
 
       if (includeOutOfStock) {
         if (
-          category.includes("clothes") ||
-          category.includes("Clothes") ||
-          category.includes("cloth") ||
-          category.includes("Cloth")
+          category.includes("Accessories") ||
+          category.includes("accessories")
         ) {
-          clothes.push(product);
+          accessories.push(product);
         }
       } else {
         if (
-          (category.includes("clothes") ||
-            category.includes("Clothes") ||
-            category.includes("cloth") ||
-            category.includes("Cloth")) &&
+          (category.includes("Accessories") ||
+            category.includes("accessories")) &&
           product.prodQuantity > 0
         ) {
-          clothes.push(product);
+          accessories.push(product);
         }
       }
     });
 
     if (ratingValue) {
-      newProdArray = filterByRating(ratingValue, clothes);
+      newProdArray = filterByRating(ratingValue, accessories);
     } else {
-      newProdArray = clothes;
+      newProdArray = accessories;
     }
 
     if (priceSliderValue) {
@@ -173,11 +155,10 @@ function Clothes() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <ClothesItem newProdArray={newProdArray} />
+          <AccessoriesItems newProdArray={newProdArray} />
         </div>
       </div>
     </>
   );
 }
-
-export default Clothes;
+export default Accessories;

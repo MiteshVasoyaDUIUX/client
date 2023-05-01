@@ -1,42 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
-import { Card } from "@mui/material";
-import { CardActions } from "@mui/material";
-import { CardContent } from "@mui/material";
-import { CardMedia } from "@mui/material";
-import { Typography } from "@mui/material";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import { IconButton } from "@mui/material";
-import "./OtherProducts.css";
-import Filter from "../Filter";
+import "../Products/Clothes.css";
+import { fetchProducts } from "../../features/products/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  addToWishList,
-  fetchProducts,
-  fetchWishList,
-  reset,
-} from "../../features/productsForClient/productsForClientSlice";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { ImageForCard } from "../DetailedProductPage.jsx/Images";
-import ProductCard from "../ProductCard";
-import { ProductCardsGrid } from "../ProductCardGrid";
 
-function OtherProductsItem({ newProdArray, wishlist }) {
+import Filter from "../../components/Filter";
+import { ProductCardsGrid } from "../../components/ProductCardGrid";
+import { toast } from "react-toastify";
+import { reset } from "../../features/user/userSlice";
+
+function ClothesItem({ newProdArray }) {
   return (
     <>
       <div>
-        <h1 id="other-products-title">Products</h1>
+        <h1 id="menswear-title">Menswear</h1>
       </div>
       <div
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        {/* {console.log("Wishlist  :", wishlist)} */}
-        <ProductCardsGrid products={newProdArray} wishlist={wishlist} />
+        <ProductCardsGrid products={newProdArray} />
       </div>
     </>
   );
@@ -65,8 +47,8 @@ const filterByPrice = (lower, upper, prodArray) => {
 const filterByPODEligibility = (prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    let deliveryType = product.deliveryType;
-    if (deliveryType.includes("COD")) {
+    let paymentType = product.paymentType;
+    if (paymentType.includes("COD")) {
       filteredArray.push(product);
     }
   });
@@ -83,33 +65,36 @@ const filterByDiscount = (discount, prodArray) => {
   return filteredArray;
 };
 
-function OtherProducts() {
-  const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
-  const [ratingValue, setRatingValue] = useState();
-  const [PODEligibility, setPODEligibility] = useState(false);
-  const [discount, setDiscount] = useState();
-  const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  let otherProducts = [];
-  let newProdArray = [];
-
+function Clothes() {
   const dispatch = useDispatch();
-  const { products, wishlist, isLoading, isError, message } = useSelector(
-    (state) => state.productsForClient
+  const { products, isLoading, isError, message } = useSelector(
+    (state) => state.products
   );
 
+  const {isAddedCart, userSliceMessage} = useSelector((state) => state.user)
+
   useEffect(() => {
+    dispatch(fetchProducts());
     if (isError) {
-      // toast.error(message);
+      toast.error(message);
     }
 
-    if (products) {
-      dispatch(fetchProducts());
+    if(isAddedCart) {
+      toast.success(userSliceMessage);
     }
 
     return () => {
       dispatch(reset());
     };
-  }, [isError, dispatch]);
+  }, [isError, dispatch, isAddedCart]);
+
+  const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
+  const [ratingValue, setRatingValue] = useState();
+  const [PODEligibility, setPODEligibility] = useState(false);
+  const [discount, setDiscount] = useState();
+  const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+  let clothes = [];
+  let newProdArray = [];
 
   if (products.length > 0) {
     products.map((product) => {
@@ -117,33 +102,30 @@ function OtherProducts() {
 
       if (includeOutOfStock) {
         if (
-          category.includes("Phone") ||
-          category.includes("phones") ||
-          category.includes("Other") ||
-          category.includes("accessories") ||
-          category.includes("Accessories")
+          category.includes("clothes") ||
+          category.includes("Clothes") ||
+          category.includes("cloth") ||
+          category.includes("Cloth")
         ) {
-          otherProducts.push(product);
+          clothes.push(product);
         }
       } else {
         if (
-          (category.includes("Phone") ||
-            category.includes("phones") ||
-            category.includes("Other") ||
-            category.includes("accessories") ||
-            category.includes("Accessories")) &&
+          (category.includes("clothes") ||
+            category.includes("Clothes") ||
+            category.includes("cloth") ||
+            category.includes("Cloth")) &&
           product.prodQuantity > 0
         ) {
-          otherProducts.push(product);
+          clothes.push(product);
         }
       }
     });
 
     if (ratingValue) {
-      newProdArray = filterByRating(ratingValue, otherProducts);
-      // console.log("Rating Value");
+      newProdArray = filterByRating(ratingValue, clothes);
     } else {
-      newProdArray = otherProducts;
+      newProdArray = clothes;
     }
 
     if (priceSliderValue) {
@@ -179,11 +161,11 @@ function OtherProducts() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <OtherProductsItem newProdArray={newProdArray} wishlist={wishlist} />
+          <ClothesItem newProdArray={newProdArray} />
         </div>
       </div>
     </>
   );
 }
 
-export default OtherProducts;
+export default Clothes;

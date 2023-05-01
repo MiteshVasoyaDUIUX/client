@@ -12,12 +12,12 @@ import { createRoot } from "react-dom/client";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
-import { fetchOneProduct } from "../../features/productsForClient/productsForClientSlice";
-import { placeOrder } from "../../features/order/orderSlice";
 import Spinner from "../../components/Spinner";
-import { reset, updateUserData } from "../../features/auth/authSlice";
-import { Image } from "../../components/DetailedProductPage.jsx/Images";
+import { reset, } from "../../features/auth/authSlice";
+import { Image } from "../../components/Images/Images";
 import EmailVerification from "../../components/EmailVerification";
+import { fetchOneProduct } from "../../features/products/productsSlice";
+import { placeOrder } from "../../features/user/userSlice";
 
 import "./BuyProduct.css";
 
@@ -64,10 +64,10 @@ function BuyProduct() {
     state: "",
     pincode: "",
   });
-  const { product } = useSelector((state) => state.productsForClient);
+  const { product } = useSelector((state) => state.products);
   const { user,isVerified } = useSelector((state) => state.auth);
 
-  const { isPlaced, isPlacing } = useSelector((state) => state.order);
+  const { isPlaced, isPlacing } = useSelector((state) => state.user);
   const { street, city, state, pincode } = newAddress;
 
   let productId = params.id.split("&")[0];

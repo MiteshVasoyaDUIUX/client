@@ -17,7 +17,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
 import { FaIcons } from "react-icons/fa";
-
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
@@ -28,7 +27,6 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import MessageIcon from "@mui/icons-material/Message";
 import "./Header.css";
-import { searchProduct } from "../features/productsForClient/productsForClientSlice";
 import SideBar from "./SideBar";
 
 const pagesForAdmin = [
@@ -95,12 +93,9 @@ function Header() {
 
     if (quary !== "" && e.type === "click") {
       navigate(`/search/${quary}`);
-      // console.log("Key Code : ", e.type);
     } else if (quary !== "" && e.keyCode == 13) {
-      // console.log("Key Code : ", e.keyCode);
       navigate(`/search/${quary}`);
     }
-    // dispatch(searchProduct(quary));
   };
 
   useEffect(() => {

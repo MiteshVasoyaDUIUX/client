@@ -1,31 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./TrendingProducts.css";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  addToWishList,
-  fetchProducts,
-  fetchWishList,
-  reset,
-} from "../../features/productsForClient/productsForClientSlice";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import { fetchProducts, reset } from "../../features/products/productsSlice";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ImageForCard } from "../DetailedProductPage.jsx/Images";
 import ProductCard from "../ProductCard";
 import Spinner from "../Spinner";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function ProductCards({ trendingProducts, wishlist }) {
   let inWishlist;
@@ -50,9 +32,10 @@ function ProductCards({ trendingProducts, wishlist }) {
 
 function TrendingProducts() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { products, wishlist, isFetching, isError, message } = useSelector(
-    (state) => state.productsForClient
+    (state) => state.products
   );
 
   let trendingProducts = [{}];
@@ -64,6 +47,7 @@ function TrendingProducts() {
 
   useEffect(() => {
     if (isError) {
+      toast.error("Error : ", message);
     }
 
     if (products) {
@@ -79,10 +63,16 @@ function TrendingProducts() {
     return <Spinner />;
   }
 
+  const openNewArrivalsPage = () => {
+    navigate("/products/trendingproducts")
+  };
+
   return (
     <>
       <div>
-        <h1 id="trending-product-title">Trending Products</h1>
+        <h1 id="trending-product-title" onClick={openNewArrivalsPage}>
+          Trending Products
+        </h1>
       </div>
       <div
         className="productCards"

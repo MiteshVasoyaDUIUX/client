@@ -357,7 +357,7 @@ function AllUser() {
     isOrderFetching,
     isUsersFetched,
     isError,
-    message,
+    userSliceMessage,
   } = useSelector((state) => state.users);
 
   const [page, setPage] = React.useState(0);
@@ -374,7 +374,7 @@ function AllUser() {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message);
+      toast.error(userSliceMessage);
     }
 
     if (users) {
@@ -389,7 +389,7 @@ function AllUser() {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isError, message]);
+  }, [dispatch, isError, userSliceMessage]);
 
   if (isUserFetching || isOrderFetching) {
     return <Spinner />;

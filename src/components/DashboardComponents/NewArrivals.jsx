@@ -1,30 +1,15 @@
-import React, { useEffect, useState } from "react";
-import "./NewArrivals.css";
+import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
-import { Card } from "@mui/material";
-import { CardActions } from "@mui/material";
-import { CardContent } from "@mui/material";
-import { CardMedia } from "@mui/material";
-import { Typography } from "@mui/material";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import { IconButton } from "@mui/material";
-import {
-  fetchProducts,
-  addToCart,
-  fetchWishList,
-  reset,
-  addToWishList,
-} from "../../features/productsForClient/productsForClientSlice";
+
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { ImageForCard } from "../DetailedProductPage.jsx/Images";
-import { height } from "@mui/system";
 import ProductCard from "../ProductCard";
 import Spinner from "../Spinner";
+import { fetchProducts } from "../../features/products/productsSlice";
+import "./NewArrivals.css";
+import { useNavigate } from "react-router-dom";
+import { reset } from "../../features/user/userSlice";
 
 function ProductCards({ NewArrivals }) {
   return (
@@ -40,31 +25,39 @@ function ProductCards({ NewArrivals }) {
 
 function NewArrivals() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { products, isFetching, isError, message, isAddedCart } = useSelector(
-    (state) => state.productsForClient
+  const { products, isFetching, isError, message } = useSelector(
+    (state) => state.products
   );
+
+  const {isAddedCart, userSliceMessage} = useSelector((state) => state.user)
 
   useEffect(() => {
     dispatch(fetchProducts());
 
     if (isError) {
-      // console.log("Error : ", message);
-    }
-
-    if (isAddedCart) {
-      toast.success(message);
+      toast.error("Error : ");
     }
     return () => {
       dispatch(reset());
     };
-  }, [isError, isAddedCart, dispatch]);
+  }, [isError, dispatch]);
+
+  useEffect(() => {
+    if (isAddedCart) {
+      toast.success(userSliceMessage);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [isAddedCart]);
 
   if (isFetching) {
     return <Spinner />;
   }
 
-  // console.log("productsForClient : ", products);
   let NewArrivals = [{}];
   let indexNewArrivals = 0;
   for (let index = products.length - 1; index >= products.length - 4; index--) {
@@ -72,12 +65,16 @@ function NewArrivals() {
     indexNewArrivals++;
   }
 
-  // console.log("New Arrivals : ", NewArrivals);
+  const openNewArrivalsPage = () => {
+    navigate("/products/newarrivals");
+  };
 
   return (
     <>
       <div>
-        <h1 id="new-arrivals-title">New Arrivals</h1>
+        <h1 id="new-arrivals-title" onClick={openNewArrivalsPage}>
+          New Arrivals
+        </h1>
       </div>
       <div
         className="productCards"

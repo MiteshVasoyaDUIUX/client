@@ -15,10 +15,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { updateProduct, reset } from "../../features/product/productSlice";
 import { toast } from "react-toastify";
 import Spinner from "../../components/Spinner";
 import "./AddEditProduct.css";
+import { reset, updateProduct } from "../../features/admin/adminSlice";
 
 function EditProduct() {
   const location = useLocation();

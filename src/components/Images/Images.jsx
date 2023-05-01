@@ -1,8 +1,6 @@
 import React from "react";
-import { ErrorBoundary } from "../ErrorBoundary";
 import "./Images.css";
 import Carousel from "react-material-ui-carousel";
-import { Paper, Button } from "@mui/material";
 
 function ImageSlider({ prodImage }) {
   return (

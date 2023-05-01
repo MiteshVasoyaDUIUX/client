@@ -1,29 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
-import { Card } from "@mui/material";
-import { CardActions } from "@mui/material";
-import { CardContent } from "@mui/material";
-import { CardMedia } from "@mui/material";
-import { Typography } from "@mui/material";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import { IconButton } from "@mui/material";
-import "./Accessories.css";
-import Filter from "../Filter";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToWishList,
-  fetchProducts,
-  fetchWishList,
-  addToCart,
-  reset,
-} from "../../features/productsForClient/productsForClientSlice";
+import { fetchProducts } from "../../features/products/productsSlice";
+
+import Filter from "../../components/Filter";
+import { ProductCardsGrid } from "../../components/ProductCardGrid";
+
+import "./Accessories.css";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { ImageForCard } from "../DetailedProductPage.jsx/Images";
-import ProductCard from "../ProductCard";
-import { ProductCardsGrid } from "../ProductCardGrid";
+import { reset } from "../../features/user/userSlice";
 
 function AccessoriesItems({ newProdArray }) {
   return (
@@ -90,19 +74,31 @@ const filterByDiscount = (discount, prodArray) => {
 function Accessories() {
   const dispatch = useDispatch();
   const { products, isLoading, isError, message } = useSelector(
-    (state) => state.productsForClient
+    (state) => state.products
   );
+
+  const { isAddedCart, userSliceMessage } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(fetchProducts());
     if (isError) {
-      // toast.error(message);
+      toast.error(message);
     }
 
     return () => {
       dispatch(reset());
     };
   }, [isError, dispatch]);
+
+  useEffect(() => {
+    if (isAddedCart) {
+      toast.success(userSliceMessage);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [isAddedCart]);
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState();

@@ -5,12 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchProducts,
-  removeProduct,
-  updateProduct,
-  reset,
-} from "../../features/product/productSlice";
 
 //MaterialUI Components import...
 import {
@@ -32,9 +26,15 @@ import DeleteIcon from "@mui/icons-material/DeleteRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
-import { ImageForList } from "../../components/DetailedProductPage.jsx/Images";
+import { ImageForList } from "../../components/Images/Images";
 import Spinner from "../../components/Spinner";
 import "./AllProduct.css";
+import {
+  fetchProducts,
+  removeProduct,
+  reset,
+  updateProduct,
+} from "../../features/admin/adminSlice";
 
 const columns = [
   {
@@ -206,7 +206,7 @@ function Row(props) {
                   </>
                 ) : column.id === "prodPrice" ? (
                   <>
-                    <div style={{width: "90px" }}>
+                    <div style={{ width: "90px" }}>
                       {value.toLocaleString("en-IN") + " ₹"}
                     </div>
                   </>
