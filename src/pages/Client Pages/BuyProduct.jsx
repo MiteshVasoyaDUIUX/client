@@ -13,13 +13,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import Spinner from "../../components/Spinner";
-import { reset, } from "../../features/auth/authSlice";
+import { reset } from "../../features/auth/authSlice";
 import { Image } from "../../components/Images/Images";
 import EmailVerification from "../../components/EmailVerification";
 import { fetchOneProduct } from "../../features/products/productsSlice";
 import { placeOrder } from "../../features/user/userSlice";
-
 import "./BuyProduct.css";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 let userData;
 
@@ -65,7 +68,7 @@ function BuyProduct() {
     pincode: "",
   });
   const { product } = useSelector((state) => state.products);
-  const { user,isVerified } = useSelector((state) => state.auth);
+  const { user, isVerified } = useSelector((state) => state.auth);
 
   const { isPlaced, isPlacing } = useSelector((state) => state.user);
   const { street, city, state, pincode } = newAddress;
@@ -120,6 +123,8 @@ function BuyProduct() {
   const handlePayNowButton = () => {
     if (paymentOption === "") {
       alert("Select Payment Option");
+    } else if (Object.keys(deliveryAddress).length === 0) {
+      alert("Select Delivery Address");
     } else {
       if (!user.user.emailVerified) {
         setEmailVerPage(true);
@@ -335,16 +340,24 @@ function BuyProduct() {
                                 marginLeft: "2.5%",
                               }}
                             />
-                            <TextField
-                              className="credit-debit-atm-card"
-                              variant="standard"
-                              placeholder="Enter Card Holder Name"
-                              style={{
-                                marginLeft: "5%",
-                                marginRight: "2.5%",
-                                width: "45%",
-                              }}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                views={["month", "year"]}
+                                disablePast
+                                sx={{
+                                  marginLeft: "5%",
+                                  marginRight: "2.5%",
+                                  width: "45%",
+                                  marginBottom: "20px",
+                                }}
+                                slotProps={{
+                                  textField: {
+                                    variant: "standard",
+                                    size: "35px",
+                                  },
+                                }}
+                              />
+                            </LocalizationProvider>
                           </div>
                         </>
                       ) : paymentOption === "cod" ? (

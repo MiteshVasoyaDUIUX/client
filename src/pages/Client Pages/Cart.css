@@ -333,3 +333,13 @@
       background-size: 100%;
       transition: background 0s;
 }
+
+.cart-payment-details-form {
+      margin-top: 5%;
+      margin-left: 0%;
+      display: block;
+      background-color: #fbfff8;
+      padding: 30px 10px;
+      box-shadow: 0px -3px 10px -3px rgba(0, 0, 0, 0.445);
+      border-radius: 8px;
+}

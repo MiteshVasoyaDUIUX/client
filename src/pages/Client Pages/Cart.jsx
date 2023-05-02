@@ -19,7 +19,15 @@ import "./Cart.css";
 
 import { createRoot } from "react-dom/client";
 import EmailVerification from "../../components/EmailVerification";
-import { fetchCart, placeOrder, removeFromCart, reset, updateCartQuantity } from "../../features/user/userSlice";
+import {
+  fetchCart,
+  placeOrder,
+  removeFromCart,
+  reset,
+  updateCartQuantity,
+} from "../../features/user/userSlice";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function DeliveryAddress({ address, setDeliveryAddress }) {
   const handleAddressChange = () => {
@@ -32,13 +40,13 @@ function DeliveryAddress({ address, setDeliveryAddress }) {
           <input type="radio" name="address" onChange={handleAddressChange} />
         </div>
         <div style={{ marginLeft: "7px", marginTop: "1px" }}>
-          {address.street},
+          {address?.street},
           <br />
-          {address.city},
+          {address?.city},
           <br />
-          {address.state},
+          {address?.state},
           <br />
-          Pincode : {address.pincode}
+          Pincode : {address?.pincode}
           <br />
         </div>
       </div>
@@ -55,8 +63,6 @@ function ProductCard({ item }) {
   subTotal = subTotal.toLocaleString("en-IN");
 
   const handleRemoveButton = (id) => {
-    // console.log("Remove Button is Clicked...", id);
-
     dispatch(removeFromCart(id));
   };
 
@@ -76,14 +82,12 @@ function ProductCard({ item }) {
               newQuantity: quantity + 1,
             };
             dispatch(updateCartQuantity(newData));
-            // console.log(quantity + 1);
           }
         }
         break;
       case "-":
         {
           quantity > 1 ? setQuantity(quantity - 1) : setQuantity(quantity);
-          // console.log(sign, id);
 
           if (quantity > 1) {
             const newData = {
@@ -339,7 +343,7 @@ function PaymentDeliveryPage({
           <div className="cart-delivery-all-address">
             <div className="delivery-address-title">Delivery Address</div>
             <div className="cart-address-select" id="address-select-id">
-              {address.map((address) => {
+              {address?.map((address) => {
                 return (
                   <>
                     <DeliveryAddress
@@ -451,12 +455,13 @@ function PaymentDeliveryPage({
             )}
           </div>
         </div>
+
         <div className="payment-info-div">
           <div className="payment-info-title">Payment Info :</div>
           <div className="accepted-cards-icons">
             Accepted Cards : <br />
             <i
-              class="fa fa-cc-visa"
+              className="fa fa-cc-visa"
               style={{
                 color: "navy",
                 marginLeft: "0px",
@@ -465,7 +470,7 @@ function PaymentDeliveryPage({
               }}
             ></i>
             <i
-              class="fa fa-cc-amex"
+              className="fa fa-cc-amex"
               style={{
                 color: "blue",
                 marginLeft: "15px",
@@ -474,7 +479,7 @@ function PaymentDeliveryPage({
               }}
             ></i>
             <i
-              class="fa fa-cc-mastercard"
+              className="fa fa-cc-mastercard"
               style={{
                 color: "red",
                 marginLeft: "15px",
@@ -483,7 +488,7 @@ function PaymentDeliveryPage({
               }}
             ></i>
             <i
-              class="fa fa-cc-discover"
+              className="fa fa-cc-discover"
               style={{
                 color: "orange",
                 marginLeft: "15px",
@@ -513,53 +518,86 @@ function PaymentDeliveryPage({
                 </MenuItem>
               </Select>
             </div>
-            <div style={{ marginTop: "25px", marginLeft: "10%" }}>
+
+            <div
+              style={{
+                marginTop: "10px",
+                marginLeft: "3%",
+                width: "90%",
+                // border: "1px solid black",
+              }}
+            >
               {paymentOption === "card" ? (
                 <>
-                  <TextField
-                    className="cart-payment-select"
-                    variant="standard"
-                    placeholder="Card Holder Name"
-                    style={{ width: "300px" }}
-                  />
-                  <TextField
-                    className="cart-payment-select"
-                    variant="standard"
-                    placeholder="Card Number"
-                    style={{ marginLeft: "50px", width: "300px" }}
-                  />
-                  <TextField
-                    className="cart-payment-select"
-                    variant="standard"
-                    placeholder="Enter CVV"
-                    style={{ width: "300px", marginTop: "70px" }}
-                  />
-                  <TextField
-                    className="cart-payment-select"
-                    variant="standard"
-                    placeholder="Enter Expiry Date & Year"
-                    style={{
-                      marginLeft: "50px",
-                      width: "300px",
-                      marginTop: "70px",
-                    }}
-                  />
+                  <div className="cart-payment-details-form">
+                    <TextField
+                      className="cart-payment-select"
+                      variant="standard"
+                      placeholder="Card Holder Name"
+                      style={{
+                        width: "45%",
+                        marginLeft: "2.5%",
+                        marginBottom: "px",
+                      }}
+                    />
+                    <TextField
+                      className="cart-payment-select"
+                      variant="standard"
+                      placeholder="Card Number"
+                      style={{
+                        marginLeft: "5%",
+                        marginRight: "2.5%",
+                        width: "45%",
+                        marginBottom: "20px",
+                      }}
+                    />
+                    <TextField
+                      className="cart-payment-select"
+                      variant="standard"
+                      placeholder="Enter CVV"
+                      style={{
+                        width: "45%",
+                        marginLeft: "2.5%",
+                      }}
+                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        views={["month", "year"]}
+                        disablePast
+                        sx={{
+                          marginLeft: "5%",
+                          marginRight: "2.5%",
+                          width: "45%",
+                          marginBottom: "15px",
+                        }}
+                        slotProps={{
+                          textField: {
+                            variant: "standard",
+                            size: "35px",
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </div>
                 </>
               ) : paymentOption === "cod" ? (
                 <></>
               ) : paymentOption === "upi" ? (
                 <>
-                  <TextField
-                    className="upi-payment-info"
-                    variant="standard"
-                    placeholder="Enter UPI Id"
-                    style={{ width: "500px", marginLeft: "100px" }}
-                  />
+                  <div className="cart-payment-details-form">
+                    <TextField
+                      className="upi-payment-info"
+                      variant="standard"
+                      placeholder="Enter UPI Id"
+                      style={{ width: "70%", marginLeft: "15%" }}
+                    />
+                  </div>
                 </>
               ) : (
                 <></>
               )}
             </div>
+
             <div className="payment-button-div">
               <button className="payment-button" onClick={handlePaymentButton}>
                 Pay Now
@@ -583,11 +621,9 @@ export default function Cart() {
   const [emailVerPage, setEmailVerPage] = useState(false);
   const [mainClass, setMainClass] = useState("cart-payment-details");
 
-
   const { user } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.user);
   const { isPlaced } = useSelector((state) => state.user);
-  const { _id, email, emailVerified, address, name, phoneNumber } = user.user;
   const [deliveryAddress, setDeliveryAddress] = useState({});
 
   const [newAddress, setAddressNew] = useState({
@@ -634,56 +670,56 @@ export default function Cart() {
 
   const handlePaymentButton = () => {
     let checkoutData = [];
-
     let allAddress = userData.user.address;
     let addressFound = false;
 
-    for (let index = 0; index < allAddress.length; index++) {
-      const element = allAddress[index];
-
-      if (
-        element.street === deliveryAddress.street &&
-        element.city === deliveryAddress.city &&
-        element.state === deliveryAddress.state &&
-        element.pincode === deliveryAddress.pincode
-      ) {
-        addressFound = true;
-      } else {
-        continue;
-      }
-    }
-
-    if (!addressFound) {
-      allAddress.push(deliveryAddress);
-      localStorage.setItem("user", JSON.stringify(userData));
-    }
-
     if (paymentOption === "") {
       alert("Select Payment Option");
+    } else if ( Object.keys(deliveryAddress).length === 0) {
+      alert("Select Delivery Address");
     } else {
-      for (let index = 0; index < cart.length; index++) {
-        if (cart[index].prodQuantity !== 0) {
-          const newData = {
-            userId,
-            productId: cart[index]._id,
-            prodImage: cart[index].prodImage,
-            prodName: cart[index].prodName,
-            quantity: cart[index].quantity,
-            productPrice: cart[index].prodPrice,
-            paymentOption,
-            deliveryAddress: deliveryAddress,
-          };
-          checkoutData.push(newData);
-        }
-      }
-
-      if (!emailVerified) {
+      if (!user.user.emailVerified) {
         setEmailVerPage(true);
 
         if (!emailVerPage) {
           setMainClass("blur-cart-payment-details");
         }
       } else {
+        for (let index = 0; index < allAddress.length; index++) {
+          const element = allAddress[index];
+
+          if (
+            element.street === deliveryAddress.street &&
+            element.city === deliveryAddress.city &&
+            element.state === deliveryAddress.state &&
+            element.pincode === deliveryAddress.pincode
+          ) {
+            addressFound = true;
+          } else {
+            continue;
+          }
+        }
+
+        if (!addressFound) {
+          allAddress.push(deliveryAddress);
+          localStorage.setItem("user", JSON.stringify(userData));
+        }
+
+        for (let index = 0; index < cart.length; index++) {
+          if (cart[index].prodQuantity !== 0) {
+            const newData = {
+              userId,
+              productId: cart[index]._id,
+              prodImage: cart[index].prodImage,
+              prodName: cart[index].prodName,
+              quantity: cart[index].quantity,
+              productPrice: cart[index].prodPrice,
+              paymentOption,
+              deliveryAddress: deliveryAddress,
+            };
+            checkoutData.push(newData);
+          }
+        }
         dispatch(placeOrder(checkoutData));
       }
     }
@@ -732,7 +768,7 @@ export default function Cart() {
               handlePaymentButton={handlePaymentButton}
               paymentOption={paymentOption}
               setPaymentOption={setPaymentOption}
-              address={address}
+              address={user?.user.address}
               setDeliveryAddress={setDeliveryAddress}
               setAddressNew={setAddressNew}
               newAddress={newAddress}
@@ -771,7 +807,7 @@ export default function Cart() {
             {emailVerPage ? (
               <div className="email-verification">
                 <EmailVerification
-                  email={email}
+                  email={user.user.email}
                   emailVerPage={emailVerPage}
                   setEmailVerPage={setEmailVerPage}
                   setMainClass={setMainClass}

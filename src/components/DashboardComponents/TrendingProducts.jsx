@@ -62,6 +62,7 @@ function TrendingProducts() {
   if (isFetching) {
     return <Spinner />;
   }
+  
 
   const openNewArrivalsPage = () => {
     navigate("/products/trendingproducts")
