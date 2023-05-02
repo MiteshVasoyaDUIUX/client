@@ -1,9 +1,9 @@
 .carousel-class {
       height: fit-content;
-      height: 800px;
+      height: 700px;
       width: 550px;
       margin-left: 0px;
-      margin-top: 30px;
+      margin-top: 15px;
       min-height: 700;
       /* border: 1px solid rgb(253, 2, 2); */
       padding: 0;
@@ -15,7 +15,7 @@
 
 .carousel-image {
       max-width: 550px;
-      max-height: 800px;
+      max-height: 700px;
       width: auto;
       position: absolute;
       margin: auto;
@@ -23,7 +23,6 @@
       left: 0;
       right: 0;
       bottom: 0;
-
       /* border: 1px solid rgb(0, 253, 76); */
 }
 
@@ -61,7 +60,7 @@
 
 .carousel-one-image-for-card-class {
       height: fit-content;
-      height:400px;
+      height: 400px;
       width: 390px;
       margin-left: auto;
       margin-right: auto;
@@ -87,7 +86,7 @@
 }
 
 .carousel-one-image-for-list {
-      height:100px;
+      height: 100px;
       width: 100px;
       margin-left: auto;
       margin-right: auto;
@@ -108,5 +107,35 @@
       left: 0;
       right: 0;
       bottom: 0;
-      
+
+}
+
+.thumbnails-imgs {
+      /* border: 1px solid saddlebrown; */
+      width: 90%;
+      height: fit-content;
+      margin: 30px auto 0 auto;
+      justify-content: space-evenly;
+      display: flex;
+}
+
+.img-thumb {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      border: 1px solid rgba(55, 55, 55, 0.461);
+      margin-bottom: 0%;
+      border-radius: 4px;
+      background-color: white;
+      /* padding: 5px; */
+}
+
+.img-thumb:hover {
+      cursor: pointer;
+}
+
+.active-img-thumb {
+      border: 1px solid rgba(0, 0, 0, 0.461);
+      box-shadow: 0 0 10px 0px rgba(76, 76, 76, 0.800);
+      border-radius: 5px;
 }

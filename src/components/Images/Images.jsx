@@ -1,14 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Images.css";
 import Carousel from "react-material-ui-carousel";
 
+function Item({ item }) {
+  return <img src={item} alt="Images" className="carousel-image" />;
+}
+
 function ImageSlider({ prodImage }) {
+  const [activeThumb, setActiveThumb] = useState(1);
+
+  let newImageData = [];
+
+  const imgThumb = "img-thumb";
+  const activeImgThumb = imgThumb + " active-img-thumb";
+
+  const onImgChanges = (id) => {
+    setActiveThumb(id);
+  };
+
+  for (let index = 0; index < prodImage.length; index++) {
+    const element = prodImage[index];
+
+    newImageData.push({
+      id: index,
+      imgURL: element,
+    });
+  }
+
   return (
-    <Carousel className="carousel-class" indicators={false}>
-      {prodImage.map((item) => (
-        <Item item={item} key={item} />
-      ))}
-    </Carousel>
+    <>
+      <Carousel
+        className="carousel-class"
+        indicators="true"
+        navButtonsProps={{
+          style: {
+            backgroundColor: "black",
+            borderRadius: "50%",
+            opacity: "0.4",
+          },
+        }}
+        onChange={(id) => onImgChanges(id)}
+        navButtonsAlwaysVisible
+      >
+        {newImageData.map((item) => (
+          <>
+            <Item item={item.imgURL} key={item.id} />
+          </>
+        ))}
+      </Carousel>
+      <div className="thumbnails-imgs">
+        {newImageData.map((item) => (
+          <>
+            <img
+              src={item.imgURL}
+              alt={item.id}
+              className={activeThumb === item.id ? activeImgThumb : imgThumb}
+            />
+          </>
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -29,17 +80,6 @@ function OneImage({ prodImage }) {
         style={{ boxShadow: "none" }}
       />
     </Carousel>
-  );
-}
-
-function Item({ item }) {
-  return (
-    <img
-      src={item}
-      alt="Images"
-      className="carousel-image"
-      style={{ boxShadow: "none" }}
-    />
   );
 }
 

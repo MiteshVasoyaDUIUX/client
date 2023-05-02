@@ -18,6 +18,13 @@ function Slider(props) {
               opacity: "0.4",
             },
           }}
+          indicatorIconButtonProps={{
+            style: {
+                padding: '10px',    // 1
+                color: 'blue',
+                zIndex : 5     // 3
+            }
+        }}
           animation="slide"
           duration={700}
           stopAutoPlayOnHover
