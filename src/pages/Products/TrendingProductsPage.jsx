@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, reset } from "../../features/products/productsSlice";
-
+import discountCalcFunc from "../../../src/app/discountCalcFunc";
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 
@@ -54,15 +54,12 @@ const filterByPODEligibility = (prodArray) => {
   return filteredArray;
 };
 
+
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    const calculatedDisc = Math.floor(
-      ((product.prodMRP - product.prodPrice) * 100) / product.prodMRP
-    );
-
-    if (calculatedDisc > discount) {
-      // console.log("Discount : ", calculatedDisc);
+    const CalcDiscount = discountCalcFunc(product.prodPrice, product.prodMRP);
+    if (Number(CalcDiscount) >= Number(discount)) {
       filteredArray.push(product);
     }
   });
@@ -72,7 +69,7 @@ const filterByDiscount = (discount, prodArray) => {
 function Accessories() {
   const dispatch = useDispatch();
   const { products, isLoading, isError, message } = useSelector(
-    (state) => state.productsForClient
+    (state) => state.products
   );
 
   useEffect(() => {

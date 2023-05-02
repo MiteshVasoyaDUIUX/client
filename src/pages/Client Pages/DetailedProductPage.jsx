@@ -13,8 +13,13 @@ import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import "./DetailedProductPage.css";
 import { toast } from "react-toastify";
 import { fetchOneProduct } from "../../features/products/productsSlice";
-import { addToCart, addToWishList, fetchWishList, reset } from "../../features/user/userSlice";
-
+import {
+  addToCart,
+  addToWishList,
+  fetchWishList,
+  reset,
+  resetIs,
+} from "../../features/user/userSlice";
 
 function DetailedProductPage() {
   const dispatch = useDispatch();
@@ -24,7 +29,7 @@ function DetailedProductPage() {
   const params = useParams();
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlist } = useSelector((state) => state.user);
+  const { wishlist, userSliceMessage } = useSelector((state) => state.user);
   const { product, isAddedCart, isError, message } = useSelector(
     (state) => state.products
   );
@@ -40,17 +45,24 @@ function DetailedProductPage() {
       const userId = user.user._id;
       dispatch(fetchWishList(userId));
     }
-
-    if (isAddedCart) {
-      toast.success("Added to cart...");
-    }
-
     if (isError) {
       toast.error("Error : " + message);
     }
 
-    reset();
-  }, [isAddedCart, isError]);
+    return () => {
+      reset();
+    };
+  }, [isError]);
+
+  useEffect(() => {
+    if (isAddedCart) {
+      toast.success(userSliceMessage);
+    }
+
+    return () => {
+      dispatch(resetIs());
+    };
+  }, [isAddedCart]);
 
   if (product.prodQuantity === 0) {
     outOfStock = 0;

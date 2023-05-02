@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./SearchedQuary.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import discountCalcFunc from "../../../src/app/discountCalcFunc";
 import { toast } from "react-toastify";
 
 import Filter from "../../components/Filter";
@@ -60,7 +60,9 @@ const filterByPODEligibility = (prodArray) => {
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    if (product.discount > discount) {
+    const CalcDiscount = discountCalcFunc(product.prodPrice, product.prodMRP);
+    if (Number(CalcDiscount) >= Number(discount)) {
+      console.log("CalcDiscount : ", CalcDiscount, "Discount : ", discount)
       filteredArray.push(product);
     }
   });

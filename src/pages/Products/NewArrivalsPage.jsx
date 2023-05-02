@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, reset } from "../../features/products/productsSlice";
-
+import discountCalcFunc from "../../../src/app/discountCalcFunc";
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 
@@ -57,12 +57,9 @@ const filterByPODEligibility = (prodArray) => {
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    const calculatedDisc = Math.floor(
-      ((product.prodMRP - product.prodPrice) * 100) / product.prodMRP
-    );
-
-    if (calculatedDisc > discount) {
-      // console.log("Discount : ", calculatedDisc);
+    const CalcDiscount = discountCalcFunc(product.prodPrice, product.prodMRP);
+    if (Number(CalcDiscount) >= Number(discount)) {
+      console.log("CalcDiscount : ", CalcDiscount, "Discount : ", discount)
       filteredArray.push(product);
     }
   });

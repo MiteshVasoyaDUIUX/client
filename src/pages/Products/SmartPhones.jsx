@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, reset } from "../../features/products/productsSlice";
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
+import discountCalcFunc from "../../../src/app/discountCalcFunc";
 import "./SmartPhones.css";
+import { resetIs } from "../../features/user/userSlice";
+import { toast } from "react-toastify";
 
 function OtherProductsItem({ newProdArray, wishlist }) {
   return (
@@ -15,7 +18,6 @@ function OtherProductsItem({ newProdArray, wishlist }) {
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        {/* {console.log("Wishlist  :", wishlist)} */}
         <ProductCardsGrid products={newProdArray} wishlist={wishlist} />
       </div>
     </>
@@ -56,7 +58,8 @@ const filterByPODEligibility = (prodArray) => {
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    if (product.discount > discount) {
+    const CalcDiscount = discountCalcFunc(product.prodPrice, product.prodMRP);
+    if (Number(CalcDiscount) >= Number(discount)) {
       filteredArray.push(product);
     }
   });
@@ -77,21 +80,29 @@ function SmartPhones() {
     (state) => state.products
   );
 
-  const {wishlist, userSliceMessage} = useSelector((state) => state.user)
+  const { wishlist, isAddedCart, userSliceMessage } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     if (isError) {
-      // toast.error(message);
+      toast.error(message || userSliceMessage);
     }
 
     if (products) {
       dispatch(fetchProducts());
     }
+  }, [isError, dispatch]);
+
+  useEffect(() => {
+    if (isAddedCart) {
+      toast.success(userSliceMessage);
+    }
 
     return () => {
-      dispatch(reset());
+      dispatch(resetIs());
     };
-  }, [isError, dispatch]);
+  }, [isAddedCart]);
 
   if (products.length > 0) {
     products.map((product) => {
@@ -113,7 +124,6 @@ function SmartPhones() {
 
     if (ratingValue) {
       newProdArray = filterByRating(ratingValue, otherProducts);
-      // console.log("Rating Value");
     } else {
       newProdArray = otherProducts;
     }

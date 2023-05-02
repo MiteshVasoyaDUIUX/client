@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 import { toast } from "react-toastify";
-import { reset } from "../../features/user/userSlice";
+import { reset, resetIs } from "../../features/user/userSlice";
 
 function ClothesItem({ newProdArray }) {
   return (
@@ -71,7 +71,7 @@ function Clothes() {
     (state) => state.products
   );
 
-  const {isAddedCart, userSliceMessage} = useSelector((state) => state.user)
+  const { isAddedCart, userSliceMessage } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -79,14 +79,20 @@ function Clothes() {
       toast.error(message);
     }
 
-    if(isAddedCart) {
+    return () => {
+      dispatch(reset());
+    };
+  }, [isError, dispatch]);
+
+  useEffect(() => {
+    if (isAddedCart) {
       toast.success(userSliceMessage);
     }
 
     return () => {
-      dispatch(reset());
+      dispatch(resetIs());
     };
-  }, [isError, dispatch, isAddedCart]);
+  }, [isAddedCart]);
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState();

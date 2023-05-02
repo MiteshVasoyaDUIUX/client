@@ -5,7 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Wishlist.css";
 
 import { Card, Grid, Rating, Typography } from "@mui/material";
-import { fetchWishListProducts, removeFromWishlist } from "../../features/user/userSlice";
+import {
+  fetchWishListProducts,
+  removeFromWishlist,
+  resetIs,
+} from "../../features/user/userSlice";
+import { toast } from "react-toastify";
 
 function ProductCard({ item, userId }) {
   const dispatch = useDispatch();
@@ -98,9 +103,8 @@ function Wishlist() {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlistProducts, isAddedCart, isError, message } = useSelector(
-    (state) => state.user
-  );
+  const { wishlistProducts, isError, message, userSliceMessage } =
+    useSelector((state) => state.user);
 
   useEffect(() => {
     if (!user) {
@@ -113,7 +117,6 @@ function Wishlist() {
     }
   }, []);
 
-  // console.log("Wishlist : ", wishlistProducts);
   return (
     <>
       {wishlistProducts.length > 0 ? (
@@ -142,8 +145,8 @@ function Wishlist() {
               width: "fit-content",
               margin: "4% auto 0 auto",
               fontSize: "35px",
-              fontFamily : "sans-serif",
-              textDecoration : "underline"
+              fontFamily: "sans-serif",
+              textDecoration: "underline",
             }}
           >
             Wishlist Is Empty

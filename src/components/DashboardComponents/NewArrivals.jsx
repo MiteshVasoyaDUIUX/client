@@ -9,7 +9,7 @@ import Spinner from "../Spinner";
 import { fetchProducts } from "../../features/products/productsSlice";
 import "./NewArrivals.css";
 import { useNavigate } from "react-router-dom";
-import { reset } from "../../features/user/userSlice";
+import { reset, resetIs } from "../../features/user/userSlice";
 
 function ProductCards({ NewArrivals }) {
   return (
@@ -27,7 +27,7 @@ function NewArrivals() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { products, isFetching, isError, message } = useSelector(
+  const { products, isFetching, isError } = useSelector(
     (state) => state.products
   );
 
@@ -50,7 +50,7 @@ function NewArrivals() {
     }
 
     return () => {
-      dispatch(reset());
+      dispatch(resetIs());
     };
   }, [isAddedCart]);
 

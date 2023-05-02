@@ -9,13 +9,13 @@ const initialState = {
   cart: [],
   orders: [],
   orderId: "",
-  isError: false,
-  isFetching: false,
   isFetched: false,
+  isFetching: false,
   isPlaced: false,
-  isAddedCart: false,
   isPlacing: false,
+  isAddedCart: false,
   isRated: false,
+  isError: false,
   userSliceMessage: "",
 };
 
@@ -88,7 +88,6 @@ export const addToCart = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
 
       const message = await userService.addToCart(userId, token);
-      // console.log("TOTKEOKE : ", message);
       return message;
     } catch (error) {
       const message =
@@ -249,6 +248,16 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => initialState,
+    resetIs(state) {
+      state.isAddedCart = initialState.isAddedCart;
+      state.isError = initialState.isError;
+      state.isFetching = initialState.isFetching;
+      state.isFetched = initialState.isFetched;
+      state.isPlaced = initialState.isPlaced;
+      state.isPlacing = initialState.isPlacing;
+      state.isRated = initialState.isRated;
+      state.userSliceMessage = initialState.userSliceMessage;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -262,13 +271,13 @@ const userSlice = createSlice({
         state.isError = false;
         state.isAddingCart = false;
         state.isAddedCart = true;
-        state.userSliceMessage = "Added to Cart";
+        state.userSliceMessage = action.payload.message;
       })
       .addCase(addToCart.rejected, (state, action) => {
         state.isError = true;
         state.isAddingCart = false;
         state.isAddedCart = false;
-        state.userSliceMessage = action.payload;
+        state.userSliceMessage = action.payload.message;
       })
       .addCase(updateCartQuantity.pending, (state) => {
         state.isError = false;
@@ -385,7 +394,6 @@ const userSlice = createSlice({
         state.wishlist = state.wishlist.filter(
           (product) => product._id !== action.payload.productId
         );
-        // console.log("Response Payload : ", action.payload);
       })
       .addCase(removeFromWishlist.rejected, (state, action) => {
         state.isError = true;
@@ -420,5 +428,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { reset } = userSlice.actions;
+export const { reset, resetIs } = userSlice.actions;
 export default userSlice.reducer;

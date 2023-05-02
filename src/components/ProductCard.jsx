@@ -134,7 +134,7 @@ export default function ProductCard({ product }) {
             align="justify"
             style={{ fontSize: "17px", marginTop: "13px" }}
           >
-            Price : {product.prodPrice.toLocaleString()} ₹
+            Price : {product.prodPrice.toLocaleString("en-IN")} ₹
           </Typography>
         </CardContent>
         <CardActions>

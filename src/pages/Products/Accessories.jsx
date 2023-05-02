@@ -4,10 +4,10 @@ import { fetchProducts } from "../../features/products/productsSlice";
 
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
-
+import discountCalcFunc from "../../../src/app/discountCalcFunc";
 import "./Accessories.css";
 import { toast } from "react-toastify";
-import { reset } from "../../features/user/userSlice";
+import { reset, resetIs } from "../../features/user/userSlice";
 
 function AccessoriesItems({ newProdArray }) {
   return (
@@ -56,15 +56,13 @@ const filterByPODEligibility = (prodArray) => {
   return filteredArray;
 };
 
+
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
-    const calculatedDisc = Math.floor(
-      ((product.prodMRP - product.prodPrice) * 100) / product.prodMRP
-    );
-
-    if (calculatedDisc > discount) {
-      // console.log("Discount : ", calculatedDisc);
+    const CalcDiscount = discountCalcFunc(product.prodPrice, product.prodMRP);
+    if (Number(CalcDiscount) >= Number(discount)) {
+      console.log("CalcDiscount : ", CalcDiscount, "Discount : ", discount)
       filteredArray.push(product);
     }
   });
@@ -96,7 +94,7 @@ function Accessories() {
     }
 
     return () => {
-      dispatch(reset());
+      dispatch(resetIs());
     };
   }, [isAddedCart]);
 
