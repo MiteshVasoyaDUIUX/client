@@ -17,7 +17,7 @@ import EditProduct from "./pages/Admin Pages/EditProduct";
 import EditAdminProfile from "./pages/EditAdminProfile";
 import Clothes from "./pages/Products/Clothes";
 import Accessories from "./pages/Products/Accessories";
-import DetailedProductPage from "./pages/Client Pages/DetailedProductPage";
+import DetailedProductPage from "./pages/Products/DetailedProductPage";
 import BuyProduct from "./pages/Client Pages/BuyProduct";
 import Orders from "./pages/Admin Pages/Orders";
 import ChatAdmin from "./pages/Admin Pages/ChatAdmin";

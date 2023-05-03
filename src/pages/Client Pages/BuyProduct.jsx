@@ -67,7 +67,7 @@ function BuyProduct() {
     state: "",
     pincode: "",
   });
-  const { product } = useSelector((state) => state.products);
+  const { product, productMessage } = useSelector((state) => state.products);
   const { user, isVerified } = useSelector((state) => state.auth);
 
   const { isPlaced, isPlacing } = useSelector((state) => state.user);

@@ -2,15 +2,15 @@
 /* eslint-disable default-case */
 /* eslint-disable no-lone-blocks */
 import { IconButton, Rating } from "@mui/material";
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Images from "../../components/Images/Images";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
-
+import { TextField } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import "./DetailedProductPage.css";
 import { toast } from "react-toastify";
 import { fetchOneProduct } from "../../features/products/productsSlice";
 import {
@@ -20,20 +20,23 @@ import {
   reset,
   resetIs,
 } from "../../features/user/userSlice";
+import "./DetailedProductPage.css";
 
 function DetailedProductPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [wishList, setWishList] = useState(false);
   const params = useParams();
+
+  const [wishList, setWishList] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [applyCoupon, setApplyCoupon] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
   const { wishlist, userSliceMessage } = useSelector((state) => state.user);
-  const { product, isAddedCart, isError, message } = useSelector(
+  const { product, isAddedCart, isError, productMessage } = useSelector(
     (state) => state.products
   );
-  const [quantity, setQuantity] = useState(1);
   const productId = params.id;
   let outOfStock;
 
@@ -46,7 +49,7 @@ function DetailedProductPage() {
       dispatch(fetchWishList(userId));
     }
     if (isError) {
-      toast.error("Error : " + message);
+      toast.error("Error : " + productMessage);
     }
 
     return () => {
@@ -129,6 +132,10 @@ function DetailedProductPage() {
     } else {
       alert("Currently Product is out of stock...");
     }
+  };
+
+  const handleAppyCouponButton = () => {
+    setApplyCoupon(!applyCoupon);
   };
 
   return (
@@ -366,7 +373,42 @@ function DetailedProductPage() {
                 )}
               </div>
             </div>
-            <div style={{ marginTop: "20px", marginBlock: "40px" }}>
+            {applyCoupon ? (
+              <>
+                <div className="coupon-code-div">
+                  <TextField
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        height: "40px",
+                        width: "250px",
+                      },
+                    }}
+                    className="coupon-code-text"
+                    variant="outlined"
+                    placeholder="Enter Coupon Code"
+                  />
+                  <div className="coupon-code-div-buttons">
+                    <input type="button" value="Apply" />
+                    <input
+                      type="button"
+                      value="cancel"
+                      onClick={handleAppyCouponButton}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  className="detailed-page-coupon-code"
+                  onClick={handleAppyCouponButton}
+                >
+                  Have Coupon Code ? Apply
+                </div>
+              </>
+            )}
+
+            <div className="prod-detailed-page-btn">
               <button id="add-to-cart-button" onClick={handleCartButton}>
                 Add To Cart
               </button>

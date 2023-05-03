@@ -72,11 +72,6 @@
       display: flex;
 }
 
-/* 
-.detailed-page-rating:hover {
-      border: 1px solid black;
-} */
-
 .detailed-page-price {
       margin-left: 90px;
       margin-top: 25px;
@@ -246,12 +241,41 @@
       /* height: fit-content; */
 }
 
+.detailed-page-coupon-code {
+      padding: 5px 10px;
+      margin: 15px 0 0 auto;
+      width: fit-content;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.detailed-page-coupon-code:hover {
+      text-decoration: underline;
+      cursor: pointer;
+}
+
+.prod-detailed-page-btn {
+      width: 91%;
+      margin: 15px auto 30px auto;
+
+}
+
+.coupon-code-div {
+      /* border : 1px solid black; */
+      width : fit-content;
+      height: fit-content;
+      margin: 15px auto 15px auto ;
+}
+
+.coupon-code-div input {
+      width: 200px;
+      height: 30px;
+      /* border : 1px solid black; */
+}
+
 #buy-now-button {
       width: 300px;
       height: 50px;
-      margin-left: 30px;
-      margin-right: auto;
-      margin-top: 20px;
+      margin-top: 10px;
       border: 0px;
       background-color: #2a3035;
       color: #f4ede2;
@@ -265,9 +289,6 @@
 #add-to-cart-button {
       width: 300px;
       height: 50px;
-      margin-left: 30px;
-      margin-right: auto;
-      margin-top: 20px;
       border: 0px;
       background-color: #2a3035;
       color: #f4ede2;

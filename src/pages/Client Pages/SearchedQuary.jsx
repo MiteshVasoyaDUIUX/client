@@ -62,7 +62,7 @@ const filterByDiscount = (discount, prodArray) => {
   prodArray.map((product) => {
     const CalcDiscount = discountCalcFunc(product.prodPrice, product.prodMRP);
     if (Number(CalcDiscount) >= Number(discount)) {
-      console.log("CalcDiscount : ", CalcDiscount, "Discount : ", discount)
+      console.log("CalcDiscount : ", CalcDiscount, "Discount : ", discount);
       filteredArray.push(product);
     }
   });
@@ -73,7 +73,7 @@ function SearchedQuary() {
   const params = useParams();
   const dispatch = useDispatch();
 
-  const { searchedProducts, isLoading, isError, message } = useSelector(
+  const { searchedProducts, isLoading, isError, productMessage } = useSelector(
     (state) => state.products
   );
 
@@ -95,8 +95,6 @@ function SearchedQuary() {
 
   if (searchedProducts.length > 0) {
     searchedProducts.map((product) => {
-      let category = product.prodCategory;
-
       if (includeOutOfStock) {
         searchProd.push(product);
       } else {
@@ -145,9 +143,9 @@ function SearchedQuary() {
       />
       <div style={{ marginLeft: "100px", width: "fitContent" }}>
         <SearchedItems newProdArray={newProdArray} />
-      {
-        // console.log("New Prod Array : ", newProdArray)
-      }
+        {
+          // console.log("New Prod Array : ", newProdArray)
+        }
       </div>
     </div>
   );

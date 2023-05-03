@@ -4,6 +4,7 @@ import axios from "axios";
 const API_URL = "http://localhost:5555";
 
 const fetchProducts = async () => {
+  // console.log("Fetching Product...");
   const response = await axios.get(API_URL);
   return response.data;
 };
@@ -18,10 +19,24 @@ const searchProduct = async (quary) => {
   return response.data;
 };
 
+const fetchNewArrivals = async (quary) => {
+  const response = await axios.get(API_URL + "/newarrivals");
+  console.log("Response : ", response.data);
+  return response.data;
+};
+
+const fetchTrendingProducts = async (quary) => {
+  const response = await axios.get(API_URL + "/trendingproducts");
+  // console.log("Trending Products : ", response.data);
+  return response.data;
+};
+
 const products = {
   fetchProducts,
   fetchOneProduct,
   searchProduct,
+  fetchNewArrivals,
+  fetchTrendingProducts
 };
 
 export default products;

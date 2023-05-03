@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, reset } from "../../features/products/productsSlice";
+import {
+  fetchProducts,
+  fetchTrendingProducts,
+  reset,
+} from "../../features/products/productsSlice";
 import discountCalcFunc from "../../../src/app/discountCalcFunc";
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
@@ -54,7 +58,6 @@ const filterByPODEligibility = (prodArray) => {
   return filteredArray;
 };
 
-
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
@@ -68,12 +71,12 @@ const filterByDiscount = (discount, prodArray) => {
 
 function Accessories() {
   const dispatch = useDispatch();
-  const { products, isLoading, isError, message } = useSelector(
+  const { products, isLoading, isError, productMessage } = useSelector(
     (state) => state.products
   );
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(fetchTrendingProducts());
     if (isError) {
       // toast.error(message);
     }
@@ -88,35 +91,15 @@ function Accessories() {
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  let accessories = [];
   let newProdArray = [];
 
   if (products.length > 0) {
-    products.map((product) => {
-      let category = product.prodCategory;
-
-      if (includeOutOfStock) {
-        if (
-          category.includes("Accessories") ||
-          category.includes("accessories")
-        ) {
-          accessories.push(product);
-        }
-      } else {
-        if (
-          (category.includes("Accessories") ||
-            category.includes("accessories")) &&
-          product.prodQuantity > 0
-        ) {
-          accessories.push(product);
-        }
-      }
-    });
+    
 
     if (ratingValue) {
-      newProdArray = filterByRating(ratingValue, accessories);
+      newProdArray = filterByRating(ratingValue, products);
     } else {
-      newProdArray = accessories;
+      newProdArray = products;
     }
 
     if (priceSliderValue) {

@@ -12,7 +12,7 @@ const initialState = {
   isError: false,
   isFetching: false,
   isFetched: false,
-  message: "",
+  productMessage: "",
 };
 
 export const fetchProducts = createAsyncThunk(
@@ -34,12 +34,29 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+export const fetchNewArrivals = createAsyncThunk(
+  "products/fetchNewArrivals",
+  async (thunkAPI) => {
+    try {
+      const response = await products.fetchNewArrivals();
+      return response;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const searchProduct = createAsyncThunk(
   "productsForClient/searchProduct",
   async (quary, thunkAPI) => {
     try {
       const response = await products.searchProduct(quary);
-      // console.log("Searched Products : ", products);
       return response;
     } catch (error) {
       const message =
@@ -71,70 +88,98 @@ export const fetchOneProduct = createAsyncThunk(
   }
 );
 
+export const fetchTrendingProducts = createAsyncThunk(
+  "products/fetchNewArrivals",
+  async (thunkAPI) => {
+    try {
+      const response = await products.fetchTrendingProducts();
+      return response;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const productsSlice = createSlice({
-      name: "products",
-      initialState,
-      reducers: {
-        reset: (state) => initialState,
-      },
-      extraReducers: (builder) => {
-        builder
-          .addCase(fetchProducts.pending, (state) => {
-            state.isError = false;
-            state.isFetching = true;
-            state.isFetched = false;
-            state.message = "";
-          })
-          .addCase(fetchProducts.fulfilled, (state, action) => {
-            state.isError = false;
-            state.isFetching = false;
-            state.isFetched = true;
-            state.products = action.payload;
-          })
-          .addCase(fetchProducts.rejected, (state, action) => {
-            state.isError = true;
-            state.isFetching = false;
-            state.isFetched = false;
-            state.message = action.payload;
-          })
-          .addCase(searchProduct.pending, (state) => {
-            state.isError = false;
-            state.isFetching = true;
-            state.isFetched = false;
-            state.message = "";
-          })
-          .addCase(searchProduct.fulfilled, (state, action) => {
-            state.isError = false;
-            state.isFetching = false;
-            state.isFetched = true;
-            state.searchedProducts = action.payload;
-          })
-          .addCase(searchProduct.rejected, (state, action) => {
-            state.isError = true;
-            state.isFetching = false;
-            state.isFetched = false;
-            state.message = action.payload;
-          })
-          .addCase(fetchOneProduct.pending, (state) => {
-            state.isError = false;
-            state.isFetching = true;
-            state.isFetched = false;
-            state.message = "";
-          })
-          .addCase(fetchOneProduct.fulfilled, (state, action) => {
-            state.isError = false;
-            state.isFetching = false;
-            state.isFetched = true;
-            state.product = action.payload;
-          })
-          .addCase(fetchOneProduct.rejected, (state, action) => {
-            state.isError = true;
-            state.isFetching = false;
-            state.isFetched = false;
-            state.message = action.payload;
-          })
-      },
-    });
-    
-    export const { reset } = productsSlice.actions;
-    export default productsSlice.reducer;
+  name: "products",
+  initialState,
+  reducers: {
+    reset: (state) => initialState,
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.isError = false;
+        state.isFetching = true;
+        state.isFetched = false;
+        state.productMessage = "";
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isFetching = false;
+        state.isFetched = true;
+        state.products = action.payload;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.isError = true;
+        state.isFetching = false;
+        state.isFetched = false;
+        state.productMessage = action.payload;
+      })
+      .addCase(searchProduct.pending, (state) => {
+        state.isError = false;
+        state.isFetching = true;
+        state.isFetched = false;
+        state.productMessage = "";
+      })
+      .addCase(searchProduct.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isFetching = false;
+        state.isFetched = true;
+        state.searchedProducts = action.payload;
+      })
+      .addCase(searchProduct.rejected, (state, action) => {
+        state.isError = true;
+        state.isFetching = false;
+        state.isFetched = false;
+        state.productMessage = action.payload;
+      })
+      .addCase(fetchOneProduct.pending, (state) => {
+        state.isError = false;
+        state.isFetching = true;
+        state.isFetched = false;
+        state.productMessage = "";
+      })
+      .addCase(fetchOneProduct.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isFetching = false;
+        state.isFetched = true;
+        state.product = action.payload;
+      })
+      .addCase(fetchOneProduct.rejected, (state, action) => {
+        state.isError = true;
+        state.isFetching = false;
+        state.isFetched = false;
+        state.productMessage = action.payload;
+      })
+      .addCase(fetchNewArrivals.pending, (state) => {
+        state.productMessage = "";
+      })
+      .addCase(fetchNewArrivals.fulfilled, (state, action) => {
+        state.products = action.payload;
+        // console.log("State.Products : ", state.products.length);
+      })
+      .addCase(fetchNewArrivals.rejected, (state, action) => {
+        state.productMessage = action.payload;
+      });
+  },
+});
+
+export const { reset } = productsSlice.actions;
+export default productsSlice.reducer;

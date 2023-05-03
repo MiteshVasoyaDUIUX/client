@@ -76,7 +76,7 @@ function SmartPhones() {
   let newProdArray = [];
 
   const dispatch = useDispatch();
-  const { products, isLoading, isError, message } = useSelector(
+  const { products, isLoading, isError, productMessage } = useSelector(
     (state) => state.products
   );
 
@@ -86,7 +86,7 @@ function SmartPhones() {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message || userSliceMessage);
+      toast.error(productMessage || userSliceMessage);
     }
 
     if (products) {

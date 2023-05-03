@@ -67,7 +67,7 @@ const filterByDiscount = (discount, prodArray) => {
 
 function Clothes() {
   const dispatch = useDispatch();
-  const { products, isLoading, isError, message } = useSelector(
+  const { products, isLoading, isError, productMessage } = useSelector(
     (state) => state.products
   );
 
@@ -76,7 +76,7 @@ function Clothes() {
   useEffect(() => {
     dispatch(fetchProducts());
     if (isError) {
-      toast.error(message);
+      toast.error(productMessage);
     }
 
     return () => {

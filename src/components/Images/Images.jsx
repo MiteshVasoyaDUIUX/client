@@ -17,7 +17,6 @@ function ImageSlider({ prodImage }) {
   let activeThumb = 0;
 
   const handleImgChange = (id) => {
-    console.log("ID : ", id);
     activeThumb = id;
   };
 
