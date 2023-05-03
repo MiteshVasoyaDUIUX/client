@@ -141,7 +141,7 @@ function DetailedProductPage() {
 
           <div className="page-details">
             <div style={{ display: "flex" }}>
-              <div className="detailed-page-title ">
+              <div className="detailed-page-title">
                 {product.prodName}
                 <span className="title-tooltiptext">{product.prodName}</span>
               </div>

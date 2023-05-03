@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Images.css";
 import Carousel from "react-material-ui-carousel";
 
@@ -7,57 +7,67 @@ function Item({ item }) {
 }
 
 function ImageSlider({ prodImage }) {
-  const [activeThumb, setActiveThumb] = useState(1);
-
   let newImageData = [];
-
-  const imgThumb = "img-thumb";
-  const activeImgThumb = imgThumb + " active-img-thumb";
-
-  const onImgChanges = (id) => {
-    setActiveThumb(id);
-  };
 
   for (let index = 0; index < prodImage.length; index++) {
     const element = prodImage[index];
-
-    newImageData.push({
-      id: index,
-      imgURL: element,
-    });
+    newImageData.push(<img src={element} alt="" height="90px" width="100px" />);
   }
+
+  let activeThumb = 0;
+
+  const handleImgChange = (id) => {
+    console.log("ID : ", id);
+    activeThumb = id;
+  };
 
   return (
     <>
-      <Carousel
-        className="carousel-class"
-        indicators="true"
-        navButtonsProps={{
-          style: {
-            backgroundColor: "black",
-            borderRadius: "50%",
-            opacity: "0.4",
-          },
-        }}
-        onChange={(id) => onImgChanges(id)}
-        navButtonsAlwaysVisible
-      >
-        {newImageData.map((item) => (
-          <>
-            <Item item={item.imgURL} key={item.id} />
-          </>
-        ))}
-      </Carousel>
-      <div className="thumbnails-imgs">
-        {newImageData.map((item) => (
-          <>
-            <img
-              src={item.imgURL}
-              alt={item.id}
-              className={activeThumb === item.id ? activeImgThumb : imgThumb}
-            />
-          </>
-        ))}
+      <div className="carousel-class">
+        <Carousel
+          sx={{}}
+          height="700px"
+          indicators
+          onChange={(id) => {
+            handleImgChange(id);
+          }}
+          navButtonsProps={{
+            style: {
+              backgroundColor: "black",
+              borderRadius: "50%",
+              opacity: "0.9",
+            },
+          }}
+          IndicatorIcon={newImageData}
+          indicatorIconButtonProps={{
+            className:
+              activeThumb === newImageData.id
+                ? console.log("asaasasa")
+                : "indicator-icon-button",
+            style: {
+              border: "1px solid rgba(26, 26, 26, 0.6)",
+              borderRadius: "5px",
+              padding: "5px",
+              objectFit: "cover",
+            },
+          }}
+          indicatorContainerProps={{
+            style: {
+              marginTop: "20px",
+              marginBottom: "20px",
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "space-evenly",
+            },
+          }}
+          navButtonsAlwaysVisible
+        >
+          {prodImage.map((item) => (
+            <>
+              <Item item={item} key={item} />
+            </>
+          ))}
+        </Carousel>
       </div>
     </>
   );

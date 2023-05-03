@@ -1,16 +1,15 @@
 .carousel-class {
       height: fit-content;
-      height: 700px;
       width: 550px;
       margin-left: 0px;
       margin-top: 15px;
       min-height: 700;
-      /* border: 1px solid rgb(253, 2, 2); */
       padding: 0;
       border-radius: 10px;
       box-shadow: 0px 10px 20px 1px rgb(190, 190, 190);
       text-align: center;
       background-color: white;
+      /* overflow: scroll; */
 }
 
 .carousel-image {
@@ -138,4 +137,10 @@
       border: 1px solid rgba(0, 0, 0, 0.461);
       box-shadow: 0 0 10px 0px rgba(76, 76, 76, 0.800);
       border-radius: 5px;
+}
+
+.indicator-icon-button {
+      height: 100px;
+      width: 100px;
+      z-index: 1;
 }
