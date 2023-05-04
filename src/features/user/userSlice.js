@@ -8,6 +8,7 @@ const initialState = {
   searchedProducts: [],
   cart: [],
   orders: [],
+  coupon: {},
   orderId: "",
   isFetched: false,
   isFetching: false,
@@ -243,6 +244,25 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
+export const applyCoupon = createAsyncThunk(
+  "products/applyCoupon",
+  async (couponCode, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      const coupon = await userService.applyCoupon(couponCode, token);
+      return coupon;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -257,6 +277,9 @@ const userSlice = createSlice({
       state.isPlacing = initialState.isPlacing;
       state.isRated = initialState.isRated;
       state.userSliceMessage = initialState.userSliceMessage;
+    },
+    resetCoupon(state) {
+      state.coupon = {};
     },
   },
   extraReducers: (builder) => {
@@ -424,9 +447,17 @@ const userSlice = createSlice({
         state.isPlacing = false;
         state.isFetching = false;
         state.userSliceMessage = action.payload;
+      })
+      .addCase(applyCoupon.pending, (state) => {})
+      .addCase(applyCoupon.fulfilled, (state, action) => {
+        state.coupon = action.payload;
+        })
+      .addCase(applyCoupon.rejected, (state, action) => {
+        state.isError = true;
+        state.userSliceMessage = action.payload;
       });
   },
 });
 
-export const { reset, resetIs } = userSlice.actions;
+export const { reset, resetIs, resetCoupon } = userSlice.actions;
 export default userSlice.reducer;

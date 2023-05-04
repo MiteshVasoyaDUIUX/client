@@ -259,17 +259,53 @@
 
 }
 
-.coupon-code-div {
-      /* border : 1px solid black; */
-      width : fit-content;
-      height: fit-content;
-      margin: 15px auto 15px auto ;
+.coupon-applied-div {
+      margin-top: 15px;
+      margin-left: 0;
+      padding: 5px 1px;
+      font-size: 19px;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      color: rgb(17, 19, 17);
+      text-align: justify;
+      text-justify: inter-word;
 }
 
-.coupon-code-div input {
-      width: 200px;
-      height: 30px;
-      /* border : 1px solid black; */
+.coupon-applied-div div {
+      /* border: 1px solid black; */
+}
+
+.coupon-code-div {
+      width: 300px;
+      height: fit-content;
+      margin: 20px auto 25px auto;
+      display: flex;
+      /* border : 1px solid black */
+}
+
+.coupon-code-div-buttons {
+      display: flex;
+      margin-top: 7px;
+      justify-content: space-evenly;
+}
+
+.coupon-code-div input[type="button"] {
+      width: 70px;
+      height: 40px;
+      border: 1px solid #2a3035;
+      border-radius: 0px;
+      background-color: #2a3035;
+      transition: ease-out 0.2s;
+      color: white;
+      font-size: 14px;
+}
+
+.coupon-code-div input[type="button"]:hover {
+      background-color: #2a3035;
+      color: white;
+}
+
+.coupon-code-div input[type="button"]:active {
+      transform: scale(0.98);
 }
 
 #buy-now-button {

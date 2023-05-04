@@ -173,6 +173,17 @@ const giveRating = async (ratingData, token) => {
   return response.data;
 };
 
+const applyCoupon = async (coupon, token) => {
+  const couponCode = {
+    coupon: coupon,
+  };
+  const response = await axios.get(
+    API_URL + "/buyer/applycoupon/" + coupon
+  );
+
+  return response.data;
+};
+
 const userService = {
   addToCart,
   fetchWishList,
@@ -185,6 +196,7 @@ const userService = {
   placeOrder,
   fetchAllOrders,
   giveRating,
+  applyCoupon,
 };
 
 export default userService;

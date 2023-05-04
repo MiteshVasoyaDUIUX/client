@@ -120,14 +120,14 @@ function Header() {
                     to="/admin/dashboard"
                     style={{ color: "#f0f3ed", textDecoration: "none" }}
                   >
-                    LOGO
+                    ShopCart
                   </Link>
                 ) : (
                   <Link
                     to="/"
                     style={{ color: "#f0f3ed", textDecoration: "none" }}
                   >
-                    LOGO
+                    ShopCart
                   </Link>
                 )
               ) : (
@@ -136,7 +136,7 @@ function Header() {
                     to="/"
                     style={{ color: "#f0f3ed", textDecoration: "none" }}
                   >
-                    LOGO
+                    ShopCart
                   </Link>
                 </>
               )}
@@ -377,7 +377,7 @@ function Header() {
           <div className="header">
             <div className="header-logo">
               <Link to="/" style={{ color: "#f0f3ed", textDecoration: "none" }}>
-                LOGO
+                ShopCart
               </Link>
             </div>
           </div>

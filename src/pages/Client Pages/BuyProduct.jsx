@@ -17,7 +17,7 @@ import { reset } from "../../features/auth/authSlice";
 import { Image } from "../../components/Images/Images";
 import EmailVerification from "../../components/EmailVerification";
 import { fetchOneProduct } from "../../features/products/productsSlice";
-import { placeOrder } from "../../features/user/userSlice";
+import { applyCoupon, placeOrder } from "../../features/user/userSlice";
 import "./BuyProduct.css";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -70,11 +70,15 @@ function BuyProduct() {
   const { product, productMessage } = useSelector((state) => state.products);
   const { user, isVerified } = useSelector((state) => state.auth);
 
-  const { isPlaced, isPlacing } = useSelector((state) => state.user);
+  const { isPlaced, coupon, isPlacing } = useSelector((state) => state.user);
+
   const { street, city, state, pincode } = newAddress;
 
   let productId = params.id.split("&")[0];
   let quantity = params.id.split("&")[1];
+  let couponCode = params.id.split("&")[2];
+
+  console.log("Params : ", couponCode !== "");
 
   useEffect(() => {
     if (!user) {
@@ -84,6 +88,8 @@ function BuyProduct() {
     if (user) {
       // console.log("User Logged...")
       userData = JSON.parse(localStorage.getItem("user"));
+      dispatch(applyCoupon(couponCode));
+      console.log("COUPON CODE  :", coupon);
     }
 
     dispatch(fetchOneProduct(productId));
@@ -144,6 +150,7 @@ function BuyProduct() {
           productPrice: product.prodPrice,
           paymentOption,
           deliveryAddress: deliveryAddress,
+          couponCode,
         };
 
         let allAddress = userData.user.address;
@@ -249,8 +256,59 @@ function BuyProduct() {
                       </div>
                     </div>
                     <div className="products-total-amount">
-                      Total :
-                      {(quantity * product.prodPrice).toLocaleString("en-IN")} ₹
+                      {couponCode !== "" ? (
+                        <>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div>Subtotal : </div>
+                            <div>
+                              {(quantity * product.prodPrice).toLocaleString(
+                                "en-IN"
+                              )}{" "}
+                              ₹
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div>Discount :</div>
+                            <div>{coupon.discount}%</div>
+                          </div>
+                          <hr />
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div>Total :</div>
+                            <div>
+                              {Math.ceil(
+                                (product.prodPrice *
+                                  quantity *
+                                  (100 - coupon.discount)) /
+                                  100
+                              )?.toLocaleString("en-IN")}{" "}
+                              ₹
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          Total :
+                          {(quantity * product.prodPrice).toLocaleString(
+                            "en-IN"
+                          )}{" "}
+                          ₹
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

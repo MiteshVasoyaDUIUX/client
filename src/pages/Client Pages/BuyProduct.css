@@ -95,16 +95,18 @@
 }
 
 .products-total-amount {
-      width: fit-content;
+      width: 250px;
       margin-top: 3%;
-      margin-right: -5%;
+      margin-right: -5.5%;
       margin-left: auto;
+      margin-bottom: 60px;
       font-family: 'Questrial', sans-serif;
-      font-size: 25px;
+      font-size: 18px;
       font-weight: 500;
       padding-bottom: 2px;
       color: rgb(109, 109, 109);
       text-align: end;
+      /* border : 1px solid seagreen */
 }
 
 .order-summary-details {
@@ -128,6 +130,8 @@
       width: 400px;
       box-shadow: 0px -3px 10px -3px rgba(0, 0, 0, 0.445);
       cursor: default;
+      font-family: 'Questrial', sans-serif;
+
 }
 
 .address-select {

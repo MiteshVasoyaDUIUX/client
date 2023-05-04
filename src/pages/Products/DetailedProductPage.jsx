@@ -16,8 +16,10 @@ import { fetchOneProduct } from "../../features/products/productsSlice";
 import {
   addToCart,
   addToWishList,
+  applyCoupon,
   fetchWishList,
   reset,
+  resetCoupon,
   resetIs,
 } from "../../features/user/userSlice";
 import "./DetailedProductPage.css";
@@ -30,10 +32,13 @@ function DetailedProductPage() {
 
   const [wishList, setWishList] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [applyCoupon, setApplyCoupon] = useState(false);
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlist, userSliceMessage } = useSelector((state) => state.user);
+  const { wishlist, coupon, userSliceMessage } = useSelector(
+    (state) => state.user
+  );
   const { product, isAddedCart, isError, productMessage } = useSelector(
     (state) => state.products
   );
@@ -115,7 +120,6 @@ function DetailedProductPage() {
         userId,
         productId,
       };
-      // console.log("Data : ", data);
       dispatch(addToCart(data));
     } else {
       toast.error("Not Logged In");
@@ -125,7 +129,7 @@ function DetailedProductPage() {
   const handleBuyNowButton = () => {
     if (product.prodQuantity !== 0 && quantity <= product.prodQuantity) {
       if (user) {
-        navigate(`/product/placeorder/${productId}&${quantity}`);
+        navigate(`/product/placeorder/${productId}&${quantity}&${couponCode}`);
       } else {
         navigate("/login", { state: { from: location.pathname } });
       }
@@ -134,8 +138,17 @@ function DetailedProductPage() {
     }
   };
 
-  const handleAppyCouponButton = () => {
-    setApplyCoupon(!applyCoupon);
+  const handleApplyCouponButton = () => {
+    if (couponCode !== "") {
+      setCouponApplied(true);
+      dispatch(applyCoupon(couponCode));
+    } else {
+      alert("Enter Coupon Code...");
+    }
+  };
+
+  const handleCouponChanges = (e) => {
+    setCouponCode(e.target.value);
   };
 
   return (
@@ -363,36 +376,139 @@ function DetailedProductPage() {
             </div>
             <div className="total-amount">
               <div style={{ width: "fitContent", marginTop: "1%" }}>
-                {outOfStock !== 0 ? (
+                {coupon?.discount !== undefined ? (
                   <>
-                    Total Amount &nbsp;: &nbsp;
-                    {(product.prodPrice * quantity)?.toLocaleString("en-IN")} ₹
+                    <div className="coupon-applied-div">
+                      <div>{coupon.message}</div>
+                      <br />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div>Subtotal :</div>
+                        <div>
+                          {(product.prodPrice * quantity)?.toLocaleString(
+                            "en-IN"
+                          )}{" "}
+                          ₹
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div>Coupon Discount :</div>
+                        <div>{coupon.discount} %</div>
+                      </div>
+                      <hr />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div>Total : </div>
+                        <div>
+                          {Math.ceil(
+                            (product.prodPrice *
+                              quantity *
+                              (100 - coupon.discount)) /
+                              100
+                          )?.toLocaleString("en-IN")}{" "}
+                          ₹
+                        </div>
+                      </div>
+                    </div>
                   </>
                 ) : (
-                  ""
+                  <>
+                    {outOfStock !== 0 ? (
+                      <>
+                        Total &nbsp;: &nbsp;
+                        {(product.prodPrice * quantity)?.toLocaleString(
+                          "en-IN"
+                        )}{" "}
+                        ₹
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </>
                 )}
               </div>
             </div>
-            {applyCoupon ? (
+
+            <div className="coupon-code-div">
+              <TextField
+                sx={{
+                  "& .MuiInputBase-root": {
+                    height: "40px",
+                    width: "230px",
+                    // marginLeft: "25px",
+                    // marginRight: "0",
+                    backgroundColor: "white",
+                    border: "1px solid black",
+                    borderRadius: "0",
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                }}
+                className="coupon-code-text"
+                variant="outlined"
+                placeholder="Enter Coupon Code"
+                value={couponCode}
+                onChange={handleCouponChanges}
+              />
+              <input
+                type="button"
+                value="Apply"
+                onClick={handleApplyCouponButton}
+              />
+            </div>
+            {/* {openCouponBox ? (
               <>
                 <div className="coupon-code-div">
                   <TextField
                     sx={{
                       "& .MuiInputBase-root": {
                         height: "40px",
-                        width: "250px",
+                        width: "230px",
+                        // marginLeft: "25px",
+                        // marginRight: "0",
+                        backgroundColor: "white",
+                        borderRadius : "0"
                       },
                     }}
                     className="coupon-code-text"
                     variant="outlined"
                     placeholder="Enter Coupon Code"
+                    value={couponCode}
+                    onChange={handleCouponChanges}
+                  />
+                  <input
+                    type="button"
+                    value="Apply"
+                    onClick={handleApplyCouponButton}
                   />
                   <div className="coupon-code-div-buttons">
-                    <input type="button" value="Apply" />
+                    {showApplyCouponBtn ? (
+                      <>
+                        <input
+                          type="button"
+                          value="Apply"
+                          onClick={handleApplyCouponButton}
+                        />
+                      </>
+                    ) : (
+                      <></>
+                    )}
                     <input
                       type="button"
                       value="cancel"
-                      onClick={handleAppyCouponButton}
+                      onClick={handleCouponBox}
                     />
                   </div>
                 </div>
@@ -401,13 +517,12 @@ function DetailedProductPage() {
               <>
                 <div
                   className="detailed-page-coupon-code"
-                  onClick={handleAppyCouponButton}
+                  onClick={handleCouponBox}
                 >
                   Have Coupon Code ? Apply
                 </div>
               </>
-            )}
-
+            )} */}
             <div className="prod-detailed-page-btn">
               <button id="add-to-cart-button" onClick={handleCartButton}>
                 Add To Cart
@@ -416,7 +531,6 @@ function DetailedProductPage() {
                 Buy Now
               </button>
             </div>
-
             {/* <div className="detailed-page-share-icons">
               <div className="share-title">Share Using : </div>
               <div className="share-icons">
