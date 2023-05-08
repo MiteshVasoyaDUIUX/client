@@ -34,7 +34,7 @@ function ImageSlider({ prodImage }) {
             style: {
               backgroundColor: "black",
               borderRadius: "50%",
-              opacity: "0.9",
+              opacity: "0.3",
             },
           }}
           IndicatorIcon={newImageData}
@@ -44,12 +44,19 @@ function ImageSlider({ prodImage }) {
                 ? console.log("asaasasa")
                 : "indicator-icon-button",
             style: {
-              border: "1px solid rgba(26, 26, 26, 0.6)",
+              border: "1px solid rgba(26, 26, 26, 0.3)",
               borderRadius: "5px",
               padding: "5px",
               objectFit: "cover",
             },
           }}
+          activeIndicatorIconButtonProps={{
+            style: {
+                boxShadow : "0 0 8px 1px #00000088",
+                borderRadius: "7px",
+                transform : "scale(1.03)"
+            }
+        }}
           indicatorContainerProps={{
             style: {
               marginTop: "20px",

@@ -1,3 +1,4 @@
+import { responsivePropType } from "@mui/system";
 import axios from "axios";
 
 const API_URL = "http://localhost:5555";
@@ -174,12 +175,10 @@ const giveRating = async (ratingData, token) => {
 };
 
 const applyCoupon = async (coupon, token) => {
-  const couponCode = {
-    coupon: coupon,
-  };
-  const response = await axios.get(
-    API_URL + "/buyer/applycoupon/" + coupon
-  );
+  // const couponCode = {
+  //   coupon: coupon,
+  // };
+  const response = await axios.get(API_URL + "/buyer/applycoupon/" + coupon);
 
   return response.data;
 };

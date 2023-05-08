@@ -122,7 +122,6 @@
 
 .order-address {
       display: flex;
-      /* border: 1px solid blue; */
       margin: 0 0 10px 0px;
       background-color: #fbfff8;
       padding: 15px 10px;
@@ -132,6 +131,22 @@
       cursor: default;
       font-family: 'Questrial', sans-serif;
 
+}
+
+.order-address .remove-address-button {
+      margin: 0 0 0 auto;
+      width: fit-content;
+      height: fit-content;
+      opacity: 0.7;
+      transition: ease-in-out 0.1s;
+}
+
+.order-address .remove-address-button:hover {
+      opacity: 1;
+}
+
+.order-address .remove-address-button:active {
+      transform: scale(0.8);
 }
 
 .address-select {

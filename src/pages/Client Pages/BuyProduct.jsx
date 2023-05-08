@@ -13,30 +13,68 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import Spinner from "../../components/Spinner";
-import { reset } from "../../features/auth/authSlice";
+import {
+  addNewAddress,
+  removeAddress,
+  reset,
+} from "../../features/auth/authSlice";
 import { Image } from "../../components/Images/Images";
 import EmailVerification from "../../components/EmailVerification";
 import { fetchOneProduct } from "../../features/products/productsSlice";
-import { applyCoupon, placeOrder } from "../../features/user/userSlice";
-import "./BuyProduct.css";
-
+import {
+  applyCoupon,
+  placeOrder,
+  resetIs,
+} from "../../features/user/userSlice";
+import CloseIcon from "@mui/icons-material/Close";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+import "./BuyProduct.css";
+
 let userData;
 
-function DeliveryAddress({ address, setDeliveryAddress }) {
+function DeliveryAddress({ address, setDeliveryAddress, deliveryAddress }) {
+  const dispatch = useDispatch();
+
   const handleAddressChange = () => {
     setDeliveryAddress(address);
+  };
+
+  const handleRemoveAddress = (e) => {
+    e.stopPropagation();
+    dispatch(removeAddress(address));
+
+    const allAddress = userData.user.address;
+
+    for (let index = 0; index < allAddress.length; index++) {
+      if (
+        allAddress[index].street === address.street &&
+        allAddress[index].city === address.city &&
+        allAddress[index].state === address.state &&
+        allAddress[index].pincode === address.pincode
+      ) {
+        allAddress.splice(index, 1);
+        userData.user.address = allAddress;
+        localStorage.setItem("user", JSON.stringify(userData));
+        break;
+      }
+    }
+    setDeliveryAddress(null);
   };
   return (
     <>
       <div className="order-address" onClick={handleAddressChange}>
-        <div>
-          <input type="radio" name="address" onChange={handleAddressChange} />
+        <div className="order-address-radio">
+          <input type="radio" name="address" onChange={handleAddressChange} checked ={JSON.stringify(address) === JSON.stringify(deliveryAddress)}/>
         </div>
-        <div style={{ marginLeft: "7px", marginTop: "1px" }}>
+        <div
+          style={{
+            marginLeft: "7px",
+            marginTop: "1px",
+          }}
+        >
           {address.street},
           <br />
           {address.city},
@@ -45,6 +83,14 @@ function DeliveryAddress({ address, setDeliveryAddress }) {
           <br />
           Pincode : {address.pincode}
           <br />
+        </div>
+        <div className="remove-address-button">
+          <CloseIcon
+            style={{ fontSize: "20px" }}
+            onClick={(e) => {
+              handleRemoveAddress(e);
+            }}
+          />
         </div>
       </div>
     </>
@@ -59,7 +105,7 @@ function BuyProduct() {
   const [emailVerPage, setEmailVerPage] = useState(false);
   const [mainClass, setMainClass] = useState("place-order-page");
   const [paymentOption, setPaymentOption] = useState("cod");
-  const [deliveryAddress, setDeliveryAddress] = useState({});
+  const [deliveryAddress, setDeliveryAddress] = useState(null);
   const [openNewAddress, setOpenNewAddress] = useState(false);
   const [newAddress, setAddressNew] = useState({
     street: "",
@@ -70,7 +116,14 @@ function BuyProduct() {
   const { product, productMessage } = useSelector((state) => state.products);
   const { user, isVerified } = useSelector((state) => state.auth);
 
-  const { isPlaced, coupon, isPlacing } = useSelector((state) => state.user);
+  const {
+    isPlaced,
+    userSliceMessage,
+    isError,
+    coupon,
+    isPlacing,
+    isAddrRemoved,
+  } = useSelector((state) => state.user);
 
   const { street, city, state, pincode } = newAddress;
 
@@ -78,18 +131,16 @@ function BuyProduct() {
   let quantity = params.id.split("&")[1];
   let couponCode = params.id.split("&")[2];
 
-  console.log("Params : ", couponCode !== "");
-
   useEffect(() => {
     if (!user) {
       navigate("/");
     }
 
     if (user) {
-      // console.log("User Logged...")
       userData = JSON.parse(localStorage.getItem("user"));
-      dispatch(applyCoupon(couponCode));
-      console.log("COUPON CODE  :", coupon);
+      if (couponCode !== "") {
+        dispatch(applyCoupon(couponCode));
+      }
     }
 
     dispatch(fetchOneProduct(productId));
@@ -102,14 +153,21 @@ function BuyProduct() {
 
     if (isPlaced) {
       alert(`Your Order is Placed...`);
-      // console.log("Your Order Id is ", orderId.orderId)
       navigate("/myorders");
     }
 
+    if (isError) {
+      alert(userSliceMessage);
+    }
+
     return () => {
-      reset();
+      dispatch(resetIs());
     };
-  }, [isPlaced, isVerified, user]);
+  }, [isPlaced, isVerified, isAddrRemoved, user, userSliceMessage]);
+
+  useEffect(() => {
+    console.log("Selected Delivery Address : ", deliveryAddress);
+  }, [deliveryAddress]);
 
   if (isPlacing) {
     <Spinner />;
@@ -129,7 +187,7 @@ function BuyProduct() {
   const handlePayNowButton = () => {
     if (paymentOption === "") {
       alert("Select Payment Option");
-    } else if (Object.keys(deliveryAddress).length === 0) {
+    } else if (deliveryAddress === null) {
       alert("Select Delivery Address");
     } else {
       if (!user.user.emailVerified) {
@@ -153,32 +211,9 @@ function BuyProduct() {
           couponCode,
         };
 
-        let allAddress = userData.user.address;
-        // console.log("Address : ", allAddress);
-        let addressFound = false;
-
-        for (let index = 0; index < allAddress.length; index++) {
-          const element = allAddress[index];
-
-          if (
-            element.street === deliveryAddress.street &&
-            element.city === deliveryAddress.city &&
-            element.state === deliveryAddress.state &&
-            element.pincode === deliveryAddress.pincode
-          ) {
-            addressFound = true;
-          } else {
-            continue;
-          }
-        }
-
-        if (!addressFound) {
-          allAddress.push(deliveryAddress);
-          localStorage.setItem("user", JSON.stringify(userData));
-        }
-
         let checkoutData = [];
         checkoutData.push(newData);
+        console.log("Checkout Data : ", checkoutData);
         dispatch(placeOrder(checkoutData));
       }
     }
@@ -186,7 +221,7 @@ function BuyProduct() {
 
   const handleAddAddrButton = () => {
     setOpenNewAddress(true);
-    setDeliveryAddress({});
+    setDeliveryAddress(null);
     var addressRadio = document.getElementsByName("address");
     for (var i = 0; i < addressRadio.length; i++) {
       if (addressRadio[i].checked) addressRadio[i].checked = false;
@@ -202,21 +237,13 @@ function BuyProduct() {
 
     if (street && city && state && pincode) {
       const newAddress = { street, city, state, pincode };
-
-      const addrArea = document.getElementById("address-select-id");
-
-      const div = document.createElement("div");
-
-      div.innerHTML = createRoot(div).render(
-        DeliveryAddress({
-          address: newAddress,
-          setDeliveryAddress: setDeliveryAddress,
-        })
-      );
-
-      addrArea.append(div);
-      setDeliveryAddress(newAddress);
+      dispatch(addNewAddress(newAddress));
+      const address = userData.user.address;
+      address.push(newAddress);
+      localStorage.setItem("user", JSON.stringify(userData));
       setOpenNewAddress(false);
+      setDeliveryAddress(null);
+      setAddressNew({});
     } else {
       window.alert("Fill all the Fields...");
     }
@@ -319,12 +346,13 @@ function BuyProduct() {
                       Delivery Address
                     </div>
                     <div className="address-select" id="address-select-id">
-                      {user?.user?.address.map((address) => {
+                      {user?.user.address.map((address) => {
                         return (
                           <>
                             <DeliveryAddress
                               address={address}
                               setDeliveryAddress={setDeliveryAddress}
+                              deliveryAddress = {deliveryAddress}
                             />
                           </>
                         );

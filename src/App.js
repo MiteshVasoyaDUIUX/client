@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useRef } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -34,10 +34,17 @@ import NewArrivalsPage from "./pages/Products/NewArrivalsPage";
 import TrendingProductsPage from "./pages/Products/TrendingProductsPage";
 
 function App() {
+  const scollToRef = useRef("");
+
+  const handleScroll = () => {
+    console.log("Scrolling...");
+  };
+
   return (
     <>
+    <div>
       <Router>
-        <div className="container">
+        <div className="container"ref={scollToRef}>
           <Header />
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -67,7 +74,10 @@ function App() {
             <Route path="/products/accessories" element={<Accessories />} />
             <Route path="/products/clothes" element={<Clothes />} />
             <Route path="/products/newarrivals" element={<NewArrivalsPage />} />
-            <Route path="/products/trendingproducts" element={<TrendingProductsPage />} />
+            <Route
+              path="/products/trendingproducts"
+              element={<TrendingProductsPage />}
+            />
             <Route path="/product/:id" element={<DetailedProductPage />} />
             <Route path="/product/placeorder/:id" element={<BuyProduct />} />
             <Route path="/logout" />
@@ -86,6 +96,7 @@ function App() {
         pauseOnHover={false}
         theme="colored"
       />
+      </div>
     </>
   );
 }

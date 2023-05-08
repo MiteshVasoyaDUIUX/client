@@ -17,6 +17,7 @@ const initialState = {
   isAddedCart: false,
   isRated: false,
   isError: false,
+  isAddrRemoved: false,
   userSliceMessage: "",
 };
 
@@ -451,9 +452,22 @@ const userSlice = createSlice({
       .addCase(applyCoupon.pending, (state) => {})
       .addCase(applyCoupon.fulfilled, (state, action) => {
         state.coupon = action.payload;
-        })
+      })
       .addCase(applyCoupon.rejected, (state, action) => {
         state.isError = true;
+        state.userSliceMessage = action.payload;
+      })
+      .addCase(placeOrder.pending, (state) => {
+        state.isPlacing = true;
+        state.isPlaced = false;
+      })
+      .addCase(placeOrder.fulfilled, (state, action) => {
+        state.isPlaced = true;
+        // state.userSliceMessage = action.payload;
+      })
+      .addCase(placeOrder.rejected, (state, action) => {
+        state.isError = true;
+        // console.log("Message : ", action.payload);
         state.userSliceMessage = action.payload;
       });
   },

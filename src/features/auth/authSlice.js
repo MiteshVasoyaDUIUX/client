@@ -68,8 +68,46 @@ export const resetPassword = createAsyncThunk(
   "user/reset-password",
   async (email, thunkAPI) => {
     try {
-      console.log("___Reset Password Slice...", email);
+      // console.log("___Reset Password Slice...", email);
       return await authService.resetPassword(email);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const addNewAddress = createAsyncThunk(
+  "user/add-address",
+  async (addressData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      const addAddress = await authService.addNewAddress(addressData, token);
+      return addAddress;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const removeAddress = createAsyncThunk(
+  "user/remove-address",
+  async (addressData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      const removeAddress = await authService.removeAddress(addressData, token);
+      return removeAddress;
     } catch (error) {
       const message =
         (error.response &&
@@ -152,6 +190,24 @@ export const authSlice = createSlice({
       .addCase(resetPassword.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(addNewAddress.pending, (state) => {})
+      .addCase(addNewAddress.fulfilled, (state, action) => {
+        // state.userSliceMessage = action.payload;
+        state.user.user.address.push(action.payload);
+      })
+      .addCase(addNewAddress.rejected, (state, action) => {
+        // console.log("Message : ", action.payload);
+        state.userSliceMessage = action.payload;
+      })
+      .addCase(removeAddress.pending, (state) => {})
+      .addCase(removeAddress.fulfilled, (state, action) => {
+        state.user.user.address.splice(action.payload, 1)
+      })
+      .addCase(removeAddress.rejected, (state, action) => {
+        state.isError = true;
+        // console.log("Message : ", action.payload);
+        state.userSliceMessage = action.payload;
       });
   },
 });

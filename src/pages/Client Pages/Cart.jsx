@@ -675,7 +675,7 @@ export default function Cart() {
 
     if (paymentOption === "") {
       alert("Select Payment Option");
-    } else if ( Object.keys(deliveryAddress).length === 0) {
+    } else if (Object.keys(deliveryAddress).length === 0) {
       alert("Select Delivery Address");
     } else {
       if (!user.user.emailVerified) {
@@ -742,7 +742,7 @@ export default function Cart() {
               <div className="cart-grand-total">
                 <div className="grand-total-summary-title">Summary :</div>
                 <div style={{ display: "flex", marginTop: "10px" }}>
-                  <div className="total-title">Total :</div>
+                  <div className="total-title">Subtotal :</div>
                   <div className="total-value">{totalAmount} ₹</div>
                 </div>
                 <div style={{ display: "flex" }}>

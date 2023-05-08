@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:5555/auth";
+const BUYER_API_URL = "http://localhost:5555";
 
 const register = async (userData) => {
   const response = await axios.post(API_URL + "/register/", userData);
@@ -48,12 +49,48 @@ const resetPassword = async (email) => {
   return response.data;
 };
 
+const removeAddress = async (addressData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  // console.log("Remove Button", token)
+
+  const response = await axios.post(
+    BUYER_API_URL + "/buyer/removeaddress/",
+    addressData,
+    config
+  );
+  return response.data;
+};
+
+const addNewAddress = async (addressData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  // console.log("New Address :", addressData);
+
+  const response = await axios.post(
+    BUYER_API_URL + "/buyer/addaddress/",
+    addressData,
+    config
+  );
+  return response.data;
+};
+
 const authService = {
   register,
   login,
   logout,
   verifyUser,
   resetPassword,
+  removeAddress,
+  addNewAddress,
 };
 
 export default authService;

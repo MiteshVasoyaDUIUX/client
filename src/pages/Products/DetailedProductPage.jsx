@@ -44,6 +44,7 @@ function DetailedProductPage() {
   );
   const productId = params.id;
   let outOfStock;
+  let couponData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -142,6 +143,7 @@ function DetailedProductPage() {
     if (couponCode !== "") {
       setCouponApplied(true);
       dispatch(applyCoupon(couponCode));
+      couponData = coupon;
     } else {
       alert("Enter Coupon Code...");
     }
@@ -376,7 +378,42 @@ function DetailedProductPage() {
             </div>
             <div className="total-amount">
               <div style={{ width: "fitContent", marginTop: "1%" }}>
-                {coupon?.discount !== undefined ? (
+                {user ? (
+                  <>
+                    <div className="coupon-code-div">
+                      <TextField
+                        sx={{
+                          "& .MuiInputBase-root": {
+                            height: "40px",
+                            width: "230px",
+                            // marginLeft: "25px",
+                            // marginRight: "0",
+                            backgroundColor: "white",
+                            border: "1px solid black",
+                            borderRadius: "0",
+                          },
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            border: "none",
+                          },
+                        }}
+                        className="coupon-code-text"
+                        variant="outlined"
+                        placeholder="Enter Coupon Code"
+                        value={couponCode}
+                        onChange={handleCouponChanges}
+                      />
+                      <input
+                        type="button"
+                        value="Apply"
+                        onClick={handleApplyCouponButton}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {couponData?.discount !== undefined ? (
                   <>
                     <div className="coupon-applied-div">
                       <div>{coupon.message}</div>
@@ -442,32 +479,6 @@ function DetailedProductPage() {
               </div>
             </div>
 
-            <div className="coupon-code-div">
-              <TextField
-                sx={{
-                  "& .MuiInputBase-root": {
-                    height: "40px",
-                    width: "230px",
-                    // marginLeft: "25px",
-                    // marginRight: "0",
-                    backgroundColor: "white",
-                    border: "1px solid black",
-                    borderRadius: "0",
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                }}
-                className="coupon-code-text"
-                variant="outlined"
-                placeholder="Enter Coupon Code"
-                value={couponCode}
-                onChange={handleCouponChanges}
-              />
-              <input
-                type="button"
-                value="Apply"
-                onClick={handleApplyCouponButton}
-              />
-            </div>
             {/* {openCouponBox ? (
               <>
                 <div className="coupon-code-div">
