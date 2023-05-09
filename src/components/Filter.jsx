@@ -38,8 +38,9 @@ function Filter({
     setPriceSliderValue(newValue);
   };
 
-  const handleRatingButton = (ratingValue) => {
+  const handleRatingButton = (event, ratingValue) => {
     setRatingValue(ratingValue);
+    console.log("Rating Value :", ratingValue);
   };
 
   const handlePODCheckBox = () => {
@@ -55,15 +56,19 @@ function Filter({
   };
 
   const handleClearRating = () => {
-    setRatingValue();
+    setRatingValue(0);
   };
 
   const handleClearDiscount = () => {
     setDiscount();
   };
 
-  const handleMinValueBox = (e) => {
-    const minValue = e.target.value;
+  const handleAllResetButton = () => {
+    handlePODCheckBox();
+    setIncludeOutOfStock(false);
+    setPODEligibility(false);
+    handleClearRating();
+    handleClearDiscount();
   };
 
   return (
@@ -71,139 +76,32 @@ function Filter({
       <div id="product-filter">
         <div id="customer-rating-div">
           <div id="customer-rating-div-title">Customer Rating :</div>
-          <div id="customer-rating-div-content">
-            {ratingValue !== undefined ? (
+          <div id="rating-clear-button">
+            {ratingValue !== 0 ? (
               <>
-                <p
+                <input
+                  type="button"
                   id="clear-rating-discount-button"
                   onClick={handleClearRating}
-                >
-                  Clear
-                </p>
+                  value="Clear"
+                />
               </>
             ) : (
               ""
             )}
-            <div className="customer-rating-item">
-              <Button
-                sx={
-                  ratingValue === 4
-                    ? {
-                        width: 200,
-                        display: "flex",
-                        alignItems: "center",
-                        fontFamily: "sans-serif",
-                        color: "black",
-                        fontSize: "16px",
-                        backgroundColor: "rgba(66, 102, 122, 0.200)",
-                      }
-                    : {
-                        width: 200,
-                        display: "flex",
-                        alignItems: "center",
-                        fontFamily: "sans-serif",
-                        color: "black",
-                        fontSize: "16px",
-                      }
-                }
-                onClick={() => {
-                  handleRatingButton(4);
-                }}
-              >
-                <Rating name="read-only" value={4} readOnly />
-                <Box sx={{ ml: 1 }}>& Up</Box>
-              </Button>
-            </div>
-            <div className="customer-rating-item">
-              <Button
-                sx={
-                  ratingValue === 3
-                    ? {
-                        width: 200,
-                        display: "flex",
-                        alignItems: "center",
-                        fontFamily: "sans-serif",
-                        color: "black",
-                        fontSize: "16px",
-                        backgroundColor: "rgba(66, 102, 122, 0.200)",
-                      }
-                    : {
-                        width: 200,
-                        display: "flex",
-                        alignItems: "center",
-                        fontFamily: "sans-serif",
-                        color: "black",
-                        fontSize: "16px",
-                      }
-                }
-                onClick={() => {
-                  handleRatingButton(3);
-                }}
-              >
-                <Rating name="read-only" value={3} readOnly />
-                <Box sx={{ ml: 1 }}>& Up</Box>
-              </Button>
-            </div>
-            <div className="customer-rating-item">
-              <Button
-                sx={
-                  ratingValue ===2
-                    ? {
-                        width: 200,
-                        display: "flex",
-                        alignItems: "center",
-                        fontFamily: "sans-serif",
-                        color: "black",
-                        fontSize: "16px",
-                        backgroundColor: "rgba(66, 102, 122, 0.200)",
-                      }
-                    : {
-                        width: 200,
-                        display: "flex",
-                        alignItems: "center",
-                        fontFamily: "sans-serif",
-                        color: "black",
-                        fontSize: "16px",
-                      }
-                }
-                onClick={() => {
-                  handleRatingButton(2);
-                }}
-              >
-                <Rating name="read-only" value={2} readOnly />
-                <Box sx={{ ml: 1 }}>& Up</Box>
-              </Button>
-            </div>
-            <div className="customer-rating-item">
-              <Button
-                sx={
-                  ratingValue ===1
-                    ? {
-                        width: 200,
-                        display: "flex",
-                        alignItems: "center",
-                        fontFamily: "sans-serif",
-                        color: "black",
-                        fontSize: "16px",
-                        backgroundColor: "rgba(66, 102, 122, 0.200)",
-                      }
-                    : {
-                        width: 200,
-                        display: "flex",
-                        alignItems: "center",
-                        fontFamily: "sans-serif",
-                        color: "black",
-                        fontSize: "16px",
-                      }
-                }
-                onClick={() => {
-                  handleRatingButton(1);
-                }}
-              >
-                <Rating name="read-only" value={1} readOnly />
-                <Box sx={{ ml: 1 }}>& Up</Box>
-              </Button>
-            </div>
+          </div>
+          <div id="customer-rating-div-content">
+            <Rating
+              name="half-rating"
+              precision={0.5}
+              value={ratingValue}
+              onChange={(event, newValue) => {
+                handleRatingButton(event, newValue);
+              }}
+              sx={{
+                fontSize: "30px",
+              }}
+            />
           </div>
         </div>
         <div id="price-div">
@@ -239,7 +137,7 @@ function Filter({
           <div id="delivery-type-div-title">Pay On Delivery :</div>
           <div id="delivery-type-div-content">
             <FormControlLabel
-              control={<Checkbox />}
+              control={<Checkbox checked={PODEligibility} />}
               label="Eligible Pay On Delivery"
               onChange={handlePODCheckBox}
             />
@@ -292,13 +190,30 @@ function Filter({
           <div id="availability-div-content">
             <div>
               <FormControlLabel
-                control={<Checkbox />}
+                control={<Checkbox checked={includeOutOfStock} />}
                 label="Include Out Of Stock Products"
                 onChange={handleIncludeOutOfStocks}
               />
             </div>
           </div>
         </div>
+        {ratingValue !== 0 ||
+        discount !== undefined ||
+        includeOutOfStock === true ||
+        PODEligibility === true ? (
+          <>
+            {" "}
+            <div id="reset-all-filter">
+              <input
+                type="button"
+                value="Reset All Filters"
+                onClick={handleAllResetButton}
+              />
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

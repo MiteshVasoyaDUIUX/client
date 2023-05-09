@@ -54,8 +54,6 @@ function Header() {
 
   let showHeader = true;
 
-  // console.log("Page Location : ", location);
-
   if (
     location.pathname === "/login" ||
     location.pathname === "/register" ||
@@ -70,6 +68,7 @@ function Header() {
     navigate("/");
     dispatch(logout());
     dispatch(reset());
+    document.getElementById("header-searchbar-input").value = "";
     // console.log("OnLogOUT");
   };
 
@@ -86,6 +85,10 @@ function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogoClick = () => {
+    document.getElementById("header-searchbar-input").value = "";
   };
 
   const handleSearchBar = (e) => {
@@ -119,6 +122,7 @@ function Header() {
                   <Link
                     to="/admin/dashboard"
                     style={{ color: "#f0f3ed", textDecoration: "none" }}
+                    onClick={handleLogoClick}
                   >
                     ShopCart
                   </Link>
@@ -126,6 +130,7 @@ function Header() {
                   <Link
                     to="/"
                     style={{ color: "#f0f3ed", textDecoration: "none" }}
+                    onClick={handleLogoClick}
                   >
                     ShopCart
                   </Link>
@@ -135,6 +140,7 @@ function Header() {
                   <Link
                     to="/"
                     style={{ color: "#f0f3ed", textDecoration: "none" }}
+                    onClick={handleLogoClick}
                   >
                     ShopCart
                   </Link>
@@ -376,7 +382,11 @@ function Header() {
         <>
           <div className="header">
             <div className="header-logo">
-              <Link to="/" style={{ color: "#f0f3ed", textDecoration: "none" }}>
+              <Link
+                to="/"
+                style={{ color: "#f0f3ed", textDecoration: "none" }}
+                onClick={handleLogoClick}
+              >
                 ShopCart
               </Link>
             </div>

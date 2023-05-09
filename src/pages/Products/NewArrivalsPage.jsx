@@ -83,7 +83,7 @@ function Accessories() {
   }, [isError, dispatch]);
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
-  const [ratingValue, setRatingValue] = useState();
+  const [ratingValue, setRatingValue] = useState(0);
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);

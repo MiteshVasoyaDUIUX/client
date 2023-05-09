@@ -103,7 +103,7 @@ export default function ProductCard({ product }) {
         onClick={handleCardClick}
       >
         <div className="detailed-page-image">
-          <ImageForCard prodImage={product.prodImage} />
+          <ImageForCard prodImage={product?.prodImage} />
         </div>
         <CardContent>
           <Typography

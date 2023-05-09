@@ -24,7 +24,15 @@
 
 #customer-rating-div-content {
       margin-top: 10px;
-      margin-left: 35px;
+      margin-left: auto;
+      margin-right: auto;
+      width: fit-content;
+}
+
+#rating-clear-button {
+      /* border :1px solid rgb(9, 119, 170); */
+      margin-top: 10px;
+
 }
 
 .customer-rating-item Button:hover {
@@ -42,18 +50,21 @@
 
 #clear-rating-discount-button {
       width: fit-content;
+      height: fit-content;
       text-align: left;
       vertical-align: middle;
-      margin: 3px;
       background-color: rgb(240, 246, 248);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
+      border: 1px solid black;
+      border-radius: 5px;
+      padding: 5px 10px;
 }
 
-#clear-rating-discount-button:hover {
-      color: rgb(9, 119, 170);
+#clear-rating-discount-button:active {
+      transform: scale(0.95);
 }
 
 
@@ -62,8 +73,6 @@
       padding-right: 10px;
       padding-left: 8px;
 }
-
-
 
 #price-div-title {
       margin-top: 15px;
@@ -194,7 +203,7 @@
       padding-top: 5px;
       padding-bottom: 5px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-height: 50px;
+      height: 50px;
 }
 
 .discount-button label {
@@ -204,4 +213,29 @@ height: 50px;
       margin-left: 8px;
       margin-bottom: 10px;
       border: 1px solid black;
+}
+
+#reset-all-filter {
+      width: fit-content;
+      margin: 10px auto 10px auto;
+}
+
+#reset-all-filter input[type="button"] {
+      border : 1px solid black;
+      border-radius: 5px;
+      background-color: white;
+      padding : 7px;
+      font-size: 16px;
+      transition: ease-in-out 0.14s;
+}
+
+#reset-all-filter input[type="button"]:hover {
+      background-color: black;
+      color: #f7f7f7;
+      box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.7);
+}
+
+#reset-all-filter input[type="button"]:active {
+      transform: scale(0.97);
+      box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.7);
 }

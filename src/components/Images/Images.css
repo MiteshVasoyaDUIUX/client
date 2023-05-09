@@ -63,10 +63,9 @@
       width: 390px;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 10px;
+      margin-top: 0px;
       min-height: 350;
-      /* border: 1px solid rgb(253, 2, 2); */
-      padding: 0;
+      /* padding: 10px; */
       text-align: center;
 }
 
@@ -75,13 +74,11 @@
       max-height: 400px;
       width: auto;
       position: absolute;
-      margin: auto;
+      margin: 0 auto auto auto;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-
-      /* border: 1px solid rgb(0, 253, 76); */
 }
 
 .carousel-one-image-for-list {
@@ -90,7 +87,6 @@
       margin-left: auto;
       margin-right: auto;
       min-height: 350;
-      /* border: 1px solid rgb(253, 2, 2); */
       padding: 0;
       text-align: center;
       z-index: 0;

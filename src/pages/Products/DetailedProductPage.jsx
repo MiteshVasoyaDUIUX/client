@@ -32,6 +32,7 @@ function DetailedProductPage() {
 
   const [wishList, setWishList] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  // eslint-disable-next-line no-unused-vars
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponCode, setCouponCode] = useState("");
 
@@ -73,11 +74,12 @@ function DetailedProductPage() {
     };
   }, [isAddedCart]);
 
-  if (product.prodQuantity === 0) {
-    outOfStock = 0;
-  } else {
-    outOfStock = 1;
-  }
+  // if (product.prodQuantity === 0) {
+  //   outOfStock = 0;
+  // } else {
+  //   outOfStock = 1;
+  // }
+
   const handleQuantityChange = (sign) => {
     switch (sign) {
       case "+":
@@ -332,16 +334,24 @@ function DetailedProductPage() {
             </div>
           </div>
 
-          <div className="buying-details">
+          <div className="order-details-card">
             <div className="product-stock">
-              {outOfStock === 0 ? (
+              {product.prodQuantity === 0 ? (
                 <div style={{ color: "rgb(207, 10, 10)" }}>Out Of Stock</div>
+              ) : product.prodQuantity < 5 ? (
+                <div style={{ color: "#379237", fontSize: "19px" }}>
+                  Hurry Up, Only {product.prodQuantity} left in Stock...
+                </div>
               ) : (
-                <div style={{ color: "#379237" }}>In Stocks</div>
+                <>
+                  <div style={{ color: "#379237" }}>
+                    In Stock
+                  </div>
+                </>
               )}
             </div>
             <div className="detailed-page-quantity">
-              {outOfStock !== 0 ? (
+              {product.prodQuantity !== 0 ? (
                 <>
                   <div style={{ width: "120px", marginTop: "2px" }}>
                     Quantity :
@@ -366,7 +376,7 @@ function DetailedProductPage() {
                     <button
                       id="quantity-increase"
                       onClick={() => handleQuantityChange("+")}
-                      disabled={product.prodQuantity === 0}
+                      disabled={product.prodQuantity === 0 || quantity >= product.prodQuantity}
                     >
                       +
                     </button>
@@ -386,8 +396,6 @@ function DetailedProductPage() {
                           "& .MuiInputBase-root": {
                             height: "40px",
                             width: "230px",
-                            // marginLeft: "25px",
-                            // marginRight: "0",
                             backgroundColor: "white",
                             border: "1px solid black",
                             borderRadius: "0",
@@ -542,30 +550,6 @@ function DetailedProductPage() {
                 Buy Now
               </button>
             </div>
-            {/* <div className="detailed-page-share-icons">
-              <div className="share-title">Share Using : </div>
-              <div className="share-icons">
-                <a
-                  href={`whatsapp://send?text=http://localhost:3000${location.pathname}`}
-                  data-action="share/whatsapp/share"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <IconButton>
-                    <WhatsAppIcon style={{ fontSize: "40px" }} />
-                  </IconButton>
-                </a>
-                <IconButton>
-                  <FacebookIcon style={{ fontSize: "40px" }} />
-                </IconButton>
-                <IconButton>
-                  <TwitterIcon style={{ fontSize: "40px" }} />
-                </IconButton>
-                <IconButton>
-                  <InstagramIcon style={{ fontSize: "40px" }} />
-                </IconButton>
-              </div>
-            </div> */}
           </div>
         </div>
       </ErrorBoundary>

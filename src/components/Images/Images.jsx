@@ -14,12 +14,6 @@ function ImageSlider({ prodImage }) {
     newImageData.push(<img src={element} alt="" height="90px" width="100px" />);
   }
 
-  let activeThumb = 0;
-
-  const handleImgChange = (id) => {
-    activeThumb = id;
-  };
-
   return (
     <>
       <div className="carousel-class">
@@ -27,9 +21,6 @@ function ImageSlider({ prodImage }) {
           sx={{}}
           height="700px"
           indicators
-          onChange={(id) => {
-            handleImgChange(id);
-          }}
           navButtonsProps={{
             style: {
               backgroundColor: "black",
@@ -39,31 +30,33 @@ function ImageSlider({ prodImage }) {
           }}
           IndicatorIcon={newImageData}
           indicatorIconButtonProps={{
-            className:
-              activeThumb === newImageData.id
-                ? console.log("asaasasa")
-                : "indicator-icon-button",
+            className: "indicator-icon-button",
             style: {
               border: "1px solid rgba(26, 26, 26, 0.3)",
               borderRadius: "5px",
               padding: "5px",
               objectFit: "cover",
+              marginLeft : "5px",
+              marginRight : "5px"
             },
           }}
           activeIndicatorIconButtonProps={{
             style: {
-                boxShadow : "0 0 8px 1px #00000088",
-                borderRadius: "7px",
-                transform : "scale(1.03)"
-            }
-        }}
+              boxShadow: "0 0 8px 1px #00000088",
+              borderRadius: "7px",
+              transform: "scale(1.03)",
+            },
+          }}
           indicatorContainerProps={{
             style: {
               marginTop: "20px",
               marginBottom: "20px",
               textAlign: "center",
               display: "flex",
+              width : "fit-content",
               justifyContent: "space-evenly",
+              marginLeft : "auto",
+              marginRight : "auto"
             },
           }}
           navButtonsAlwaysVisible
