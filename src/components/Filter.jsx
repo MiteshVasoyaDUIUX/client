@@ -34,13 +34,15 @@ function Filter({
   includeOutOfStock,
   setIncludeOutOfStock,
 }) {
+  const initialPriceSliderValue = [100, 200000];
+
   const handleSliderChange = (event, newValue) => {
     setPriceSliderValue(newValue);
+    console.log("Slider Value : ", priceSliderValue);
   };
 
   const handleRatingButton = (event, ratingValue) => {
     setRatingValue(ratingValue);
-    console.log("Rating Value :", ratingValue);
   };
 
   const handlePODCheckBox = () => {
@@ -65,10 +67,11 @@ function Filter({
 
   const handleAllResetButton = () => {
     handlePODCheckBox();
-    setIncludeOutOfStock(false);
-    setPODEligibility(false);
     handleClearRating();
     handleClearDiscount();
+    setIncludeOutOfStock(false);
+    setPODEligibility(false);
+    setPriceSliderValue(initialPriceSliderValue);
   };
 
   return (
@@ -77,7 +80,9 @@ function Filter({
         <div id="customer-rating-div">
           <div id="customer-rating-div-title">Customer Rating :</div>
           <div id="rating-clear-button">
-            {ratingValue !== 0 ? (
+            {ratingValue === 0 || ratingValue === null ? (
+              <></>
+            ) : (
               <>
                 <input
                   type="button"
@@ -86,8 +91,6 @@ function Filter({
                   value="Clear"
                 />
               </>
-            ) : (
-              ""
             )}
           </div>
           <div id="customer-rating-div-content">
@@ -200,9 +203,15 @@ function Filter({
         {ratingValue !== 0 ||
         discount !== undefined ||
         includeOutOfStock === true ||
-        PODEligibility === true ? (
+        PODEligibility === true ||
+        JSON.stringify(priceSliderValue) !==
+          JSON.stringify(initialPriceSliderValue) ? (
           <>
-            {" "}
+            {console.log(
+              "SLIDER : ",
+              JSON.stringify(priceSliderValue) !==
+                JSON.stringify(initialPriceSliderValue)
+            )}
             <div id="reset-all-filter">
               <input
                 type="button"

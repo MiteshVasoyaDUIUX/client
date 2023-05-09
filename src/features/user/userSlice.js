@@ -22,7 +22,7 @@ const initialState = {
 };
 
 export const placeOrder = createAsyncThunk(
-  "client/order/place",
+  "user/order/place",
   async (checkoutData, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
@@ -42,7 +42,7 @@ export const placeOrder = createAsyncThunk(
 );
 
 export const fetchAllOrders = createAsyncThunk(
-  "client/order/fetchallorders",
+  "user/order/fetch",
   async (userId, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
@@ -63,7 +63,7 @@ export const fetchAllOrders = createAsyncThunk(
 );
 
 export const giveRating = createAsyncThunk(
-  "client/order/giveRating",
+  "user/order/giveRating",
   async (ratingData, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
@@ -84,7 +84,7 @@ export const giveRating = createAsyncThunk(
 );
 
 export const addToCart = createAsyncThunk(
-  "productsForClient/addToCart",
+  "user/cart/add",
   async (userId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -104,7 +104,7 @@ export const addToCart = createAsyncThunk(
 );
 
 export const updateCartQuantity = createAsyncThunk(
-  "productsForClient/updateCart",
+  "user/cart/update",
   async (newData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -125,7 +125,7 @@ export const updateCartQuantity = createAsyncThunk(
 );
 
 export const removeFromCart = createAsyncThunk(
-  "productsForClient/removeFromCart",
+  "user/cart/remove",
   async (productId, thunkAPI) => {
     try {
       //'token' may be not use because only user can add the goal...
@@ -145,7 +145,7 @@ export const removeFromCart = createAsyncThunk(
 );
 
 export const addToWishList = createAsyncThunk(
-  "productsForClient/addToWishList",
+  "user/wishlist/add",
   async (data, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -165,7 +165,7 @@ export const addToWishList = createAsyncThunk(
 );
 
 export const removeFromWishlist = createAsyncThunk(
-  "productsForClient/removeFromWishlist",
+  "user/wishlist/remove",
   async (data, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -186,7 +186,7 @@ export const removeFromWishlist = createAsyncThunk(
 );
 
 export const fetchWishList = createAsyncThunk(
-  "productsForClient/fetchWishList",
+  "user/wishlist/fetch",
   async (data, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -206,7 +206,7 @@ export const fetchWishList = createAsyncThunk(
 );
 
 export const fetchWishListProducts = createAsyncThunk(
-  "productsForClient/fetchWishListProducts",
+  "user/wishlist/fetch/products",
   async (data, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -226,7 +226,7 @@ export const fetchWishListProducts = createAsyncThunk(
 );
 
 export const fetchCart = createAsyncThunk(
-  "productsForClient/fetchCart",
+  "user/cart/fetch",
   async (data, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;

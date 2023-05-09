@@ -16,11 +16,11 @@ const initialState = {
 };
 
 export const fetchProducts = createAsyncThunk(
-  "productsForClient/fetchProducts",
-  async (thunkAPI) => {
+  "products/fetch/products",
+  async (productReqData, thunkAPI) => {
     try {
-      const response = await products.fetchProducts();
-      // console.log(products);
+      const response = await products.fetchProducts(productReqData);
+      // console.log(productReqData);
       return response;
     } catch (error) {
       const message =
@@ -35,7 +35,7 @@ export const fetchProducts = createAsyncThunk(
 );
 
 export const fetchNewArrivals = createAsyncThunk(
-  "products/fetchNewArrivals",
+  "products/fetch/new-arrivals",
   async (thunkAPI) => {
     try {
       const response = await products.fetchNewArrivals();
@@ -53,7 +53,7 @@ export const fetchNewArrivals = createAsyncThunk(
 );
 
 export const searchProduct = createAsyncThunk(
-  "productsForClient/searchProduct",
+  "products/fetch/search-products",
   async (quary, thunkAPI) => {
     try {
       const response = await products.searchProduct(quary);
@@ -71,7 +71,7 @@ export const searchProduct = createAsyncThunk(
 );
 
 export const fetchOneProduct = createAsyncThunk(
-  "productsForClient/fetchOneProducts",
+  "products/fetch/one",
   async (productId, thunkAPI) => {
     try {
       const response = await products.fetchOneProduct(productId);
@@ -89,7 +89,7 @@ export const fetchOneProduct = createAsyncThunk(
 );
 
 export const fetchTrendingProducts = createAsyncThunk(
-  "products/fetchNewArrivals",
+  "products/fetch/new-",
   async (thunkAPI) => {
     try {
       const response = await products.fetchTrendingProducts();

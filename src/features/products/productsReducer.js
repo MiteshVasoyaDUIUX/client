@@ -3,9 +3,12 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5555";
 
-const fetchProducts = async () => {
-  // console.log("Fetching Product...");
-  const response = await axios.get(API_URL);
+const fetchProducts = async (productReqData) => {
+  console.log("Fetching Product...");
+  const response = await axios.get(
+    API_URL + "/products?page=" +
+    productReqData.page + "&category=" + productReqData.category
+  );
   return response.data;
 };
 
@@ -36,7 +39,7 @@ const products = {
   fetchOneProduct,
   searchProduct,
   fetchNewArrivals,
-  fetchTrendingProducts
+  fetchTrendingProducts,
 };
 
 export default products;

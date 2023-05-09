@@ -98,6 +98,10 @@
       padding: 5px;
 }
 
+#slider-min-value-textbox:focus {
+      outline: none;
+}
+
 #slider-max-value-textbox {
       border: 1px solid rgb(236, 234, 234);
       border-radius: 10px;
@@ -109,6 +113,10 @@
       float: right;
       text-align: center;
       padding: 5px;
+}
+
+#slider-max-value-textbox:focus {
+      outline: none;
 }
 
 

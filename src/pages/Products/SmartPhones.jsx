@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, reset } from "../../features/products/productsSlice";
 import Filter from "../../components/Filter";
@@ -8,7 +8,7 @@ import "./SmartPhones.css";
 import { resetIs } from "../../features/user/userSlice";
 import { toast } from "react-toastify";
 
-function OtherProductsItem({ newProdArray, wishlist }) {
+function SmartPhonesItem({ filteredProductArray, wishlist }) {
   return (
     <>
       <div>
@@ -18,7 +18,7 @@ function OtherProductsItem({ newProdArray, wishlist }) {
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        <ProductCardsGrid products={newProdArray} wishlist={wishlist} />
+        <ProductCardsGrid products={filteredProductArray} wishlist={wishlist} />
       </div>
     </>
   );
@@ -67,13 +67,21 @@ const filterByDiscount = (discount, prodArray) => {
 };
 
 function SmartPhones() {
+  const bottomRef = useRef(null);
+
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState(0);
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  let otherProducts = [];
-  let newProdArray = [];
+  
+  let productArray = [];
+  let filteredProductArray = [];
+
+  let productPage = {
+    page: 1,
+    category: "smart phones",
+  };
 
   const dispatch = useDispatch();
   const { products, isLoading, isError, productMessage } = useSelector(
@@ -85,12 +93,12 @@ function SmartPhones() {
   );
 
   useEffect(() => {
+    dispatch(fetchProducts(productPage));
+  }, []);
+
+  useEffect(() => {
     if (isError) {
       toast.error(productMessage || userSliceMessage);
-    }
-
-    if (products) {
-      dispatch(fetchProducts());
     }
   }, [isError, dispatch]);
 
@@ -104,44 +112,39 @@ function SmartPhones() {
     };
   }, [isAddedCart]);
 
-  if (products.length > 0) {
-    products.map((product) => {
-      let category = product.prodCategory;
+  console.log("Products :", products);
 
+  if (products?.products?.length > 0) {
+    products.products.map((product) => {
       if (includeOutOfStock) {
-        if (category.includes("Phone") || category.includes("phones")) {
-          otherProducts.push(product);
-        }
+        productArray.push(product);
       } else {
-        if (
-          (category.includes("Phone") || category.includes("phones")) &&
-          product.prodQuantity > 0
-        ) {
-          otherProducts.push(product);
+        if (product.prodQuantity > 0) {
+          productArray.push(product);
         }
       }
     });
 
     if (ratingValue) {
-      newProdArray = filterByRating(ratingValue, otherProducts);
+      filteredProductArray = filterByRating(ratingValue, productArray);
     } else {
-      newProdArray = otherProducts;
+      filteredProductArray = productArray;
     }
 
     if (priceSliderValue) {
-      newProdArray = filterByPrice(
+      filteredProductArray = filterByPrice(
         priceSliderValue[0],
         priceSliderValue[1],
-        newProdArray
+        filteredProductArray
       );
     }
 
     if (PODEligibility) {
-      newProdArray = filterByPODEligibility(newProdArray);
+      filteredProductArray = filterByPODEligibility(filteredProductArray);
     }
 
     if (discount) {
-      newProdArray = filterByDiscount(discount, newProdArray);
+      filteredProductArray = filterByDiscount(discount, filteredProductArray);
     }
   }
 
@@ -161,7 +164,10 @@ function SmartPhones() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <OtherProductsItem newProdArray={newProdArray} wishlist={wishlist} />
+          <SmartPhonesItem
+            filteredProductArray={filteredProductArray}
+            wishlist={wishlist}
+          />
         </div>
       </div>
     </>

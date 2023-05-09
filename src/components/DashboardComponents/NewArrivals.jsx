@@ -27,6 +27,8 @@ function NewArrivals() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  
+
   const { products, isFetching, isError } = useSelector(
     (state) => state.products
   );
@@ -34,6 +36,7 @@ function NewArrivals() {
   const {isAddedCart, userSliceMessage} = useSelector((state) => state.user)
 
   useEffect(() => {
+    
     dispatch(fetchProducts());
 
     if (isError) {
