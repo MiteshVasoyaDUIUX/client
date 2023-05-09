@@ -16,6 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import "./Cart.css";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { createRoot } from "react-dom/client";
 import EmailVerification from "../../components/EmailVerification";
@@ -28,16 +29,51 @@ import {
 } from "../../features/user/userSlice";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { addNewAddress, removeAddress } from "../../features/auth/authSlice";
 
-function DeliveryAddress({ address, setDeliveryAddress }) {
+let userData;
+
+function DeliveryAddress({ address, setDeliveryAddress, deliveryAddress }) {
+  const dispatch = useDispatch();
+
   const handleAddressChange = () => {
     setDeliveryAddress(address);
   };
+
+  const handleRemoveAddress = (e) => {
+    e.stopPropagation();
+    dispatch(removeAddress(address));
+
+    const allAddress = userData.user.address;
+
+    for (let index = 0; index < allAddress.length; index++) {
+      if (
+        allAddress[index].street === address.street &&
+        allAddress[index].city === address.city &&
+        allAddress[index].state === address.state &&
+        allAddress[index].pincode === address.pincode
+      ) {
+        allAddress.splice(index, 1);
+        userData.user.address = allAddress;
+        localStorage.setItem("user", JSON.stringify(userData));
+        break;
+      }
+    }
+    setDeliveryAddress(null);
+  };
+
   return (
     <>
       <div className="cart-order-address" onClick={handleAddressChange}>
-        <div>
-          <input type="radio" name="address" onChange={handleAddressChange} />
+        <div className="cart-order-address-radio">
+          <input
+            type="radio"
+            name="address"
+            onChange={handleAddressChange}
+            checked={
+              JSON.stringify(address) === JSON.stringify(deliveryAddress)
+            }
+          />
         </div>
         <div style={{ marginLeft: "7px", marginTop: "1px" }}>
           {address?.street},
@@ -48,6 +84,14 @@ function DeliveryAddress({ address, setDeliveryAddress }) {
           <br />
           Pincode : {address?.pincode}
           <br />
+        </div>
+        <div className="cart-remove-address-button">
+          <CloseIcon
+            style={{ fontSize: "20px" }}
+            onClick={(e) => {
+              handleRemoveAddress(e);
+            }}
+          />
         </div>
       </div>
     </>
@@ -275,7 +319,10 @@ function PaymentDeliveryPage({
   setAddressNew,
   newAddress,
   mainClass,
+  deliveryAddress
 }) {
+  const dispatch = useDispatch();
+  
   const handlePaymentOptionChanges = (event) => {
     setPaymentOption(event.target.value);
   };
@@ -296,21 +343,13 @@ function PaymentDeliveryPage({
 
     if (street && city && state && pincode) {
       const newAddress = { street, city, state, pincode };
-
-      const addrArea = document.getElementById("address-select-id");
-
-      const div = document.createElement("div");
-
-      div.innerHTML = createRoot(div).render(
-        DeliveryAddress({
-          address: newAddress,
-          setDeliveryAddress: setDeliveryAddress,
-        })
-      );
-
-      addrArea.append(div);
-      setDeliveryAddress(newAddress);
+      dispatch(addNewAddress(newAddress));
+      const address = userData.user.address;
+      address.push(newAddress);
+      localStorage.setItem("user", JSON.stringify(userData));
       setOpenNewAddress(false);
+      setDeliveryAddress(null);
+      setAddressNew({});
     } else {
       window.alert("Fill all the Fields...");
     }
@@ -349,6 +388,7 @@ function PaymentDeliveryPage({
                     <DeliveryAddress
                       address={address}
                       setDeliveryAddress={setDeliveryAddress}
+                      deliveryAddress={deliveryAddress}
                     />
                   </>
                 );
@@ -614,7 +654,6 @@ export default function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const userData = JSON.parse(localStorage.getItem("user"));
   const [page, setPage] = useState(1);
   const [paymentOption, setPaymentOption] = useState("cod");
 
@@ -624,7 +663,7 @@ export default function Cart() {
   const { user } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.user);
   const { isPlaced } = useSelector((state) => state.user);
-  const [deliveryAddress, setDeliveryAddress] = useState({});
+  const [deliveryAddress, setDeliveryAddress] = useState(null);
 
   const [newAddress, setAddressNew] = useState({
     street: "",
@@ -640,6 +679,7 @@ export default function Cart() {
 
     if (user) {
       dispatch(fetchCart(userId));
+      userData = JSON.parse(localStorage.getItem("user"));
     }
 
     if (isPlaced) {
@@ -670,12 +710,10 @@ export default function Cart() {
 
   const handlePaymentButton = () => {
     let checkoutData = [];
-    let allAddress = userData.user.address;
-    let addressFound = false;
 
     if (paymentOption === "") {
       alert("Select Payment Option");
-    } else if (Object.keys(deliveryAddress).length === 0) {
+    } else if (deliveryAddress === null) {
       alert("Select Delivery Address");
     } else {
       if (!user.user.emailVerified) {
@@ -685,26 +723,6 @@ export default function Cart() {
           setMainClass("blur-cart-payment-details");
         }
       } else {
-        for (let index = 0; index < allAddress.length; index++) {
-          const element = allAddress[index];
-
-          if (
-            element.street === deliveryAddress.street &&
-            element.city === deliveryAddress.city &&
-            element.state === deliveryAddress.state &&
-            element.pincode === deliveryAddress.pincode
-          ) {
-            addressFound = true;
-          } else {
-            continue;
-          }
-        }
-
-        if (!addressFound) {
-          allAddress.push(deliveryAddress);
-          localStorage.setItem("user", JSON.stringify(userData));
-        }
-
         for (let index = 0; index < cart.length; index++) {
           if (cart[index].prodQuantity !== 0) {
             const newData = {
@@ -773,6 +791,7 @@ export default function Cart() {
               setAddressNew={setAddressNew}
               newAddress={newAddress}
               mainClass={mainClass}
+              deliveryAddress ={deliveryAddress}
             />
             {mainClass === "blur-cart-payment-details" ? (
               <></>

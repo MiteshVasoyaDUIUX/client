@@ -201,15 +201,30 @@
 
 .cart-order-address {
       display: flex;
-      /* border: 1px solid blue; */
       margin: 0 0 10px 0px;
       background-color: #fbfff8;
       padding: 15px 10px;
       border-radius: 8px;
       width: 400px;
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
       box-shadow: 0px -3px 10px -3px rgba(0, 0, 0, 0.445);
       cursor: default;
+      font-family: 'Questrial', sans-serif;
+}
+
+.cart-order-address .cart-remove-address-button {
+      margin: 0 0 0 auto;
+      width: fit-content;
+      height: fit-content;
+      opacity: 0.7;
+      transition: ease-in-out 0.1s;
+}
+
+.cart-order-address .cart-remove-address-button:hover {
+      opacity: 1;
+}
+
+.cart-order-address .cart-remove-address-button:active {
+      transform: scale(0.8);
 }
 
 .cart-delivery-all-address {

@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
@@ -65,9 +64,16 @@ function DeliveryAddress({ address, setDeliveryAddress, deliveryAddress }) {
   };
   return (
     <>
-      <div className="order-address" onClick={handleAddressChange}>
+      <div className="order-address" onClick={handleAddressChange} >
         <div className="order-address-radio">
-          <input type="radio" name="address" onChange={handleAddressChange} checked ={JSON.stringify(address) === JSON.stringify(deliveryAddress)}/>
+          <input
+            type="radio"
+            name="address"
+            onChange={handleAddressChange}
+            checked={
+              JSON.stringify(address) === JSON.stringify(deliveryAddress)
+            }
+          />
         </div>
         <div
           style={{
@@ -352,7 +358,7 @@ function BuyProduct() {
                             <DeliveryAddress
                               address={address}
                               setDeliveryAddress={setDeliveryAddress}
-                              deliveryAddress = {deliveryAddress}
+                              deliveryAddress={deliveryAddress}
                             />
                           </>
                         );
