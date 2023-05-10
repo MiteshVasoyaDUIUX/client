@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, reset } from "../../features/products/productsSlice";
@@ -7,6 +8,7 @@ import discountCalcFunc from "../../../src/app/discountCalcFunc";
 import "./SmartPhones.css";
 import { resetIs } from "../../features/user/userSlice";
 import { toast } from "react-toastify";
+import { ProductFetchingSpinner } from "../../components/Spinner";
 
 function SmartPhonesItem({ filteredProductArray, wishlist }) {
   return (
@@ -69,93 +71,56 @@ const filterByDiscount = (discount, prodArray) => {
 function SmartPhones() {
   const dispatch = useDispatch();
 
-  // const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
-  // const [ratingValue, setRatingValue] = useState(0);
-  // const [PODEligibility, setPODEligibility] = useState(false);
-  // const [discount, setDiscount] = useState();
-  // const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-
-  const [product, setProduct] = useState([]);
+  const [priceRange, setPriceRange] = useState([100, 200000]);
+  const [price, setPrice] = useState([100, 200000]);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [PODEligibility, setPODEligibility] = useState(false);
+  const [discount, setDiscount] = useState();
+  const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+  const [nextPage, setNextPage] = useState(1);
   const [page, setPage] = useState(1);
+  const [product, setProduct] = useState([]);
+  const [moreProducts, setMoreProducts] = useState(true);
+  const [showSpinner, setShowSpinner] = useState(false);
 
-  const { products, isLoading, isError, productMessage } = useSelector(
-    (state) => state.products
-  );
+  const { products, isLoading, isFetching, isError, productMessage } =
+    useSelector((state) => state.products);
+
   const { wishlist, isAddedCart, userSliceMessage } = useSelector(
     (state) => state.user
   );
 
-  let productArray = [];
-  let filteredProductArray = [];
-
-  let productReqData = {
-    page: 1,
+  let prodReqData = {
+    page: page,
     category: "smart phones",
-  };
-
-  const fetchProductData = () => {
-    dispatch(fetchProducts(productReqData));
+    filter: {
+      price: priceRange,
+      rating: ratingValue,
+      discount: discount,
+      outOfStock: includeOutOfStock,
+      POD: PODEligibility,
+    },
   };
 
   useEffect(() => {
-    fetchProductData();
-  }, [page]);
-
-  // useEffect(() => {
-  //   if (isError) {
-  //     toast.error(productMessage || userSliceMessage);
-  //   }
-  // }, [isError, dispatch]);
-
-  useEffect(() => {
-    if (isAddedCart) {
-      toast.success(userSliceMessage);
+    if (isFetching) {
+      setShowSpinner(true);
+    } else {
+      setShowSpinner(false);
     }
+  }, [isFetching]);
 
-    if (products) {
-      const prod = products.products;
+  useEffect(() => {
+    fetchProductsData();
+  }, [page, ]);
+
+  useEffect(() => {
+    if (products.products?.length > 0) {
       setProduct((prev) => [...prev, ...products.products]);
-      console.log("Products : ", prod);
+      setNextPage(products.nextPage);
+      setMoreProducts(products.moreProduct);
     }
-
-    return () => {
-      dispatch(resetIs());
-    };
-  }, [isAddedCart, products]);
-
-  // if (products?.products?.length > 0) {
-  //   product.map((product) => {
-  //     if (includeOutOfStock) {
-  //       productArray.push(product);
-  //     } else {
-  //       if (product.prodQuantity > 0) {
-  //         productArray.push(product);
-  //       }
-  //     }
-  //   });
-
-  //   if (ratingValue) {
-  //     filteredProductArray = filterByRating(ratingValue, productArray);
-  //   } else {
-  //     filteredProductArray = productArray;
-  //   }
-
-  //   if (priceSliderValue) {
-  //     filteredProductArray = filterByPrice(
-  //       priceSliderValue[0],
-  //       priceSliderValue[1],
-  //       filteredProductArray
-  //     );
-  //   }
-
-  //   if (PODEligibility) {
-  //     filteredProductArray = filterByPODEligibility(filteredProductArray);
-  //   }
-
-  //   if (discount) {
-  //     filteredProductArray = filterByDiscount(discount, filteredProductArray);
-  //   }
-  // }
+  }, [products]);
 
   const handelInfiniteScroll = async () => {
     try {
@@ -163,19 +128,49 @@ function SmartPhones() {
         window.innerHeight + document.documentElement.scrollTop + 1 >=
         document.documentElement.scrollHeight
       ) {
-        productReqData = {
-          page: productReqData.page + 1,
-          category: productReqData.category,
-        };
-
         setPage((prev) => prev + 1);
-
-        console.log("Fetching More Products_ : ", products);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchProductsData = () => {
+    if (moreProducts) {
+      dispatch(fetchProducts(prodReqData));
+
+      prodReqData = {
+        page: products.nextPage,
+        category: "smart phones",
+      };
+    }
+  };
+
+  useEffect(() => {
+    console.log(
+      "Changes....",
+      // price,
+      // ratingValue,
+      // PODEligibility,
+      // includeOutOfStock,
+      // discount,
+      // prodReqData
+    );
+
+    let prodReqData = {
+      page: 1,
+      category: "smart phones",
+      filter: {
+        price: priceRange,
+        rating: ratingValue,
+        discount: discount,
+        outOfStock: includeOutOfStock,
+        POD: PODEligibility,
+      },
+    };
+
+    dispatch(fetchProducts(prodReqData));
+  }, [ratingValue, PODEligibility, includeOutOfStock, discount, price]);
 
   useEffect(() => {
     window.addEventListener("scroll", handelInfiniteScroll);
@@ -186,28 +181,41 @@ function SmartPhones() {
     <>
       <div style={{ display: "flex" }}>
         <Filter
-          // priceSliderValue={priceSliderValue}
-          // setPriceSliderValue={setPriceSliderValue}
-          // ratingValue={ratingValue}
-          // setRatingValue={setRatingValue}
-          // PODEligibility={PODEligibility}
-          // setPODEligibility={setPODEligibility}
-          // discount={discount}
-          // setDiscount={setDiscount}
-          // includeOutOfStock={includeOutOfStock}
-          // setIncludeOutOfStock={setIncludeOutOfStock}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          price={price}
+          setPrice={setPrice}
+          ratingValue={ratingValue}
+          setRatingValue={setRatingValue}
+          PODEligibility={PODEligibility}
+          setPODEligibility={setPODEligibility}
+          discount={discount}
+          setDiscount={setDiscount}
+          includeOutOfStock={includeOutOfStock}
+          setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div
-          style={{
-            marginLeft: "100px",
-            width: "fitContent",
-            border: "1px solid black",
-          }}
-        >
-          <SmartPhonesItem
-            filteredProductArray={filteredProductArray}
-            wishlist={wishlist}
-          />
+        <div>
+          <div
+            style={{
+              marginLeft: "100px",
+              width: "fitContent",
+              display: "block",
+            }}
+          >
+            <SmartPhonesItem
+              filteredProductArray={product}
+              wishlist={wishlist}
+            />
+          </div>
+          {showSpinner ? (
+            <>
+              <div className="product-fetching-spinner">
+                <ProductFetchingSpinner />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </>

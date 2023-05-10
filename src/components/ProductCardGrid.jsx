@@ -7,7 +7,6 @@ export function ProductCardsGrid({ products, wishlist }) {
     <>
       <div className="product-card-grid">
         {products.map((product) => {
-
           if (wishlist?.includes(product._id)) {
             inWishlist = true;
           } else {

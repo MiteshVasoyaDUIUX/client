@@ -23,8 +23,10 @@ import React from "react";
 import "./Filter.css";
 
 function Filter({
-  priceSliderValue,
-  setPriceSliderValue,
+  priceRange,
+  setPriceRange,
+  price,
+  setPrice,
   ratingValue,
   setRatingValue,
   PODEligibility,
@@ -37,10 +39,12 @@ function Filter({
   const initialPriceSliderValue = [100, 200000];
 
   const handleSliderChange = (event, newValue) => {
-    setPriceSliderValue(newValue);
-    console.log("Slider Value : ", priceSliderValue);
+    setPriceRange(newValue);
   };
 
+  const handlePriceChange = () => {
+    setPrice(priceRange);
+  };
   const handleRatingButton = (event, ratingValue) => {
     setRatingValue(ratingValue);
   };
@@ -71,7 +75,8 @@ function Filter({
     handleClearDiscount();
     setIncludeOutOfStock(false);
     setPODEligibility(false);
-    setPriceSliderValue(initialPriceSliderValue);
+    setPrice(initialPriceSliderValue)
+    setPriceRange(initialPriceSliderValue);
   };
 
   return (
@@ -114,24 +119,25 @@ function Filter({
               type="text"
               name="slider-value"
               id="slider-min-value-textbox"
-              value={priceSliderValue[0]}
+              value={priceRange[0]}
               readOnly
             />
             <input
               type="text"
               name="slider-value"
               id="slider-max-value-textbox"
-              value={priceSliderValue[1]}
+              value={priceRange[1]}
               readOnly
             />
             <Box sx={{ width: 290 }} id="bolx">
               <Slider
-                value={priceSliderValue}
-                onChange={handleSliderChange}
+                value={priceRange}
                 valueLabelDisplay="auto"
                 color="primary"
                 min={100}
                 max={200000}
+                onChange={handleSliderChange}
+                onChangeCommitted={handlePriceChange}
               />
             </Box>
           </div>
@@ -204,14 +210,9 @@ function Filter({
         discount !== undefined ||
         includeOutOfStock === true ||
         PODEligibility === true ||
-        JSON.stringify(priceSliderValue) !==
+        JSON.stringify(priceRange) !==
           JSON.stringify(initialPriceSliderValue) ? (
           <>
-            {console.log(
-              "SLIDER : ",
-              JSON.stringify(priceSliderValue) !==
-                JSON.stringify(initialPriceSliderValue)
-            )}
             <div id="reset-all-filter">
               <input
                 type="button"

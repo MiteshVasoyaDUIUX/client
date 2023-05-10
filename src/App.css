@@ -13,5 +13,10 @@
     height: 200px;
 }
 
+.product-fetching-spinner {
+    width: fit-content;
+    height : fit-content;
+    margin: 3px auto 18px auto;
+}
 
 
