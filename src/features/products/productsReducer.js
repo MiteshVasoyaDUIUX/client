@@ -26,14 +26,32 @@ const searchProduct = async (quary) => {
   return response.data;
 };
 
-const fetchNewArrivals = async (quary) => {
-  const response = await axios.get(API_URL + "/newarrivals");
+const fetchNewArrivals = async (productReqData) => {
+  const response = await axios.get(
+    API_URL + "/newarrivals?page=" + productReqData.page,
+    productReqData.filter
+  );
   console.log("Response : ", response.data);
   return response.data;
 };
 
-const fetchTrendingProducts = async (quary) => {
-  const response = await axios.get(API_URL + "/trendingproducts");
+const fetchNewArrivalComp = async (quary) => {
+  const response = await axios.get(API_URL + "/newarrivalscomp");
+  console.log("Response : ", response.data);
+  return response.data;
+};
+
+const fetchTrendingProducts = async (productReqData) => {
+  const response = await axios.get(
+    API_URL + "/trendingproducts?page=" + productReqData.page,
+    productReqData.filter
+  );
+  // console.log("Trending Products : ", response.data);
+  return response.data;
+};
+
+const fetchTrendingProductComp = async (quary) => {
+  const response = await axios.get(API_URL + "/trendingproductscomp");
   // console.log("Trending Products : ", response.data);
   return response.data;
 };
@@ -43,7 +61,9 @@ const products = {
   fetchOneProduct,
   searchProduct,
   fetchNewArrivals,
+  fetchNewArrivalComp,
   fetchTrendingProducts,
+  fetchTrendingProductComp,
 };
 
 export default products;

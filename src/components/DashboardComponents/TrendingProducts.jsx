@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import "./TrendingProducts.css";
 import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, reset } from "../../features/products/productsSlice";
+import {
+  fetchTrendingProductComp,
+  reset,
+} from "../../features/products/productsSlice";
 import { ErrorBoundary } from "../ErrorBoundary";
 import ProductCard from "../ProductCard";
 import Spinner from "../Spinner";
@@ -15,7 +18,7 @@ function ProductCards({ trendingProducts, wishlist }) {
   return (
     <>
       {trendingProducts.map((product) => {
-        if (wishlist.includes(product._id)) {
+        if (wishlist.includes(product?._id)) {
           inWishlist = true;
         } else {
           inWishlist = false;
@@ -51,7 +54,7 @@ function TrendingProducts() {
     }
 
     if (products) {
-      dispatch(fetchProducts());
+      dispatch(fetchTrendingProductComp());
     }
 
     return () => {
@@ -62,10 +65,9 @@ function TrendingProducts() {
   if (isFetching) {
     return <Spinner />;
   }
-  
 
   const openNewArrivalsPage = () => {
-    navigate("/products/trendingproducts")
+    navigate("/products/trendingproducts");
   };
 
   return (

@@ -132,15 +132,12 @@ function SmartPhones() {
 
   const fetchProductsData = () => {
     if (moreProducts) {
-      console.log("Fetch More Products__----");
       dispatch(fetchProducts(prodReqData));
 
       prodReqData = {
         page: products.nextPage,
         category: "smart phones",
       };
-
-      console.log("Product's Request Data : ", prodReqData);
     }
   };
 

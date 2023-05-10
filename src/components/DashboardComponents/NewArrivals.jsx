@@ -6,7 +6,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { toast } from "react-toastify";
 import ProductCard from "../ProductCard";
 import Spinner from "../Spinner";
-import { fetchProducts } from "../../features/products/productsSlice";
+import { fetchNewArrivalComp } from "../../features/products/productsSlice";
 import "./NewArrivals.css";
 import { useNavigate } from "react-router-dom";
 import { reset, resetIs } from "../../features/user/userSlice";
@@ -27,17 +27,14 @@ function NewArrivals() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  
-
   const { products, isFetching, isError } = useSelector(
     (state) => state.products
   );
 
-  const {isAddedCart, userSliceMessage} = useSelector((state) => state.user)
+  const { isAddedCart, userSliceMessage } = useSelector((state) => state.user);
 
   useEffect(() => {
-    
-    dispatch(fetchProducts());
+    dispatch(fetchNewArrivalComp());
 
     if (isError) {
       toast.error("Error : ");

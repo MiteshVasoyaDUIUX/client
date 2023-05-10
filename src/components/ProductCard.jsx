@@ -33,7 +33,7 @@ export default function ProductCard({ product }) {
   );
   useEffect(() => {
     if (user) {
-      const userId = user.user._id;
+      const userId = user.user?._id;
       dispatch(fetchWishList(userId));
     }
 
@@ -45,9 +45,9 @@ export default function ProductCard({ product }) {
   const handleCartButton = (e) => {
     e.stopPropagation();
     if (user) {
-      const productId = product._id;
+      const productId = product?._id;
       const userData = user;
-      const userId = userData.user._id;
+      const userId = userData.user?._id;
       const data = {
         userId,
         productId,
@@ -69,9 +69,9 @@ export default function ProductCard({ product }) {
     e.preventDefault();
     if (user) {
       setWishList(!wishList);
-      const productId = product._id;
+      const productId = product?._id;
       const userData = user;
-      const userId = userData.user._id;
+      const userId = userData.user?._id;
       const data = {
         userId,
         productId,
@@ -98,7 +98,7 @@ export default function ProductCard({ product }) {
           borderRadius: "15px",
           cursor: "pointer",
         }}
-        key={product._id}
+        key={product?._id}
         className="product-card"
         onClick={handleCardClick}
       >
@@ -118,7 +118,7 @@ export default function ProductCard({ product }) {
               marginBottom: "10px",
             }}
           >
-            {product.prodName}
+            {product?.prodName}
           </Typography>
           <Typography
             variant="body2"
@@ -126,7 +126,7 @@ export default function ProductCard({ product }) {
             align="justify"
             className="products-card-desc"
           >
-            {product.prodDesc}
+            {product?.prodDesc}
           </Typography>
           <Typography
             variant="body2"
@@ -134,7 +134,7 @@ export default function ProductCard({ product }) {
             align="justify"
             style={{ fontSize: "17px", marginTop: "13px" }}
           >
-            Price : {product.prodPrice.toLocaleString("en-IN")} ₹
+            Price : {product?.prodPrice?.toLocaleString("en-IN")} ₹
           </Typography>
         </CardContent>
         <CardActions>
@@ -146,7 +146,7 @@ export default function ProductCard({ product }) {
             )}
           </IconButton>
           <IconButton onClick={handleWishListButton}>
-            {user && wishlist.includes(product._id) ? (
+            {user && wishlist.includes(product?._id) ? (
               <FavouriteRoundedIcon color="error" />
             ) : (
               <FavoriteBorderIcon color="error" />
