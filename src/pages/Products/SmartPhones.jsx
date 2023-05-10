@@ -71,8 +71,7 @@ const filterByDiscount = (discount, prodArray) => {
 function SmartPhones() {
   const dispatch = useDispatch();
 
-  const [priceRange, setPriceRange] = useState([100, 200000]);
-  const [price, setPrice] = useState([100, 200000]);
+  const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState(0);
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
@@ -82,6 +81,9 @@ function SmartPhones() {
   const [product, setProduct] = useState([]);
   const [moreProducts, setMoreProducts] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
+
+  let productArray = [];
+  let filteredProductArray = [];
 
   const { products, isLoading, isFetching, isError, productMessage } =
     useSelector((state) => state.products);
@@ -93,13 +95,6 @@ function SmartPhones() {
   let prodReqData = {
     page: page,
     category: "smart phones",
-    filter: {
-      price: priceRange,
-      rating: ratingValue,
-      discount: discount,
-      outOfStock: includeOutOfStock,
-      POD: PODEligibility,
-    },
   };
 
   useEffect(() => {
@@ -112,7 +107,7 @@ function SmartPhones() {
 
   useEffect(() => {
     fetchProductsData();
-  }, [page, ]);
+  }, [page]);
 
   useEffect(() => {
     if (products.products?.length > 0) {
@@ -137,54 +132,63 @@ function SmartPhones() {
 
   const fetchProductsData = () => {
     if (moreProducts) {
+      console.log("Fetch More Products__----");
       dispatch(fetchProducts(prodReqData));
 
       prodReqData = {
         page: products.nextPage,
         category: "smart phones",
       };
+
+      console.log("Product's Request Data : ", prodReqData);
     }
   };
-
-  useEffect(() => {
-    console.log(
-      "Changes....",
-      // price,
-      // ratingValue,
-      // PODEligibility,
-      // includeOutOfStock,
-      // discount,
-      // prodReqData
-    );
-
-    let prodReqData = {
-      page: 1,
-      category: "smart phones",
-      filter: {
-        price: priceRange,
-        rating: ratingValue,
-        discount: discount,
-        outOfStock: includeOutOfStock,
-        POD: PODEligibility,
-      },
-    };
-
-    dispatch(fetchProducts(prodReqData));
-  }, [ratingValue, PODEligibility, includeOutOfStock, discount, price]);
 
   useEffect(() => {
     window.addEventListener("scroll", handelInfiniteScroll);
     return () => window.removeEventListener("scroll", handelInfiniteScroll);
   }, []);
 
+  if (products?.products?.length > 0) {
+    product.map((product) => {
+      if (includeOutOfStock) {
+        productArray.push(product);
+      } else {
+        if (product.prodQuantity > 0) {
+          productArray.push(product);
+        }
+      }
+    });
+
+    if (ratingValue) {
+      filteredProductArray = filterByRating(ratingValue, productArray);
+    } else {
+      filteredProductArray = productArray;
+    }
+
+    if (priceSliderValue) {
+      filteredProductArray = filterByPrice(
+        priceSliderValue[0],
+        priceSliderValue[1],
+        filteredProductArray
+      );
+    }
+
+    if (PODEligibility) {
+      filteredProductArray = filterByPODEligibility(filteredProductArray);
+    }
+
+    if (discount) {
+      filteredProductArray = filterByDiscount(discount, filteredProductArray);
+    }
+  }
+
   return (
     <>
       <div style={{ display: "flex" }}>
         <Filter
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
-          price={price}
-          setPrice={setPrice}
+          priceSliderValue={priceSliderValue}
+          setPriceSliderValue={setPriceSliderValue}
           ratingValue={ratingValue}
           setRatingValue={setRatingValue}
           PODEligibility={PODEligibility}
@@ -203,7 +207,7 @@ function SmartPhones() {
             }}
           >
             <SmartPhonesItem
-              filteredProductArray={product}
+              filteredProductArray={filteredProductArray}
               wishlist={wishlist}
             />
           </div>
