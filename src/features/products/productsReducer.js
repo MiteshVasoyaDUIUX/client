@@ -4,7 +4,7 @@ import axios from "axios";
 const API_URL = "http://localhost:5555";
 
 const fetchProducts = async (productReqData) => {
-  console.log("Fetching Product...");
+  // console.log("Fetching Product...");
   const response = await axios.get(
     API_URL + "/products?page=" +
     productReqData.page + "&category=" + productReqData.category

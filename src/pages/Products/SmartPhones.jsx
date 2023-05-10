@@ -67,103 +67,143 @@ const filterByDiscount = (discount, prodArray) => {
 };
 
 function SmartPhones() {
-  const bottomRef = useRef(null);
-
-  const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
-  const [ratingValue, setRatingValue] = useState(0);
-  const [PODEligibility, setPODEligibility] = useState(false);
-  const [discount, setDiscount] = useState();
-  const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  
-  let productArray = [];
-  let filteredProductArray = [];
-
-  let productPage = {
-    page: 1,
-    category: "smart phones",
-  };
-
   const dispatch = useDispatch();
+
+  // const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
+  // const [ratingValue, setRatingValue] = useState(0);
+  // const [PODEligibility, setPODEligibility] = useState(false);
+  // const [discount, setDiscount] = useState();
+  // const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+
+  const [product, setProduct] = useState([]);
+  const [page, setPage] = useState(1);
+
   const { products, isLoading, isError, productMessage } = useSelector(
     (state) => state.products
   );
-
   const { wishlist, isAddedCart, userSliceMessage } = useSelector(
     (state) => state.user
   );
 
-  useEffect(() => {
-    dispatch(fetchProducts(productPage));
-  }, []);
+  let productArray = [];
+  let filteredProductArray = [];
+
+  let productReqData = {
+    page: 1,
+    category: "smart phones",
+  };
+
+  const fetchProductData = () => {
+    dispatch(fetchProducts(productReqData));
+  };
 
   useEffect(() => {
-    if (isError) {
-      toast.error(productMessage || userSliceMessage);
-    }
-  }, [isError, dispatch]);
+    fetchProductData();
+  }, [page]);
+
+  // useEffect(() => {
+  //   if (isError) {
+  //     toast.error(productMessage || userSliceMessage);
+  //   }
+  // }, [isError, dispatch]);
 
   useEffect(() => {
     if (isAddedCart) {
       toast.success(userSliceMessage);
     }
 
+    if (products) {
+      const prod = products.products;
+      setProduct((prev) => [...prev, ...products.products]);
+      console.log("Products : ", prod);
+    }
+
     return () => {
       dispatch(resetIs());
     };
-  }, [isAddedCart]);
+  }, [isAddedCart, products]);
 
-  console.log("Products :", products);
+  // if (products?.products?.length > 0) {
+  //   product.map((product) => {
+  //     if (includeOutOfStock) {
+  //       productArray.push(product);
+  //     } else {
+  //       if (product.prodQuantity > 0) {
+  //         productArray.push(product);
+  //       }
+  //     }
+  //   });
 
-  if (products?.products?.length > 0) {
-    products.products.map((product) => {
-      if (includeOutOfStock) {
-        productArray.push(product);
-      } else {
-        if (product.prodQuantity > 0) {
-          productArray.push(product);
-        }
+  //   if (ratingValue) {
+  //     filteredProductArray = filterByRating(ratingValue, productArray);
+  //   } else {
+  //     filteredProductArray = productArray;
+  //   }
+
+  //   if (priceSliderValue) {
+  //     filteredProductArray = filterByPrice(
+  //       priceSliderValue[0],
+  //       priceSliderValue[1],
+  //       filteredProductArray
+  //     );
+  //   }
+
+  //   if (PODEligibility) {
+  //     filteredProductArray = filterByPODEligibility(filteredProductArray);
+  //   }
+
+  //   if (discount) {
+  //     filteredProductArray = filterByDiscount(discount, filteredProductArray);
+  //   }
+  // }
+
+  const handelInfiniteScroll = async () => {
+    try {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 1 >=
+        document.documentElement.scrollHeight
+      ) {
+        productReqData = {
+          page: productReqData.page + 1,
+          category: productReqData.category,
+        };
+
+        setPage((prev) => prev + 1);
+
+        console.log("Fetching More Products_ : ", products);
       }
-    });
-
-    if (ratingValue) {
-      filteredProductArray = filterByRating(ratingValue, productArray);
-    } else {
-      filteredProductArray = productArray;
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    if (priceSliderValue) {
-      filteredProductArray = filterByPrice(
-        priceSliderValue[0],
-        priceSliderValue[1],
-        filteredProductArray
-      );
-    }
-
-    if (PODEligibility) {
-      filteredProductArray = filterByPODEligibility(filteredProductArray);
-    }
-
-    if (discount) {
-      filteredProductArray = filterByDiscount(discount, filteredProductArray);
-    }
-  }
+  useEffect(() => {
+    window.addEventListener("scroll", handelInfiniteScroll);
+    return () => window.removeEventListener("scroll", handelInfiniteScroll);
+  }, []);
 
   return (
     <>
       <div style={{ display: "flex" }}>
         <Filter
-          priceSliderValue={priceSliderValue}
-          setPriceSliderValue={setPriceSliderValue}
-          ratingValue={ratingValue}
-          setRatingValue={setRatingValue}
-          PODEligibility={PODEligibility}
-          setPODEligibility={setPODEligibility}
-          discount={discount}
-          setDiscount={setDiscount}
-          includeOutOfStock={includeOutOfStock}
-          setIncludeOutOfStock={setIncludeOutOfStock}
+          // priceSliderValue={priceSliderValue}
+          // setPriceSliderValue={setPriceSliderValue}
+          // ratingValue={ratingValue}
+          // setRatingValue={setRatingValue}
+          // PODEligibility={PODEligibility}
+          // setPODEligibility={setPODEligibility}
+          // discount={discount}
+          // setDiscount={setDiscount}
+          // includeOutOfStock={includeOutOfStock}
+          // setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div style={{ marginLeft: "100px", width: "fitContent" }}>
+        <div
+          style={{
+            marginLeft: "100px",
+            width: "fitContent",
+            border: "1px solid black",
+          }}
+        >
           <SmartPhonesItem
             filteredProductArray={filteredProductArray}
             wishlist={wishlist}
