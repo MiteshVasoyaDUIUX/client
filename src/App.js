@@ -22,7 +22,6 @@ import BuyProduct from "./pages/Client Pages/BuyProduct";
 import Orders from "./pages/Admin Pages/Orders";
 import ChatAdmin from "./pages/Admin Pages/ChatAdmin";
 import Chat from "./pages/Client Pages/Chat";
-import SearchedQuary from "./pages/Client Pages/SearchedQuary";
 import DeletedUser from "./pages/Client Pages/DeletedUser";
 import BlockedUser from "./pages/Client Pages/BlockedUser";
 import Wishlist from "./pages/Client Pages/Wishlist";
@@ -32,6 +31,7 @@ import ResetPassword from "./pages/ResetPassword";
 import SmartPhones from "./pages/Products/SmartPhones";
 import TrendingProductsPage from "./pages/Products/TrendingProductsPage";
 import NewArrivalsProductsPage from "./pages/Products/NewArrivalsPage";
+import SearchedQuary from "./pages/Products/SearchedQuary";
 
 function App() {
   const scollToRef = useRef("");

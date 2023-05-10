@@ -5,13 +5,12 @@ const API_URL = "http://localhost:5555";
 
 const fetchProducts = async (productReqData) => {
   // console.log("Fetching Product...", productReqData.filter);
-  const response = await axios.post(
+  const response = await axios.get(
     API_URL +
       "/products?page=" +
       productReqData.page +
       "&category=" +
-      productReqData.category,
-    productReqData.filter
+      productReqData.category
   );
   return response.data;
 };
@@ -21,8 +20,14 @@ const fetchOneProduct = async (productId) => {
   return response.data;
 };
 
-const searchProduct = async (quary) => {
-  const response = await axios.get(API_URL + "/search/" + quary);
+const searchProduct = async (productReqData) => {
+  const response = await axios.get(
+    API_URL +
+      "/search?page=" +
+      productReqData.page +
+      "&&query=" +
+      productReqData.query,
+  );
   return response.data;
 };
 

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./SearchedQuary.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import discountCalcFunc from "../../../src/app/discountCalcFunc";
+import discountCalcFunc from "../../app/discountCalcFunc";
 import { toast } from "react-toastify";
 
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 import { searchProduct } from "../../features/products/productsSlice";
 
-function SearchedItems({ newProdArray }) {
+function SearchedItems({ filteredProductArray }) {
   // console.log("SearchedItems");
   return (
     <>
@@ -20,7 +20,7 @@ function SearchedItems({ newProdArray }) {
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        <ProductCardsGrid products={newProdArray} />
+        <ProductCardsGrid products={filteredProductArray} />
       </div>
     </>
   );
@@ -73,57 +73,113 @@ function SearchedQuary() {
   const params = useParams();
   const dispatch = useDispatch();
 
-  const { searchedProducts, isLoading, isError, productMessage } = useSelector(
-    (state) => state.products
-  );
-
-  const quary = params.params;
-
-  useEffect(() => {
-    dispatch(searchProduct(quary));
-  }, [quary]);
-
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState(0);
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  let searchProd = [];
-  let newProdArray = [];
+  const [nextPage, setNextPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [product, setProduct] = useState([]);
+  const [moreProducts, setMoreProducts] = useState(true);
+  const [showSpinner, setShowSpinner] = useState(false);
 
-  // console.log("searchedProducts : ", searchedProducts);
+  let productArray = [];
+  let filteredProductArray = [];
 
-  if (searchedProducts.length > 0) {
-    searchedProducts.map((product) => {
+  const query = params.params;
+
+  const { products, isLoading, isFetching, isError, productMessage } =
+    useSelector((state) => state.products);
+
+  const { wishlist, isAddedCart, userSliceMessage } = useSelector(
+    (state) => state.user
+  );
+
+  let prodReqData = {
+    page: page,
+    query: query,
+  };
+
+  useEffect(() => {
+    if (isFetching) {
+      setShowSpinner(true);
+    } else {
+      setShowSpinner(false);
+    }
+  }, [isFetching]);
+
+  useEffect(() => {
+    fetchProductsData();
+  }, [page]);
+
+  useEffect(() => {
+    if (products.products?.length > 0) {
+      setProduct((prev) => [...prev, ...products.products]);
+      setNextPage(products.nextPage);
+      setMoreProducts(products.moreProduct);
+    }
+  }, [products]);
+
+  const handelInfiniteScroll = async () => {
+    try {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 1 >=
+        document.documentElement.scrollHeight
+      ) {
+        setPage((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchProductsData = () => {
+    if (moreProducts) {
+      dispatch(searchProduct(prodReqData));
+      prodReqData = {
+        page: products.nextPage,
+        query : query
+      };
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handelInfiniteScroll);
+    return () => window.removeEventListener("scroll", handelInfiniteScroll);
+  }, []);
+
+  if (products?.products?.length > 0) {
+    product.map((product) => {
       if (includeOutOfStock) {
-        searchProd.push(product);
+        productArray.push(product);
       } else {
         if (product.prodQuantity > 0) {
-          searchProd.push(product);
+          productArray.push(product);
         }
       }
     });
 
     if (ratingValue) {
-      newProdArray = filterByRating(ratingValue, searchProd);
+      filteredProductArray = filterByRating(ratingValue, productArray);
     } else {
-      newProdArray = searchProd;
+      filteredProductArray = productArray;
     }
 
     if (priceSliderValue) {
-      newProdArray = filterByPrice(
+      filteredProductArray = filterByPrice(
         priceSliderValue[0],
         priceSliderValue[1],
-        newProdArray
+        filteredProductArray
       );
     }
 
     if (PODEligibility) {
-      newProdArray = filterByPODEligibility(newProdArray);
+      filteredProductArray = filterByPODEligibility(filteredProductArray);
     }
 
     if (discount) {
-      newProdArray = filterByDiscount(discount, newProdArray);
+      filteredProductArray = filterByDiscount(discount, filteredProductArray);
     }
   }
 
@@ -142,7 +198,7 @@ function SearchedQuary() {
         setIncludeOutOfStock={setIncludeOutOfStock}
       />
       <div style={{ marginLeft: "100px", width: "fitContent" }}>
-        <SearchedItems newProdArray={newProdArray} />
+        <SearchedItems filteredProductArray={filteredProductArray} />
         {
           // console.log("New Prod Array : ", newProdArray)
         }

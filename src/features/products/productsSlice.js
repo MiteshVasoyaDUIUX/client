@@ -53,9 +53,9 @@ export const fetchOneProduct = createAsyncThunk(
 
 export const searchProduct = createAsyncThunk(
   "products/fetch/search-products",
-  async (quary, thunkAPI) => {
+  async (productReqData, thunkAPI) => {
     try {
-      const response = await products.searchProduct(quary);
+      const response = await products.searchProduct(productReqData);
       return response;
     } catch (error) {
       const message =
@@ -177,7 +177,7 @@ const productsSlice = createSlice({
         state.isError = false;
         state.isFetching = false;
         state.isFetched = true;
-        state.searchedProducts = action.payload;
+        state.products = action.payload;
       })
       .addCase(searchProduct.rejected, (state, action) => {
         state.isError = true;

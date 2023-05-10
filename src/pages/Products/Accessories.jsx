@@ -8,6 +8,7 @@ import discountCalcFunc from "../../../src/app/discountCalcFunc";
 import "./Accessories.css";
 import { toast } from "react-toastify";
 import { reset, resetIs } from "../../features/user/userSlice";
+import { ProductFetchingSpinner } from "../../components/Spinner";
 
 function AccessoriesItems({ filteredProductArray }) {
   return (
@@ -56,13 +57,12 @@ const filterByPODEligibility = (prodArray) => {
   return filteredArray;
 };
 
-
 const filterByDiscount = (discount, prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
     const CalcDiscount = discountCalcFunc(product.prodPrice, product.prodMRP);
     if (Number(CalcDiscount) >= Number(discount)) {
-      console.log("CalcDiscount : ", CalcDiscount, "Discount : ", discount)
+      console.log("CalcDiscount : ", CalcDiscount, "Discount : ", discount);
       filteredArray.push(product);
     }
   });
@@ -196,9 +196,20 @@ function Accessories() {
           includeOutOfStock={includeOutOfStock}
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div style={{ marginLeft: "100px", width: "fitContent" }}>
-          <AccessoriesItems filteredProductArray={filteredProductArray} />
-          {/* {console.log("Products : ", newProdArray)} */}
+        <div>
+          <div style={{ marginLeft: "100px", width: "fitContent" }}>
+            <AccessoriesItems filteredProductArray={filteredProductArray} />
+            {/* {console.log("Products : ", newProdArray)} */}
+          </div>
+          {showSpinner ? (
+            <>
+              <div className="product-fetching-spinner">
+                <ProductFetchingSpinner />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </>
