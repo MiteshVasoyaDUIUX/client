@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 import {
   PodFilter,
   discountFilter,
@@ -8,16 +7,81 @@ import {
   ratingFilter,
 } from "../../app/Functions/filterFunc";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../features/products/productsSlice";
+import {
+  fetchProducts,
+  sortPriceLowToHigh,
+} from "../../features/products/productsSlice";
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 import { ProductFetchingSpinner } from "../../components/Spinner";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import "./Products.css";
+import {
+  RatingHighToLow,
+  RatingLowToHigh,
+  newArrivals,
+  priceHighToLow,
+  priceLowToHigh,
+} from "../../app/Functions/SortFunc";
 
-function ProductsList({ filteredProductArray, wishlist }) {
+function ProductsList({
+  filteredProductArray,
+  wishlist,
+  category,
+  showProducts,
+}) {
+  const dispatch = useDispatch();
+
+  const [openSortOpt, setOpenSortOpt] = useState(false);
+  const [sortBy, setSortBy] = useState("New Arrivals");
+
+  // console.log("Product Array : ", filteredProductArray);
+
+  useEffect(() => {
+    switch (sortBy) {
+      case "newarrivals":
+        // dispatch(sortNewArrivals())
+        break;
+      case "priceLowToHigh":
+        // filteredProductArray = priceLowToHigh(filteredProductArray);
+        dispatch(sortPriceLowToHigh(filteredProductArray));
+        break;
+      case "priceHighToLow":
+        filteredProductArray = priceHighToLow(filteredProductArray);
+        break;
+      case "RatingLowToHigh":
+        filteredProductArray = RatingLowToHigh(filteredProductArray);
+        break;
+      case "ratingHighToLow":
+        filteredProductArray = RatingHighToLow(filteredProductArray);
+        break;
+      default:
+        break;
+    }
+  }, [sortBy]);
+
+  useEffect(() => {
+    console.log("Array Updated...");
+  }, [filteredProductArray]);
+
+  const handleSorting = (newValue) => {
+    setSortBy(newValue);
+  };
+
   return (
     <>
-      <div>
-        <h1 id="smartphones-title">Smart Phones</h1>
+      <div className="product-title-div">
+        <div id="products-title">{category}</div>
+        <div id="products-sort-box">
+          <select
+            value={sortBy}
+            onChange={(e) => handleSorting(e.target.value)}
+          >
+            <option value="newarrivals">Newest Arrivals</option>
+            <option value="priceHighToLow">Price : High to Low</option>
+            <option value="priceLowToHigh">Price : Low to High</option>
+          </select>
+        </div>
       </div>
       <div
         className="productCards"
@@ -35,7 +99,6 @@ function Products() {
 
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get("category");
-  console.log("Category : ", category);
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState(0);
@@ -47,6 +110,7 @@ function Products() {
   const [product, setProduct] = useState([]);
   const [moreProducts, setMoreProducts] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [showProducts, setShowProducts] = useState([]);
 
   let productArray = [];
   let filteredProductArray = [];
@@ -74,6 +138,10 @@ function Products() {
   useEffect(() => {
     fetchProductsData();
   }, [page]);
+
+  useEffect(() => {
+    console.log("Array Updated...");
+  }, [filteredProductArray]);
 
   useEffect(() => {
     if (products.products?.length > 0) {
@@ -172,6 +240,7 @@ function Products() {
             <ProductsList
               filteredProductArray={filteredProductArray}
               wishlist={wishlist}
+              category={category}
             />
           </div>
           {showSpinner ? (

@@ -26,7 +26,6 @@ const pagesForAdmin = [
 ];
 const optionsForClient = ["Cart", "My Orders", "My Wishlist", "Logout"];
 const optionsForAdmin = ["Profile", "Logout"];
-const optionIfNotLoggedIn = ["Login", "Register"];
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -40,6 +39,7 @@ const StyledMenu = styled((props) => (
       horizontal: "right",
     }}
     {...props}
+    sx={{ border: "1px solid red" }}
   />
 ))(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -58,10 +58,7 @@ const StyledMenu = styled((props) => (
     },
     "& .MuiMenuItem-root": {
       "&:active": {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity
-        ),
+        backgroundColor: "#c8c8c8cc",
       },
     },
   },
@@ -76,9 +73,7 @@ function Header() {
 
   const { user } = useSelector((state) => state.auth);
 
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [sidebar, setSideBar] = useState(false);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -239,6 +234,9 @@ function Header() {
                         backgroundColor: "#f0f3ed",
                         color: "#000000",
                       },
+                      "& .Mui-active": {
+                        border: "3px dashed red",
+                      },
                     }}
                     disableRipple
                   >
@@ -255,7 +253,7 @@ function Header() {
                       return (
                         <MenuItem
                           onClick={() => handleCategoryClick(category)}
-                          sx = {{textTransform : "capitalize"}}
+                          sx={{ textTransform: "capitalize" }}
                           disableRipple
                         >
                           {category}
@@ -353,9 +351,9 @@ function Header() {
                       >
                         Hello, {user.user?.name}
                       </div>
-                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                          <Avatar />
-                        </IconButton>
+                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar />
+                      </IconButton>
                     </div>
                     <Menu
                       sx={{ mt: "45px" }}
@@ -422,50 +420,48 @@ function Header() {
                 )
               ) : (
                 <>
-                  <Tooltip>
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar alt="No Image" src="#" />
-                    </IconButton>
-                  </Tooltip>
-                  <Menu
-                    sx={{ mt: "45px" }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                  >
-                    <MenuItem
-                      key={optionIfNotLoggedIn[0]}
-                      onClick={handleCloseUserMenu}
+                  <div className="login-register-button">
+                    <Link
+                      style={{ textDecoration: "None", color: "#f0f3ed" }}
+                      to="/login"
                     >
-                      <Link
-                        style={{ textDecoration: "None", color: "black" }}
-                        to="/login"
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          height: "35px",
+                          color: "black",
+                          fontSize: "15px",
+                          "&:hover": {
+                            backgroundColor: "#f0f3ed",
+                            border: "1px solid #2a3035",
+                            color: "#000000",
+                          },
+                        }}
                       >
-                        {optionIfNotLoggedIn[0]}
-                      </Link>
-                    </MenuItem>
-                    <MenuItem
-                      key={optionIfNotLoggedIn[1]}
-                      onClick={handleCloseUserMenu}
+                        Login
+                      </Button>
+                    </Link>
+                    <Link
+                      style={{ textDecoration: "None", color: "#f0f3ed" }}
+                      to="/register"
                     >
-                      <Link
-                        style={{ textDecoration: "None", color: "black" }}
-                        to="/register"
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          height: "35px",
+                          color: "black",
+                          fontSize: "15px",
+                          "&:hover": {
+                            backgroundColor: "#f0f3ed",
+                            border: "1px solid #2a3035",
+                            color: "#000000",
+                          },
+                        }}
                       >
-                        {optionIfNotLoggedIn[1]}
-                      </Link>
-                    </MenuItem>
-                  </Menu>
+                        Register
+                      </Button>
+                    </Link>
+                  </div>
                 </>
               )}
             </div>
