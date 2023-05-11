@@ -8,6 +8,12 @@ import { ProductCardsGrid } from "../../components/ProductCardGrid";
 import { toast } from "react-toastify";
 import { reset, resetIs } from "../../features/user/userSlice";
 import { ProductFetchingSpinner } from "../../components/Spinner";
+import {
+  PodFilter,
+  discountFilter,
+  priceFilter,
+  ratingFilter,
+} from "../../app/Functions/filterFunc";
 
 function ClothesItem({ newProdArray }) {
   return (
@@ -24,47 +30,6 @@ function ClothesItem({ newProdArray }) {
     </>
   );
 }
-
-const filterByRating = (ratingValue, prodArray) => {
-  let filteredArray = [];
-  prodArray.map((product) => {
-    if (product.rating >= ratingValue) {
-      filteredArray.push(product);
-    }
-  });
-  return filteredArray;
-};
-
-const filterByPrice = (lower, upper, prodArray) => {
-  let filteredArray = [];
-  prodArray.map((product) => {
-    if (product.prodPrice > lower && product.prodPrice < upper) {
-      filteredArray.push(product);
-    }
-  });
-  return filteredArray;
-};
-
-const filterByPODEligibility = (prodArray) => {
-  let filteredArray = [];
-  prodArray.map((product) => {
-    let paymentType = product.paymentType;
-    if (paymentType.includes("COD")) {
-      filteredArray.push(product);
-    }
-  });
-  return filteredArray;
-};
-
-const filterByDiscount = (discount, prodArray) => {
-  let filteredArray = [];
-  prodArray.map((product) => {
-    if (product.discount > discount) {
-      filteredArray.push(product);
-    }
-  });
-  return filteredArray;
-};
 
 function Clothes() {
   const dispatch = useDispatch();
@@ -92,7 +57,7 @@ function Clothes() {
 
   let prodReqData = {
     page: page,
-    category: "cloths",
+    category: "clothes",
   };
 
   useEffect(() => {
@@ -131,10 +96,9 @@ function Clothes() {
   const fetchProductsData = () => {
     if (moreProducts) {
       dispatch(fetchProducts(prodReqData));
-
       prodReqData = {
         page: products.nextPage,
-        category: "cloths",
+        category: "clothes",
       };
     }
   };
@@ -156,13 +120,13 @@ function Clothes() {
     });
 
     if (ratingValue) {
-      filteredProductArray = filterByRating(ratingValue, productArray);
+      filteredProductArray = ratingFilter(ratingValue, productArray);
     } else {
       filteredProductArray = productArray;
     }
 
     if (priceSliderValue) {
-      filteredProductArray = filterByPrice(
+      filteredProductArray = priceFilter(
         priceSliderValue[0],
         priceSliderValue[1],
         filteredProductArray
@@ -170,11 +134,11 @@ function Clothes() {
     }
 
     if (PODEligibility) {
-      filteredProductArray = filterByPODEligibility(filteredProductArray);
+      filteredProductArray = PodFilter(filteredProductArray);
     }
 
     if (discount) {
-      filteredProductArray = filterByDiscount(discount, filteredProductArray);
+      filteredProductArray = discountFilter(discount, filteredProductArray);
     }
   }
 

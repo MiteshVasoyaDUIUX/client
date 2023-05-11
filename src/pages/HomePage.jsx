@@ -5,8 +5,8 @@ import { reset } from "../features/auth/authSlice";
 import ImageSlider from "../components/ImageSlider";
 import NewArrivals from "../components/DashboardComponents/NewArrivals";
 import TrandingProducts from "../components/DashboardComponents/TrendingProducts";
-import "./Register.css";
-import { EmailVerificationReg } from "../components/EmailVerification";
+import { toast } from "react-toastify";
+import "./HomePage.css";
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -17,9 +17,11 @@ function HomePage() {
     (state) => state.auth
   );
   const [blur, setBlur] = useState(false);
+  const [height, setHeight] = useState();
 
   useEffect(() => {
     if (isError) {
+      toast.error("Error : ", message);
       // console.log(message);
     }
 
@@ -29,7 +31,6 @@ function HomePage() {
 
     if (isVerified) {
       setBlur(false);
-      // console.log("isVerified", blur);
       reset();
     }
 
@@ -37,13 +38,12 @@ function HomePage() {
       if (user.role === "admin") {
         navigate(`/admin/dashboard`);
       } else {
-        // console.log("In Buyer Panel : ");
         if (user?.user.isDeleted) {
           navigate("/deleteduser");
         } else if (user?.user.isBlocked) {
           navigate("/blockeduser");
         } else if (location.state?.from === "/register") {
-          navigate("/user/verification", {state : { email: user.user.email }});
+          navigate("/user/verification", { state: { email: user.user.email } });
           setBlur(true);
         } else {
           navigate("/");
@@ -58,19 +58,17 @@ function HomePage() {
 
   return (
     <>
-      {/* {blur ? (
-        <>
-          // {console.log("Blur")}
-          <EmailVerificationReg email={user.user.email} setBlur={setBlur} />
-        </>
-      ) : ( */}
       <>
-        {/* {console.log("Home Page")} */}
-        <ImageSlider />
-        <NewArrivals />
-        <TrandingProducts />
+        <div className="image-slider-component">
+          <ImageSlider />
+        </div>
+        <div className="new-arrivals-component">
+          <NewArrivals />
+        </div>
+        <div className="trending-products-component">
+          <TrandingProducts />
+        </div>
       </>
-      {/* )} */}
     </>
   );
 }

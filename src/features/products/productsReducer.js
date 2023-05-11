@@ -36,13 +36,13 @@ const fetchNewArrivals = async (productReqData) => {
     API_URL + "/newarrivals?page=" + productReqData.page,
     productReqData.filter
   );
-  console.log("Response : ", response.data);
+  // console.log("Response : ", response.data);
   return response.data;
 };
 
 const fetchNewArrivalComp = async (quary) => {
   const response = await axios.get(API_URL + "/newarrivalscomp");
-  console.log("Response : ", response.data);
+  // console.log("Response : ", response.data);
   return response.data;
 };
 

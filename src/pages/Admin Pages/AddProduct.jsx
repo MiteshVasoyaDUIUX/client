@@ -88,7 +88,7 @@ function AddProduct() {
 
   const categories = [
     "Select Category",
-    "Cloths",
+    "Clothes",
     "Footware",
     "Accessories",
     "Smart Phones",

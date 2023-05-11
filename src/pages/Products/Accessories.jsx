@@ -4,11 +4,17 @@ import { fetchProducts } from "../../features/products/productsSlice";
 
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
-import discountCalcFunc from "../../../src/app/discountCalcFunc";
+import discountCalcFunc from "../../../src/app/Functions/discountCalcFunc";
 import "./Accessories.css";
 import { toast } from "react-toastify";
 import { reset, resetIs } from "../../features/user/userSlice";
 import { ProductFetchingSpinner } from "../../components/Spinner";
+import {
+  PodFilter,
+  discountFilter,
+  priceFilter,
+  ratingFilter,
+} from "../../app/Functions/filterFunc";
 
 function AccessoriesItems({ filteredProductArray }) {
   return (
@@ -25,49 +31,6 @@ function AccessoriesItems({ filteredProductArray }) {
     </>
   );
 }
-
-const filterByRating = (ratingValue, prodArray) => {
-  let filteredArray = [];
-  prodArray.map((product) => {
-    if (product.rating >= ratingValue) {
-      filteredArray.push(product);
-    }
-  });
-  return filteredArray;
-};
-
-const filterByPrice = (lower, upper, prodArray) => {
-  let filteredArray = [];
-  prodArray.map((product) => {
-    if (product.prodPrice > lower && product.prodPrice < upper) {
-      filteredArray.push(product);
-    }
-  });
-  return filteredArray;
-};
-
-const filterByPODEligibility = (prodArray) => {
-  let filteredArray = [];
-  prodArray.map((product) => {
-    let paymentType = product.paymentType;
-    if (paymentType?.includes("COD")) {
-      filteredArray.push(product);
-    }
-  });
-  return filteredArray;
-};
-
-const filterByDiscount = (discount, prodArray) => {
-  let filteredArray = [];
-  prodArray.map((product) => {
-    const CalcDiscount = discountCalcFunc(product.prodPrice, product.prodMRP);
-    if (Number(CalcDiscount) >= Number(discount)) {
-      console.log("CalcDiscount : ", CalcDiscount, "Discount : ", discount);
-      filteredArray.push(product);
-    }
-  });
-  return filteredArray;
-};
 
 function Accessories() {
   const dispatch = useDispatch();
@@ -159,13 +122,13 @@ function Accessories() {
     });
 
     if (ratingValue) {
-      filteredProductArray = filterByRating(ratingValue, productArray);
+      filteredProductArray = ratingFilter(ratingValue, productArray);
     } else {
       filteredProductArray = productArray;
     }
 
     if (priceSliderValue) {
-      filteredProductArray = filterByPrice(
+      filteredProductArray = priceFilter(
         priceSliderValue[0],
         priceSliderValue[1],
         filteredProductArray
@@ -173,11 +136,11 @@ function Accessories() {
     }
 
     if (PODEligibility) {
-      filteredProductArray = filterByPODEligibility(filteredProductArray);
+      filteredProductArray = PodFilter(filteredProductArray);
     }
 
     if (discount) {
-      filteredProductArray = filterByDiscount(discount, filteredProductArray);
+      filteredProductArray = discountFilter(discount, filteredProductArray);
     }
   }
 

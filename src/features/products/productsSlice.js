@@ -208,7 +208,6 @@ const productsSlice = createSlice({
       })
       .addCase(fetchNewArrivals.fulfilled, (state, action) => {
         state.products = action.payload;
-        console.log("{RPDUCFSD FETCHED>>>>")
       })
       .addCase(fetchNewArrivals.rejected, (state, action) => {
         state.productMessage = action.payload;

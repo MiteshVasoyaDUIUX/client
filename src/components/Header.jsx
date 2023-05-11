@@ -1,33 +1,20 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
-import { FaIcons } from "react-icons/fa";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import PersonIcon from "@mui/icons-material/Person";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import LocalMallIcon from "@mui/icons-material/LocalMall";
-import AddIcon from "@mui/icons-material/Add";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import MessageIcon from "@mui/icons-material/Message";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
 import "./Header.css";
 import SideBar from "./SideBar";
+import { styled, alpha } from "@mui/material/styles";
 
 const pagesForAdmin = [
   "Dashboard",
@@ -41,6 +28,47 @@ const optionsForClient = ["Cart", "My Orders", "My Wishlist", "Logout"];
 const optionsForAdmin = ["Profile", "Logout"];
 const optionIfNotLoggedIn = ["Login", "Register"];
 
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "right",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "right",
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  "& .MuiPaper-root": {
+    borderRadius: 6,
+    marginTop: theme.spacing(0.8),
+    marginLeft: theme.spacing(5),
+    minWidth: 180,
+    color:
+      theme.palette.mode === "light"
+        ? "rgb(55, 65, 81)"
+        : theme.palette.grey[300],
+    boxShadow:
+      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    "& .MuiMenu-list": {
+      padding: "4px 0",
+    },
+    "& .MuiMenuItem-root": {
+      "&:active": {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity
+        ),
+      },
+    },
+  },
+}));
+
+const productCategories = ["clothes", "smart phones", "accessories", "other"];
+
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -51,8 +79,27 @@ function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [sidebar, setSideBar] = useState(false);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
   let showHeader = true;
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+
+    return () => {
+      reset();
+    };
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handelInfiniteScroll);
+    return () => window.removeEventListener("scroll", handelInfiniteScroll);
+  }, []);
 
   if (
     location.pathname === "/login" ||
@@ -72,19 +119,20 @@ function Header() {
     // console.log("OnLogOUT");
   };
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const handleLogoClick = () => {
@@ -96,20 +144,27 @@ function Header() {
 
     if (quary !== "" && e.type === "click") {
       navigate(`/search/${quary}`);
-    } else if (quary !== "" && e.keyCode == 13) {
+    } else if (quary !== "" && e.keyCode === 13) {
       navigate(`/search/${quary}`);
     }
   };
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
+  const handleCategoryClick = (category) => {
+    setAnchorEl(null);
+    navigate(`/products?category=${category}`);
+  };
 
-    return () => {
-      reset();
-    };
-  }, [user, dispatch]);
+  const handelInfiniteScroll = async () => {
+    try {
+      if (document.documentElement.scrollTop >= 550) {
+        setShowCategoryMenu(true);
+      } else {
+        setShowCategoryMenu(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -147,7 +202,6 @@ function Header() {
                 </>
               )}
             </div>
-
             {(!user || user.role === "buyer") &&
             (!user?.user.isBlocked || !user?.user.isDeleted) ? (
               <div className="header-searchbar">
@@ -165,6 +219,56 @@ function Header() {
               <></>
             )}
 
+            {showCategoryMenu ? (
+              <>
+                <div className="category-menu">
+                  <Button
+                    id="demo-customized-button"
+                    aria-controls={open ? "demo-customized-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    variant="contained"
+                    disableElevation
+                    onClick={handleClick}
+                    endIcon={<KeyboardArrowDownIcon />}
+                    sx={{
+                      backgroundColor: "#f0f3ed",
+                      height: "35px",
+                      color: "black",
+                      "&:hover": {
+                        backgroundColor: "#f0f3ed",
+                        color: "#000000",
+                      },
+                    }}
+                    disableRipple
+                  >
+                    Categories
+                  </Button>
+                  <StyledMenu
+                    id="demo-customized-menu"
+                    MenuListProps={{}}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                  >
+                    {productCategories.map((category) => {
+                      return (
+                        <MenuItem
+                          onClick={() => handleCategoryClick(category)}
+                          sx = {{textTransform : "capitalize"}}
+                          disableRipple
+                        >
+                          {category}
+                        </MenuItem>
+                      );
+                    })}
+                  </StyledMenu>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+
             <div className="header-signin">
               {user ? (
                 user.role === "admin" ? (
@@ -176,11 +280,9 @@ function Header() {
                       >
                         Hello, {user.user.name}
                       </div>
-                      <Tooltip>
-                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                          <Avatar />
-                        </IconButton>
-                      </Tooltip>
+                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar />
+                      </IconButton>
                     </div>
                     <Menu
                       sx={{ mt: "45px" }}
@@ -251,11 +353,9 @@ function Header() {
                       >
                         Hello, {user.user?.name}
                       </div>
-                      <Tooltip>
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                           <Avatar />
                         </IconButton>
-                      </Tooltip>
                     </div>
                     <Menu
                       sx={{ mt: "45px" }}

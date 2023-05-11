@@ -13,6 +13,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavouriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { toast } from "react-toastify";
 import { fetchOneProduct } from "../../features/products/productsSlice";
+import Tooltip from "@mui/material/Tooltip";
 import {
   addToCart,
   addToWishList,
@@ -165,10 +166,12 @@ function DetailedProductPage() {
 
           <div className="page-details">
             <div style={{ display: "flex" }}>
-              <div className="detailed-page-title">
-                {product.prodName}
-                <span className="title-tooltiptext">{product.prodName}</span>
-              </div>
+              <Tooltip title={product.prodName} placement="top">
+                <div className="detailed-page-title">
+                  {product.prodName}
+                  {/* <span className="title-tooltiptext">{product.prodName}</span> */}
+                </div>
+              </Tooltip>
               <div className="detailed-page-wishlist-button">
                 <IconButton onClick={handleWishListButton}>
                   {wishlist.includes(product._id) ? (
@@ -344,9 +347,7 @@ function DetailedProductPage() {
                 </div>
               ) : (
                 <>
-                  <div style={{ color: "#379237" }}>
-                    In Stock
-                  </div>
+                  <div style={{ color: "#379237" }}>In Stock</div>
                 </>
               )}
             </div>
@@ -376,7 +377,10 @@ function DetailedProductPage() {
                     <button
                       id="quantity-increase"
                       onClick={() => handleQuantityChange("+")}
-                      disabled={product.prodQuantity === 0 || quantity >= product.prodQuantity}
+                      disabled={
+                        product.prodQuantity === 0 ||
+                        quantity >= product.prodQuantity
+                      }
                     >
                       +
                     </button>

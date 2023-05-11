@@ -1,40 +1,41 @@
 import React, { useEffect, useState } from "react";
-import "./SearchedQuary.css";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import discountCalcFunc from "../../../src/app/Functions/discountCalcFunc";
-import { toast } from "react-toastify";
-
-import Filter from "../../components/Filter";
-import { ProductCardsGrid } from "../../components/ProductCardGrid";
-import { searchProduct } from "../../features/products/productsSlice";
+import { useLocation, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 import {
   PodFilter,
   discountFilter,
   priceFilter,
   ratingFilter,
 } from "../../app/Functions/filterFunc";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../../features/products/productsSlice";
+import Filter from "../../components/Filter";
+import { ProductCardsGrid } from "../../components/ProductCardGrid";
+import { ProductFetchingSpinner } from "../../components/Spinner";
 
-function SearchedItems({ filteredProductArray }) {
-  // console.log("SearchedItems");
+function ProductsList({ filteredProductArray, wishlist }) {
   return (
     <>
       <div>
-        <h1 id="searched-results">Results</h1>
+        <h1 id="smartphones-title">Smart Phones</h1>
       </div>
       <div
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
       >
-        <ProductCardsGrid products={filteredProductArray} />
+        <ProductCardsGrid products={filteredProductArray} wishlist={wishlist} />
       </div>
     </>
   );
 }
 
-function SearchedQuary() {
-  const params = useParams();
+function Products() {
+  const location = useLocation();
   const dispatch = useDispatch();
+
+  const searchParams = new URLSearchParams(location.search);
+  const category = searchParams.get("category");
+  console.log("Category : ", category);
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState(0);
@@ -50,8 +51,6 @@ function SearchedQuary() {
   let productArray = [];
   let filteredProductArray = [];
 
-  const query = params.params;
-
   const { products, isLoading, isFetching, isError, productMessage } =
     useSelector((state) => state.products);
 
@@ -61,7 +60,7 @@ function SearchedQuary() {
 
   let prodReqData = {
     page: page,
-    query: query,
+    category: category,
   };
 
   useEffect(() => {
@@ -99,10 +98,11 @@ function SearchedQuary() {
 
   const fetchProductsData = () => {
     if (moreProducts) {
-      dispatch(searchProduct(prodReqData));
+      dispatch(fetchProducts(prodReqData));
+
       prodReqData = {
         page: products.nextPage,
-        query: query,
+        category: "smart phones",
       };
     }
   };
@@ -147,27 +147,46 @@ function SearchedQuary() {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <Filter
-        priceSliderValue={priceSliderValue}
-        setPriceSliderValue={setPriceSliderValue}
-        ratingValue={ratingValue}
-        setRatingValue={setRatingValue}
-        PODEligibility={PODEligibility}
-        setPODEligibility={setPODEligibility}
-        discount={discount}
-        setDiscount={setDiscount}
-        includeOutOfStock={includeOutOfStock}
-        setIncludeOutOfStock={setIncludeOutOfStock}
-      />
-      <div style={{ marginLeft: "100px", width: "fitContent" }}>
-        <SearchedItems filteredProductArray={filteredProductArray} />
-        {
-          // console.log("New Prod Array : ", newProdArray)
-        }
+    <>
+      <div style={{ display: "flex" }}>
+        <Filter
+          priceSliderValue={priceSliderValue}
+          setPriceSliderValue={setPriceSliderValue}
+          ratingValue={ratingValue}
+          setRatingValue={setRatingValue}
+          PODEligibility={PODEligibility}
+          setPODEligibility={setPODEligibility}
+          discount={discount}
+          setDiscount={setDiscount}
+          includeOutOfStock={includeOutOfStock}
+          setIncludeOutOfStock={setIncludeOutOfStock}
+        />
+        <div>
+          <div
+            style={{
+              marginLeft: "100px",
+              width: "fitContent",
+              display: "block",
+            }}
+          >
+            <ProductsList
+              filteredProductArray={filteredProductArray}
+              wishlist={wishlist}
+            />
+          </div>
+          {showSpinner ? (
+            <>
+              <div className="product-fetching-spinner">
+                <ProductFetchingSpinner />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
-export default SearchedQuary;
+export default Products;

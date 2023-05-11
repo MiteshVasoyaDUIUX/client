@@ -20,11 +20,11 @@ function Slider(props) {
           }}
           indicatorIconButtonProps={{
             style: {
-                padding: '10px',    // 1
-                color: 'blue',
-                zIndex : 5     // 3
-            }
-        }}
+              padding: "10px", // 1
+              color: "blue",
+              zIndex: 5, // 3
+            },
+          }}
           animation="slide"
           duration={700}
           stopAutoPlayOnHover
@@ -35,7 +35,11 @@ function Slider(props) {
             style={{ color: "#f0f3ed", textDecoration: "none" }}
           >
             <div className="image-slider-img-text">
-              <input type="button" value="Smart Phones" className="smartphones"/>
+              <input
+                type="button"
+                value="Smart Phones"
+                className="smartphones"
+              />
             </div>
             <div className="image-slider-img-div">
               <img
@@ -50,7 +54,11 @@ function Slider(props) {
             style={{ color: "#f0f3ed", textDecoration: "none" }}
           >
             <div className="image-slider-img-text">
-              <input type="button" value="Accessories" className="accessories"/>
+              <input
+                type="button"
+                value="Accessories"
+                className="accessories"
+              />
             </div>
             <div className="image-slider-img-div">
               <img
@@ -65,7 +73,7 @@ function Slider(props) {
             style={{ color: "#f0f3ed", textDecoration: "none" }}
           >
             <div className="image-slider-img-text">
-              <input type="button" value="Clothing" className="clothing"/>
+              <input type="button" value="Clothing" className="clothing" />
             </div>
             <div className="image-slider-img-div">
               <img
@@ -75,7 +83,6 @@ function Slider(props) {
               />
             </div>
           </Link>
-          
         </Carousel>
       </div>
     </>
@@ -85,7 +92,7 @@ function ImageSlider() {
   const Array = [
     {
       url: "https://firebasestorage.googleapis.com/v0/b/shoppingsite-e25c4.appspot.com/o/Home%20Page%20Images%2Fpexels-josh-sorenson-5349810.jpg?alt=media&token=5bbc56e8-e8d1-4024-8d73-a20ff5c1b20d",
-      
+
       link: "/products/accessories",
     },
     {

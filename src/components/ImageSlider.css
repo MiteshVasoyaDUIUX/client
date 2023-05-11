@@ -3,6 +3,7 @@
       height: 550px;
       width: 100%;
       overflow: hidden;
+      box-shadow: 0px 2px 30px 0px rgba(0, 0, 0, 0.8);
 }
 
 .image-slider-img-div {
@@ -43,7 +44,7 @@
       padding: 8px 15px;
       color: white;
       background-color: rgba(49, 49, 49, 0);
-      font-size:35px;
+      font-size: 35px;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       text-decoration: none;
       transition: ease-in-out 0.2s;
@@ -58,7 +59,7 @@
       padding: 8px 15px;
       color: white;
       background-color: rgba(49, 49, 49, 0);
-      font-size:35px;
+      font-size: 35px;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       text-decoration: none;
       transition: ease-in-out 0.2s;
@@ -73,7 +74,7 @@
       padding: 8px 15px;
       color: white;
       background-color: rgba(49, 49, 49, 0);
-      font-size:35px;
+      font-size: 35px;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       text-decoration: none;
       transition: ease-in-out 0.2s;

@@ -32,6 +32,7 @@ import SmartPhones from "./pages/Products/SmartPhones";
 import TrendingProductsPage from "./pages/Products/TrendingProductsPage";
 import NewArrivalsProductsPage from "./pages/Products/NewArrivalsPage";
 import SearchedQuary from "./pages/Products/SearchedQuary";
+import Products from "./pages/Products/Products";
 
 function App() {
   const scollToRef = useRef("");
@@ -73,6 +74,7 @@ function App() {
               <Route path="/products/smartphones" element={<SmartPhones />} />
               <Route path="/products/accessories" element={<Accessories />} />
               <Route path="/products/clothes" element={<Clothes />} />
+              <Route path="/products" element={<Products />} />
               <Route
                 path="/products/newarrivals"
                 element={<NewArrivalsProductsPage />}

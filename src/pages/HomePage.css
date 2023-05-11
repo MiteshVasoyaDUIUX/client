@@ -1,0 +1,7 @@
+.image-slider-component {
+      /* border: 3px solid violet; */
+}
+
+.image-slider-component::after {
+      width: 200px;
+}
