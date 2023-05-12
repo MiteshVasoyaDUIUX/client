@@ -30,6 +30,7 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { addNewAddress, removeAddress } from "../../features/auth/authSlice";
+import { ImageForCart, ImageForList } from "../../components/Images/Images";
 
 let userData;
 
@@ -151,22 +152,10 @@ function ProductCard({ item }) {
 
   return (
     <Grid item xl={10} style={{ marginLeft: "7%" }}>
-      <Card>
+      <Card className="cart-one-product-card">
         <div style={{ display: "flex" }}>
-          <div
-            style={{
-              width: "auto",
-              height: "auto",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "20px",
-            }}
-          >
-            <img
-              src={item.prodImage[0]}
-              className="card-image-content"
-              alt=""
-              style={{ width: "100px", height: "100px" }}
-            />
+          <div className="cart-card-image">
+            <ImageForCart prodImage={item.prodImage} />
           </div>
           <div
             style={{
@@ -175,16 +164,8 @@ function ProductCard({ item }) {
               padding: "15px",
             }}
           >
-            <Typography variant="h6" component="div">
-              {item.prodName}
-            </Typography>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              style={{ marginTop: "5px" }}
-            >
-              Price : {item.prodPrice} ₹
-            </Typography>
+            <div className="cart-product-name">{item.prodName}</div>
+            <div className="cart-product-price">Price : {item.prodPrice} ₹</div>
           </div>
           <div
             style={{ display: "block", position: "relative", padding: "15px" }}
@@ -319,10 +300,10 @@ function PaymentDeliveryPage({
   setAddressNew,
   newAddress,
   mainClass,
-  deliveryAddress
+  deliveryAddress,
 }) {
   const dispatch = useDispatch();
-  
+
   const handlePaymentOptionChanges = (event) => {
     setPaymentOption(event.target.value);
   };
@@ -791,7 +772,7 @@ export default function Cart() {
               setAddressNew={setAddressNew}
               newAddress={newAddress}
               mainClass={mainClass}
-              deliveryAddress ={deliveryAddress}
+              deliveryAddress={deliveryAddress}
             />
             {mainClass === "blur-cart-payment-details" ? (
               <></>

@@ -1,22 +1,11 @@
 /* eslint-disable no-unused-vars */
 import {
-  Button,
   Checkbox,
-  Divider,
-  Drawer,
-  FormControl,
   FormControlLabel,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Radio,
   RadioGroup,
   Rating,
   Slider,
-  Toolbar,
-  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
@@ -57,7 +46,7 @@ function Filter({
   };
 
   const handleClearRating = () => {
-    setRatingValue(0);
+    setRatingValue(null);
   };
 
   const handleClearDiscount = () => {
@@ -199,7 +188,7 @@ function Filter({
             </div>
           </div>
         </div>
-        {ratingValue !== 0 ||
+        {ratingValue !== null ||
         discount !== undefined ||
         includeOutOfStock === true ||
         PODEligibility === true ||

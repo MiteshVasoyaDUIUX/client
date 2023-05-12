@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   PodFilter,
   discountFilter,
@@ -7,22 +7,11 @@ import {
   ratingFilter,
 } from "../../app/Functions/filterFunc";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchProducts,
-  sortPriceLowToHigh,
-} from "../../features/products/productsSlice";
+import { fetchProducts } from "../../features/products/productsSlice";
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 import { ProductFetchingSpinner } from "../../components/Spinner";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import "./Products.css";
-import {
-  RatingHighToLow,
-  RatingLowToHigh,
-  newArrivals,
-  priceHighToLow,
-  priceLowToHigh,
-} from "../../app/Functions/SortFunc";
 
 function ProductsList({
   filteredProductArray,
@@ -30,59 +19,8 @@ function ProductsList({
   category,
   showProducts,
 }) {
-  const dispatch = useDispatch();
-
-  const [openSortOpt, setOpenSortOpt] = useState(false);
-  const [sortBy, setSortBy] = useState("New Arrivals");
-
-  // console.log("Product Array : ", filteredProductArray);
-
-  useEffect(() => {
-    switch (sortBy) {
-      case "newarrivals":
-        // dispatch(sortNewArrivals())
-        break;
-      case "priceLowToHigh":
-        // filteredProductArray = priceLowToHigh(filteredProductArray);
-        dispatch(sortPriceLowToHigh(filteredProductArray));
-        break;
-      case "priceHighToLow":
-        filteredProductArray = priceHighToLow(filteredProductArray);
-        break;
-      case "RatingLowToHigh":
-        filteredProductArray = RatingLowToHigh(filteredProductArray);
-        break;
-      case "ratingHighToLow":
-        filteredProductArray = RatingHighToLow(filteredProductArray);
-        break;
-      default:
-        break;
-    }
-  }, [sortBy]);
-
-  useEffect(() => {
-    console.log("Array Updated...");
-  }, [filteredProductArray]);
-
-  const handleSorting = (newValue) => {
-    setSortBy(newValue);
-  };
-
   return (
     <>
-      <div className="product-title-div">
-        <div id="products-title">{category}</div>
-        <div id="products-sort-box">
-          <select
-            value={sortBy}
-            onChange={(e) => handleSorting(e.target.value)}
-          >
-            <option value="newarrivals">Newest Arrivals</option>
-            <option value="priceHighToLow">Price : High to Low</option>
-            <option value="priceLowToHigh">Price : Low to High</option>
-          </select>
-        </div>
-      </div>
       <div
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
@@ -101,16 +39,15 @@ function Products() {
   const category = searchParams.get("category");
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
-  const [ratingValue, setRatingValue] = useState(0);
+  const [ratingValue, setRatingValue] = useState(null);
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  const [nextPage, setNextPage] = useState(1);
   const [page, setPage] = useState(1);
   const [product, setProduct] = useState([]);
   const [moreProducts, setMoreProducts] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
-  const [showProducts, setShowProducts] = useState([]);
+  const [sortBy, setSortBy] = useState("newArrivals");
 
   let productArray = [];
   let filteredProductArray = [];
@@ -125,6 +62,7 @@ function Products() {
   let prodReqData = {
     page: page,
     category: category,
+    sortBy: sortBy,
   };
 
   useEffect(() => {
@@ -136,20 +74,27 @@ function Products() {
   }, [isFetching]);
 
   useEffect(() => {
-    fetchProductsData();
+    if (page > 1) fetchProductsData();
   }, [page]);
-
-  useEffect(() => {
-    console.log("Array Updated...");
-  }, [filteredProductArray]);
 
   useEffect(() => {
     if (products.products?.length > 0) {
       setProduct((prev) => [...prev, ...products.products]);
-      setNextPage(products.nextPage);
       setMoreProducts(products.moreProduct);
     }
   }, [products]);
+
+  // console.log("Product Array : ", filteredProductArray);
+
+  useEffect(() => {
+    setProduct([]);
+
+    fetchProductData();
+  }, [sortBy]);
+
+  const handleSorting = (newValue) => {
+    setSortBy(newValue);
+  };
 
   const handelInfiniteScroll = async () => {
     try {
@@ -167,12 +112,28 @@ function Products() {
   const fetchProductsData = () => {
     if (moreProducts) {
       dispatch(fetchProducts(prodReqData));
-
+      console.log("Dispatch More : ", prodReqData);
       prodReqData = {
-        page: products.nextPage,
-        category: "smart phones",
+        page: page,
+        category: category,
+        sortBy: sortBy,
       };
     }
+  };
+
+  const fetchProductData = () => {
+    setPage(1);
+    prodReqData = {
+      page: 1,
+      category: category,
+      sortBy: sortBy,
+    };
+    dispatch(fetchProducts(prodReqData));
+    prodReqData = {
+      page: page,
+      category: category,
+      sortBy: sortBy,
+    };
   };
 
   useEffect(() => {
@@ -229,7 +190,26 @@ function Products() {
           includeOutOfStock={includeOutOfStock}
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div>
+        <div
+          style={{
+            width: "fit-content",
+            height: "fit-content",
+          }}
+        >
+          <div className="product-title-div">
+            <div id="products-title">{category}</div>
+            <div id="products-sort-box">
+              <select
+                value={sortBy}
+                onChange={(e) => handleSorting(e.target.value)}
+              >
+                <option value="newArrivals">Newest Arrivals</option>
+                <option value="priceHighToLow">Price : High to Low</option>
+                <option value="priceLowToHigh">Price : Low to High</option>
+                <option value="highRating">High Rating</option>
+              </select>
+            </div>
+          </div>
           <div
             style={{
               marginLeft: "100px",

@@ -7,6 +7,40 @@
       height: 100px;
 }
 
+.cart-card-image {
+      /* border-right: 1px solid rgb(136, 136, 136); */
+      margin: 5px 4px 0px 4px;
+      width: 140px;
+      height: 130px;
+      min-height: 350;
+      /* padding: 10px; */
+      text-align: center;
+}
+
+.cart-product-name {
+      height: fit-content;
+      max-height: 60px;
+      white-space: normal;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-align: justify;
+      text-justify: inter-word;
+      max-height: 140px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 20px;
+      cursor: default;
+}
+
+.cart-product-price {
+      width: fit-content;
+      height: fit-content;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 15px;
+      margin: 10px 0px 0px 0px;
+}
 
 .cart-table-title {
       margin-top: 1%;

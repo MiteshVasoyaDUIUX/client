@@ -36,7 +36,7 @@ function Accessories() {
   const dispatch = useDispatch();
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
-  const [ratingValue, setRatingValue] = useState(0);
+  const [ratingValue, setRatingValue] = useState(null);
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);

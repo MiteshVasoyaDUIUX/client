@@ -65,7 +65,6 @@
       margin-right: auto;
       margin-top: 0px;
       min-height: 350;
-      /* padding: 10px; */
       text-align: center;
 }
 
@@ -103,6 +102,31 @@
       right: 0;
       bottom: 0;
 
+}
+
+.cart-one-product-card {
+      height: 140px;
+}
+
+.carousel-image-for-cart {
+      height: 130px;
+      width: 120px;
+      margin-left: auto;
+      margin-right: auto;
+      min-height: 350;
+      text-align: center;
+      z-index: 0;
+      object-fit: contain;
+}
+
+
+.carousel-img-for-cart {
+      height: 130px;
+      max-width: 120px;
+      width: auto;
+      object-fit: contain;
+      margin-top: auto;
+      margin-bottom: 0;
 }
 
 .thumbnails-imgs {

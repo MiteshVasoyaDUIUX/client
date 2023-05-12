@@ -149,3 +149,26 @@ export const ImageForList = ({ prodImage }) => {
     );
   }
 };
+
+export const ImageForCart = ({ prodImage }) => {
+  if (prodImage !== undefined) {
+    return (
+      <>
+        <Carousel
+          className="carousel-image-for-cart"
+          indicators={false}
+          NextIcon={false}
+          PrevIcon={false}
+          navButtonsAlwaysInvisible={true}
+        >
+          <img
+            src={prodImage[0]}
+            alt="Images"
+            className="carousel-img-for-cart"
+            style={{ boxShadow: "none", zIndex: "0" }}
+          />
+        </Carousel>
+      </>
+    );
+  }
+};

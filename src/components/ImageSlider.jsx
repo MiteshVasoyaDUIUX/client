@@ -93,15 +93,15 @@ function ImageSlider() {
     {
       url: "https://firebasestorage.googleapis.com/v0/b/shoppingsite-e25c4.appspot.com/o/Home%20Page%20Images%2Fpexels-josh-sorenson-5349810.jpg?alt=media&token=5bbc56e8-e8d1-4024-8d73-a20ff5c1b20d",
 
-      link: "/products/accessories",
+      link: "/products?category=accessories",
     },
     {
       url: "https://firebasestorage.googleapis.com/v0/b/shoppingsite-e25c4.appspot.com/o/Home%20Page%20Images%2Fpexels-tembela-bohle-1884581.jpg?alt=media&token=3c960093-3e61-4dd2-8b13-d9eb4dfc29c8",
-      link: "/products/clothes",
+      link: "/products?category=clothes",
     },
     {
       url: "https://firebasestorage.googleapis.com/v0/b/shoppingsite-e25c4.appspot.com/o/Home%20Page%20Images%2Fwallpaperflare.com_wallpaper%20(2).jpg?alt=media&token=1e1dd889-2cc7-44f5-bbef-a5eeb26064dd",
-      link: "/products/smartphones",
+      link: "/products?category=smart phones",
     },
   ];
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card } from "@mui/material";
+import { Card, Rating } from "@mui/material";
 import { CardActions } from "@mui/material";
 import { CardContent } from "@mui/material";
 import { Typography } from "@mui/material";
@@ -28,9 +28,7 @@ export default function ProductCard({ product }) {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlist, isError, message } = useSelector(
-    (state) => state.user
-  );
+  const { wishlist, isError, message } = useSelector((state) => state.user);
   useEffect(() => {
     if (user) {
       const userId = user.user?._id;
@@ -86,18 +84,7 @@ export default function ProductCard({ product }) {
   return (
     <>
       <Card
-        sx={{
-          width: 390,
-          height: 650,
-          paddingBottom: "10px",
-          textAlign: "center",
-          marginBottom: "30px",
-          marginRight: "30px",
-          border: "0.5px solid white",
-          boxShadow: "none",
-          borderRadius: "15px",
-          cursor: "pointer",
-        }}
+        sx={{ boxShadow: "0 0 10px -5px black", borderRadius : "10px" }}
         key={product?._id}
         className="product-card"
         onClick={handleCardClick}
@@ -106,53 +93,37 @@ export default function ProductCard({ product }) {
           <ImageForCard prodImage={product?.prodImage} />
         </div>
         <CardContent>
-          <Typography
-            variant="h6"
-            component="div"
-            style={{
-              textAlign: "left",
-              overflow: "hidden",
-              whiteSpace: "wrap",
-              textOverflow: "ellipsis",
-              height: "60px",
-              marginBottom: "10px",
-            }}
-          >
-            {product?.prodName}
-          </Typography>
+          <div className="products-card-product-name">{product?.prodName}</div>
+          <div className="products-card-rating">
+            <Rating name="read-only" value={product?.rating} readOnly />
+          </div>
           <Typography
             variant="body2"
             color="text.secondary"
             align="justify"
-            className="products-card-desc"
-          >
-            {product?.prodDesc}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="justify"
-            style={{ fontSize: "17px", marginTop: "13px" }}
+            style={{ fontSize: "17px", marginTop: "8px" }}
           >
             Price : {product?.prodPrice?.toLocaleString("en-IN")} ₹
           </Typography>
         </CardContent>
-        <CardActions>
-          <IconButton onClick={handleCartButton}>
-            {!addToCart ? (
-              <AddShoppingCartIcon color="primary" />
-            ) : (
-              <AddShoppingCartIcon />
-            )}
-          </IconButton>
-          <IconButton onClick={handleWishListButton}>
-            {user && wishlist.includes(product?._id) ? (
-              <FavouriteRoundedIcon color="error" />
-            ) : (
-              <FavoriteBorderIcon color="error" />
-            )}
-          </IconButton>
-        </CardActions>
+        <div className="cart-wishlist-buttons">
+          <CardActions>
+            <IconButton onClick={handleCartButton}>
+              {!addToCart ? (
+                <AddShoppingCartIcon color="primary" />
+              ) : (
+                <AddShoppingCartIcon />
+              )}
+            </IconButton>
+            <IconButton onClick={handleWishListButton}>
+              {user && wishlist.includes(product?._id) ? (
+                <FavouriteRoundedIcon color="error" />
+              ) : (
+                <FavoriteBorderIcon color="error" />
+              )}
+            </IconButton>
+          </CardActions>
+        </div>
       </Card>
     </>
   );

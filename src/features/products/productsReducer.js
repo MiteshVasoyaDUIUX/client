@@ -10,7 +10,9 @@ const fetchProducts = async (productReqData) => {
       "/products?page=" +
       productReqData.page +
       "&category=" +
-      productReqData.category
+      productReqData.category +
+      "&sortBy=" +
+      productReqData.sortBy
   );
   return response.data;
 };
@@ -26,7 +28,9 @@ const searchProduct = async (productReqData) => {
       "/search?page=" +
       productReqData.page +
       "&&query=" +
-      productReqData.query,
+      productReqData.query +
+      "&sortBy=" +
+      productReqData.sortBy
   );
   return response.data;
 };

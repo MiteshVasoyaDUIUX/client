@@ -39,7 +39,6 @@ const StyledMenu = styled((props) => (
       horizontal: "right",
     }}
     {...props}
-    sx={{ border: "1px solid red" }}
   />
 ))(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -105,6 +104,12 @@ function Header() {
   } else {
     showHeader = true;
   }
+
+  // useEffect(() => {
+  //   if (location.pathname === "/") {
+  //     setShowCategoryMenu(false);
+  //   }
+  // }, [location.pathname]);
 
   const onLogout = () => {
     navigate("/");
@@ -214,7 +219,7 @@ function Header() {
               <></>
             )}
 
-            {showCategoryMenu ? (
+            {location.pathname=== "/" && showCategoryMenu ? (
               <>
                 <div className="category-menu">
                   <Button
@@ -235,7 +240,6 @@ function Header() {
                         color: "#000000",
                       },
                       "& .Mui-active": {
-                        border: "3px dashed red",
                       },
                     }}
                     disableRipple

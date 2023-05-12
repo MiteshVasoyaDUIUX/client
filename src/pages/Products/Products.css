@@ -1,7 +1,8 @@
 .product-title-div {
       /* border: 1px solid seagreen; */
+      width : 100%;
       height: fit-content;
-      margin-top: 30px;
+      margin: 30px auto 0 auto;
       display: flex;
 }
 
@@ -9,7 +10,7 @@
       font-size: 38px;
       font-weight: 600;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-      margin: 0 auto 0 0;
+      margin: 0 auto 0 125px;
       width: fit-content;
       border-bottom: 0px solid rgb(0, 0, 0);
       cursor: default;

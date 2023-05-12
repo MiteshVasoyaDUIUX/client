@@ -24,7 +24,7 @@ export const PodFilter = (prodArray) => {
   let filteredArray = [];
   prodArray.map((product) => {
     let paymentType = product.paymentType;
-    if (paymentType.includes("COD")) {
+    if (paymentType?.includes("COD")) {
       filteredArray.push(product);
     }
   });

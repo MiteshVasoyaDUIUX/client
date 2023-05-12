@@ -142,25 +142,6 @@ export const fetchTrendingProductComp = createAsyncThunk(
   }
 );
 
-export const sortPriceLowToHigh = createAsyncThunk(
-  "products/sort/new-arrivals",
-  async (filteredProductArray, thunkAPI) => {
-    try {
-      const response = priceLowToHigh(filteredProductArray);
-      console.log("Reponse D : ");
-      return response;
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -257,15 +238,6 @@ const productsSlice = createSlice({
         state.products = action.payload;
       })
       .addCase(fetchTrendingProductComp.rejected, (state, action) => {
-        state.productMessage = action.payload;
-      })
-      .addCase(sortPriceLowToHigh.pending, (state) => {
-        state.productMessage = "";
-      })
-      .addCase(sortPriceLowToHigh.fulfilled, (state, action) => {
-        state.products = action.payload;
-      })
-      .addCase(sortPriceLowToHigh.rejected, (state, action) => {
         state.productMessage = action.payload;
       });
   },

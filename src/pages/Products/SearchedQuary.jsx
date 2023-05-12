@@ -14,14 +14,12 @@ import {
   priceFilter,
   ratingFilter,
 } from "../../app/Functions/filterFunc";
+import { ProductFetchingSpinner } from "../../components/Spinner";
 
 function SearchedItems({ filteredProductArray }) {
   // console.log("SearchedItems");
   return (
     <>
-      <div>
-        <h1 id="searched-results">Results</h1>
-      </div>
       <div
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
@@ -37,7 +35,7 @@ function SearchedQuary() {
   const dispatch = useDispatch();
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
-  const [ratingValue, setRatingValue] = useState(0);
+  const [ratingValue, setRatingValue] = useState(null);
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
@@ -46,6 +44,7 @@ function SearchedQuary() {
   const [product, setProduct] = useState([]);
   const [moreProducts, setMoreProducts] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [sortBy, setSortBy] = useState("newArrivals");
 
   let productArray = [];
   let filteredProductArray = [];
@@ -62,6 +61,7 @@ function SearchedQuary() {
   let prodReqData = {
     page: page,
     query: query,
+    sortBy: sortBy,
   };
 
   useEffect(() => {
@@ -73,16 +73,25 @@ function SearchedQuary() {
   }, [isFetching]);
 
   useEffect(() => {
-    fetchProductsData();
+    if (page > 1) fetchProductsData();
   }, [page]);
 
   useEffect(() => {
     if (products.products?.length > 0) {
       setProduct((prev) => [...prev, ...products.products]);
-      setNextPage(products.nextPage);
       setMoreProducts(products.moreProduct);
     }
   }, [products]);
+
+  useEffect(() => {
+    setProduct([]);
+
+    fetchProductData();
+  }, [sortBy]);
+
+  const handleSorting = (newValue) => {
+    setSortBy(newValue);
+  };
 
   const handelInfiniteScroll = async () => {
     try {
@@ -100,11 +109,28 @@ function SearchedQuary() {
   const fetchProductsData = () => {
     if (moreProducts) {
       dispatch(searchProduct(prodReqData));
+      console.log("Dispatch More : ", prodReqData);
       prodReqData = {
-        page: products.nextPage,
+        page: page,
         query: query,
+        sortBy: sortBy,
       };
     }
+  };
+
+  const fetchProductData = () => {
+    setPage(1);
+    prodReqData = {
+      page: 1,
+      query: query,
+      sortBy: sortBy,
+    };
+    dispatch(searchProduct(prodReqData));
+    prodReqData = {
+      page: page,
+      query: query,
+      sortBy: sortBy,
+    };
   };
 
   useEffect(() => {
@@ -160,11 +186,47 @@ function SearchedQuary() {
         includeOutOfStock={includeOutOfStock}
         setIncludeOutOfStock={setIncludeOutOfStock}
       />
-      <div style={{ marginLeft: "100px", width: "fitContent" }}>
-        <SearchedItems filteredProductArray={filteredProductArray} />
-        {
-          // console.log("New Prod Array : ", newProdArray)
-        }
+      <div
+        style={{
+          width: "fit-content",
+          height: "fit-content",
+        }}
+      >
+        <div className="product-title-div">
+          <div id="products-title">Search Result</div>
+          <div id="products-sort-box">
+            <select
+              value={sortBy}
+              onChange={(e) => handleSorting(e.target.value)}
+            >
+              <option value="newArrivals">Newest Arrivals</option>
+              <option value="priceHighToLow">Price : High to Low</option>
+              <option value="priceLowToHigh">Price : Low to High</option>
+              <option value="highRating">High Rating</option>
+            </select>
+          </div>
+        </div>
+        <div
+          style={{
+            marginLeft: "100px",
+            width: "fitContent",
+            display: "block",
+          }}
+        >
+          <SearchedItems
+            wishlist={wishlist}
+            filteredProductArray={filteredProductArray}
+          />
+        </div>
+        {showSpinner ? (
+          <>
+            <div className="product-fetching-spinner">
+              <ProductFetchingSpinner />
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
