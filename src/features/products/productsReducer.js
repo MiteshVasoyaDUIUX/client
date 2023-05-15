@@ -37,8 +37,11 @@ const searchProduct = async (productReqData) => {
 
 const fetchNewArrivals = async (productReqData) => {
   const response = await axios.get(
-    API_URL + "/newarrivals?page=" + productReqData.page,
-    productReqData.filter
+    API_URL +
+      "/newarrivals?page=" +
+      productReqData.page +
+      "&sortBy=" +
+      productReqData.sortBy
   );
   // console.log("Response : ", response.data);
   return response.data;
@@ -52,8 +55,11 @@ const fetchNewArrivalComp = async (quary) => {
 
 const fetchTrendingProducts = async (productReqData) => {
   const response = await axios.get(
-    API_URL + "/trendingproducts?page=" + productReqData.page,
-    productReqData.filter
+    API_URL +
+      "/trendingproducts?page=" +
+      productReqData.page +
+      "&sortBy=" +
+      productReqData.sortBy
   );
   // console.log("Trending Products : ", response.data);
   return response.data;

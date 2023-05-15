@@ -62,7 +62,7 @@ const columns = [
   },
   {
     id: "rating",
-    label: "Rating",
+    label: "Rate Product",
     align: "center",
     textAlign: "center",
     width: "10%",

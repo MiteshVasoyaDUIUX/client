@@ -206,21 +206,27 @@ const productsSlice = createSlice({
       })
       .addCase(fetchNewArrivals.pending, (state) => {
         state.productMessage = "";
+        state.isFetching = true;
       })
       .addCase(fetchNewArrivals.fulfilled, (state, action) => {
         state.products = action.payload;
+        state.isFetching = false;
       })
       .addCase(fetchNewArrivals.rejected, (state, action) => {
         state.productMessage = action.payload;
+        state.isFetching = false;
       })
       .addCase(fetchTrendingProducts.pending, (state) => {
         state.productMessage = "";
+        state.isFetching = true;
       })
       .addCase(fetchTrendingProducts.fulfilled, (state, action) => {
         state.products = action.payload;
+        state.isFetching = false;
       })
       .addCase(fetchTrendingProducts.rejected, (state, action) => {
         state.productMessage = action.payload;
+        state.isFetching = false;
       })
       .addCase(fetchNewArrivalComp.pending, (state) => {
         state.productMessage = "";

@@ -217,10 +217,10 @@ function BuyProduct() {
           couponCode,
         };
 
-        let checkoutData = [];
-        checkoutData.push(newData);
-        console.log("Checkout Data : ", checkoutData);
-        dispatch(placeOrder(checkoutData));
+        // let checkoutData = [];
+        // checkoutData.push(newData);
+        // console.log("Checkout Data : ", newData);
+        dispatch(placeOrder(newData));
       }
     }
   };

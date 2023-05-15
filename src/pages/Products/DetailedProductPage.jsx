@@ -35,6 +35,7 @@ function DetailedProductPage() {
   const [quantity, setQuantity] = useState(1);
   // eslint-disable-next-line no-unused-vars
   const [couponApplied, setCouponApplied] = useState(false);
+  const [couponData, setCouponData] = useState();
   const [couponCode, setCouponCode] = useState("");
 
   const { user } = useSelector((state) => state.auth);
@@ -46,7 +47,6 @@ function DetailedProductPage() {
   );
   const productId = params.id;
   let outOfStock;
-  let couponData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -146,7 +146,8 @@ function DetailedProductPage() {
     if (couponCode !== "") {
       setCouponApplied(true);
       dispatch(applyCoupon(couponCode));
-      couponData = coupon;
+      setCouponData(coupon);
+      console.log("Applying Coupon...", coupon);
     } else {
       alert("Enter Coupon Code...");
     }
@@ -425,7 +426,7 @@ function DetailedProductPage() {
                   <></>
                 )}
 
-                {couponData?.discount !== undefined ? (
+                {couponApplied ? (
                   <>
                     <div className="coupon-applied-div">
                       <div>{coupon.message}</div>

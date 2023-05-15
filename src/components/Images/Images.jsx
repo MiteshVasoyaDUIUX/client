@@ -11,14 +11,26 @@ function ImageSlider({ prodImage }) {
 
   for (let index = 0; index < prodImage.length; index++) {
     const element = prodImage[index];
-    newImageData.push(<img src={element} alt="" height="90px" width="100px" />);
+    newImageData.push(
+      <img
+        src={element}
+        alt=""
+        height="90px"
+        width="100px"
+        className="indicator-img"
+      />
+    );
   }
 
   return (
     <>
       <div className="carousel-class">
         <Carousel
-          sx={{}}
+          sx={{
+            indicatorIcon: {
+              border: "1px solid black",
+            },
+          }}
           height="700px"
           indicators
           navButtonsProps={{
@@ -31,13 +43,13 @@ function ImageSlider({ prodImage }) {
           IndicatorIcon={newImageData}
           indicatorIconButtonProps={{
             className: "indicator-icon-button",
-            style: {
+            sx: {
               border: "1px solid rgba(26, 26, 26, 0.3)",
               borderRadius: "5px",
               padding: "5px",
               objectFit: "cover",
-              marginLeft : "5px",
-              marginRight : "5px"
+              marginLeft: "3px",
+              marginRight: "3px",
             },
           }}
           activeIndicatorIconButtonProps={{
@@ -53,10 +65,10 @@ function ImageSlider({ prodImage }) {
               marginBottom: "20px",
               textAlign: "center",
               display: "flex",
-              width : "fit-content",
+              width: "fit-content",
               justifyContent: "space-evenly",
-              marginLeft : "auto",
-              marginRight : "auto"
+              marginLeft: "auto",
+              marginRight: "auto",
             },
           }}
           navButtonsAlwaysVisible

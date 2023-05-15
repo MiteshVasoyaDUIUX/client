@@ -20,8 +20,10 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { createRoot } from "react-dom/client";
 import EmailVerification from "../../components/EmailVerification";
-import {
+import userSlice, {
+  applyCoupon,
   fetchCart,
+  placeCartOrder,
   placeOrder,
   removeFromCart,
   reset,
@@ -642,9 +644,12 @@ export default function Cart() {
   const [mainClass, setMainClass] = useState("cart-payment-details");
 
   const { user } = useSelector((state) => state.auth);
-  const { cart } = useSelector((state) => state.user);
+  const { cart, coupon, userSliceMessage } = useSelector((state) => state.user);
   const { isPlaced } = useSelector((state) => state.user);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponData, setCouponData] = useState();
 
   const [newAddress, setAddressNew] = useState({
     street: "",
@@ -652,6 +657,7 @@ export default function Cart() {
     state: "",
     pincode: "",
   });
+  let outOfStock;
 
   useEffect(() => {
     if (!user) {
@@ -664,7 +670,14 @@ export default function Cart() {
     }
 
     if (isPlaced) {
-      alert("Order Placed Successfully");
+      if (userSliceMessage.outOfStock <= 0) {
+        alert("Order Placed Successfully");
+      } else if (userSliceMessage.outOfStock > 0) {
+        alert(
+          `${userSliceMessage.successfull} Order Placed Successfully, ${userSliceMessage.outOfStock} are out of stocks...`
+        );
+      }
+      console.log("Order Placed Message : ", userSliceMessage);
       navigate("/myorders");
     }
 
@@ -673,15 +686,22 @@ export default function Cart() {
     };
   }, [dispatch, isPlaced]);
 
+  let subTotal = 0;
   let totalAmount = 0;
 
   for (let index = 0; index < cart.length; index++) {
     if (cart[index].prodQuantity !== 0) {
-      totalAmount = totalAmount + cart[index].quantity * cart[index].prodPrice;
+      subTotal = subTotal + cart[index].quantity * cart[index].prodPrice;
     }
   }
 
-  totalAmount = totalAmount.toLocaleString("en-IN");
+  if (coupon.discount) {
+    totalAmount = Math.ceil(
+      (Number(subTotal) * (100 - Number(coupon.discount))) / 100
+    );
+  } else {
+    totalAmount = subTotal;
+  }
 
   const userId = user?.user._id;
 
@@ -715,13 +735,29 @@ export default function Cart() {
               productPrice: cart[index].prodPrice,
               paymentOption,
               deliveryAddress: deliveryAddress,
+              couponCode,
             };
             checkoutData.push(newData);
           }
         }
-        dispatch(placeOrder(checkoutData));
+        dispatch(placeCartOrder(checkoutData));
       }
     }
+  };
+
+  const handleApplyCouponButton = () => {
+    if (couponCode !== "") {
+      setCouponApplied(true);
+      dispatch(applyCoupon(couponCode));
+      setCouponData(coupon);
+      console.log("Applying Coupon...", coupon);
+    } else {
+      alert("Enter Coupon Code...");
+    }
+  };
+
+  const handleCouponChanges = (e) => {
+    setCouponCode(e.target.value);
   };
 
   return (
@@ -740,24 +776,116 @@ export default function Cart() {
               </div>
               <div className="cart-grand-total">
                 <div className="grand-total-summary-title">Summary :</div>
-                <div style={{ display: "flex", marginTop: "10px" }}>
-                  <div className="total-title">Subtotal :</div>
-                  <div className="total-value">{totalAmount} ₹</div>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <div className="shipping-charge-title">Shipping Charge :</div>
-                  <div className="shipping-charge-value">0 ₹</div>
-                </div>
-                <hr style={{ marginTop: "20px" }} />
-                <div style={{ display: "flex" }}>
-                  <div className="grand-total-title">Total Amount :</div>
-                  <div className="grand-total-value">{totalAmount} ₹</div>
-                </div>
-                <div className="cart-page-checkout-button">
-                  <button className="checkout-button" onClick={handleCheckout}>
-                    CHECKOUT
-                  </button>
-                </div>
+                {user ? (
+                  <>
+                    <div className="coupon-code-div">
+                      <TextField
+                        sx={{
+                          "& .MuiInputBase-root": {
+                            height: "40px",
+                            width: "230px",
+                            backgroundColor: "white",
+                            border: "1px solid black",
+                            borderRadius: "0",
+                          },
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            border: "none",
+                          },
+                        }}
+                        className="coupon-code-text"
+                        variant="outlined"
+                        placeholder="Enter Coupon Code"
+                        value={couponCode}
+                        onChange={handleCouponChanges}
+                      />
+                      <input
+                        type="button"
+                        value="Apply"
+                        onClick={handleApplyCouponButton}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
+                {couponApplied ? (
+                  <>
+                    <div className="coupon-message">{coupon.message}</div>
+                    <div style={{ display: "flex", marginTop: "10px" }}>
+                      <div className="total-title">Subtotal :</div>
+                      <div className="total-value">
+                        {subTotal.toLocaleString("en-IN")} ₹
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", marginTop: "10px" }}>
+                      <div className="coupon-discount-title">
+                        Coupon Discount :
+                      </div>
+                      <div className="coupon-discount-value">
+                        {coupon.discount}%
+                      </div>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                      <div className="shipping-charge-title">
+                        Shipping Charge :
+                      </div>
+                      <div className="shipping-charge-value">0 ₹</div>
+                    </div>
+                    <hr style={{ marginTop: "20px" }} />
+                    <div style={{ display: "flex" }}>
+                      <div className="grand-total-title">Total Amount :</div>
+                      <div className="grand-total-value">
+                        {totalAmount.toLocaleString("en-IN")} ₹
+                      </div>
+                    </div>
+                    <div className="cart-page-checkout-button">
+                      <button
+                        className="checkout-button"
+                        onClick={handleCheckout}
+                      >
+                        CHECKOUT
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {outOfStock !== 0 ? (
+                      <>
+                        <div style={{ display: "flex", marginTop: "10px" }}>
+                          <div className="total-title">Subtotal :</div>
+                          <div className="total-value">
+                            {subTotal.toLocaleString("en-IN")} ₹
+                          </div>
+                        </div>
+                        <div style={{ display: "flex" }}>
+                          <div className="shipping-charge-title">
+                            Shipping Charge :
+                          </div>
+                          <div className="shipping-charge-value">0 ₹</div>
+                        </div>
+                        <hr style={{ marginTop: "20px" }} />
+                        <div style={{ display: "flex" }}>
+                          <div className="grand-total-title">
+                            Total Amount :
+                          </div>
+                          <div className="grand-total-value">
+                            {totalAmount.toLocaleString("en-IN")} ₹
+                          </div>
+                        </div>
+                        <div className="cart-page-checkout-button">
+                          <button
+                            className="checkout-button"
+                            onClick={handleCheckout}
+                          >
+                            CHECKOUT
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </>

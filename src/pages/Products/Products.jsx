@@ -84,8 +84,6 @@ function Products() {
     }
   }, [products]);
 
-  // console.log("Product Array : ", filteredProductArray);
-
   useEffect(() => {
     setProduct([]);
 
@@ -223,9 +221,15 @@ function Products() {
               category={category}
             />
           </div>
-          {showSpinner ? (
+          {moreProducts && !isFetching === false ? (
             <>
-              <div className="product-fetching-spinner">
+              <div
+                style={{
+                  width: "fit-content",
+                  height: "fit-content",
+                  margin: "30px auto 50px auto",
+                }}
+              >
                 <ProductFetchingSpinner />
               </div>
             </>

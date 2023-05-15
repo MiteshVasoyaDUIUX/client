@@ -21,8 +21,6 @@ import {
 } from "../features/user/userSlice";
 
 export default function ProductCard({ product }) {
-  // console.log("ProductCard");
-
   const [wishList, setWishList] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,7 +48,6 @@ export default function ProductCard({ product }) {
         userId,
         productId,
       };
-      // console.log("Data : ", data);
       dispatch(addToCart(data));
     } else {
       toast.error("Not Logged In");
@@ -58,7 +55,6 @@ export default function ProductCard({ product }) {
   };
 
   const handleCardClick = () => {
-    // console.log(product._id);
     navigate(`/product/${product._id}`);
   };
 
@@ -74,7 +70,6 @@ export default function ProductCard({ product }) {
         userId,
         productId,
       };
-      // console.log("Data : ", data);
       dispatch(addToWishList(data));
     } else {
       toast.error("Not Logged In");

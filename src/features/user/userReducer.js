@@ -143,6 +143,25 @@ const placeOrder = async (checkoutData, token) => {
   return response.data;
 };
 
+const placeCartOrder = async (checkoutData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData);
+
+  const response = await axios.post(
+    API_URL + "/buyer/placecartorder",
+    checkoutData,
+    config
+  );
+
+  console.log("Check Out Responseeeeee: ");
+  return response.data;
+};
+
 const fetchAllOrders = async (userId, token) => {
   const config = {
     headers: {
@@ -179,7 +198,6 @@ const applyCoupon = async (coupon, token) => {
   //   coupon: coupon,
   // };
   const response = await axios.get(API_URL + "/buyer/applycoupon/" + coupon);
-
   return response.data;
 };
 
@@ -193,6 +211,7 @@ const userService = {
   removeFromCart,
   removeFromWishlist,
   placeOrder,
+  placeCartOrder,
   fetchAllOrders,
   giveRating,
   applyCoupon,

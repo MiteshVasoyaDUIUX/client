@@ -41,6 +41,26 @@ export const placeOrder = createAsyncThunk(
   }
 );
 
+export const placeCartOrder = createAsyncThunk(
+  "user/order/place-cart-order",
+  async (checkoutData, thunkAPI) => {
+    try {
+      //'token' may be not use because only user can add the goal...
+      const token = thunkAPI.getState().auth.user.token;
+      console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
+      return await userService.placeCartOrder(checkoutData, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const fetchAllOrders = createAsyncThunk(
   "user/order/fetch",
   async (userId, thunkAPI) => {
@@ -466,6 +486,19 @@ const userSlice = createSlice({
         // state.userSliceMessage = action.payload;
       })
       .addCase(placeOrder.rejected, (state, action) => {
+        state.isError = true;
+        // console.log("Message : ", action.payload);
+        // state.userSliceMessage = action.payload;
+      })
+      .addCase(placeCartOrder.pending, (state) => {
+        state.isPlacing = true;
+        state.isPlaced = false;
+      })
+      .addCase(placeCartOrder.fulfilled, (state, action) => {
+        state.isPlaced = true;
+        state.userSliceMessage = action.payload;
+      })
+      .addCase(placeCartOrder.rejected, (state, action) => {
         state.isError = true;
         // console.log("Message : ", action.payload);
         state.userSliceMessage = action.payload;

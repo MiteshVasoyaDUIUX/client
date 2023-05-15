@@ -6,14 +6,17 @@ import { ProductCardsGrid } from "../../components/ProductCardGrid";
 
 import "./Accessories.css";
 import { ProductFetchingSpinner } from "../../components/Spinner";
-import { PodFilter, discountFilter, priceFilter, ratingFilter } from "../../app/Functions/filterFunc";
+import {
+  PodFilter,
+  discountFilter,
+  priceFilter,
+  ratingFilter,
+} from "../../app/Functions/filterFunc";
+import { useLocation } from "react-router-dom";
 
 function NewArrivalsProduct({ filteredProductArray }) {
   return (
     <>
-      <div>
-        <h1 id="accessories-title">New Arrivals</h1>
-      </div>
       <div
         className="productCards"
         style={{ width: "90%", marginLeft: "10px", marginTop: "40px" }}
@@ -25,19 +28,23 @@ function NewArrivalsProduct({ filteredProductArray }) {
 }
 
 function NewArrivalsProductsPage() {
+  const location = useLocation();
   const dispatch = useDispatch();
+
+  const searchParams = new URLSearchParams(location.search);
+  const category = searchParams.get("category");
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState(null);
   const [PODEligibility, setPODEligibility] = useState(false);
   const [discount, setDiscount] = useState();
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
-  const [nextPage, setNextPage] = useState(1);
   const [page, setPage] = useState(1);
   const [product, setProduct] = useState([]);
   const [moreProducts, setMoreProducts] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
-
+  const [sortBy, setSortBy] = useState("newArrivals");
+  const initialPriceSliderValue = [100, 200000];
   let productArray = [];
   let filteredProductArray = [];
 
@@ -50,28 +57,54 @@ function NewArrivalsProductsPage() {
 
   let prodReqData = {
     page: page,
-    // category: "smart phones",
+    // category: category,
+    sortBy: sortBy,
   };
 
-  useEffect(() => {
-    if (isFetching) {
-      setShowSpinner(true);
-    } else {
-      setShowSpinner(false);
-    }
-  }, [isFetching]);
+  // useEffect(() => {
+  //   if (isFetching) {
+  //     console.log("ASASasasasaas")
+  //   } else {
+  //   }
+  // }, [isFetching]);
+
+  // if(isFetching) {
+    
+  // }
+  
 
   useEffect(() => {
-    fetchProductsData();
+    if (page > 1) fetchProductsData();
   }, [page]);
 
   useEffect(() => {
     if (products.products?.length > 0) {
       setProduct((prev) => [...prev, ...products.products]);
-      setNextPage(products.nextPage);
       setMoreProducts(products.moreProduct);
     }
   }, [products]);
+
+  useEffect(() => {
+    setProduct([]);
+
+    fetchProductData();
+  }, [sortBy]);
+
+  // const handleClearRating = () => {
+  //   setRatingValue(null);
+  // };
+
+  // const handleClearDiscount = () => {
+  //   setDiscount();
+  // };
+
+  // const handlePODCheckBox = () => {
+  //   setPODEligibility(!PODEligibility);
+  // };
+
+  const handleSorting = (newValue) => {
+    setSortBy(newValue);
+  };
 
   const handelInfiniteScroll = async () => {
     try {
@@ -89,10 +122,28 @@ function NewArrivalsProductsPage() {
   const fetchProductsData = () => {
     if (moreProducts) {
       dispatch(fetchNewArrivals(prodReqData));
+      console.log("Dispatch More : ", prodReqData);
       prodReqData = {
-        page: products.nextPage,
+        page: page,
+        // category: category,
+        sortBy: sortBy,
       };
     }
+  };
+
+  const fetchProductData = () => {
+    setPage(1);
+    prodReqData = {
+      page: 1,
+      // category: category,
+      sortBy: sortBy,
+    };
+    dispatch(fetchNewArrivals(prodReqData));
+    prodReqData = {
+      page: page,
+      // category: category,
+      sortBy: sortBy,
+    };
   };
 
   useEffect(() => {
@@ -149,13 +200,46 @@ function NewArrivalsProductsPage() {
           includeOutOfStock={includeOutOfStock}
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div>
-          <div style={{ marginLeft: "100px", width: "fitContent" }}>
+        <div
+          style={{
+            width: "fit-content",
+            height: "fit-content",
+          }}
+        >
+          <div className="product-title-div">
+            <div id="products-title">New Arrivals</div>
+            <div id="products-sort-box">
+              <select
+                value={sortBy}
+                onChange={(e) => handleSorting(e.target.value)}
+              >
+                <option value="newArrivals">Newest Arrivals</option>
+                <option value="priceHighToLow">Price : High to Low</option>
+                <option value="priceLowToHigh">Price : Low to High</option>
+                <option value="highRating">High Rating</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginLeft: "100px",
+              width: "fitContent",
+              display: "block",
+            }}
+          >
             <NewArrivalsProduct filteredProductArray={filteredProductArray} />
           </div>
-          {showSpinner ? (
+
+          {moreProducts && !isFetching === false ? (
             <>
-              <div className="product-fetching-spinner">
+              <div
+                style={{
+                  width: "fit-content",
+                  height: "fit-content",
+                  margin: "30px auto 50px auto",
+                }}
+              >
                 <ProductFetchingSpinner />
               </div>
             </>
