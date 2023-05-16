@@ -12,6 +12,8 @@ import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 import { ProductFetchingSpinner } from "../../components/Spinner";
 import "./Products.css";
+import { toast } from "react-toastify";
+import { resetIs } from "../../features/user/userSlice";
 
 function ProductsList({
   filteredProductArray,
@@ -47,6 +49,7 @@ function Products() {
   const [product, setProduct] = useState([]);
   const [moreProducts, setMoreProducts] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
   const [sortBy, setSortBy] = useState("newArrivals");
 
   let productArray = [];
@@ -74,6 +77,18 @@ function Products() {
   }, [isFetching]);
 
   useEffect(() => {
+    if (isAddedCart) {
+      toast.success("Added To Cart");
+      console.log("Added To Cart : ", isAddedCart);
+    }
+
+    return () => {
+      dispatch(resetIs());
+      console.log("Added To Cart///", isAddedCart);
+    };
+  }, [isAddedCart]);
+
+  useEffect(() => {
     if (page > 1) fetchProductsData();
   }, [page]);
 
@@ -81,12 +96,16 @@ function Products() {
     if (products.products?.length > 0) {
       setProduct((prev) => [...prev, ...products.products]);
       setMoreProducts(products.moreProduct);
+      if (products.moreProduct === true) {
+        setShowLoadMoreBtn(true);
+      } else {
+        setShowLoadMoreBtn(false);
+      }
     }
   }, [products]);
 
   useEffect(() => {
     setProduct([]);
-
     fetchProductData();
   }, [sortBy]);
 
@@ -94,14 +113,9 @@ function Products() {
     setSortBy(newValue);
   };
 
-  const handelInfiniteScroll = async () => {
+  const handleLoadMoreProdButton = async () => {
     try {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight
-      ) {
-        setPage((prev) => prev + 1);
-      }
+      setPage((prev) => prev + 1);
     } catch (error) {
       console.log(error);
     }
@@ -133,11 +147,6 @@ function Products() {
       sortBy: sortBy,
     };
   };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handelInfiniteScroll);
-    return () => window.removeEventListener("scroll", handelInfiniteScroll);
-  }, []);
 
   if (products?.products?.length > 0) {
     product.map((product) => {
@@ -221,16 +230,14 @@ function Products() {
               category={category}
             />
           </div>
-          {moreProducts && !isFetching === false ? (
+          {showLoadMoreBtn === true ? (
             <>
-              <div
-                style={{
-                  width: "fit-content",
-                  height: "fit-content",
-                  margin: "30px auto 50px auto",
-                }}
-              >
-                <ProductFetchingSpinner />
+              <div className="load-more-prod-button">
+                <input
+                  type="button"
+                  value="Load More..."
+                  onClick={handleLoadMoreProdButton}
+                />
               </div>
             </>
           ) : (

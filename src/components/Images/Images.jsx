@@ -130,7 +130,6 @@ export const ImageForCard = ({ prodImage }) => {
           <img
             src={prodImage[0]}
             alt="Images"
-            className="carousel-image-for-card"
             style={{ boxShadow: "none" }}
           />
         </Carousel>

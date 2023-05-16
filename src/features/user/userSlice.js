@@ -315,6 +315,7 @@ const userSlice = createSlice({
         state.isError = false;
         state.isAddingCart = false;
         state.isAddedCart = true;
+        console.log("IS Added To Cart : ", state.isAddedCart)
         state.userSliceMessage = action.payload.message;
       })
       .addCase(addToCart.rejected, (state, action) => {

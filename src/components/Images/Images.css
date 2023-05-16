@@ -67,17 +67,12 @@
       text-align: center;
 }
 
-.carousel-image-for-card {
-      max-width: 390px;
-      max-height: 400px;
-      width: auto;
-      position: absolute;
-      margin: 0 auto auto auto;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+.carousel-one-image-for-card-class img {
+      width: 390px;
+      aspect-ratio: 1/1;
+      object-fit: contain;
 }
+
 
 .carousel-one-image-for-list {
       height: 100px;

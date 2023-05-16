@@ -45,12 +45,15 @@ function NewArrivals() {
   }, [isError, dispatch]);
 
   useEffect(() => {
+
     if (isAddedCart) {
       toast.success(userSliceMessage);
+      console.log("Added To Cart : ", isAddedCart);
     }
 
     return () => {
       dispatch(resetIs());
+      console.log("Added To Cart///", isAddedCart);
     };
   }, [isAddedCart]);
 

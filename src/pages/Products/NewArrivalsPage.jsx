@@ -13,6 +13,8 @@ import {
   ratingFilter,
 } from "../../app/Functions/filterFunc";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import { resetIs } from "../../features/user/userSlice";
 
 function NewArrivalsProduct({ filteredProductArray }) {
   return (
@@ -43,6 +45,7 @@ function NewArrivalsProductsPage() {
   const [product, setProduct] = useState([]);
   const [moreProducts, setMoreProducts] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
   const [sortBy, setSortBy] = useState("newArrivals");
   const initialPriceSliderValue = [100, 200000];
   let productArray = [];
@@ -69,9 +72,8 @@ function NewArrivalsProductsPage() {
   // }, [isFetching]);
 
   // if(isFetching) {
-    
+
   // }
-  
 
   useEffect(() => {
     if (page > 1) fetchProductsData();
@@ -81,39 +83,38 @@ function NewArrivalsProductsPage() {
     if (products.products?.length > 0) {
       setProduct((prev) => [...prev, ...products.products]);
       setMoreProducts(products.moreProduct);
+      if (products.moreProduct === true) {
+        setShowLoadMoreBtn(true);
+      } else {
+        setShowLoadMoreBtn(false);
+      }
     }
   }, [products]);
 
   useEffect(() => {
     setProduct([]);
-
     fetchProductData();
   }, [sortBy]);
 
-  // const handleClearRating = () => {
-  //   setRatingValue(null);
-  // };
+  useEffect(() => {
+    if (isAddedCart) {
+      toast.success(userSliceMessage);
+      console.log("Added To Cart : ", isAddedCart);
+    }
 
-  // const handleClearDiscount = () => {
-  //   setDiscount();
-  // };
-
-  // const handlePODCheckBox = () => {
-  //   setPODEligibility(!PODEligibility);
-  // };
+    return () => {
+      dispatch(resetIs());
+      console.log("Added To Cart///", isAddedCart);
+    };
+  }, [isAddedCart]);
 
   const handleSorting = (newValue) => {
     setSortBy(newValue);
   };
 
-  const handelInfiniteScroll = async () => {
+  const handleLoadMoreProdButton = async () => {
     try {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight
-      ) {
-        setPage((prev) => prev + 1);
-      }
+      setPage((prev) => prev + 1);
     } catch (error) {
       console.log(error);
     }
@@ -145,11 +146,6 @@ function NewArrivalsProductsPage() {
       sortBy: sortBy,
     };
   };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handelInfiniteScroll);
-    return () => window.removeEventListener("scroll", handelInfiniteScroll);
-  }, []);
 
   if (products?.products?.length > 0) {
     product.map((product) => {
@@ -230,17 +226,14 @@ function NewArrivalsProductsPage() {
           >
             <NewArrivalsProduct filteredProductArray={filteredProductArray} />
           </div>
-
-          {moreProducts && !isFetching === false ? (
+          {showLoadMoreBtn === true ? (
             <>
-              <div
-                style={{
-                  width: "fit-content",
-                  height: "fit-content",
-                  margin: "30px auto 50px auto",
-                }}
-              >
-                <ProductFetchingSpinner />
+              <div className="load-more-prod-button">
+                <input
+                  type="button"
+                  value="Load More..."
+                  onClick={handleLoadMoreProdButton}
+                />
               </div>
             </>
           ) : (

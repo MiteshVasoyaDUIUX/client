@@ -26,7 +26,7 @@ export default function ProductCard({ product }) {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlist, isError, message } = useSelector((state) => state.user);
+  const { wishlist, isError, isAddedCart, userSliceMessage } = useSelector((state) => state.user);
   useEffect(() => {
     if (user) {
       const userId = user.user?._id;
@@ -34,7 +34,7 @@ export default function ProductCard({ product }) {
     }
 
     return () => {
-      reset();
+      dispatch(reset());
     };
   }, [dispatch, isError]);
 

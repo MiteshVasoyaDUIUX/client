@@ -17,7 +17,6 @@ import {
 import { ProductFetchingSpinner } from "../../components/Spinner";
 
 function SearchedItems({ filteredProductArray }) {
-  // console.log("SearchedItems");
   return (
     <>
       <div
@@ -44,6 +43,7 @@ function SearchedQuary() {
   const [product, setProduct] = useState([]);
   const [moreProducts, setMoreProducts] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
   const [sortBy, setSortBy] = useState("newArrivals");
 
   let productArray = [];
@@ -80,6 +80,11 @@ function SearchedQuary() {
     if (products.products?.length > 0) {
       setProduct((prev) => [...prev, ...products.products]);
       setMoreProducts(products.moreProduct);
+      if (products.moreProduct === true) {
+        setShowLoadMoreBtn(true);
+      } else {
+        setShowLoadMoreBtn(false);
+      }
     }
   }, [products]);
 
@@ -93,14 +98,9 @@ function SearchedQuary() {
     setSortBy(newValue);
   };
 
-  const handelInfiniteScroll = async () => {
+  const handleLoadMoreProdButton = async () => {
     try {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight
-      ) {
-        setPage((prev) => prev + 1);
-      }
+      setPage((prev) => prev + 1);
     } catch (error) {
       console.log(error);
     }
@@ -132,11 +132,6 @@ function SearchedQuary() {
       sortBy: sortBy,
     };
   };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handelInfiniteScroll);
-    return () => window.removeEventListener("scroll", handelInfiniteScroll);
-  }, []);
 
   if (products?.products?.length > 0) {
     product.map((product) => {
@@ -218,15 +213,19 @@ function SearchedQuary() {
             filteredProductArray={filteredProductArray}
           />
         </div>
-        {showSpinner ? (
-          <>
-            <div className="product-fetching-spinner">
-              <ProductFetchingSpinner />
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
+        {showLoadMoreBtn === true ? (
+            <>
+              <div className="load-more-prod-button">
+                <input
+                  type="button"
+                  value="Load More..."
+                  onClick={handleLoadMoreProdButton}
+                />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
       </div>
     </div>
   );
