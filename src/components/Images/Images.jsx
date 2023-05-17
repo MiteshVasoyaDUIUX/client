@@ -41,7 +41,8 @@ function ImageSlider({ prodImage }) {
     setFullImgView(false);
   };
 
-  const handlePrevImgBtn = () => {
+  const handlePrevImgBtn = (e) => {
+    e.stopPropagation();
     console.log("Previous Image : ", imgIndex - 1);
     if (imgIndex - 1 >= 0) {
       setImgIndex(imgIndex - 1);
@@ -52,7 +53,8 @@ function ImageSlider({ prodImage }) {
     }
   };
 
-  const handleNextImgBtn = () => {
+  const handleNextImgBtn = (e) => {
+    e.stopPropagation();
     console.log("Next Image : ", imgIndex + 1);
     if (imgIndex + 1 < prodImage.length) {
       setImgIndex(imgIndex + 1);
@@ -142,23 +144,33 @@ function ImageSlider({ prodImage }) {
       </div>
       {fullImgView ? (
         <>
-          <div className="full-img-view">
+          <div className="full-img-view" onClick={handleCloseBtn}>
             <div className="img-close-div" onClick={handleCloseBtn}>
               <CloseIcon sx={{ fontSize: "30px" }} />
             </div>
             <div className="full-img-view-card">
               <div className="full-img">
-                <div className="prev-img-btn" onClick={handlePrevImgBtn}>
+                <div
+                  className="prev-img-btn"
+                  onClick={(e) => handlePrevImgBtn(e)}
+                >
                   <ArrowBackIosNewIcon sx={{ fontSize: "50px" }} />
                 </div>
-                <div className="next-img-btn" onClick={handleNextImgBtn}>
+                <div
+                  className="next-img-btn"
+                  onClick={(e) => handleNextImgBtn(e)}
+                >
                   <ArrowForwardIosIcon sx={{ fontSize: "50px" }} />
                 </div>
               </div>
             </div>
 
             <div className="full-img">
-              <img src={prodImage[imgIndex]} alt="" />
+              <img
+                src={prodImage[imgIndex]}
+                alt=""
+                onClick={(e) => e.stopPropagation()}
+              />
             </div>
           </div>
         </>
