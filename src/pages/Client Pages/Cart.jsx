@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import "./Cart.css";
 import CloseIcon from "@mui/icons-material/Close";
+import { toast } from "react-toastify";
 
 import { createRoot } from "react-dom/client";
 import EmailVerification from "../../components/EmailVerification";
@@ -645,7 +646,7 @@ export default function Cart() {
 
   const { user } = useSelector((state) => state.auth);
   const { cart, coupon, userSliceMessage } = useSelector((state) => state.user);
-  const { isPlaced } = useSelector((state) => state.user);
+  const { isPlaced, isError } = useSelector((state) => state.user);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
@@ -662,6 +663,11 @@ export default function Cart() {
   useEffect(() => {
     if (!user) {
       navigate("/");
+    }
+
+    if (isError) {
+      console.log("Error Message : ", userSliceMessage);
+      toast.error(userSliceMessage);
     }
 
     if (user) {
@@ -684,7 +690,7 @@ export default function Cart() {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isPlaced]);
+  }, [dispatch, isPlaced, isError]);
 
   let subTotal = 0;
   let totalAmount = 0;
@@ -808,7 +814,7 @@ export default function Cart() {
                 ) : (
                   <></>
                 )}
-                {couponApplied ? (
+                {couponApplied && coupon.isValid === true ? (
                   <>
                     <div className="coupon-message">{coupon.message}</div>
                     <div style={{ display: "flex", marginTop: "10px" }}>

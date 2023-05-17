@@ -79,12 +79,10 @@ function Products() {
   useEffect(() => {
     if (isAddedCart) {
       toast.success("Added To Cart");
-      console.log("Added To Cart : ", isAddedCart);
     }
 
     return () => {
       dispatch(resetIs());
-      console.log("Added To Cart///", isAddedCart);
     };
   }, [isAddedCart]);
 
@@ -198,10 +196,12 @@ function Products() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div
-          style={{
-            width: "fit-content",
-            height: "fit-content",
-          }}
+          // style={{
+          //   width: "fit-content",
+          //   height: "fit-content",
+          //   border : "1px solid red"
+          // }}
+          className="product-container"
         >
           <div className="product-title-div">
             <div id="products-title">{category}</div>
@@ -230,7 +230,7 @@ function Products() {
               category={category}
             />
           </div>
-          {showLoadMoreBtn === true ? (
+          {showLoadMoreBtn ? (
             <>
               <div className="load-more-prod-button">
                 <input

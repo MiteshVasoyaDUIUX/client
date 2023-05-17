@@ -99,12 +99,10 @@ function TrendingProductsPage() {
 
   useEffect(() => {
     if (isAddedCart) {
-      toast.success(userSliceMessage);
-      console.log("Added To Cart : ", isAddedCart);
+      toast.success("Added to Cart...");
     }
     return () => {
       dispatch(resetIs());
-      console.log("Added To Cart///", isAddedCart);
     };
   }, [isAddedCart]);
 

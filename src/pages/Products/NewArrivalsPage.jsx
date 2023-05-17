@@ -98,13 +98,11 @@ function NewArrivalsProductsPage() {
 
   useEffect(() => {
     if (isAddedCart) {
-      toast.success(userSliceMessage);
-      console.log("Added To Cart : ", isAddedCart);
+      toast.success("Added To Cart...");
     }
 
     return () => {
       dispatch(resetIs());
-      console.log("Added To Cart///", isAddedCart);
     };
   }, [isAddedCart]);
 

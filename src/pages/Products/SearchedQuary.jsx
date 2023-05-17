@@ -14,7 +14,6 @@ import {
   priceFilter,
   ratingFilter,
 } from "../../app/Functions/filterFunc";
-import { ProductFetchingSpinner } from "../../components/Spinner";
 
 function SearchedItems({ filteredProductArray }) {
   return (
@@ -32,6 +31,7 @@ function SearchedItems({ filteredProductArray }) {
 function SearchedQuary() {
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState(null);
@@ -64,13 +64,13 @@ function SearchedQuary() {
     sortBy: sortBy,
   };
 
-  useEffect(() => {
-    if (isFetching) {
-      setShowSpinner(true);
-    } else {
-      setShowSpinner(false);
-    }
-  }, [isFetching]);
+  // useEffect(() => {
+  //   if (isFetching) {
+  //     setShowSpinner(true);
+  //   } else {
+  //     setShowSpinner(false);
+  //   }
+  // }, [isFetching]);
 
   useEffect(() => {
     if (page > 1) fetchProductsData();
@@ -89,10 +89,15 @@ function SearchedQuary() {
   }, [products]);
 
   useEffect(() => {
+    // console.log("Fetching Products...");
     setProduct([]);
-
     fetchProductData();
-  }, [sortBy]);
+  }, [sortBy, query]);
+
+  // useEffect(() => {
+  //   setProduct([]);
+  //   fetchProductData();
+  // }, [query]);
 
   const handleSorting = (newValue) => {
     setSortBy(newValue);
@@ -109,7 +114,7 @@ function SearchedQuary() {
   const fetchProductsData = () => {
     if (moreProducts) {
       dispatch(searchProduct(prodReqData));
-      console.log("Dispatch More : ", prodReqData);
+      // console.log("Dispatch More : ", prodReqData);
       prodReqData = {
         page: page,
         query: query,
@@ -188,7 +193,7 @@ function SearchedQuary() {
         }}
       >
         <div className="product-title-div">
-          <div id="products-title">Search Result</div>
+          <div id="products-title">Results for : {query}</div>
           <div id="products-sort-box">
             <select
               value={sortBy}
@@ -214,18 +219,18 @@ function SearchedQuary() {
           />
         </div>
         {showLoadMoreBtn === true ? (
-            <>
-              <div className="load-more-prod-button">
-                <input
-                  type="button"
-                  value="Load More..."
-                  onClick={handleLoadMoreProdButton}
-                />
-              </div>
-            </>
-          ) : (
-            <></>
-          )}
+          <>
+            <div className="load-more-prod-button">
+              <input
+                type="button"
+                value="Load More..."
+                onClick={handleLoadMoreProdButton}
+              />
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./ChatAdmin.css";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,18 +7,12 @@ import {
   fetchChatAdmin,
   saveChat,
 } from "../../features/chat/chatSlice";
-import RefreshIcon from "@mui/icons-material/Refresh";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 let currentMsg = [];
 
 function Conversation({ conversation, openConversation, setOpenConversation }) {
   const handleOpenConversation = () => {
-    const myDiv = document.getElementById("new-message-container-id");
-
-    // while (myDiv.firstChild) {
-    //   myDiv.removeChild(myDiv.firstChild);
-    // }
     setOpenConversation(conversation.conversationId);
   };
   return (
@@ -31,11 +25,8 @@ function Conversation({ conversation, openConversation, setOpenConversation }) {
 }
 
 function Message({ message, own }) {
-
   return (
-    <div
-      className={own ? "own-message-admin" : "message-from-other-client"}
-    >
+    <div className={own ? "own-message-admin" : "message-from-other-client"}>
       <div>{message.message}</div>
       <div
         className={own ? "time-of-sent-message" : "time-of-received-message"}
@@ -56,7 +47,6 @@ function Chat() {
   const [toScroll, setToScroll] = useState(0);
   const { messages, conversations } = useSelector((state) => state.chat);
   const scrollRef = useRef();
-  const chatScrollRef = useRef();
 
   let messageData = messages.messageData;
   let conversationId = "";
@@ -222,43 +212,56 @@ function Chat() {
             );
           })}
         </div>
-        <div className="chat-message-div">
-          <div id="adminScrollableDiv">
-            <InfiniteScroll
-              dataLength={currentMsg.length}
-              next={fetchMoreData}
-              style={{
-                display: "flex",
-                flexDirection: "column-reverse",
-                overflow: "none",
-              }} //To put endMessage and loader to the top.
-              inverse={true} //
-              hasMore={messages.moreMsg}
-              loader={<h4>Loading...</h4>}
-              scrollableTarget="adminScrollableDiv"
-            >
-              <div id="new-message-container-id"></div>
-              {currentMsg.map((message) => (
-                <Message
-                  message={message}
-                  own={message.senderId === user.user._id}
+        {openConversationId !== null ? (
+          <>
+            <div className="chat-message-div">
+              <div id="adminScrollableDiv">
+                <InfiniteScroll
+                  dataLength={currentMsg.length}
+                  next={fetchMoreData}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column-reverse",
+                    overflow: "none",
+                  }} //To put endMessage and loader to the top.
+                  inverse={true} //
+                  hasMore={messages.moreMsg}
+                  loader={<h4>Loading...</h4>}
+                  scrollableTarget="adminScrollableDiv"
+                >
+                  <div id="new-message-container-id"></div>
+                  {currentMsg.map((message) => (
+                    <Message
+                      message={message}
+                      own={message.senderId === user.user._id}
+                    />
+                  ))}
+                </InfiniteScroll>
+              </div>
+              <div className="chat-box-button">
+                <input
+                  type="text"
+                  name="message"
+                  className="message-box"
+                  id="message-box-id"
+                  onKeyUp={handleSendButton}
                 />
-              ))}
-            </InfiniteScroll>
-          </div>
-          <div className="chat-box-button">
-            <input
-              type="text"
-              name="message"
-              className="message-box"
-              id="message-box-id"
-              onKeyUp={handleSendButton}
-            />
-            <button className="send-message-button" onClick={handleSendButton}>
-              Send
-            </button>
-          </div>
-        </div>
+                <button
+                  className="send-message-button"
+                  onClick={handleSendButton}
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="welcome-chat-div">
+              <div></div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

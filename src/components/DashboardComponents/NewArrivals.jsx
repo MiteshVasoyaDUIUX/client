@@ -16,7 +16,7 @@ function ProductCards({ NewArrivals }) {
     <>
       {NewArrivals.map((product) => (
         <Grid item spacing={3}>
-          <ProductCard product={product} />
+          <ProductCard product={product} key={product?._id}/>
         </Grid>
       ))}
     </>
@@ -47,13 +47,11 @@ function NewArrivals() {
   useEffect(() => {
 
     if (isAddedCart) {
-      toast.success(userSliceMessage);
-      console.log("Added To Cart : ", isAddedCart);
+      toast.success("Added To Cart...");
     }
 
     return () => {
       dispatch(resetIs());
-      console.log("Added To Cart///", isAddedCart);
     };
   }, [isAddedCart]);
 

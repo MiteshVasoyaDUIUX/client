@@ -39,12 +39,9 @@ function DetailedProductPage() {
   const [couponCode, setCouponCode] = useState("");
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlist, coupon, userSliceMessage } = useSelector(
-    (state) => state.user
-  );
-  const { product, isAddedCart, isError, productMessage } = useSelector(
-    (state) => state.products
-  );
+  const { wishlist, coupon, isError, isAddedCart, userSliceMessage } =
+    useSelector((state) => state.user);
+  const { product, productMessage } = useSelector((state) => state.products);
   const productId = params.id;
   let outOfStock;
 
@@ -56,30 +53,25 @@ function DetailedProductPage() {
       const userId = user.user._id;
       dispatch(fetchWishList(userId));
     }
+
     if (isError) {
-      toast.error("Error : " + productMessage);
+      toast.error(userSliceMessage);
     }
 
     return () => {
-      reset();
+      dispatch(reset());
     };
   }, [isError]);
 
   useEffect(() => {
     if (isAddedCart) {
-      toast.success(userSliceMessage);
+      toast.success("Added To Cart...");
     }
 
     return () => {
       dispatch(resetIs());
     };
   }, [isAddedCart]);
-
-  // if (product.prodQuantity === 0) {
-  //   outOfStock = 0;
-  // } else {
-  //   outOfStock = 1;
-  // }
 
   const handleQuantityChange = (sign) => {
     switch (sign) {
@@ -124,6 +116,7 @@ function DetailedProductPage() {
         userId,
         productId,
       };
+      console.log("Adding to Cart...");
       dispatch(addToCart(data));
     } else {
       toast.error("Not Logged In");
@@ -426,7 +419,7 @@ function DetailedProductPage() {
                   <></>
                 )}
 
-                {couponApplied ? (
+                {couponApplied && coupon.isValid === true ? (
                   <>
                     <div className="coupon-applied-div">
                       <div>{coupon.message}</div>

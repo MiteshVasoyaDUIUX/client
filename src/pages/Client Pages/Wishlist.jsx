@@ -11,6 +11,7 @@ import {
   resetIs,
 } from "../../features/user/userSlice";
 import { toast } from "react-toastify";
+import { ImageForList } from "../../components/Images/Images";
 
 function ProductCard({ item, userId }) {
   const dispatch = useDispatch();
@@ -32,69 +33,44 @@ function ProductCard({ item, userId }) {
   };
 
   return (
-    <Grid
-      item
-      xl={10}
-      style={{
-        marginLeft: "auto",
-        marginRight: "auto",
-        width: "50%",
-        marginTop: "0.8%",
-      }}
-    >
-      <Card style={{ height: "144px" }}>
-        <div style={{ display: "flex" }}>
-          <div
-            style={{
-              width: "auto",
-              height: "auto",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "20px",
-            }}
-          >
-            <img
-              src={item.prodImage[0]}
-              className="card-image-content"
-              alt=""
-              style={{ width: "100px", height: "100px" }}
+    <>
+      <div className="wishlist-card" onClick={handleCardClick}>
+        <div className="wishlist-card-image">
+          <img
+            src={item.prodImage[0]}
+            className="card-image-content"
+            alt=""
+            height="138"
+            width="138"
+          />
+        </div>
+        <div className="wishlist-card-product-details">
+          <div className="wishlist-card-title">{item.prodName}</div>
+          <div className="wishlist-card-rating">
+            <Rating
+              name="read-only"
+              value={item.rating}
+              precision={0.5}
+              readOnly
             />
           </div>
-          <div
-            style={{
-              width: "73%",
-              padding: "15px",
-              cursor: "pointer",
-            }}
-            onClick={handleCardClick}
-          >
-            <div className="wishlist-card-title">{item.prodName}</div>
-            <div style={{ display: "flex" }}>
-              <div className="wishlist-card-price">
-                Price : {item.prodPrice.toLocaleString("en-IN")} ₹
-              </div>
-              <div className="wishlist-card-rating">
-                <Rating
-                  name="read-only"
-                  value={item.rating}
-                  precision={0.5}
-                  readOnly
-                />
-              </div>
+          <div style={{ display: "flex" }}>
+            <div className="wishlist-card-price">
+              Price : {item.prodPrice.toLocaleString("en-IN")} ₹
+            </div>
+            <div className="wishlist-card-remove-btn">
+              <input
+                type="button"
+                value="Remove"
+                onClick={() => {
+                  handleRemoveButton(item._id);
+                }}
+              />
             </div>
           </div>
-
-          <div className="wishlist-card-remove-btn">
-            <input
-              type="button"
-              value="Remove"
-              onClick={() => {
-                handleRemoveButton(item._id);
-              }}
-            />
-          </div>
         </div>
-      </Card>
-    </Grid>
+      </div>
+    </>
   );
 }
 
@@ -103,8 +79,9 @@ function Wishlist() {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlistProducts, isError, message, userSliceMessage } =
-    useSelector((state) => state.user);
+  const { wishlistProducts, isError, message, userSliceMessage } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     if (!user) {

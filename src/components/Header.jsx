@@ -16,14 +16,6 @@ import "./Header.css";
 import SideBar from "./SideBar";
 import { styled, alpha } from "@mui/material/styles";
 
-const pagesForAdmin = [
-  "Dashboard",
-  "Orders",
-  "Add Product",
-  "Inventory",
-  "All Users",
-  "Messages",
-];
 const optionsForClient = ["Cart", "My Orders", "My Wishlist", "Logout"];
 const optionsForAdmin = ["Profile", "Logout"];
 
@@ -74,6 +66,7 @@ function Header() {
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+  const [query, setQuery] = useState("");
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -95,6 +88,13 @@ function Header() {
     return () => window.removeEventListener("scroll", handelInfiniteScroll);
   }, []);
 
+  useEffect(() => {
+    if (query !== "") {
+      navigate(`/search/${query}`);
+      console.log("Redirecting...");
+    }
+  }, [query]);
+
   if (
     location.pathname === "/login" ||
     location.pathname === "/register" ||
@@ -105,18 +105,11 @@ function Header() {
     showHeader = true;
   }
 
-  // useEffect(() => {
-  //   if (location.pathname === "/") {
-  //     setShowCategoryMenu(false);
-  //   }
-  // }, [location.pathname]);
-
   const onLogout = () => {
     navigate("/");
     dispatch(logout());
     dispatch(reset());
     document.getElementById("header-searchbar-input").value = "";
-    // console.log("OnLogOUT");
   };
 
   const handleOpenUserMenu = (event) => {
@@ -140,12 +133,20 @@ function Header() {
   };
 
   const handleSearchBar = (e) => {
-    const quary = document.getElementById("header-searchbar-input").value;
+    const enteredQuery = document.getElementById(
+      "header-searchbar-input"
+    ).value;
 
-    if (quary !== "" && e.type === "click") {
-      navigate(`/search/${quary}`);
-    } else if (quary !== "" && e.keyCode === 13) {
-      navigate(`/search/${quary}`);
+    console.log("Setting New Query : ", query);
+
+    if (enteredQuery !== "" && e.type === "click") {
+      console.log("QUARY : ", enteredQuery);
+      // navigate(`/search/${quary}`);
+      setQuery(enteredQuery);
+    } else if (enteredQuery !== "" && e.keyCode === 13) {
+      console.log("QUARY : ", enteredQuery);
+      // navigate(`/search/${quary}`);
+      setQuery(enteredQuery);
     }
   };
 
@@ -219,7 +220,7 @@ function Header() {
               <></>
             )}
 
-            {location.pathname=== "/" && showCategoryMenu ? (
+            {location.pathname === "/" && showCategoryMenu ? (
               <>
                 <div className="category-menu">
                   <Button
@@ -239,8 +240,7 @@ function Header() {
                         backgroundColor: "#f0f3ed",
                         color: "#000000",
                       },
-                      "& .Mui-active": {
-                      },
+                      "& .Mui-active": {},
                     }}
                     disableRipple
                   >
@@ -258,6 +258,7 @@ function Header() {
                         <MenuItem
                           onClick={() => handleCategoryClick(category)}
                           sx={{ textTransform: "capitalize" }}
+                          key={category}
                           disableRipple
                         >
                           {category}

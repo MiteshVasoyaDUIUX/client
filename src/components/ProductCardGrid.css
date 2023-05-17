@@ -1,9 +1,8 @@
 .product-card-grid {
-      /* border: 1px solid blueviolet; */
       width: fit-content;
       padding-left: 10px;
       padding-right: 10px;
       display: grid;
-      grid-template-columns: 390px 390px 390px;
-      column-gap: 70px;
+      grid-template-columns: auto auto auto;
+      column-gap: 10px;
 }
