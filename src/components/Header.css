@@ -70,16 +70,26 @@ body {
       width: fit-content;
 }
 
+@media only screen and (max-width : 776px) {
+      .header-searchbar {
+      visibility: hidden;
+            
+      }
+}
+
 .header-searchbar {
       height: fit-content;
       width: 40%;
-      border: 1px solid rgb(189, 189, 189);
       border-radius: 4px;
       margin-left: 3%;
       margin-top: auto;
       margin-bottom: auto;
       display: flex;
+      overflow: hidden;
+      background-color: white;
 }
+
+
 
 .header-searchbar input {
       height: 33px;
@@ -112,6 +122,7 @@ body {
 
 .header-searchbar button:active {
       transform: scale(0.9);
+      border-radius: 4px;
 }
 
 .category-menu {
@@ -135,8 +146,8 @@ body {
       height: 35px;
 }
 
-.login-register-button Button { 
-      border : 1px solid #f4ede2;
+.login-register-button Button {
+      border: 1px solid #f4ede2;
       color: #f4ede2;
       margin: 0 5px 0 5px;
 }
@@ -205,6 +216,3 @@ body {
 .menu-icon-options:hover {
       background-color: #2a3035;
 }
-
-
-/* SideBar CSS */

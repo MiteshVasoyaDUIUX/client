@@ -227,6 +227,7 @@ function DetailedProductPage() {
               <ul>
                 <li style={{ margin: "5px" }}>{product.prodDesc}</li>
               </ul>
+              
             </div>
             <br />
 

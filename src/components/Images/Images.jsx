@@ -1,13 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Images.css";
 import Carousel from "react-material-ui-carousel";
+import CloseIcon from "@mui/icons-material/Close";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
-function Item({ item }) {
-  return <img src={item} alt="Images" className="carousel-image" />;
+function Item({ item, setImage, setFullImgView }) {
+  const handleImgClick = () => {
+    setFullImgView(true);
+    setImage(item);
+  };
+
+  return (
+    <img
+      src={item}
+      alt="Images"
+      className="carousel-image"
+      onClick={handleImgClick}
+      key={item}
+    />
+  );
 }
 
 function ImageSlider({ prodImage }) {
   let newImageData = [];
+  const [image, setImage] = useState("");
+  const [imgIndex, setImgIndex] = useState();
+  const [fullImgView, setFullImgView] = useState(false);
+
+  useEffect(() => {
+    const index = prodImage.indexOf(image);
+
+    if (prodImage.indexOf(image) > -1) {
+      setFullImgView(true);
+      setImgIndex(index);
+    }
+  }, [image]);
+
+  const handleCloseBtn = () => {
+    setFullImgView(false);
+  };
+
+  const handlePrevImgBtn = () => {
+    console.log("Previous Image : ", imgIndex - 1);
+    if (imgIndex - 1 >= 0) {
+      setImgIndex(imgIndex - 1);
+      setImage(prodImage[imgIndex - 1]);
+    } else {
+      setImgIndex(prodImage.length - 1);
+      setImage(prodImage[prodImage.length - 1]);
+    }
+  };
+
+  const handleNextImgBtn = () => {
+    console.log("Next Image : ", imgIndex + 1);
+    if (imgIndex + 1 < prodImage.length) {
+      setImgIndex(imgIndex + 1);
+      setImage(prodImage[imgIndex + 1]);
+    } else {
+      setImgIndex(0);
+      setImage(prodImage[0]);
+    }
+  };
 
   for (let index = 0; index < prodImage.length; index++) {
     const element = prodImage[index];
@@ -18,6 +72,7 @@ function ImageSlider({ prodImage }) {
         height="90px"
         width="100px"
         className="indicator-img"
+        key={element}
       />
     );
   }
@@ -75,11 +130,41 @@ function ImageSlider({ prodImage }) {
         >
           {prodImage.map((item) => (
             <>
-              <Item item={item} key={item} />
+              <Item
+                item={item}
+                key={item}
+                setImage={setImage}
+                setFullImgView={setFullImgView}
+              />
             </>
           ))}
         </Carousel>
       </div>
+      {fullImgView ? (
+        <>
+          <div className="full-img-view">
+            <div className="img-close-div" onClick={handleCloseBtn}>
+              <CloseIcon sx={{ fontSize: "30px" }} />
+            </div>
+            <div className="full-img-view-card">
+              <div className="full-img">
+                <div className="prev-img-btn" onClick={handlePrevImgBtn}>
+                  <ArrowBackIosNewIcon sx={{ fontSize: "50px" }} />
+                </div>
+                <div className="next-img-btn" onClick={handleNextImgBtn}>
+                  <ArrowForwardIosIcon sx={{ fontSize: "50px" }} />
+                </div>
+              </div>
+            </div>
+
+            <div className="full-img">
+              <img src={prodImage[imgIndex]} alt="" />
+            </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 }
@@ -127,11 +212,7 @@ export const ImageForCard = ({ prodImage }) => {
           PrevIcon={false}
           navButtonsAlwaysInvisible={true}
         >
-          <img
-            src={prodImage[0]}
-            alt="Images"
-            style={{ boxShadow: "none" }}
-          />
+          <img src={prodImage[0]} alt="Images" style={{ boxShadow: "none" }} />
         </Carousel>
       </>
     );

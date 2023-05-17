@@ -64,14 +64,6 @@ function SearchedQuary() {
     sortBy: sortBy,
   };
 
-  // useEffect(() => {
-  //   if (isFetching) {
-  //     setShowSpinner(true);
-  //   } else {
-  //     setShowSpinner(false);
-  //   }
-  // }, [isFetching]);
-
   useEffect(() => {
     if (page > 1) fetchProductsData();
   }, [page]);
@@ -188,7 +180,7 @@ function SearchedQuary() {
       />
       <div
         style={{
-          width: "fit-content",
+          width: "100%",
           height: "fit-content",
         }}
       >
@@ -218,7 +210,7 @@ function SearchedQuary() {
             filteredProductArray={filteredProductArray}
           />
         </div>
-        {showLoadMoreBtn === true ? (
+        {showLoadMoreBtn === true && filteredProductArray > 0 ? (
           <>
             <div className="load-more-prod-button">
               <input

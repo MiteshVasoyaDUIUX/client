@@ -4,6 +4,8 @@
       height: fit-content;
       margin: 30px auto 0 auto;
       display: flex;
+      flex-direction: row;
+      justify-content: space-between;
 }
 
 .product-title-div #products-title {
@@ -20,7 +22,7 @@
 .product-title-div #products-sort-box {
       font-size: 14px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-      margin: auto 0 auto auto;
+      margin: auto 50px auto auto;
       width: fit-content;
       height: fit-content;
       cursor: default;

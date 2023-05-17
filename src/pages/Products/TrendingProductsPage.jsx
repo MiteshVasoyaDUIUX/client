@@ -224,7 +224,7 @@ function TrendingProductsPage() {
           >
             <TrendingProduct filteredProductArray={filteredProductArray} />
           </div>
-          {showLoadMoreBtn === true ? (
+          {showLoadMoreBtn === true && filteredProductArray > 0 ? (
             <>
               <div className="load-more-prod-button">
                 <input

@@ -137,8 +137,6 @@ function Header() {
       "header-searchbar-input"
     ).value;
 
-    console.log("Setting New Query : ", query);
-
     if (enteredQuery !== "" && e.type === "click") {
       console.log("QUARY : ", enteredQuery);
       // navigate(`/search/${quary}`);

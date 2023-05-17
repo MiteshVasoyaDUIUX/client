@@ -138,8 +138,6 @@ const placeOrder = async (checkoutData, token) => {
     checkoutData,
     config
   );
-
-  console.log("Check Out Response: ", response.data);
   return response.data;
 };
 

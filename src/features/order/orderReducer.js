@@ -18,7 +18,6 @@
 //             config
 //           );
 
-//       console.log("Check Out Response: ", response.data);
 //       return response.data;
 // };
 

@@ -196,11 +196,10 @@ function Products() {
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
         <div
-          // style={{
-          //   width: "fit-content",
-          //   height: "fit-content",
-          //   border : "1px solid red"
-          // }}
+          style={{
+            width: "100%",
+            height: "fit-content",
+          }}
           className="product-container"
         >
           <div className="product-title-div">
