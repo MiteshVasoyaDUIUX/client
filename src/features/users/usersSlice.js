@@ -91,7 +91,6 @@ export const blockUnblockUser = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      console.log("Block User...")
       return await usersService.blockUnblockUser(userData, token);
     } catch (error) {
       const message =

@@ -19,17 +19,19 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
-import { Button, TablePagination } from "@mui/material";
+import { TablePagination } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
-import { ErrorBoundary } from "../../components/ErrorBoundary";
 import Spinner from "../../components/Spinner";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 import "../Admin Pages/AllUser.css";
 
 const columns = [
@@ -72,7 +74,7 @@ const columns = [
   {
     id: "buttons",
     label: "",
-    width: "100px",
+    width: "120px",
     align: "center",
   },
 ];
@@ -167,37 +169,58 @@ function OrderRow(props) {
   );
 }
 
-function Row(props) {
+function Row({ user }) {
   const [open, setOpen] = useState(false);
-  const { row } = props;
+  const [blockConfirmation, setBlockConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
   const dispatch = useDispatch();
   const { ordersUserwise, isError, message } = useSelector(
     (state) => state.users
   );
 
-  const isBlocked = row.isBlocked;
-  const isDeleted = row.isDeleted;
-
-  // console.log("Deleted : ", row.isDeleted);
+  const isBlocked = user.isBlocked;
+  const isDeleted = user.isDeleted;
 
   const handleOrdersButton = () => {
-    // console.log(row._id);
-    // Fetch Order of Particular User...
-    // dispatch(fetchOrderUserwise({ userId }));
     setOpen(!open);
   };
 
+  const handleBlockConfirmation = (response) => {
+    if (response === "yes") {
+      setBlockConfirmation(false);
+      const userData = {
+        userId: user._id,
+        blocked: !user.isBlocked,
+      };
+      dispatch(blockUnblockUser(userData));
+    } else if (response === "cancel") {
+      setBlockConfirmation(false);
+    }
+  };
+
+  const handleCloseConfirmation = () => {
+    setBlockConfirmation(false);
+  };
+
   const handleBlockButton = () => {
-    const userData = {
-      userId: row._id,
-      blocked: !row.isBlocked,
-    };
-    dispatch(blockUnblockUser(userData));
+    setBlockConfirmation(true);
+  };
+
+  const handleDeleteConfirmation = (response) => {
+    if (response === "yes") {
+      setDeleteConfirmation(false);
+      console.log("Response : ", response);
+      const userId = { userId: user._id };
+      dispatch(deleteUser(userId));
+    } else if (response === "cancel") {
+      setDeleteConfirmation(false);
+      console.log("Response : ", response);
+    }
   };
 
   const handleDeleteButton = () => {
-    const userId = { userId: row._id };
-    dispatch(deleteUser(userId));
+    setDeleteConfirmation(true);
   };
 
   return (
@@ -210,7 +233,7 @@ function Row(props) {
         sx={{ margin: "2px", padding: "0px" }}
       >
         {columns.map((column) => {
-          const value = row[column.id];
+          const value = user[column.id];
           return (
             <TableCell key={value} align={column.align}>
               {column.id === "buttons" ? (
@@ -218,31 +241,41 @@ function Row(props) {
                   <></>
                 ) : isBlocked === false ? (
                   <>
-                    <input
-                      type="button"
-                      value="Block User"
-                      id="block-user-btn"
-                      onClick={handleBlockButton}
-                    />
-                    <input
-                      type="button"
-                      value="Delete User"
-                      id="delete-user-btn"
-                      onClick={handleDeleteButton}
-                    />
+                    <div className="block-delete-button">
+                      <input
+                        type="button"
+                        value="Block User"
+                        id="block-user-btn"
+                        onClick={handleBlockButton}
+                      />
+                      <input
+                        type="button"
+                        value="Delete User"
+                        id="delete-user-btn"
+                        onClick={handleDeleteButton}
+                      />
+                    </div>
                   </>
                 ) : (
                   <>
-                    <input
-                      type="button"
-                      value="Unblock User"
-                      id="block-user-btn"
-                      onClick={handleBlockButton}
-                    />
+                    <div className="block-delete-button">
+                      <input
+                        type="button"
+                        value="Unblock User"
+                        id="block-user-btn"
+                        onClick={handleBlockButton}
+                      />
+                      <input
+                        type="button"
+                        value="Delete User"
+                        id="delete-user-btn"
+                        onClick={handleDeleteButton}
+                      />
+                    </div>
                   </>
                 )
               ) : column.id === "userStatus" ? (
-                row["isDeleted"] === true ? (
+                user["isDeleted"] === true ? (
                   <>
                     <div
                       style={{
@@ -257,9 +290,8 @@ function Row(props) {
                       Deleted
                     </div>
                   </>
-                ) : row["isBlocked"] === true ? (
+                ) : user["isBlocked"] === true ? (
                   <>
-                    {" "}
                     <div
                       style={{
                         width: "100px",
@@ -276,7 +308,6 @@ function Row(props) {
                 ) : (
                   <>
                     <>
-                      {" "}
                       <div
                         style={{
                           width: "100px",
@@ -334,7 +365,7 @@ function Row(props) {
                 </TableHead>
                 <TableBody>
                   {ordersUserwise.map((order) => {
-                    const userId = row._id;
+                    const userId = user._id;
                     return <OrderRow order={order} userId={userId} />;
                   })}
                 </TableBody>
@@ -343,6 +374,106 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
+
+      <Dialog
+        open={blockConfirmation}
+        onClose={handleCloseConfirmation}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        {isBlocked ? (
+          <>
+            <DialogTitle id="alert-dialog-title">
+              {"Are You Sure want to Unblock this user ?"}
+            </DialogTitle>
+          </>
+        ) : (
+          <>
+            <DialogTitle id="alert-dialog-title">
+              {"Are You Sure want to Block this user ?"}
+            </DialogTitle>
+          </>
+        )}
+
+        <DialogActions>
+          <Button
+            sx={{
+              height: "35px",
+              color: "black",
+              fontSize: "15px",
+              "&:hover": {
+                backgroundColor: "#2a3035",
+                border: "0px solid #2a3035",
+                color: "white",
+              },
+            }}
+            onClick={() => handleBlockConfirmation("yes")}
+            autoFocus
+          >
+            Yes
+          </Button>
+          <Button
+            sx={{
+              height: "35px",
+              color: "black",
+              fontSize: "15px",
+              "&:hover": {
+                backgroundColor: "#2a3035",
+                border: "0px solid #2a3035",
+                color: "white",
+              },
+            }}
+            onClick={() => handleBlockConfirmation("cancel")}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={deleteConfirmation}
+        onClose={handleCloseConfirmation}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are You Sure want to Delete this user ?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button
+            sx={{
+              height: "35px",
+              color: "black",
+              fontSize: "15px",
+              "&:hover": {
+                backgroundColor: "#2a3035",
+                border: "0px solid #2a3035",
+                color: "white",
+              },
+            }}
+            onClick={() => handleDeleteConfirmation("yes")}
+            autoFocus
+          >
+            Yes
+          </Button>
+          <Button
+            sx={{
+              height: "35px",
+              color: "black",
+              fontSize: "15px",
+              boxSizing: "border-box",
+              "&:hover": {
+                backgroundColor: "#2a3035",
+                border: "0px solid #2a3035",
+                color: "white",
+              },
+            }}
+            onClick={() => handleDeleteConfirmation("cancel")}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
@@ -350,6 +481,7 @@ function Row(props) {
 function AllUser() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+
   const {
     users,
     ordersUserwise,
@@ -436,8 +568,8 @@ function AllUser() {
                 <TableBody>
                   {users
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      return <Row row={row} />;
+                    .map((user) => {
+                      return <Row user={user} />;
                     })}
                 </TableBody>
               </Table>
