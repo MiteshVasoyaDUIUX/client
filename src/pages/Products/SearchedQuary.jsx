@@ -185,7 +185,13 @@ function SearchedQuary() {
         }}
       >
         <div className="product-title-div">
-          <div id="products-title">Results for : {query}</div>
+          <div id="products-title">
+            {products.products?.length > 0 ? (
+              <>Results for : {query}</>
+            ) : (
+              <>No Results For {query}</>
+            )}
+          </div>
           <div id="products-sort-box">
             <select
               value={sortBy}

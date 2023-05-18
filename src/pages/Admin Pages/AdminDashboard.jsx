@@ -176,7 +176,6 @@ function AdminDashboard() {
   let pendingOrders = 0;
   let cancelledOrders = 0;
   let successOrders = 0;
-  let arrayData = 1;
 
   let monthlyOrderData = [
     ["Month", "Orders"],
@@ -202,7 +201,7 @@ function AdminDashboard() {
       todaysSales = todaysSales + allOrders[index].totalAmount;
     }
 
-    if (allOrders[index].status === "pending") {
+    if (allOrders[index].status === "Pending") {
       pendingOrders += 1;
     } else if (allOrders[index].status === "Success") {
       successOrders += 1;

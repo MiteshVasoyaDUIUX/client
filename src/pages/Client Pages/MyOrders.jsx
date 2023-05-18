@@ -167,7 +167,7 @@ function Row({ row }) {
                 ) : (
                   value
                 )
-              ) : status === "Success" ? (
+              ) : status === "Pending" || status === "Success" ? (
                 <>
                   <Link to="/buyer/chat">
                     <button className="message-seller-button">
@@ -223,7 +223,7 @@ export default function MyOrders() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-console.log("Order : ", orders)
+  console.log("Order : ", orders);
   return (
     <>
       <section className="content" style={{ marginTop: "55px" }}>

@@ -30,10 +30,10 @@ function EditProduct() {
   //Print form data...
   //     console.log("Form Data : ", formData);
   const categories = [
-    "Select Category",
-    "Cloths",
+    "Clothes",
     "Footware",
     "Accessories",
+    "Smart Phones",
     "Other",
   ];
 

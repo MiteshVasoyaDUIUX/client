@@ -132,7 +132,7 @@ function Row(props) {
         );
       })}
       <TableCell>
-        {row.status === "pending" ? (
+        {row.status === "Pending" ? (
           <>
             <div>
               <Button
