@@ -15,6 +15,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./Header.css";
 import SideBar from "./SideBar";
 import { styled, alpha } from "@mui/material/styles";
+import { searchQuery } from "../features/products/productsSlice";
 
 const optionsForClient = ["Cart", "My Orders", "My Wishlist", "Logout"];
 const optionsForAdmin = ["Profile", "Logout"];
@@ -63,10 +64,12 @@ function Header() {
   const location = useLocation();
 
   const { user } = useSelector((state) => state.auth);
+  const { queryResponse } = useSelector((state) => state.products);
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [query, setQuery] = useState("");
+  const [openSearchList, setOpenSearchList] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -91,7 +94,6 @@ function Header() {
   useEffect(() => {
     if (query !== "") {
       navigate(`/search/${query}`);
-      console.log("Redirecting...");
     }
   }, [query]);
 
@@ -137,15 +139,25 @@ function Header() {
       "header-searchbar-input"
     ).value;
 
-    if (enteredQuery !== "" && e.type === "click") {
-      console.log("QUARY : ", enteredQuery);
-      // navigate(`/search/${quary}`);
-      setQuery(enteredQuery);
-    } else if (enteredQuery !== "" && e.keyCode === 13) {
-      console.log("QUARY : ", enteredQuery);
-      // navigate(`/search/${quary}`);
-      setQuery(enteredQuery);
+    if (enteredQuery !== "" && e.keyCode !== 32) {
+      setOpenSearchList(true);
+    } else if (enteredQuery === "") {
+      setOpenSearchList(false);
     }
+
+    setTimeout(() => {
+      if (enteredQuery !== "" && e.keyCode !== 32) {
+        dispatch(searchQuery(enteredQuery.trim()));
+      }
+    }, 300);
+
+    // if (enteredQuery !== "" && e.type === "click") {
+    //   // navigate(`/search/${quary}`);
+    //   setQuery(enteredQuery);
+    // } else if (enteredQuery !== "" && e.keyCode === 13) {
+    //   // navigate(`/search/${quary}`);
+    //   setQuery(enteredQuery);
+    // }
   };
 
   const handleCategoryClick = (category) => {
@@ -164,6 +176,8 @@ function Header() {
       console.log(error);
     }
   };
+
+  console.log("cart response : ", queryResponse);
 
   return (
     <>
@@ -203,16 +217,38 @@ function Header() {
             </div>
             {(!user || user.role === "buyer") &&
             (!user?.user.isBlocked || !user?.user.isDeleted) ? (
-              <div className="header-searchbar">
-                <input
-                  type="text"
-                  name="header-searchbar-input"
-                  id="header-searchbar-input"
-                  onKeyUp={handleSearchBar}
-                />
-                <button onClick={handleSearchBar}>
-                  <SearchIcon />
-                </button>
+              // <div className="header-search-div">
+              <div className="header-search-div">
+                <div className="header-searchbar">
+                  <input
+                    type="text"
+                    name="header-searchbar-input"
+                    id="header-searchbar-input"
+                    onKeyUp={handleSearchBar}
+                    autocomplete="off"
+                  />
+                  <button onClick={handleSearchBar}>
+                    <SearchIcon />
+                  </button>
+                  {/* </div> */}
+                </div>
+                {openSearchList ? (
+                  <>
+                    <div className="query-search-list">
+                      {queryResponse?.response?.map((response) => {
+                        return (
+                          <>
+                            <div className="query-result-div">
+                              {response.prodName}
+                            </div>
+                          </>
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             ) : (
               <></>

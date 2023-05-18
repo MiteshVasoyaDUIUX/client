@@ -48,6 +48,7 @@
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       text-decoration: none;
       transition: ease-in-out 0.2s;
+      cursor: pointer;
 }
 
 .image-slider-img-text .accessories {
@@ -63,6 +64,7 @@
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       text-decoration: none;
       transition: ease-in-out 0.2s;
+      cursor: pointer;
 }
 
 .image-slider-img-text .clothing {
@@ -78,10 +80,11 @@
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       text-decoration: none;
       transition: ease-in-out 0.2s;
+      cursor: pointer;
 }
 
 .image-slider-img-text input:hover {
       background-color: white;
-      color: rgba(7, 7, 7, 0.897);
+      color: rgba(0, 0, 0, 0.932);
       border-radius: 4px;
 }

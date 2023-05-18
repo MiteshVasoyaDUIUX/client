@@ -43,7 +43,6 @@ function ImageSlider({ prodImage }) {
 
   const handlePrevImgBtn = (e) => {
     e.stopPropagation();
-    console.log("Previous Image : ", imgIndex - 1);
     if (imgIndex - 1 >= 0) {
       setImgIndex(imgIndex - 1);
       setImage(prodImage[imgIndex - 1]);
@@ -55,7 +54,6 @@ function ImageSlider({ prodImage }) {
 
   const handleNextImgBtn = (e) => {
     e.stopPropagation();
-    console.log("Next Image : ", imgIndex + 1);
     if (imgIndex + 1 < prodImage.length) {
       setImgIndex(imgIndex + 1);
       setImage(prodImage[imgIndex + 1]);

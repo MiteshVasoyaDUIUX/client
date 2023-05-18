@@ -72,24 +72,58 @@ body {
 
 @media only screen and (max-width : 776px) {
       .header-searchbar {
-      visibility: hidden;
-            
+            visibility: hidden;
       }
 }
 
 .header-searchbar {
+      width: 100%;
       height: fit-content;
-      width: 40%;
       border-radius: 4px;
-      margin-left: 3%;
-      margin-top: auto;
-      margin-bottom: auto;
       display: flex;
       overflow: hidden;
       background-color: white;
 }
 
+.header-search-div {
+      width: 40%;
+      height: fit-content;
+      margin: 12px 0 auto 3%;
+      box-sizing: border-box;
+}
 
+.query-search-list {
+      width: 100%;
+      height: fit-content;
+      margin: 2px 0 0 0;
+      background-color: white;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      display: flex;
+      box-sizing: border-box;
+      flex-direction: column;
+      overflow: hidden;
+      /* padding: 5px 1px; */
+}
+
+.query-result-div {
+      border-bottom: 1px solid rgba(136, 136, 136, 0.5);
+      padding: 11px 7px;
+      font-family: Arial, Helvetica, sans-serif;
+      cursor: pointer;
+      box-sizing: border-box;
+      transition: ease-in-out 0.15s;
+}
+
+.query-result-div:hover {
+      background-color: #e0e0e0a4;
+}
+
+.query-result-div:active {
+      background-color: #a5a5a59d;
+}
 
 .header-searchbar input {
       height: 33px;

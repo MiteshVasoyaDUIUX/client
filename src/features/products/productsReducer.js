@@ -17,6 +17,11 @@ const fetchProducts = async (productReqData) => {
   return response.data;
 };
 
+const searchQuery = async (query) => {
+  const response = await axios.get(API_URL + `/query?query=${query}`);
+  return response.data;
+};
+
 const fetchOneProduct = async (productId) => {
   const response = await axios.get(API_URL + "/product/" + productId);
   return response.data;
@@ -75,6 +80,7 @@ const products = {
   fetchProducts,
   fetchOneProduct,
   searchProduct,
+  searchQuery,
   fetchNewArrivals,
   fetchNewArrivalComp,
   fetchTrendingProducts,
