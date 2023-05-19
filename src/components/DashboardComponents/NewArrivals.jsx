@@ -16,7 +16,7 @@ function ProductCards({ NewArrivals }) {
     <>
       {NewArrivals.map((product) => (
         <Grid item spacing={3}>
-          <ProductCard product={product} key={product?._id}/>
+          <ProductCard product={product} key={product?._id} />
         </Grid>
       ))}
     </>
@@ -27,7 +27,7 @@ function NewArrivals() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { products, isFetching, isError } = useSelector(
+  const { newArrivals, isFetching, isError } = useSelector(
     (state) => state.products
   );
 
@@ -45,7 +45,6 @@ function NewArrivals() {
   }, [isError, dispatch]);
 
   useEffect(() => {
-
     if (isAddedCart) {
       toast.success("Added To Cart...");
     }
@@ -61,8 +60,8 @@ function NewArrivals() {
 
   let NewArrivals = [{}];
   let indexNewArrivals = 0;
-  for (let index = products.length - 1; index >= products.length - 4; index--) {
-    NewArrivals[indexNewArrivals] = products[index];
+  for (let index = newArrivals.length - 1; index >= newArrivals.length - 4; index--) {
+    NewArrivals[indexNewArrivals] = newArrivals[index];
     indexNewArrivals++;
   }
 

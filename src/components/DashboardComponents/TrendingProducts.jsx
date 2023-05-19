@@ -37,15 +37,16 @@ function TrendingProducts() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { products, wishlist, isFetching, isError, message } = useSelector(
+  const { trendingProd, wishlist, isFetching, isError, message } = useSelector(
     (state) => state.products
   );
 
   let trendingProducts = [{}];
 
   for (let index = 0; index < 4; index++) {
-    const randomProductIndex = Math.floor(Math.random() * products.length);
-    trendingProducts[index] = products[randomProductIndex];
+    // console.log("Calculating Products for Trending Product Component___");
+    // const randomProductIndex = Math.floor(Math.random() * products.length);
+    trendingProducts[index] = trendingProd[index];
   }
 
   useEffect(() => {
@@ -53,9 +54,7 @@ function TrendingProducts() {
       toast.error("Error : ", message);
     }
 
-    if (products) {
       dispatch(fetchTrendingProductComp());
-    }
 
     return () => {
       dispatch(reset());

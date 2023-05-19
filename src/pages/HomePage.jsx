@@ -7,6 +7,7 @@ import NewArrivals from "../components/DashboardComponents/NewArrivals";
 import TrandingProducts from "../components/DashboardComponents/TrendingProducts";
 import { toast } from "react-toastify";
 import "./HomePage.css";
+import TopSellingProducts from "../components/DashboardComponents/TopSellingProducts";
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -22,7 +23,6 @@ function HomePage() {
   useEffect(() => {
     if (isError) {
       toast.error("Error : ", message);
-      // console.log(message);
     }
 
     if (!user) {
@@ -67,6 +67,9 @@ function HomePage() {
         </div>
         <div className="trending-products-component">
           <TrandingProducts />
+        </div>
+        <div className="top-selling-products-component">
+          <TopSellingProducts />
         </div>
       </>
     </>

@@ -9,6 +9,16 @@
       /* border :1px solid black */
 }
 
+.sold-out-quantity {
+      background-color :#f3ac14e7;
+      border-bottom-right-radius: 8px;
+      padding: 4px 10px;
+      position: absolute;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      top : 0px;
+      z-index: 2;
+}
+
 .product-card:hover {
       box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.461);
 }

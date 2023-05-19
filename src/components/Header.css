@@ -96,7 +96,8 @@ body {
       width: 100%;
       height: fit-content;
       margin: 2px 0 0 0;
-      background-color: white;
+      background-color: rgb(255, 255, 255);
+      border: 1px solid rgba(128, 128, 128, 0.61);
       border-top-left-radius: 3px;
       border-top-right-radius: 3px;
       border-bottom-left-radius: 6px;
@@ -110,11 +111,28 @@ body {
 
 .query-result-div {
       border-bottom: 1px solid rgba(136, 136, 136, 0.5);
-      padding: 11px 7px;
+      min-height: 40px;
+      max-height: 60px;
+      padding: 4px 6px;
+      font-size: 14px;
       font-family: Arial, Helvetica, sans-serif;
       cursor: pointer;
       box-sizing: border-box;
-      transition: ease-in-out 0.15s;
+      transition: ease-in-out 0.10s;
+      display: flex;
+}
+
+.query-result-div div {
+      max-height: 50px;
+      box-sizing: border-box;
+      white-space: normal;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-align: justify;
+      margin: auto 0 auto 0 ;
 }
 
 .query-result-div:hover {

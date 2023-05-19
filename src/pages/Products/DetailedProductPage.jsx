@@ -61,7 +61,7 @@ function DetailedProductPage() {
     return () => {
       dispatch(reset());
     };
-  }, [isError]);
+  }, [isError, productId]);
 
   useEffect(() => {
     if (isAddedCart) {

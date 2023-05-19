@@ -76,6 +76,12 @@ const fetchTrendingProductComp = async (quary) => {
   return response.data;
 };
 
+const fetchTopSellingComponent = async (quary) => {
+  const response = await axios.get(API_URL + "/topsellingcomp");
+  // console.log("Trending Products : ", response.data);
+  return response.data;
+};
+
 const products = {
   fetchProducts,
   fetchOneProduct,
@@ -85,6 +91,7 @@ const products = {
   fetchNewArrivalComp,
   fetchTrendingProducts,
   fetchTrendingProductComp,
+  fetchTopSellingComponent
 };
 
 export default products;

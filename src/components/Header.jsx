@@ -58,7 +58,7 @@ const StyledMenu = styled((props) => (
 
 const productCategories = ["clothes", "smart phones", "accessories", "other"];
 
-function Header() {
+function Header({ setActiveSearchList }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -69,6 +69,7 @@ function Header() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [query, setQuery] = useState("");
+  const [searchClick, setSearchClick] = useState({});
   const [openSearchList, setOpenSearchList] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -96,6 +97,13 @@ function Header() {
       navigate(`/search/${query}`);
     }
   }, [query]);
+
+  useEffect(() => {
+    if (searchClick !== "") {
+      navigate(`/product/${searchClick._id}`);
+      setOpenSearchList(false);
+    }
+  }, [searchClick]);
 
   if (
     location.pathname === "/login" ||
@@ -132,6 +140,7 @@ function Header() {
 
   const handleLogoClick = () => {
     document.getElementById("header-searchbar-input").value = "";
+    setOpenSearchList(false);
   };
 
   const handleSearchBar = (e) => {
@@ -149,15 +158,17 @@ function Header() {
       if (enteredQuery !== "" && e.keyCode !== 32) {
         dispatch(searchQuery(enteredQuery.trim()));
       }
-    }, 300);
+    }, 0);
 
-    // if (enteredQuery !== "" && e.type === "click") {
-    //   // navigate(`/search/${quary}`);
-    //   setQuery(enteredQuery);
-    // } else if (enteredQuery !== "" && e.keyCode === 13) {
-    //   // navigate(`/search/${quary}`);
-    //   setQuery(enteredQuery);
-    // }
+    if (enteredQuery !== "" && e.type === "click") {
+      // navigate(`/search/${quary}`);
+      setOpenSearchList(false);
+      setQuery(enteredQuery);
+    } else if (enteredQuery !== "" && e.keyCode === 13) {
+      // navigate(`/search/${quary}`);
+      setOpenSearchList(false);
+      setQuery(enteredQuery);
+    }
   };
 
   const handleCategoryClick = (category) => {
@@ -177,7 +188,9 @@ function Header() {
     }
   };
 
-  console.log("cart response : ", queryResponse);
+  const handleQueryClick = (response) => {
+    setSearchClick(response);
+  };
 
   return (
     <>
@@ -218,14 +231,17 @@ function Header() {
             {(!user || user.role === "buyer") &&
             (!user?.user.isBlocked || !user?.user.isDeleted) ? (
               // <div className="header-search-div">
-              <div className="header-search-div">
+              <div
+                className="header-search-div"
+                onBlur={() => setOpenSearchList(false)}
+              >
                 <div className="header-searchbar">
                   <input
                     type="text"
                     name="header-searchbar-input"
                     id="header-searchbar-input"
                     onKeyUp={handleSearchBar}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                   <button onClick={handleSearchBar}>
                     <SearchIcon />
@@ -238,8 +254,12 @@ function Header() {
                       {queryResponse?.response?.map((response) => {
                         return (
                           <>
-                            <div className="query-result-div">
-                              {response.prodName}
+                            <div
+                              className="query-result-div"
+                              onMouseDown={() => handleQueryClick(response)}
+                              key={response._id}
+                            >
+                              <div>{response.prodName}</div>
                             </div>
                           </>
                         );

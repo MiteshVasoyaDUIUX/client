@@ -5,6 +5,9 @@ import { newArrivals, priceLowToHigh } from "../../app/Functions/SortFunc";
 
 const initialState = {
   products: [],
+  newArrivals: [],
+  trendingProd: [],
+  topSelling: [],
   product: [],
   wishlist: [],
   wishlistProducts: [],
@@ -161,6 +164,24 @@ export const fetchTrendingProductComp = createAsyncThunk(
   }
 );
 
+export const fetchTopSellingComponent = createAsyncThunk(
+  "products/fetch/top-selling-component",
+  async (thunkAPI) => {
+    try {
+      const response = await products.fetchTopSellingComponent();
+      return response;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -208,7 +229,6 @@ const productsSlice = createSlice({
       .addCase(searchQuery.pending, (state) => {})
       .addCase(searchQuery.fulfilled, (state, action) => {
         state.queryResponse = action.payload;
-        console.log("QUERY RESPONSE : ", state.queryResponse);
       })
       .addCase(searchQuery.rejected, (state, action) => {
         state.isError = true;
@@ -259,7 +279,7 @@ const productsSlice = createSlice({
         state.productMessage = "";
       })
       .addCase(fetchNewArrivalComp.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.newArrivals = action.payload;
       })
       .addCase(fetchNewArrivalComp.rejected, (state, action) => {
         state.productMessage = action.payload;
@@ -268,9 +288,18 @@ const productsSlice = createSlice({
         state.productMessage = "";
       })
       .addCase(fetchTrendingProductComp.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.trendingProd = action.payload;
       })
       .addCase(fetchTrendingProductComp.rejected, (state, action) => {
+        state.productMessage = action.payload;
+      })
+      .addCase(fetchTopSellingComponent.pending, (state) => {
+        state.productMessage = "";
+      })
+      .addCase(fetchTopSellingComponent.fulfilled, (state, action) => {
+        state.topSelling = action.payload;
+      })
+      .addCase(fetchTopSellingComponent.rejected, (state, action) => {
         state.productMessage = action.payload;
       });
   },

@@ -81,7 +81,6 @@ function SearchedQuary() {
   }, [products]);
 
   useEffect(() => {
-    // console.log("Fetching Products...");
     setProduct([]);
     fetchProductData();
   }, [sortBy, query]);
@@ -106,7 +105,6 @@ function SearchedQuary() {
   const fetchProductsData = () => {
     if (moreProducts) {
       dispatch(searchProduct(prodReqData));
-      // console.log("Dispatch More : ", prodReqData);
       prodReqData = {
         page: page,
         query: query,
