@@ -4,10 +4,7 @@ import "./Chat.css";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {
-  fetchChatClient,
-  saveChat,
-} from "../../features/chat/chatSlice";
+import { fetchChatClient, saveChat } from "../../features/chat/chatSlice";
 
 let currentMsg = [];
 
@@ -18,9 +15,7 @@ function Message({ message, own }) {
         <div>{message.message}</div>
         <div
           className={
-            own
-              ? "client-sent-message-time"
-              : "client-time-of-received-message"
+            own ? "client-sent-message-time" : "client-time-of-received-message"
           }
         >
           {message.time.slice(4, 21)}
@@ -50,6 +45,8 @@ function Chat() {
       };
 
       dispatch(fetchChatClient(chatFetchdata));
+
+      console.log("Message : ", messages);
     }
 
     const socketIO = io("ws://localhost:8888");
@@ -112,7 +109,7 @@ function Chat() {
 
   messageData?.map((message) => {
     currentMsg.push(message);
-    conversationId = message.conversationId;
+    conversationId = messages.conversationId;
   });
 
   const handleSendButton = async (e) => {
@@ -126,7 +123,7 @@ function Chat() {
       const t = String(date).slice(4, 21);
 
       const message = {
-        conversationId: conversationId,
+        conversationId: messages.conversationId,
         senderId: senderId,
         receiverId: receiverId,
         message: messageValue,
@@ -147,6 +144,8 @@ function Chat() {
 
       div.append(messageDiv, timeDiv);
       newMessageArea.append(div);
+
+      console.log("Send Messages : ", message)
 
       socket.emit("sendMessage", message);
 

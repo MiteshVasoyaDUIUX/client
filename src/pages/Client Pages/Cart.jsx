@@ -19,13 +19,11 @@ import "./Cart.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { toast } from "react-toastify";
 
-import { createRoot } from "react-dom/client";
 import EmailVerification from "../../components/EmailVerification";
-import userSlice, {
+import {
   applyCoupon,
   fetchCart,
   placeCartOrder,
-  placeOrder,
   removeFromCart,
   reset,
   updateCartQuantity,
@@ -648,9 +646,6 @@ export default function Cart() {
   const { cart, coupon, userSliceMessage } = useSelector((state) => state.user);
   const { isPlaced, isError } = useSelector((state) => state.user);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
-  const [couponCode, setCouponCode] = useState("");
-  const [couponApplied, setCouponApplied] = useState(false);
-  const [couponData, setCouponData] = useState();
 
   const [newAddress, setAddressNew] = useState({
     street: "",
@@ -741,7 +736,6 @@ export default function Cart() {
               productPrice: cart[index].prodPrice,
               paymentOption,
               deliveryAddress: deliveryAddress,
-              couponCode,
             };
             checkoutData.push(newData);
           }
@@ -749,21 +743,6 @@ export default function Cart() {
         dispatch(placeCartOrder(checkoutData));
       }
     }
-  };
-
-  const handleApplyCouponButton = () => {
-    if (couponCode !== "") {
-      setCouponApplied(true);
-      dispatch(applyCoupon(couponCode));
-      setCouponData(coupon);
-      console.log("Applying Coupon...", coupon);
-    } else {
-      alert("Enter Coupon Code...");
-    }
-  };
-
-  const handleCouponChanges = (e) => {
-    setCouponCode(e.target.value);
   };
 
   return (
@@ -782,53 +761,12 @@ export default function Cart() {
               </div>
               <div className="cart-grand-total">
                 <div className="grand-total-summary-title">Summary :</div>
-                {user ? (
+                {outOfStock !== 0 ? (
                   <>
-                    <div className="coupon-code-div">
-                      <TextField
-                        sx={{
-                          "& .MuiInputBase-root": {
-                            height: "40px",
-                            width: "230px",
-                            backgroundColor: "white",
-                            border: "1px solid black",
-                            borderRadius: "0",
-                          },
-                          "& .MuiOutlinedInput-notchedOutline": {
-                            border: "none",
-                          },
-                        }}
-                        className="coupon-code-text"
-                        variant="outlined"
-                        placeholder="Enter Coupon Code"
-                        value={couponCode}
-                        onChange={handleCouponChanges}
-                      />
-                      <input
-                        type="button"
-                        value="Apply"
-                        onClick={handleApplyCouponButton}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <></>
-                )}
-                {couponApplied && coupon.isValid === true ? (
-                  <>
-                    <div className="coupon-message">{coupon.message}</div>
                     <div style={{ display: "flex", marginTop: "10px" }}>
                       <div className="total-title">Subtotal :</div>
                       <div className="total-value">
                         {subTotal.toLocaleString("en-IN")} ₹
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", marginTop: "10px" }}>
-                      <div className="coupon-discount-title">
-                        Coupon Discount :
-                      </div>
-                      <div className="coupon-discount-value">
-                        {coupon.discount}%
                       </div>
                     </div>
                     <div style={{ display: "flex" }}>
@@ -854,43 +792,7 @@ export default function Cart() {
                     </div>
                   </>
                 ) : (
-                  <>
-                    {outOfStock !== 0 ? (
-                      <>
-                        <div style={{ display: "flex", marginTop: "10px" }}>
-                          <div className="total-title">Subtotal :</div>
-                          <div className="total-value">
-                            {subTotal.toLocaleString("en-IN")} ₹
-                          </div>
-                        </div>
-                        <div style={{ display: "flex" }}>
-                          <div className="shipping-charge-title">
-                            Shipping Charge :
-                          </div>
-                          <div className="shipping-charge-value">0 ₹</div>
-                        </div>
-                        <hr style={{ marginTop: "20px" }} />
-                        <div style={{ display: "flex" }}>
-                          <div className="grand-total-title">
-                            Total Amount :
-                          </div>
-                          <div className="grand-total-value">
-                            {totalAmount.toLocaleString("en-IN")} ₹
-                          </div>
-                        </div>
-                        <div className="cart-page-checkout-button">
-                          <button
-                            className="checkout-button"
-                            onClick={handleCheckout}
-                          >
-                            CHECKOUT
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </>
+                  ""
                 )}
               </div>
             </div>
