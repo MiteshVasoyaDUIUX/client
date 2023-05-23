@@ -65,6 +65,7 @@ function Filter({
     setIncludeOutOfStock(false);
     setPODEligibility(false);
     setPriceSliderValue(initialPriceSliderValue);
+    setPriceSlider(initialPriceSliderValue);
   };
 
   return (
