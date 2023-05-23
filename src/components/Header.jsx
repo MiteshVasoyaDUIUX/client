@@ -156,7 +156,7 @@ function Header({ setActiveSearchList }) {
 
     setTimeout(() => {
       if (enteredQuery !== "" && e.keyCode !== 32) {
-        dispatch(searchQuery(enteredQuery.trim()));
+        // dispatch(searchQuery(enteredQuery.trim()));
       }
     }, 0);
 

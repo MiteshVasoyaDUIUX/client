@@ -17,8 +17,9 @@ function ProductCard({ item, userId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleRemoveButton = (id) => {
-    // console.log("Remove Button is Clicked...", id);
+  const handleRemoveButton = (e, id) => {
+    e.stopPropagation();
+    console.log("Remove Button is Clicked...", id);
 
     const data = {
       userId,
@@ -62,8 +63,8 @@ function ProductCard({ item, userId }) {
               <input
                 type="button"
                 value="Remove"
-                onClick={() => {
-                  handleRemoveButton(item._id);
+                onClick={(e) => {
+                  handleRemoveButton(e, item._id);
                 }}
               />
             </div>

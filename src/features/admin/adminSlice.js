@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import adminService from "./adminReducer";
 
 const initialState = {
+  addedProduct: [],
   allOrders: [],
   isOrderFetching: false,
   isOrdersFetched: false,
@@ -203,7 +204,7 @@ const adminSlice = createSlice({
       .addCase(uploadProduct.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.isLoading = false;
-        state.products.push(action.payload);
+        state.addedProduct.push(action.payload);
         // console.log("New State : ", initialState.products);
       })
       .addCase(uploadProduct.rejected, (state, action) => {

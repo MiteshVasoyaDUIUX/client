@@ -46,6 +46,14 @@ function SearchedQuary() {
   const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
   const [sortBy, setSortBy] = useState("newArrivals");
 
+  let filter = {
+    price: priceSliderValue,
+    rating: ratingValue,
+    POD: PODEligibility,
+    includeOutOfStock: includeOutOfStock,
+    discount: discount,
+  };
+
   let productArray = [];
   let filteredProductArray = [];
 
@@ -62,6 +70,7 @@ function SearchedQuary() {
     page: page,
     query: query,
     sortBy: sortBy,
+    filter: filter,
   };
 
   useEffect(() => {
@@ -83,12 +92,15 @@ function SearchedQuary() {
   useEffect(() => {
     setProduct([]);
     fetchProductData();
-  }, [sortBy, query]);
-
-  // useEffect(() => {
-  //   setProduct([]);
-  //   fetchProductData();
-  // }, [query]);
+  }, [
+    sortBy,
+    query,
+    priceSliderValue,
+    ratingValue,
+    PODEligibility,
+    discount,
+    includeOutOfStock,
+  ]);
 
   const handleSorting = (newValue) => {
     setSortBy(newValue);
@@ -103,63 +115,50 @@ function SearchedQuary() {
   };
 
   const fetchProductsData = () => {
+    filter = {
+      price: priceSliderValue,
+      rating: ratingValue,
+      POD: PODEligibility,
+      includeOutOfStock: includeOutOfStock,
+      discount: discount,
+    };
     if (moreProducts) {
       dispatch(searchProduct(prodReqData));
       prodReqData = {
         page: page,
         query: query,
         sortBy: sortBy,
+        filter: filter,
       };
     }
   };
 
   const fetchProductData = () => {
+    filter = {
+      price: priceSliderValue,
+      rating: ratingValue,
+      POD: PODEligibility,
+      includeOutOfStock: includeOutOfStock,
+      discount: discount,
+    };
     setPage(1);
     prodReqData = {
       page: 1,
       query: query,
       sortBy: sortBy,
+      filter: filter,
     };
     dispatch(searchProduct(prodReqData));
     prodReqData = {
       page: page,
       query: query,
       sortBy: sortBy,
+      filter: filter,
     };
   };
 
   if (products?.products?.length > 0) {
-    product.map((product) => {
-      if (includeOutOfStock) {
-        productArray.push(product);
-      } else {
-        if (product.prodQuantity > 0) {
-          productArray.push(product);
-        }
-      }
-    });
-
-    if (ratingValue) {
-      filteredProductArray = ratingFilter(ratingValue, productArray);
-    } else {
-      filteredProductArray = productArray;
-    }
-
-    if (priceSliderValue) {
-      filteredProductArray = priceFilter(
-        priceSliderValue[0],
-        priceSliderValue[1],
-        filteredProductArray
-      );
-    }
-
-    if (PODEligibility) {
-      filteredProductArray = PodFilter(filteredProductArray);
-    }
-
-    if (discount) {
-      filteredProductArray = discountFilter(discount, filteredProductArray);
-    }
+    product.map((product) => productArray.push(product));
   }
 
   return (
@@ -211,7 +210,7 @@ function SearchedQuary() {
         >
           <SearchedItems
             wishlist={wishlist}
-            filteredProductArray={filteredProductArray}
+            filteredProductArray={productArray}
           />
         </div>
         {showLoadMoreBtn === true && filteredProductArray > 0 ? (

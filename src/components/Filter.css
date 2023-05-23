@@ -1,3 +1,11 @@
+@media only screen and (max-width : 1000px) {
+      #product-filter {
+            /* visibility: hidden; */
+            width: 100px;
+            border: 2px solid black;
+      }
+}
+
 #product-filter {
       border: 1px solid rgb(211, 211, 211);
       padding: 10px;
@@ -229,10 +237,10 @@
 }
 
 #reset-all-filter input[type="button"] {
-      border : 1px solid black;
+      border: 1px solid black;
       border-radius: 5px;
       background-color: white;
-      padding : 7px;
+      padding: 7px;
       font-size: 16px;
       transition: ease-in-out 0.14s;
 }

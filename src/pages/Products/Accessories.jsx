@@ -162,7 +162,6 @@ function Accessories() {
         <div>
           <div style={{ marginLeft: "100px", width: "fitContent" }}>
             <AccessoriesItems filteredProductArray={filteredProductArray} />
-            {/* {console.log("Products : ", newProdArray)} */}
           </div>
           {showSpinner ? (
             <>

@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  PodFilter,
-  discountFilter,
-  priceFilter,
-  ratingFilter,
-} from "../../app/Functions/filterFunc";
+
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../features/products/productsSlice";
 import Filter from "../../components/Filter";
@@ -51,9 +46,15 @@ function Products() {
   const [showSpinner, setShowSpinner] = useState(false);
   const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
   const [sortBy, setSortBy] = useState("newArrivals");
+  let filter = {
+    price: priceSliderValue,
+    rating: ratingValue,
+    POD: PODEligibility,
+    includeOutOfStock: includeOutOfStock,
+    discount: discount,
+  };
 
   let productArray = [];
-  let filteredProductArray = [];
 
   const { products, isLoading, isFetching, isError, productMessage } =
     useSelector((state) => state.products);
@@ -66,6 +67,7 @@ function Products() {
     page: page,
     category: category,
     sortBy: sortBy,
+    filter: filter,
   };
 
   useEffect(() => {
@@ -105,7 +107,14 @@ function Products() {
   useEffect(() => {
     setProduct([]);
     fetchProductData();
-  }, [sortBy]);
+  }, [
+    sortBy,
+    priceSliderValue,
+    ratingValue,
+    PODEligibility,
+    discount,
+    includeOutOfStock,
+  ]);
 
   const handleSorting = (newValue) => {
     setSortBy(newValue);
@@ -120,6 +129,13 @@ function Products() {
   };
 
   const fetchProductsData = () => {
+    filter = {
+      price: priceSliderValue,
+      rating: ratingValue,
+      POD: PODEligibility,
+      includeOutOfStock: includeOutOfStock,
+      discount: discount,
+    };
     if (moreProducts) {
       dispatch(fetchProducts(prodReqData));
       console.log("Dispatch More : ", prodReqData);
@@ -127,62 +143,42 @@ function Products() {
         page: page,
         category: category,
         sortBy: sortBy,
+        filter: filter,
       };
     }
   };
 
   const fetchProductData = () => {
+    filter = {
+      price: priceSliderValue,
+      rating: ratingValue,
+      POD: PODEligibility,
+      includeOutOfStock: includeOutOfStock,
+      discount: discount,
+    };
     setPage(1);
     prodReqData = {
       page: 1,
       category: category,
       sortBy: sortBy,
+      filter: filter,
     };
     dispatch(fetchProducts(prodReqData));
     prodReqData = {
       page: page,
       category: category,
       sortBy: sortBy,
+      filter: filter,
     };
   };
 
   if (products?.products?.length > 0) {
-    product.map((product) => {
-      if (includeOutOfStock) {
-        productArray.push(product);
-      } else {
-        if (product.prodQuantity > 0) {
-          productArray.push(product);
-        }
-      }
-    });
-
-    if (ratingValue) {
-      filteredProductArray = ratingFilter(ratingValue, productArray);
-    } else {
-      filteredProductArray = productArray;
-    }
-
-    if (priceSliderValue) {
-      filteredProductArray = priceFilter(
-        priceSliderValue[0],
-        priceSliderValue[1],
-        filteredProductArray
-      );
-    }
-
-    if (PODEligibility) {
-      filteredProductArray = PodFilter(filteredProductArray);
-    }
-
-    if (discount) {
-      filteredProductArray = discountFilter(discount, filteredProductArray);
-    }
+    product.map((product) => productArray.push(product));
   }
 
   return (
     <>
-      <div style={{ display: "flex" }}>
+      <div className="page-container">
         <Filter
           priceSliderValue={priceSliderValue}
           setPriceSliderValue={setPriceSliderValue}
@@ -195,13 +191,7 @@ function Products() {
           includeOutOfStock={includeOutOfStock}
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div
-          style={{
-            width: "100%",
-            height: "fit-content",
-          }}
-          className="product-container"
-        >
+        <div className="product-container">
           <div className="product-title-div">
             <div id="products-title">{category}</div>
             <div id="products-sort-box">
@@ -224,7 +214,7 @@ function Products() {
             }}
           >
             <ProductsList
-              filteredProductArray={filteredProductArray}
+              filteredProductArray={productArray}
               wishlist={wishlist}
               category={category}
             />

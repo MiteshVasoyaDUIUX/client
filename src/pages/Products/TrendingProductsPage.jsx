@@ -8,7 +8,7 @@ import discountCalcFunc from "../../../src/app/Functions/discountCalcFunc";
 import Filter from "../../components/Filter";
 import { ProductCardsGrid } from "../../components/ProductCardGrid";
 
-import "./Accessories.css";
+import "./Products.css";
 import { ProductFetchingSpinner } from "../../components/Spinner";
 import {
   PodFilter,
@@ -34,11 +34,7 @@ function TrendingProduct({ filteredProductArray }) {
 }
 
 function TrendingProductsPage() {
-  const location = useLocation();
   const dispatch = useDispatch();
-
-  const searchParams = new URLSearchParams(location.search);
-  const category = searchParams.get("category");
 
   const [priceSliderValue, setPriceSliderValue] = useState([100, 200000]);
   const [ratingValue, setRatingValue] = useState(null);
@@ -51,6 +47,13 @@ function TrendingProductsPage() {
   const [showSpinner, setShowSpinner] = useState(false);
   const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
   const [sortBy, setSortBy] = useState("newArrivals");
+  let filter = {
+    price: priceSliderValue,
+    rating: ratingValue,
+    POD: PODEligibility,
+    includeOutOfStock: includeOutOfStock,
+    discount: discount,
+  };
 
   let productArray = [];
   let filteredProductArray = [];
@@ -64,8 +67,8 @@ function TrendingProductsPage() {
 
   let prodReqData = {
     page: page,
-    // category: category,
     sortBy: sortBy,
+    filter: filter,
   };
 
   useEffect(() => {
@@ -95,7 +98,14 @@ function TrendingProductsPage() {
   useEffect(() => {
     setProduct([]);
     fetchProductData();
-  }, [sortBy]);
+  }, [
+    sortBy,
+    priceSliderValue,
+    ratingValue,
+    PODEligibility,
+    discount,
+    includeOutOfStock,
+  ]);
 
   useEffect(() => {
     if (isAddedCart) {
@@ -119,69 +129,54 @@ function TrendingProductsPage() {
   };
 
   const fetchProductsData = () => {
+    filter = {
+      price: priceSliderValue,
+      rating: ratingValue,
+      POD: PODEligibility,
+      includeOutOfStock: includeOutOfStock,
+      discount: discount,
+    };
     if (moreProducts) {
       dispatch(fetchTrendingProducts(prodReqData));
       console.log("Dispatch More : ", prodReqData);
       prodReqData = {
         page: page,
-        // category: category,
         sortBy: sortBy,
+        filter: filter,
       };
     }
   };
 
   const fetchProductData = () => {
+    filter = {
+      price: priceSliderValue,
+      rating: ratingValue,
+      POD: PODEligibility,
+      includeOutOfStock: includeOutOfStock,
+      discount: discount,
+    };
     setPage(1);
     prodReqData = {
       page: 1,
-      // category: category,
       sortBy: sortBy,
+      filter: filter,
     };
+    console.log("Dispatch : ", prodReqData);
     dispatch(fetchTrendingProducts(prodReqData));
     prodReqData = {
       page: page,
-      // category: category,
       sortBy: sortBy,
+      filter: filter,
     };
   };
 
   if (products?.products?.length > 0) {
-    product.map((product) => {
-      if (includeOutOfStock) {
-        productArray.push(product);
-      } else {
-        if (product.prodQuantity > 0) {
-          productArray.push(product);
-        }
-      }
-    });
-
-    if (ratingValue) {
-      filteredProductArray = ratingFilter(ratingValue, productArray);
-    } else {
-      filteredProductArray = productArray;
-    }
-
-    if (priceSliderValue) {
-      filteredProductArray = priceFilter(
-        priceSliderValue[0],
-        priceSliderValue[1],
-        filteredProductArray
-      );
-    }
-
-    if (PODEligibility) {
-      filteredProductArray = PodFilter(filteredProductArray);
-    }
-
-    if (discount) {
-      filteredProductArray = discountFilter(discount, filteredProductArray);
-    }
+    product.map((product) => productArray.push(product));
   }
 
   return (
     <>
-      <div style={{ display: "flex" }}>
+      <div className="page-container">
         <Filter
           priceSliderValue={priceSliderValue}
           setPriceSliderValue={setPriceSliderValue}
@@ -194,12 +189,7 @@ function TrendingProductsPage() {
           includeOutOfStock={includeOutOfStock}
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div
-          style={{
-            width: "fit-content",
-            height: "fit-content",
-          }}
-        >
+        <div className="product-container">
           <div className="product-title-div">
             <div id="products-title">Trending Products</div>
             <div id="products-sort-box">
@@ -214,7 +204,6 @@ function TrendingProductsPage() {
               </select>
             </div>
           </div>
-
           <div
             style={{
               marginLeft: "100px",
@@ -222,9 +211,9 @@ function TrendingProductsPage() {
               display: "block",
             }}
           >
-            <TrendingProduct filteredProductArray={filteredProductArray} />
+            <TrendingProduct filteredProductArray={productArray} />
           </div>
-          {showLoadMoreBtn === true && filteredProductArray > 0 ? (
+          {showLoadMoreBtn ? (
             <>
               <div className="load-more-prod-button">
                 <input

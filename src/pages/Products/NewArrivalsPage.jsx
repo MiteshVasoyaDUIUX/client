@@ -51,6 +51,14 @@ function NewArrivalsProductsPage() {
   let productArray = [];
   let filteredProductArray = [];
 
+  let filter = {
+    price: priceSliderValue,
+    rating: ratingValue,
+    POD: PODEligibility,
+    includeOutOfStock: includeOutOfStock,
+    discount: discount,
+  };
+
   const { products, isLoading, isFetching, isError, productMessage } =
     useSelector((state) => state.products);
 
@@ -62,18 +70,8 @@ function NewArrivalsProductsPage() {
     page: page,
     // category: category,
     sortBy: sortBy,
+    filter: filter,
   };
-
-  // useEffect(() => {
-  //   if (isFetching) {
-  //     console.log("ASASasasasaas")
-  //   } else {
-  //   }
-  // }, [isFetching]);
-
-  // if(isFetching) {
-
-  // }
 
   useEffect(() => {
     if (page > 1) fetchProductsData();
@@ -94,7 +92,14 @@ function NewArrivalsProductsPage() {
   useEffect(() => {
     setProduct([]);
     fetchProductData();
-  }, [sortBy]);
+  }, [
+    sortBy,
+    priceSliderValue,
+    ratingValue,
+    PODEligibility,
+    discount,
+    includeOutOfStock,
+  ]);
 
   useEffect(() => {
     if (isAddedCart) {
@@ -119,69 +124,53 @@ function NewArrivalsProductsPage() {
   };
 
   const fetchProductsData = () => {
+    filter = {
+      price: priceSliderValue,
+      rating: ratingValue,
+      POD: PODEligibility,
+      includeOutOfStock: includeOutOfStock,
+      discount: discount,
+    };
     if (moreProducts) {
       dispatch(fetchNewArrivals(prodReqData));
       console.log("Dispatch More : ", prodReqData);
       prodReqData = {
         page: page,
-        // category: category,
         sortBy: sortBy,
+        filter: filter,
       };
     }
   };
 
   const fetchProductData = () => {
+    filter = {
+      price: priceSliderValue,
+      rating: ratingValue,
+      POD: PODEligibility,
+      includeOutOfStock: includeOutOfStock,
+      discount: discount,
+    };
     setPage(1);
     prodReqData = {
       page: 1,
-      // category: category,
       sortBy: sortBy,
+      filter: filter,
     };
     dispatch(fetchNewArrivals(prodReqData));
     prodReqData = {
       page: page,
-      // category: category,
       sortBy: sortBy,
+      filter: filter,
     };
   };
 
   if (products?.products?.length > 0) {
-    product.map((product) => {
-      if (includeOutOfStock) {
-        productArray.push(product);
-      } else {
-        if (product.prodQuantity > 0) {
-          productArray.push(product);
-        }
-      }
-    });
-
-    if (ratingValue) {
-      filteredProductArray = ratingFilter(ratingValue, productArray);
-    } else {
-      filteredProductArray = productArray;
-    }
-
-    if (priceSliderValue) {
-      filteredProductArray = priceFilter(
-        priceSliderValue[0],
-        priceSliderValue[1],
-        filteredProductArray
-      );
-    }
-
-    if (PODEligibility) {
-      filteredProductArray = PodFilter(filteredProductArray);
-    }
-
-    if (discount) {
-      filteredProductArray = discountFilter(discount, filteredProductArray);
-    }
+    product.map((product) => productArray.push(product));
   }
 
   return (
     <>
-      <div style={{ display: "flex" }}>
+      <div className="page-container">
         <Filter
           priceSliderValue={priceSliderValue}
           setPriceSliderValue={setPriceSliderValue}
@@ -194,12 +183,7 @@ function NewArrivalsProductsPage() {
           includeOutOfStock={includeOutOfStock}
           setIncludeOutOfStock={setIncludeOutOfStock}
         />
-        <div
-          style={{
-            width: "fit-content",
-            height: "fit-content",
-          }}
-        >
+        <div className="product-container">
           <div className="product-title-div">
             <div id="products-title">New Arrivals</div>
             <div id="products-sort-box">
@@ -222,7 +206,7 @@ function NewArrivalsProductsPage() {
               display: "block",
             }}
           >
-            <NewArrivalsProduct filteredProductArray={filteredProductArray} />
+            <NewArrivalsProduct filteredProductArray={productArray} />
           </div>
           {showLoadMoreBtn === true && filteredProductArray > 0 ? (
             <>

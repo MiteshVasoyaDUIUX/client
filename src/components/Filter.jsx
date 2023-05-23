@@ -8,7 +8,7 @@ import {
   Slider,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import "./Filter.css";
 
 function Filter({
@@ -24,9 +24,10 @@ function Filter({
   setIncludeOutOfStock,
 }) {
   const initialPriceSliderValue = [100, 200000];
+  const [priceSlider, setPriceSlider] = useState([100, 200000]);
 
   const handleSliderChange = (event, newValue) => {
-    setPriceSliderValue(newValue);
+    setPriceSlider(newValue);
   };
 
   const handleRatingButton = (event, ratingValue) => {
@@ -51,6 +52,10 @@ function Filter({
 
   const handleClearDiscount = () => {
     setDiscount();
+  };
+
+  const handleChangeCommit = () => {
+    setPriceSliderValue(priceSlider);
   };
 
   const handleAllResetButton = () => {
@@ -114,8 +119,9 @@ function Filter({
             />
             <Box sx={{ width: 290 }} id="bolx">
               <Slider
-                value={priceSliderValue}
+                value={priceSlider}
                 onChange={handleSliderChange}
+                onChangeCommitted={handleChangeCommit}
                 valueLabelDisplay="auto"
                 color="primary"
                 min={100}

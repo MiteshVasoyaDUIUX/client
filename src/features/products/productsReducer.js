@@ -5,14 +5,16 @@ const API_URL = "http://localhost:5555";
 
 const fetchProducts = async (productReqData) => {
   // console.log("Fetching Product...", productReqData.filter);
-  const response = await axios.get(
+  const filter = productReqData.filter;
+  const response = await axios.post(
     API_URL +
       "/products?page=" +
       productReqData.page +
       "&category=" +
       productReqData.category +
       "&sortBy=" +
-      productReqData.sortBy
+      productReqData.sortBy,
+    filter
   );
   return response.data;
 };
@@ -28,25 +30,29 @@ const fetchOneProduct = async (productId) => {
 };
 
 const searchProduct = async (productReqData) => {
-  const response = await axios.get(
+  const filter = productReqData.filter;
+  const response = await axios.post(
     API_URL +
       "/search?page=" +
       productReqData.page +
       "&&query=" +
       productReqData.query +
       "&sortBy=" +
-      productReqData.sortBy
+      productReqData.sortBy,
+    filter
   );
+  console.log("Response : ", response.data);
   return response.data;
 };
 
 const fetchNewArrivals = async (productReqData) => {
-  const response = await axios.get(
+  const response = await axios.post(
     API_URL +
       "/newarrivals?page=" +
       productReqData.page +
       "&sortBy=" +
-      productReqData.sortBy
+      productReqData.sortBy,
+    productReqData.filter
   );
   // console.log("Response : ", response.data);
   return response.data;
@@ -59,12 +65,13 @@ const fetchNewArrivalComp = async (quary) => {
 };
 
 const fetchTrendingProducts = async (productReqData) => {
-  const response = await axios.get(
+  const response = await axios.post(
     API_URL +
       "/trendingproducts?page=" +
       productReqData.page +
       "&sortBy=" +
-      productReqData.sortBy
+      productReqData.sortBy,
+    productReqData.filter
   );
   // console.log("Trending Products : ", response.data);
   return response.data;
@@ -91,7 +98,7 @@ const products = {
   fetchNewArrivalComp,
   fetchTrendingProducts,
   fetchTrendingProductComp,
-  fetchTopSellingComponent
+  fetchTopSellingComponent,
 };
 
 export default products;
