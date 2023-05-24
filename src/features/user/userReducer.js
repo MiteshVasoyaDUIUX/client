@@ -195,6 +195,7 @@ const applyCoupon = async (coupon, token) => {
   // const couponCode = {
   //   coupon: coupon,
   // };
+  console.log("APPLIED COUPON : ");
   const response = await axios.get(API_URL + "/buyer/applycoupon/" + coupon);
   return response.data;
 };

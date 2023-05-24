@@ -56,6 +56,9 @@ function DetailedProductPage() {
 
     if (isError) {
       toast.error(userSliceMessage);
+      setCouponApplied(false);
+      setCouponCode("");
+      setCouponData("");
     }
 
     return () => {
@@ -115,8 +118,13 @@ function DetailedProductPage() {
       const data = {
         userId,
         productId,
+        couponData: {
+          isApplied: couponApplied,
+          couponCode: couponCode,
+        },
       };
-      console.log("Adding to Cart...");
+      console.log("Cart Data : ", data);
+
       dispatch(addToCart(data));
     } else {
       toast.error("Not Logged In");
@@ -227,7 +235,6 @@ function DetailedProductPage() {
               <ul>
                 <li style={{ margin: "5px" }}>{product.prodDesc}</li>
               </ul>
-              
             </div>
             <br />
 

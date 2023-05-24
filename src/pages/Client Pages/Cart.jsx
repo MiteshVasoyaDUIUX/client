@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 import {
   Card,
@@ -106,7 +108,6 @@ function ProductCard({ item }) {
 
   const [quantity, setQuantity] = useState(item.quantity);
   let subTotal = item.prodPrice * item.quantity;
-  subTotal = subTotal.toLocaleString("en-IN");
 
   const handleRemoveButton = (id) => {
     dispatch(removeFromCart(id));
@@ -152,104 +153,86 @@ function ProductCard({ item }) {
   };
 
   return (
-    <Grid item xl={10} style={{ marginLeft: "7%" }}>
-      <Card className="cart-one-product-card">
-        <div style={{ display: "flex" }}>
-          <div className="cart-card-image">
-            <ImageForCart prodImage={item.prodImage} />
-          </div>
-          <div
-            style={{
-              width: "73%",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "15px",
-            }}
-          >
-            <div className="cart-product-name">{item.prodName}</div>
-            <div className="cart-product-price">Price : {item.prodPrice} ₹</div>
-          </div>
-          <div
-            style={{ display: "block", position: "relative", padding: "15px" }}
-          >
+    <>
+      <div className="cart-cards-grid">
+        <div className="cart-prod-card-img">
+          <ImageForCart prodImage={item.prodImage} />
+        </div>
+        <div className="cart-prod-card-details">
+          <div className="prod-title">{item.prodName}</div>
+          <div className="prod-price">Price : {item.prodPrice} ₹</div>
+          <div className="prod-quantity-btn">
             {item.prodQuantity > 0 ? (
               <>
-                <button
-                  className="cart-item-decrease-button"
+                <div>
+                  <button
+                    className="decrease-quantity"
+                    onClick={() => handleQuantityChange("-", item._id)}
+                  >
+                    <RemoveIcon
+                      sx={{
+                        margin: "2px auto 0 0",
+                      }}
+                    />
+                  </button>
+                </div>
+
+                <div
+                  className="quantity"
                   onClick={() => handleQuantityChange("-", item._id)}
-                  style={{
-                    marginLeft: "32%",
-                    width: "12%",
-                    marginTop: "1%",
-                    marginBottom: "4%",
-                  }}
                 >
-                  -
-                </button>
-                <input
-                  type="text"
-                  name="cart-quantity"
-                  id="cart-quantity"
-                  value={item.quantity}
-                  style={{
-                    width: "12%",
-                    height: "26px",
-                    outline: "none",
-                    border: "1px solid grey",
-                    fontSize: "18px",
-                    textAlign: "center",
-                  }}
-                  disabled
-                />
-                <button
-                  className="cart-item-icrease-button"
-                  onClick={() => handleQuantityChange("+", item._id)}
-                  style={{
-                    width: "12%",
-                  }}
-                >
-                  +
-                </button>
+                  {item.quantity}
+                </div>
+
+                <div>
+                  <button
+                    className="increase-quantity"
+                    onClick={() => handleQuantityChange("+", item._id)}
+                  >
+                    <AddIcon
+                      sx={{
+                        margin: "2px auto 0 0",
+                      }}
+                    />
+                  </button>
+                </div>
               </>
             ) : (
               <>
-                <button
-                  className="cart-item-decrease-button"
+                <div>
+                  <button
+                    className="decrease-quantity"
+                    onClick={() => handleQuantityChange("-", item._id)}
+                    disabled
+                  >
+                    <RemoveIcon
+                      sx={{
+                        margin: "2px auto 0 0",
+                      }}
+                    />
+                  </button>
+                </div>
+
+                <div
+                  className="quantity"
                   onClick={() => handleQuantityChange("-", item._id)}
-                  style={{
-                    marginLeft: "32%",
-                    width: "12%",
-                    marginTop: "1%",
-                    marginBottom: "4%",
-                  }}
-                  disabled
                 >
-                  -
-                </button>
-                <input
-                  type="text"
-                  name="cart-quantity"
-                  id="cart-quantity"
-                  value={item.quantity}
-                  style={{
-                    width: "12%",
-                    height: "26px",
-                    outline: "none",
-                    border: "1px solid grey",
-                    fontSize: "18px",
-                    textAlign: "center",
-                  }}
-                  disabled
-                />
-                <button
-                  className="cart-item-icrease-button"
-                  onClick={() => handleQuantityChange("+", item._id)}
-                  style={{
-                    width: "12%",
-                  }}
-                  disabled
-                >
-                  +
-                </button>
+                  {item.quantity}
+                </div>
+
+                <div>
+                  <button
+                    className="increase-quantity"
+                    onClick={() => handleQuantityChange("+", item._id)}
+                    disabled
+                  >
+                    <AddIcon
+                      sx={{
+                        margin: "2px auto 0 0",
+                      }}
+                    />
+                  </button>
+                </div>
                 <div
                   style={{
                     marginLeft: "auto",
@@ -264,31 +247,88 @@ function ProductCard({ item }) {
                 </div>
               </>
             )}
-            <div>
-              <div
-                style={{
-                  width: "fitContent",
-                  marginTop: "10%",
-                  marginLeft: "2%",
-                  fontSize: "150%",
-                  fontFamily: "sans-serif",
+            <div style={{ margin: "0 0 0 auto" }}>
+              <button
+                className="remove-item-cart-button"
+                onClick={() => {
+                  handleRemoveButton(item._id);
                 }}
               >
-                Subtotal : {subTotal} ₹
-              </div>
+                Remove
+              </button>
             </div>
-            <button
-              className="remove-item-cart-button"
-              onClick={() => {
-                handleRemoveButton(item._id);
-              }}
-            >
-              Remove
-            </button>
           </div>
         </div>
-      </Card>
-    </Grid>
+        <div className="prod-total">
+          {item?.couponData?.isApplied ? (
+            <>
+              {item.couponData.validCoupon ? (
+                <>
+                  <div className="prod-subtotal">
+                    Subtotal :{" "}
+                    {Math.floor(
+                      (subTotal * (100 - item.couponData.discount)) / 100
+                    )}{" "}
+                    ₹ Original Price : {subTotal}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>Coupon is no Valid Longer...</div>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="prod-subtotal">SubTotal : {subTotal} ₹</div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <Grid item xl={10} style={{ marginLeft: "7%" }}>
+        <Card className="cart-one-product-card">
+          <div style={{ display: "flex" }}>
+            <div className="cart-card-image">
+              <ImageForCart prodImage={item.prodImage} />
+            </div>
+            <div
+              style={{
+                width: "73%",
+                borderRight: "1px solid rgb(100, 100, 100, 0.2)",
+                padding: "15px",
+              }}
+            >
+              <div className="cart-product-name">{item.prodName}</div>
+              <div className="cart-product-price">
+                Price : {item.prodPrice} ₹
+              </div>
+            </div>
+            <div
+              style={{
+                display: "block",
+                position: "relative",
+                padding: "15px",
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    width: "fitContent",
+                    marginTop: "10%",
+                    marginLeft: "2%",
+                    fontSize: "15px",
+                    fontFamily: "sans-serif",
+                  }}
+                >
+                  {console.log("ITEM : ", item)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </Grid>
+    </>
   );
 }
 
@@ -692,7 +732,22 @@ export default function Cart() {
 
   for (let index = 0; index < cart.length; index++) {
     if (cart[index].prodQuantity !== 0) {
-      subTotal = subTotal + cart[index].quantity * cart[index].prodPrice;
+      if (
+        cart[index].couponData?.isApplied &&
+        cart[index].couponData?.validCoupon
+      ) {
+        console.log("CART COUPON : ", cart[index]);
+        subTotal =
+          subTotal +
+          Math.floor(
+            (cart[index].quantity *
+              cart[index].prodPrice *
+              (100 - cart[index].couponData.discount)) /
+              100
+          );
+      } else {
+        subTotal = subTotal + cart[index].quantity * cart[index].prodPrice;
+      }
     }
   }
 

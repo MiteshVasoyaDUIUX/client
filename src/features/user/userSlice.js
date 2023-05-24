@@ -271,6 +271,7 @@ export const applyCoupon = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token;
       const coupon = await userService.applyCoupon(couponCode, token);
+
       return coupon;
     } catch (error) {
       const message =
@@ -475,6 +476,7 @@ const userSlice = createSlice({
       })
       .addCase(applyCoupon.rejected, (state, action) => {
         state.isError = true;
+        console.log("COUPON ERROR : ", action.payload);
         state.userSliceMessage = action.payload;
       })
       .addCase(placeOrder.pending, (state) => {

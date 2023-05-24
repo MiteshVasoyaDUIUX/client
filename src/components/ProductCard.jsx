@@ -49,6 +49,10 @@ export default function ProductCard({ product }) {
       const data = {
         userId,
         productId,
+        couponData: {
+          isApplied: false,
+          couponCode: "",
+        },
       };
       dispatch(addToCart(data));
     } else {
@@ -193,7 +197,10 @@ export function TopSellingProductCard({ product }) {
         className="product-card"
         onClick={handleCardClick}
       >
-        <div className="sold-out-quantity"> {product.ordersCount} Pieces Sold</div>
+        <div className="sold-out-quantity">
+          {" "}
+          {product.ordersCount} Pieces Sold
+        </div>
         <div className="detailed-page-image">
           <ImageForCard prodImage={product?.prodImage} />
         </div>
