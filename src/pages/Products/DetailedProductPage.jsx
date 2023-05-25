@@ -18,6 +18,7 @@ import {
   addToCart,
   addToWishList,
   applyCoupon,
+  fetchCart,
   fetchWishList,
   reset,
   resetCoupon,
@@ -39,11 +40,13 @@ function DetailedProductPage() {
   const [couponCode, setCouponCode] = useState("");
 
   const { user } = useSelector((state) => state.auth);
-  const { wishlist, coupon, isError, isAddedCart, userSliceMessage } =
+  const { wishlist, cart, coupon, isError, isAddedCart, userSliceMessage } =
     useSelector((state) => state.user);
   const { product, productMessage } = useSelector((state) => state.products);
   const productId = params.id;
   let outOfStock;
+
+  let isInCart = false;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -51,6 +54,8 @@ function DetailedProductPage() {
 
     if (user) {
       const userId = user.user._id;
+      dispatch(fetchCart(userId));
+
       dispatch(fetchWishList(userId));
     }
 

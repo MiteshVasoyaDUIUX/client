@@ -107,10 +107,9 @@
       width: 120px;
       margin-left: auto;
       margin-right: auto;
-      min-height: 350;
       text-align: center;
       z-index: 0;
-      object-fit: contain;
+      object-fit: cover;
 }
 
 .carousel-img-for-cart {

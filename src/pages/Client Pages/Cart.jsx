@@ -179,7 +179,6 @@ function ProductCard({ item }) {
 
                 <div
                   className="quantity"
-                  onClick={() => handleQuantityChange("-", item._id)}
                 >
                   {item.quantity}
                 </div>
@@ -188,6 +187,10 @@ function ProductCard({ item }) {
                   <button
                     className="increase-quantity"
                     onClick={() => handleQuantityChange("+", item._id)}
+                    disabled={
+                      item.prodQuantity === 0 ||
+                      quantity >= item.prodQuantity
+                    }
                   >
                     <AddIcon
                       sx={{
@@ -264,70 +267,41 @@ function ProductCard({ item }) {
             <>
               {item.couponData.validCoupon ? (
                 <>
+                  <div className="coupon-title">Coupon Applied...</div>
                   <div className="prod-subtotal">
-                    Subtotal :{" "}
-                    {Math.floor(
+                    Subtotal : {subTotal.toLocaleString("en-IN")} ₹
+                  </div>
+                  <div className="prod-discount">
+                    Discount : {item.couponData.discount}%
+                  </div>
+                  <div className="prod-coupon-total">
+                    Total :{" "}
+                    {Math.ceil(
                       (subTotal * (100 - item.couponData.discount)) / 100
-                    )}{" "}
-                    ₹ Original Price : {subTotal}
+                    ).toLocaleString("en-IN")}{" "}
+                    ₹
                   </div>
                 </>
               ) : (
                 <>
-                  <div>Coupon is no Valid Longer...</div>
+                  <div className="coupon-title">
+                    Coupon is no Valid Longer...
+                  </div>
+                  <div className="prod-subtotal">
+                    SubTotal : {subTotal.toLocaleString("en-IN")} ₹
+                  </div>
                 </>
               )}
             </>
           ) : (
             <>
-              <div className="prod-subtotal">SubTotal : {subTotal} ₹</div>
+              <div className="prod-subtotal" style={{ margin: "10px 0px" }}>
+                SubTotal : {subTotal.toLocaleString("en-IN")} ₹
+              </div>
             </>
           )}
         </div>
       </div>
-
-      <Grid item xl={10} style={{ marginLeft: "7%" }}>
-        <Card className="cart-one-product-card">
-          <div style={{ display: "flex" }}>
-            <div className="cart-card-image">
-              <ImageForCart prodImage={item.prodImage} />
-            </div>
-            <div
-              style={{
-                width: "73%",
-                borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-                padding: "15px",
-              }}
-            >
-              <div className="cart-product-name">{item.prodName}</div>
-              <div className="cart-product-price">
-                Price : {item.prodPrice} ₹
-              </div>
-            </div>
-            <div
-              style={{
-                display: "block",
-                position: "relative",
-                padding: "15px",
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    width: "fitContent",
-                    marginTop: "10%",
-                    marginLeft: "2%",
-                    fontSize: "15px",
-                    fontFamily: "sans-serif",
-                  }}
-                >
-                  {console.log("ITEM : ", item)}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
-      </Grid>
     </>
   );
 }
@@ -739,7 +713,7 @@ export default function Cart() {
         console.log("CART COUPON : ", cart[index]);
         subTotal =
           subTotal +
-          Math.floor(
+          Math.ceil(
             (cart[index].quantity *
               cart[index].prodPrice *
               (100 - cart[index].couponData.discount)) /
@@ -791,10 +765,12 @@ export default function Cart() {
               productPrice: cart[index].prodPrice,
               paymentOption,
               deliveryAddress: deliveryAddress,
+              couponData: cart[index].couponData,
             };
             checkoutData.push(newData);
           }
         }
+        console.log("CART COUPON CHECK : ", checkoutData);
         dispatch(placeCartOrder(checkoutData));
       }
     }
@@ -815,7 +791,7 @@ export default function Cart() {
                 </Grid>
               </div>
               <div className="cart-grand-total">
-                <div className="grand-total-summary-title">Summary :</div>
+                <div className="grand-total-summary-title"> Cart Summary :</div>
                 {outOfStock !== 0 ? (
                   <>
                     <div style={{ display: "flex", marginTop: "10px" }}>

@@ -40,7 +40,8 @@ export default function Login() {
         if (user.user.isDeleted === true) {
           navigate("/deleteduser");
         } else if (user.user.isBlocked === true) {
-          navigate("/blockeduser");
+          // navigate("/blockeduser");
+          toast.error("Your Account Blocked By Admin");
         } else {
           navigate(location.state?.from || "/");
         }
@@ -51,7 +52,7 @@ export default function Login() {
 
     return () => {
       dispatch(reset());
-    }
+    };
   }, [user, isSuccess, isError, message, navigate, dispatch]);
 
   if (isLoading) {
@@ -69,8 +70,8 @@ export default function Login() {
     // window.alert(`Email : ${email}, Password : ${password}`);
     if (email === "" || password === "") {
       window.alert("Fill all the fields...");
-    } else if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-      window.alert("Enter Valid Email Id")
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      window.alert("Enter Valid Email Id");
     } else {
       const userData = {
         email,
