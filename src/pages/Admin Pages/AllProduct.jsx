@@ -28,6 +28,11 @@ import { Link } from "react-router-dom";
 import { margin } from "@mui/system";
 import { ImageForList } from "../../components/Images/Images";
 import Spinner from "../../components/Spinner";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import "./AllProduct.css";
 import {
   fetchProducts,
@@ -104,155 +109,214 @@ const columns = [
   // },
 ];
 
-function Row(props) {
-  const { row } = props;
-
+function Row({ row }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
   const handleEditButton = () => {
-    // console.log("Edit Button Clicked", row);
     const state = row;
-    // console.log("State ", state);
     navigate("/admin/editproduct/", { state });
-    // dispatch(updateProduct(row._id));
   };
+
+  const handleDeleteConfirmation = (response) => {
+    if (response === "yes") {
+      setDeleteConfirmation(false);
+      console.log("Response : ", row._id);
+      dispatch(removeProduct(row._id));
+    } else if (response === "cancel") {
+      setDeleteConfirmation(false);
+      console.log("Response : ", response);
+    }
+  };
+
   const handleRemoveButton = () => {
-    // console.log("Remove Button Clicked", row._id);
-    // dispatch(removeProduct(row._id));
+    setDeleteConfirmation(true);
+  };
+
+  const handleCloseConfirmation = () => {
+    setDeleteConfirmation(false);
   };
 
   return (
-    <TableRow
-      hover
-      role="checkbox"
-      tabIndex={-1}
-      key={row}
-      sx={{
-        margin: "2px",
-        padding: "10px",
-        height: "10px",
-      }}
-    >
-      {columns.map((column) => {
-        const value = row[column.id];
+    <>
+      <TableRow
+        hover
+        role="checkbox"
+        tabIndex={-1}
+        key={row}
+        sx={{
+          margin: "2px",
+          padding: "10px",
+          height: "10px",
+        }}
+      >
+        {columns.map((column) => {
+          const value = row[column.id];
 
-        const quantity = row.prodQuantity;
-        let status = "";
-        const images = row.prodImage;
-        if (quantity < 5 && quantity > 0) {
-          status = (
-            <div
-              style={{
-                fontSize: "15px",
-                backgroundColor: "orange",
-                color: "white",
-                height: "fit-content",
-              }}
-            >
-              Low Stock
-            </div>
-          );
-        } else if (quantity === 0) {
-          status = (
-            <div
-              style={{
-                fontSize: "15px",
-                backgroundColor: "#CD0404",
-                color: "white",
-              }}
-            >
-              Out Of Stock
-            </div>
-          );
-        } else {
-          status = (
-            <div
-              style={{
-                fontSize: "15px",
-                backgroundColor: "green",
-                color: "white",
-              }}
-            >
-              Active
-            </div>
-          );
-        }
-
-        return (
-          <>
-            <TableCell key={column.id} align={column.align}>
+          const quantity = row.prodQuantity;
+          let status = "";
+          const images = row.prodImage;
+          if (quantity < 5 && quantity > 0) {
+            status = (
               <div
                 style={{
-                  whiteSpace: "wrap",
-                  textOverflow: "ellipsis",
-                  overflow: "clip",
-                  height: "100px",
+                  fontSize: "15px",
+                  backgroundColor: "orange",
+                  color: "white",
+                  height: "fit-content",
                 }}
               >
-                {column.id === "prodImage" ? (
-                  <div className="detailed-page-image">
-                    <ImageForList prodImage={images} />
-                  </div>
-                ) : column.id === "prodStatus" ? (
-                  <div>{status}</div>
-                ) : column.id === "prodName" ? (
-                  <>
-                    <div className="all-products-prod-name">{value}</div>
-                  </>
-                ) : column.id === "prodDesc" ? (
-                  <>
-                    <div className="all-products-prod-desc">{value}</div>
-                  </>
-                ) : column.id === "prodPrice" ? (
-                  <>
-                    <div style={{ width: "90px" }}>
-                      {value.toLocaleString("en-IN") + " ₹"}
-                    </div>
-                  </>
-                ) : (
-                  value
-                )}
+                Low Stock
               </div>
-            </TableCell>
-          </>
-        );
-      })}
-      <TableCell>
-        <div>
-          {/* <Link to="/admin/updateproduct" style={{
+            );
+          } else if (quantity === 0) {
+            status = (
+              <div
+                style={{
+                  fontSize: "15px",
+                  backgroundColor: "#CD0404",
+                  color: "white",
+                }}
+              >
+                Out Of Stock
+              </div>
+            );
+          } else {
+            status = (
+              <div
+                style={{
+                  fontSize: "15px",
+                  backgroundColor: "green",
+                  color: "white",
+                }}
+              >
+                Active
+              </div>
+            );
+          }
+
+          return (
+            <>
+              <TableCell key={column.id} align={column.align}>
+                <div
+                  style={{
+                    whiteSpace: "wrap",
+                    textOverflow: "ellipsis",
+                    overflow: "clip",
+                    height: "100px",
+                  }}
+                >
+                  {column.id === "prodImage" ? (
+                    <div className="detailed-page-image">
+                      <ImageForList prodImage={images} />
+                    </div>
+                  ) : column.id === "prodStatus" ? (
+                    <div>{status}</div>
+                  ) : column.id === "prodName" ? (
+                    <>
+                      <div className="all-products-prod-name">{value}</div>
+                    </>
+                  ) : column.id === "prodDesc" ? (
+                    <>
+                      <div className="all-products-prod-desc">{value}</div>
+                    </>
+                  ) : column.id === "prodPrice" ? (
+                    <>
+                      <div style={{ width: "90px" }}>
+                        {value.toLocaleString("en-IN") + " ₹"}
+                      </div>
+                    </>
+                  ) : (
+                    value
+                  )}
+                </div>
+              </TableCell>
+            </>
+          );
+        })}
+        <TableCell>
+          <div>
+            {/* <Link to="/admin/updateproduct" style={{
             textDecoration: "none",
           }}> */}
+            <Button
+              variant="outlined"
+              startIcon={<EditIcon />}
+              style={{
+                width: "100px",
+                margin: "3px",
+                textDecoration: "none",
+              }}
+              onClick={handleEditButton}
+            >
+              Edit
+            </Button>
+            {/* </Link> */}
+          </div>
+          <div>
+            <Button
+              variant="outlined"
+              startIcon={<DeleteIcon />}
+              style={{
+                width: "100px",
+                margin: "3px",
+              }}
+              color="error"
+              onClick={handleRemoveButton}
+            >
+              Delete
+            </Button>
+          </div>
+        </TableCell>
+      </TableRow>
+
+      <Dialog
+        open={deleteConfirmation}
+        onClose={handleCloseConfirmation}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are You Sure want to Delete this Product ?"}
+        </DialogTitle>
+        <DialogActions>
           <Button
-            variant="outlined"
-            startIcon={<EditIcon />}
-            style={{
-              width: "100px",
-              margin: "3px",
-              textDecoration: "none",
+            sx={{
+              height: "35px",
+              color: "black",
+              fontSize: "15px",
+              "&:hover": {
+                backgroundColor: "#2a3035",
+                border: "0px solid #2a3035",
+                color: "white",
+              },
             }}
-            onClick={handleEditButton}
+            onClick={() => handleDeleteConfirmation("yes")}
+            autoFocus
           >
-            Edit
+            Yes
           </Button>
-          {/* </Link> */}
-        </div>
-        <div>
           <Button
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-            style={{
-              width: "100px",
-              margin: "3px",
+            sx={{
+              height: "35px",
+              color: "black",
+              fontSize: "15px",
+              boxSizing: "border-box",
+              "&:hover": {
+                backgroundColor: "#2a3035",
+                border: "0px solid #2a3035",
+                color: "white",
+              },
             }}
-            color="error"
-            onClick={handleRemoveButton}
+            onClick={() => handleDeleteConfirmation("cancel")}
           >
-            Delete
+            Cancel
           </Button>
-        </div>
-      </TableCell>
-    </TableRow>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 

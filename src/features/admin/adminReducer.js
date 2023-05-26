@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:5555";
-const API_URL_TO_REMOVE_PRODUCT = "http://localhost:5555/admin/product";
+const API_URL_TO_REMOVE_PRODUCT = "http://localhost:5555/admin/product/";
 
 const acceptOrder = async (orderId, token) => {
   const config = {

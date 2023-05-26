@@ -9,6 +9,7 @@ const initialState = {
   isAccepted: false,
   isRejected: false,
   isError: false,
+  isUpdated: false,
 };
 
 export const acceptOrder = createAsyncThunk(
@@ -251,6 +252,7 @@ const adminSlice = createSlice({
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.isUpdated = true;
         state.isLoading = false;
+        state.isError = false;
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.isError = true;

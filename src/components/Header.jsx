@@ -99,7 +99,7 @@ function Header({ setActiveSearchList }) {
   }, [query]);
 
   useEffect(() => {
-    if (searchClick !== "") {
+    if (Object.keys(searchClick).length !== 0) {
       navigate(`/product/${searchClick._id}`);
       setOpenSearchList(false);
     }
@@ -156,7 +156,7 @@ function Header({ setActiveSearchList }) {
 
     setTimeout(() => {
       if (enteredQuery !== "" && e.keyCode !== 32) {
-        // dispatch(searchQuery(enteredQuery.trim()));
+        dispatch(searchQuery(enteredQuery.trim()));
       }
     }, 0);
 
@@ -230,7 +230,6 @@ function Header({ setActiveSearchList }) {
             </div>
             {(!user || user.role === "buyer") &&
             (!user?.user.isBlocked || !user?.user.isDeleted) ? (
-              // <div className="header-search-div">
               <div
                 className="header-search-div"
                 onBlur={() => setOpenSearchList(false)}
@@ -246,9 +245,8 @@ function Header({ setActiveSearchList }) {
                   <button onClick={handleSearchBar}>
                     <SearchIcon />
                   </button>
-                  {/* </div> */}
                 </div>
-                {openSearchList ? (
+                {openSearchList && queryResponse?.response?.length > 0? (
                   <>
                     <div className="query-search-list">
                       {queryResponse?.response?.map((response) => {

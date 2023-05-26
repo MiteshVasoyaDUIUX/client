@@ -1,23 +1,31 @@
 .details-page {
-      height: 100%;
+      width: 100%;
+      height: fit-content;
+      margin-top: 10px;
       padding: 30px;
       display: flex;
+      box-sizing: border-box;
 }
 
-.page-details {
-      width: 850px;
-      margin-right: 80px;
+.details-page .prod-image {
+      height: fit-content;
+      width: 30%;
+      z-index: 3;
 }
 
-.detailed-page-title {
-      margin-left: 90px;
-      margin-right: 40px;
-      margin-top: 40px;
+.details-page .page-details {
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+}
+
+.page-details .prod-title {
+      margin-left: 50px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 34px;
+      font-size: 30px;
       font-weight: 500;
       text-transform: capitalize;
-      width: 550px;
+      width: 80%;
       height: fit-content;
       max-height: 140px;
       white-space: normal;
@@ -30,38 +38,14 @@
       text-justify: inter-word;
 }
 
-.detailed-page-title .title-tooltiptext {
-      visibility: hidden;
-      width: fit-content;
-      background-color: #f0f3ed;
-      color: #000000;
-      text-align: left;
-      border: 1px solid black;
-      top: 10%;
-      left: 35%;
-      font-size: 13px;
-      padding: 5px 5px;
-      border-radius: 2px;
-      position: absolute;
-      z-index: 1;
-}
-
-.detailed-page-title:hover .title-tooltiptext {
-      visibility: visible;
-}
-
-.detailed-page-wishlist-button {
-      margin-left: 30px;
-      margin-top: 45px;
+.page-details .wishlist-button {
+      margin-right: 30px;
       width: fit-content;
       height: fit-content;
 }
 
 
-.detailed-page-rating {
-      margin-left: 90px;
-      margin-right: auto;
-      margin-top: 15px;
+.page-details .prod-rating {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 20px;
       font-weight: 500;
@@ -70,11 +54,15 @@
       width: fit-content;
       height: fit-content;
       display: flex;
+      margin: 20px 0 0 60px;
+}
+
+.page-details .prod-Price-MRP-discount {
+      margin-top: 20px;
 }
 
 .detailed-page-price {
-      margin-left: 90px;
-      margin-top: 25px;
+      margin: 0 0 0 60px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 20px;
       font-weight: 500;
@@ -85,10 +73,9 @@
 }
 
 .detailed-page-mrp {
-      margin-left: 20px;
-      margin-top: 29px;
+      margin: 3px 0 0 20px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 500;
       color: rgb(143, 143, 143);
       text-transform: capitalize;
@@ -99,8 +86,7 @@
 }
 
 .detailed-page-discount {
-      margin-left: 20px;
-      margin-top: 27px;
+      margin: 3px 0 0 20px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 17px;
       font-weight: 500;
@@ -111,78 +97,64 @@
       font-style: oblique;
 }
 
-.detailed-page-description {
-      margin-left: 90px;
-      margin-right: auto;
-      margin-top: 30px;
+.page-details .detailed-page-description {
+      margin: 15px auto 0 60px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 18 px;
       font-weight: 500;
       color: rgb(100, 100, 100);
       text-transform: capitalize;
       /* border: 1px solid black; */
-      width: 650px;
+      width: 85%;
       height: fit-content;
       text-align: justify;
       text-justify: inter-word;
 }
 
-.detailed-page-offers {
-      margin-left: 90px;
-      margin-right: auto;
-      margin-top: -15px;
+.page-details .offers {
+      margin: 0 auto 0 60px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 14px;
       font-weight: 500;
       text-transform: capitalize;
       color: rgb(100, 100, 100);
-      /* border: 1px solid black; */
-      width: 650px;
-      height: 25%;
+      width: 85%;
+      height: fit-content;
       text-align: justify;
       text-justify: inter-word;
 }
 
-.offers-card {
+.page-details .offers .offers-card-grid {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+}
+
+.page-details .offers .offers-card {
       border: 1px solid rgba(126, 126, 126, 0.527);
       border-radius: 4px;
       width: 27%;
       height: 150px;
-      margin-left: auto;
-      margin-right: auto;
       box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.226);
       padding: 8px 14px;
 }
 
-.order-details-card {
-      width: 400px;
+.details-page .card {
+      width: 25%;
+}
+
+.details-page .order-details-card {
       height: fit-content;
-      padding: 50px 50px 15px 50px;
-      border: 1px solid rgba(0, 0, 0, 0.150);
+      padding: 40px 50px 40px 50px;
+      border : 1px solid rgba(139, 139, 139, 0.5);
       border-radius: 10px;
       box-shadow: 0px 0px 40px -10px rgba(0, 0, 0, 0.438);
       margin-top: 3%;
       margin-bottom: auto;
 }
 
-.detailed-page-quantity {
+.order-details-card .product-stock {
       margin-left: 20px;
-      margin-right: auto;
-      margin-top: 30px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 25px;
-      font-weight: 500;
-      color: rgb(0, 0, 0);
-      text-transform: capitalize;
-      display: flex;
-      /* width: fit-content; */
-      /* height: fit-content; */
-}
-
-.product-stock {
-      margin-left: 20px;
-
-      /* border: 1px solid black; */
       width: fit-content;
       height: fit-content;
       font-size: 25px;
@@ -190,54 +162,66 @@
       font-weight: 500;
 }
 
-#quantity-text-field {
-      height: 31px;
-      width: 40px;
-      border-top: 1px solid rgb(0, 0, 0);
-      border-bottom: 1px solid rgb(0, 0, 0);
-      border-left: 0px;
-      border-right: 0px;
-      text-align: center;
-      font-size: x-large;
-}
-
-#quantity-text-field:focus {
-      outline: none;
-}
-
-#quantity-increase {
-      height: 35px;
-      width: 40px;
-      border: 1px solid rgb(0, 0, 0);
-      background-color: black;
-      color: aliceblue;
-      border-bottom-right-radius: 9px;
-      font-size: x-large;
-      border-top-right-radius: 9px;
-}
-
-#quantity-decrease {
-      height: 35px;
-      width: 40px;
-      border: 1px solid rgb(0, 0, 0);
-      background-color: black;
-      color: aliceblue;
-      border-bottom-left-radius: 9px;
-      font-size: x-large;
-      border-top-left-radius: 9px;
-}
-
-.total-amount {
-      margin-left: 20px;
-      margin-right: auto;
-      margin-top: 30px;
+.order-details-card .prod-quantity {
+      margin: 30px 20px auto 20px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 25px;
       font-weight: 500;
       color: rgb(0, 0, 0);
       text-transform: capitalize;
       display: flex;
-      /* width: fit-content; */
+      text-align: center;
+}
+
+
+
+#quantity-text-field {
+      width: 40px;
+      height: 30px;
+      border: 1px solid rgb(0, 0, 0);
+      background-color: rgb(253, 253, 253);
+      text-align: center;
+      font-size: 19px;
+      color: rgb(0, 0, 0);
+      opacity: 0.9;
+      box-sizing: border-box;
+}
+
+#quantity-increase {
+      height: 30px;
+      width: fit-content;
+      border: 0px solid black;
+      background-color: rgb(0, 0, 0);
+      border-bottom-right-radius: 3px;
+      border-top-right-radius: 3px;
+      font-size: 18px;
+      color: white;
+      opacity: 0.9;
+      cursor: pointer;
+}
+
+#quantity-decrease {
+      height: 30px;
+      width: fit-content;
+      border: 0px solid black;
+      background-color: rgb(0, 0, 0);
+      border-bottom-left-radius: 3px;
+      border-top-left-radius: 3px;
+      font-size: 18px;
+      color: white;
+      opacity: 0.9;
+      cursor: pointer;
+}
+
+.total-amount {
+      margin: 15px auto 0 auto;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 25px;
+      font-weight: 500;
+      color: rgb(0, 0, 0);
+      text-transform: capitalize;
+      display: flex;
+      width: fit-content;
       /* height: fit-content; */
 }
 
@@ -253,12 +237,6 @@
       cursor: pointer;
 }
 
-.prod-detailed-page-btn {
-      width: 91%;
-      margin: 15px auto 30px auto;
-
-}
-
 .coupon-applied-div {
       margin-top: 15px;
       margin-left: 0;
@@ -270,23 +248,13 @@
       text-justify: inter-word;
 }
 
-.coupon-applied-div div {
-      /* border: 1px solid black; */
-}
-
 .coupon-code-div {
-      width: 300px;
       height: fit-content;
-      margin: 20px auto 25px auto;
+      margin: 10px auto 15px auto;
       display: flex;
-      /* border : 1px solid black */
 }
 
-.coupon-code-div-buttons {
-      display: flex;
-      margin-top: 7px;
-      justify-content: space-evenly;
-}
+
 
 .coupon-code-div input[type="button"] {
       width: 70px;
@@ -308,10 +276,17 @@
       transform: scale(0.98);
 }
 
-#buy-now-button {
-      width: 300px;
+.order-details-card .btns {
+      margin: 25px auto 0 auto;
+      width: 90%;
+      height: 110px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+}
+
+.btns #buy-now-button {
       height: 50px;
-      margin-top: 10px;
       border: 0px;
       background-color: #2a3035;
       color: #f4ede2;
@@ -323,12 +298,11 @@
       transition: ease-in-out 0.10s;
 }
 
-#buy-now-button:active {
+.btns #buy-now-button:active {
       transform: scale(0.98);
 }
 
-#add-to-cart-button {
-      width: 300px;
+.btns #add-to-cart-button {
       height: 50px;
       border: 0px;
       background-color: #2a3035;
@@ -341,7 +315,7 @@
       transition: ease-in-out 0.10s;
 }
 
-#add-to-cart-button:active {
+.btns #add-to-cart-button:active {
       transform: scale(0.98);
 }
 

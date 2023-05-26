@@ -22,6 +22,26 @@ function Item({ item, setImage, setFullImgView }) {
   );
 }
 
+function OneImage({ prodImage }) {
+  const item = prodImage[0];
+  return (
+    <Carousel
+      className="carousel-one-image-class"
+      indicators={false}
+      NextIcon={false}
+      PrevIcon={false}
+      navButtonsAlwaysInvisible={true}
+    >
+      <img
+        src={item}
+        alt="Images"
+        className="carousel-one-image"
+        style={{ boxShadow: "none" }}
+      />
+    </Carousel>
+  );
+}
+
 function ImageSlider({ prodImage }) {
   let newImageData = [];
   const [image, setImage] = useState("");
@@ -176,26 +196,6 @@ function ImageSlider({ prodImage }) {
         <></>
       )}
     </>
-  );
-}
-
-function OneImage({ prodImage }) {
-  const item = prodImage[0];
-  return (
-    <Carousel
-      className="carousel-one-image-class"
-      indicators={false}
-      NextIcon={false}
-      PrevIcon={false}
-      navButtonsAlwaysInvisible={true}
-    >
-      <img
-        src={item}
-        alt="Images"
-        className="carousel-one-image"
-        style={{ boxShadow: "none" }}
-      />
-    </Carousel>
   );
 }
 

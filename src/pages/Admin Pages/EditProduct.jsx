@@ -54,9 +54,11 @@ function EditProduct() {
 
   const [image, setImage] = useState(formData.prodImage);
 
-  const { products, isError, isLoading, isUpdated, message } = useSelector(
+  const { products, isError, isLoading, message } = useSelector(
     (state) => state.product
   );
+
+  const { isUpdated } = useSelector((state) => state.admin);
 
   useEffect(() => {
     if (isError) {
@@ -75,10 +77,13 @@ function EditProduct() {
         theme: "light",
       });
 
+      console.log("___REDIRECTING___");
       navigate("/admin/allproduct");
-    }
 
-    dispatch(reset());
+      return () => {
+        dispatch(reset());
+      };
+    }
   }, [isUpdated, isError, message, navigate, dispatch]);
 
   if (isLoading) {
@@ -283,7 +288,7 @@ function EditProduct() {
             {image.length > 0 &&
               image.map((item, index) => {
                 return (
-                  <div className="image-div" key={item}>
+                  <div className={`image-div img${index+1}`} key={item}>
                     <img src={item} className="image" alt="" />
                     <button
                       type="button"

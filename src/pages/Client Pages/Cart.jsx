@@ -28,6 +28,7 @@ import {
   placeCartOrder,
   removeFromCart,
   reset,
+  resetIs,
   updateCartQuantity,
 } from "../../features/user/userSlice";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -177,19 +178,14 @@ function ProductCard({ item }) {
                   </button>
                 </div>
 
-                <div
-                  className="quantity"
-                >
-                  {item.quantity}
-                </div>
+                <div className="quantity">{item.quantity}</div>
 
                 <div>
                   <button
                     className="increase-quantity"
                     onClick={() => handleQuantityChange("+", item._id)}
                     disabled={
-                      item.prodQuantity === 0 ||
-                      quantity >= item.prodQuantity
+                      item.prodQuantity === 0 || quantity >= item.prodQuantity
                     }
                   >
                     <AddIcon
@@ -657,7 +653,9 @@ export default function Cart() {
   const [mainClass, setMainClass] = useState("cart-payment-details");
 
   const { user } = useSelector((state) => state.auth);
-  const { cart, coupon, userSliceMessage } = useSelector((state) => state.user);
+  const { cart, coupon, isAddedCart, userSliceMessage } = useSelector(
+    (state) => state.user
+  );
   const { isPlaced, isError } = useSelector((state) => state.user);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
@@ -701,6 +699,12 @@ export default function Cart() {
     };
   }, [dispatch, isPlaced, isError]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(resetIs());
+    };
+  }, [isAddedCart]);
+
   let subTotal = 0;
   let totalAmount = 0;
 
@@ -710,7 +714,6 @@ export default function Cart() {
         cart[index].couponData?.isApplied &&
         cart[index].couponData?.validCoupon
       ) {
-        console.log("CART COUPON : ", cart[index]);
         subTotal =
           subTotal +
           Math.ceil(
@@ -770,7 +773,6 @@ export default function Cart() {
             checkoutData.push(newData);
           }
         }
-        console.log("CART COUPON CHECK : ", checkoutData);
         dispatch(placeCartOrder(checkoutData));
       }
     }
