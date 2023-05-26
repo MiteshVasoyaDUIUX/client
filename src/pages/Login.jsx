@@ -24,6 +24,8 @@ export default function Login() {
     password: "",
   });
 
+  const [blockDelete, setBlockDelete] = useState(true);
+
   const { email, password } = formData;
 
   const { user, isError, isLoading, isSuccess, message } = useSelector(
@@ -34,14 +36,18 @@ export default function Login() {
     if (message) {
       toast.error(message);
     }
-    if (isSuccess || user) {
-      // console.log("User : ", user.role);
+
+    if (user) {
+      console.log("---TRYING TO LOGIN____", message);
       if (user.role === "buyer") {
         if (user.user.isDeleted === true) {
-          navigate("/deleteduser");
+          console.log("User is Deleted___-");
+          toast.error("Your Account Has Been Deleted By User...")
         } else if (user.user.isBlocked === true) {
-          // navigate("/blockeduser");
-          toast.error("Your Account Blocked By Admin");
+          if (blockDelete === true) {
+            toast.error("Your Account has been Blocked By Admin");
+            setBlockDelete(false);
+          }
         } else {
           navigate(location.state?.from || "/");
         }
@@ -53,7 +59,7 @@ export default function Login() {
     return () => {
       dispatch(reset());
     };
-  }, [user, isSuccess, isError, message, navigate, dispatch]);
+  }, [user, isError, message, navigate, dispatch]);
 
   if (isLoading) {
     return <Spinner />;

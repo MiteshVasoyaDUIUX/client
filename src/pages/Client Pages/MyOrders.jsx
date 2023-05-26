@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+import {
+  IconButton,
+  ImageList,
+  ImageListItem,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Button,
+} from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch, useSelector } from "react-redux";
 import "./MyOrders.css";
 import { reset } from "../../features/admin/adminSlice";
@@ -76,29 +87,46 @@ const columns = [
 ];
 
 function Row({ row }) {
+  const dispatch = useDispatch();
+
   let status = "";
 
   const [openRating, setOpenRating] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
   const [readOnly, setReadOnly] = useState(false);
-  const dispatch = useDispatch();
+  const [confirmation, setConfirmation] = useState(false);
+  const [ratingData, setRatingData] = useState({});
+
+  const handleConfirmation = (response) => {
+    if (response === "yes") {
+      setConfirmation(false);
+      setReadOnly(true);
+      dispatch(giveRating(ratingData));
+      toast.success("Thank You for Feedback...");
+    } else if (response === "cancel") {
+      setConfirmation(false);
+      setReadOnly(false);
+      console.log("Response : ", response);
+    }
+  };
+
+  const handleCloseConfirmation = () => {
+    setConfirmation(false);
+  };
 
   const handleRatingChanges = (event, newValue) => {
     setRatingValue(newValue);
 
-    const ratingData = {
+    setRatingData({
       orderId: row._id,
       userId: row.userId,
       productId: row.productId,
       ratingValue: newValue,
-    };
+    });
 
-    setReadOnly(true);
-
-    dispatch(giveRating(ratingData));
-
-    toast.success("Thank You for Feedback...");
+    setConfirmation(true);
   };
+
   return (
     <>
       <TableRow
@@ -182,6 +210,51 @@ function Row({ row }) {
           );
         })}
       </TableRow>
+
+      <Dialog
+        open={confirmation}
+        onClose={handleCloseConfirmation}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are You Sure want to Give Rating ?"} <br />
+        </DialogTitle>
+        <DialogActions>
+          <Button
+            sx={{
+              height: "35px",
+              color: "black",
+              fontSize: "15px",
+              "&:hover": {
+                backgroundColor: "#2a3035",
+                border: "0px solid #2a3035",
+                color: "white",
+              },
+            }}
+            onClick={() => handleConfirmation("yes")}
+            autoFocus
+          >
+            Yes
+          </Button>
+          <Button
+            sx={{
+              height: "35px",
+              color: "black",
+              fontSize: "15px",
+              boxSizing: "border-box",
+              "&:hover": {
+                backgroundColor: "#2a3035",
+                border: "0px solid #2a3035",
+                color: "white",
+              },
+            }}
+            onClick={() => handleConfirmation("cancel")}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

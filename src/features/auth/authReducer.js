@@ -19,8 +19,11 @@ const login = async (userData) => {
   };
 
   if (response.data) {
-    localStorage.setItem("user", JSON.stringify(response.data));
+    if (!response.data.user.isDeleted && !response.data.user.isBlocked) {
+      localStorage.setItem("user", JSON.stringify(response.data));
+    } 
   }
+
   return userCartResponse;
 };
 

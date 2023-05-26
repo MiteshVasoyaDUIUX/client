@@ -9,6 +9,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   isVerified: false,
+  isVerifying: false,
   isDataUpdated: false,
   message: "",
 };
@@ -138,34 +139,59 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
+        state.isError = false;
+        state.isSuccess = false;
         state.isLoading = true;
+        state.isVerified = false;
+        state.isDataUpdated = false;
+        state.isVerifying = false;
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        state.isLoading = false;
+        state.isVerified = false;
+        state.isDataUpdated = false;
+        state.isVerifying = false;
+
         state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
-        state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
+        state.isLoading = false;
+        state.isVerified = false;
+        state.isVerifying = false;
+
+        state.isDataUpdated = false;
         state.user = null;
         state.message = action.payload;
       })
       .addCase(login.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.isVerified = false;
+        state.isDataUpdated = false;
+        state.isVerifying = false;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        state.isLoading = false;
+        state.isVerified = false;
+        state.isDataUpdated = false;
+        state.isVerifying = false;
+
         state.user = action.payload.user;
       })
       .addCase(login.rejected, (state, action) => {
-        state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
+        state.isLoading = false;
+        state.isVerified = false;
+        state.isVerifying = false;
+        state.isDataUpdated = false;
         state.user = null;
         state.message = action.payload;
       })
@@ -173,16 +199,29 @@ export const authSlice = createSlice({
         state.user = null;
       })
       .addCase(verifyUser.pending, (state) => {
+        state.isError = false;
+        state.isSuccess = false;
+        state.isLoading = false;
         state.isVerifying = true;
+        state.isVerified = false;
+        state.isDataUpdated = false;
       })
       .addCase(verifyUser.fulfilled, (state, action) => {
-        state.isVerifying = false;
+        state.isError = false;
+        state.isSuccess = false;
+        state.isLoading = false;
         state.isVerified = true;
+        state.isVerifying = false;
+        state.isDataUpdated = false;
         state.user.user = action.payload.user;
       })
       .addCase(verifyUser.rejected, (state, action) => {
-        state.isVerifying = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.isLoading = false;
         state.isVerified = false;
+        state.isVerifying = false;
+        state.isDataUpdated = false;
         state.message = action.payload;
       })
       .addCase(resetPassword.pending, (state) => {})
@@ -193,20 +232,17 @@ export const authSlice = createSlice({
       })
       .addCase(addNewAddress.pending, (state) => {})
       .addCase(addNewAddress.fulfilled, (state, action) => {
-        // state.userSliceMessage = action.payload;
         state.user.user.address.push(action.payload);
       })
       .addCase(addNewAddress.rejected, (state, action) => {
-        // console.log("Message : ", action.payload);
         state.userSliceMessage = action.payload;
       })
       .addCase(removeAddress.pending, (state) => {})
       .addCase(removeAddress.fulfilled, (state, action) => {
-        state.user.user.address.splice(action.payload, 1)
+        state.user.user.address.splice(action.payload, 1);
       })
       .addCase(removeAddress.rejected, (state, action) => {
         state.isError = true;
-        // console.log("Message : ", action.payload);
         state.userSliceMessage = action.payload;
       });
   },

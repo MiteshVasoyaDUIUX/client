@@ -39,7 +39,9 @@ function HomePage() {
         navigate(`/admin/dashboard`);
       } else {
         if (user?.user.isDeleted) {
-          navigate("/deleteduser");
+          console.log("USER IS DELETED...");
+          
+          // navigate("/deleteduser");
         } else if (user?.user.isBlocked) {
           navigate("/blockeduser");
         } else if (location.state?.from === "/register") {

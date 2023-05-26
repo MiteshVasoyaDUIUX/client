@@ -3,6 +3,8 @@ import "./DeletedUser.css";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 
 function DeletedUser() {
+
+  
   return (
     <>
       <div className="deleted-user-box">

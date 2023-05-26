@@ -327,10 +327,10 @@ function AddProduct() {
             multiple
           />
           <div className="row image-container">
-            {image.length > 0 &&
+          {image.length > 0 &&
               image.map((item, index) => {
                 return (
-                  <div className="image-div" key={item}>
+                  <div className={`image-div img${index+1}`} key={item}>
                     <img src={item} className="image" alt="" />
                     <button
                       type="button"

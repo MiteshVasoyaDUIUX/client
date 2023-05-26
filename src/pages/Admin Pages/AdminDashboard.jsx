@@ -8,6 +8,7 @@ import {
 import { ImCart } from "react-icons/im";
 import { MdPointOfSale, MdInventory } from "react-icons/md";
 import { fetchProducts } from "../../features/product/productSlice";
+import { fetchTopSellingComponent } from "../../features/products/productsSlice";
 import { Chart } from "react-google-charts";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import { Card, Rating, Typography } from "@mui/material";
@@ -64,86 +65,20 @@ const optionsForLineChart = {
   lineWidth: 3,
 };
 
-function TopSellingProducts({ products }) {
+function ProductCard({ product }) {
+  console.log("Prod : ", product.ordersCount);
   return (
     <>
-      <Card
-        style={{
-          width: "520px",
-          height: "120px",
-          marginLeft: "20px",
-          marginRight: "0px",
-          marginBottom: "19px",
-          marginTop: "15px",
-        }}
-      >
-        <div style={{ display: "flex" }}>
-          <div
-            style={{
-              width: "auto",
-              height: "auto",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "20px",
-            }}
-          >
-            <img
-              src={products[4].prodImage[0]}
-              className="card-image-content"
-              alt=""
-              style={{ width: "90px", height: "90px" }}
-            />
-          </div>
-          <div
-            style={{
-              width: "73%",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "15px",
-            }}
-          >
-            <Typography variant="h6" component="div">
-              {products[4].prodName}
-            </Typography>
-          </div>
+      <div className="prod-card">
+        <div className="prod-img">
+          <img src={product.prodImage} alt="" />
         </div>
-      </Card>
-      <Card
-        style={{
-          width: "520px",
-          height: "120px",
-          marginLeft: "20px",
-          marginRight: "0px",
-          marginBottom: "24px",
-        }}
-      >
-        <div style={{ display: "flex" }}>
-          <div
-            style={{
-              width: "auto",
-              height: "auto",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "20px",
-            }}
-          >
-            <img
-              src={products[2].prodImage[0]}
-              className="card-image-content"
-              alt=""
-              style={{ width: "90px", height: "90px" }}
-            />
-          </div>
-          <div
-            style={{
-              width: "73%",
-              borderRight: "1px solid rgb(100, 100, 100, 0.2)",
-              padding: "15px",
-            }}
-          >
-            <Typography variant="h6" component="div">
-              {products[2].prodName}
-            </Typography>
-          </div>
+        <div className="prod-details">
+          <div className="prod-title">{product.prodName}</div>
+          <div className="prod-price">Price : {product.prodPrice}</div>
+          <div className="prod-orders">Sold Quantity : {product.ordersCount}</div>
         </div>
-      </Card>
+      </div>
     </>
   );
 }
@@ -156,6 +91,7 @@ function AdminDashboard() {
   const { orderMonthwise } = useSelector((state) => state.users);
   const { allOrders } = useSelector((state) => state.admin);
   const { products } = useSelector((state) => state.product);
+  const { topSelling } = useSelector((state) => state.products);
 
   const date = new Date();
   let todaysDate = date.toISOString();
@@ -167,6 +103,7 @@ function AdminDashboard() {
       dispatch(fetchProducts());
       dispatch(fetchMonthlyOrders());
       dispatch(fetchAllOrders());
+      dispatch(fetchTopSellingComponent());
     }
   }, [dispatch]);
 
@@ -329,54 +266,14 @@ function AdminDashboard() {
               marginTop: "0",
             }}
           >
-            {/* <div className="customer-review-div">
-              <div className="customer-review-div-desc">Customer Review</div>
-              <div className="customer-review-div-details">
-                <Rating
-                  name="read-only"
-                  value={avgRating}
-                  precision={0.1}
-                  readOnly
-                  className="customer-review-rating-stars"
-                  size="large"
-                  color="white"
-                />
-                <div style={{ display: "flex" }}>
-                  <Typography
-                    component="legend"
-                    sx={{
-                      marginLeft: "auto",
-                      marginRight: "2px",
-                      width: "fit-content",
-                      fontSize: "20px",
-                    }}
-                  >
-                    {avgRating}
-                  </Typography>
-                  <Typography
-                    component="legend"
-                    sx={{
-                      marginLeft: "2px",
-                      marginRight: "auto",
-                      width: "fit-content",
-                      fontSize: "20px",
-                    }}
-                  >
-                    out of 5
-                  </Typography>
-                </div>
-              </div>
-            </div> */}
             <div className="top-selling-products">
               <div className="top-selling-prod-desc">Top Selling Products</div>
-              <div className="top-selling-prod-list">
-                <ErrorBoundary>
-                  {products.length > 0 ? (
-                    <TopSellingProducts products={products} />
-                  ) : (
-                    <></>
-                  )}
-                </ErrorBoundary>
+              <div className="top-selling-prod-grid">
+                {topSelling.map((product, index) => {
+                  if (index <= 2) {
+                    return <ProductCard product={product} />;
+                  }
+                })}
               </div>
             </div>
           </div>

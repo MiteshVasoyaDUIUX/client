@@ -28,6 +28,7 @@ function Slider(props) {
           animation="slide"
           duration={700}
           stopAutoPlayOnHover
+          autoPlay = {false}
           navButtonsAlwaysVisible
         >
           <Link
