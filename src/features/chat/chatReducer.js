@@ -9,7 +9,7 @@ const fetchChat = async (token) => {
     },
   };
 
-  console.log("Client Chat Reducer : ");
+  //console.log("Client Chat Reducer : ");
   const response = await axios.get(API_URL + "/chat/fetch", config);
 
   return response.data;
@@ -22,7 +22,7 @@ const fetchChatAdmin = async (chatFetchdata, token) => {
     },
   };
 
-  // console.log("Reducers : ", chatFetchdata);
+  // //console.log("Reducers : ", chatFetchdata);
   const response = await axios.get(
     API_URL +
       "/chat/admin/fetch/" +
@@ -42,7 +42,7 @@ const fetchChatClient = async (chatFetchdata, token) => {
     },
   };
 
-  // console.log("Token in Reducers : ", token);
+  // //console.log("Token in Reducers : ", token);
   const response = await axios.get(
     API_URL + "/chat/client/fetch/" + chatFetchdata.msgStart,
     config
@@ -58,13 +58,13 @@ const fetchAllConversation = async (token) => {
     },
   };
 
-  // console.log("Response : ");
+  // //console.log("Response : ");
   const response = await axios.get(
     API_URL + "/chat/fetch/conversations",
     config
   );
 
-  // console.log("All Conversations : ", response.data);
+  // //console.log("All Conversations : ", response.data);
 
   return response.data;
 };
@@ -76,10 +76,10 @@ const saveChat = async (data, token) => {
     },
   };
 
-  // console.log("Response : ", config);
+  // //console.log("Response : ", config);
 
   const response = await axios.post(API_URL + "/chat/save/chat", data, config);
-  // console.log("Response : ", response.data);
+  // //console.log("Response : ", response.data);
 
   return response.data;
 };

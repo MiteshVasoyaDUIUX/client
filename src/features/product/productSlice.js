@@ -17,7 +17,7 @@ export const uploadProduct = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("Form Data : ", formData);
+      // //console.log("Form Data : ", formData);
       return await productService.uploadProduct(formData, token);
     } catch (error) {
       const message =
@@ -104,7 +104,7 @@ const productSlice = createSlice({
         state.isSuccess = true;
         state.isLoading = false;
         state.products.push(action.payload);
-        // console.log("New State : ", initialState.products);
+        // //console.log("New State : ", initialState.products);
       })
       .addCase(uploadProduct.rejected, (state, action) => {
         state.isError = true;

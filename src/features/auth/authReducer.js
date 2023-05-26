@@ -47,7 +47,7 @@ const verifyUser = async (token) => {
 
 const resetPassword = async (email) => {
   const response = await axios.post(API_URL + "/resetpassword", email);
-  console.log("Reset Password Reducer's Response : ", response.data);
+  //console.log("Reset Password Reducer's Response : ", response.data);
 
   return response.data;
 };
@@ -59,7 +59,7 @@ const removeAddress = async (addressData, token) => {
     },
   };
 
-  // console.log("Remove Button", token)
+  // //console.log("Remove Button", token)
 
   const response = await axios.post(
     BUYER_API_URL + "/buyer/removeaddress/",
@@ -76,7 +76,7 @@ const addNewAddress = async (addressData, token) => {
     },
   };
 
-  // console.log("New Address :", addressData);
+  // //console.log("New Address :", addressData);
 
   const response = await axios.post(
     BUYER_API_URL + "/buyer/addaddress/",

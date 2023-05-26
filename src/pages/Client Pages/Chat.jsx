@@ -46,7 +46,7 @@ function Chat() {
 
       dispatch(fetchChatClient(chatFetchdata));
 
-      console.log("Message : ", messages);
+      //console.log("Message : ", messages);
     }
 
     const socketIO = io("ws://localhost:8888");
@@ -95,7 +95,7 @@ function Chat() {
     });
 
     socketIO.on("disconnect", () => {
-      // console.log("Disconnected");
+      // //console.log("Disconnected");
     });
   }, []);
 
@@ -145,7 +145,7 @@ function Chat() {
       div.append(messageDiv, timeDiv);
       newMessageArea.append(div);
 
-      console.log("Send Messages : ", message)
+      //console.log("Send Messages : ", message)
 
       socket.emit("sendMessage", message);
 

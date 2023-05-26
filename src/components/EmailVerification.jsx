@@ -20,13 +20,13 @@ function EmailVerification({
   const [timeout, setTimeout] = useState(false);
 
   const sendLinkBtn = () => {
-    // console.log("Send Btn");
+    // //console.log("Send Btn");
     dispatch(verifyUser());
 
     let time = 0;
 
     const interval = setInterval(() => {
-      // console.log("Time : ", time);
+      // //console.log("Time : ", time);
 
       if (time === 60) {
         setTimeout(true);
@@ -93,12 +93,12 @@ export function EmailVerificationReg({ email, setBlur }) {
 
   const [timeout, setTimeout] = useState(false);
 
-  // console.log("Params : ", params);
+  // //console.log("Params : ", params);
   const { isVerified } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isVerified) {
-      // console.log("User Verification Done, Redirecting...");
+      // //console.log("User Verification Done, Redirecting...");
       navigate("/");
       // setBlur(false);
     }
@@ -107,7 +107,7 @@ export function EmailVerificationReg({ email, setBlur }) {
   let interval;
 
   const sendLinkBtn = () => {
-    // console.log("Send Btn");
+    // //console.log("Send Btn");
     dispatch(verifyUser());
 
     let time = 0;

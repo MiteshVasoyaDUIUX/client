@@ -61,7 +61,7 @@ export default function Register() {
       // toast.success("Verification Email has been sent to you Email Address...")
       // navigate("/");
       navigate("/", { state: { from: location.pathname } });
-      // console.log("Location : ", location.pathname);
+      // //console.log("Location : ", location.pathname);
     }
 
     dispatch(reset());
@@ -103,7 +103,7 @@ export default function Register() {
         },
         role,
       };
-      // console.log("In register Page User Data : ");
+      // //console.log("In register Page User Data : ");
       // dispatch(register(userData));
     }
   };

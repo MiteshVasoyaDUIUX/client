@@ -9,7 +9,7 @@
 //             }
 //       }
 
-//       console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData)
+//       //console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData)
 
 
 //       const response = await axios.post(

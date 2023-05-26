@@ -673,7 +673,7 @@ export default function Cart() {
     }
 
     if (isError) {
-      console.log("Error Message : ", userSliceMessage);
+      //console.log("Error Message : ", userSliceMessage);
       toast.error(userSliceMessage);
     }
 
@@ -690,7 +690,7 @@ export default function Cart() {
           `${userSliceMessage.successfull} Order Placed Successfully, ${userSliceMessage.outOfStock} are out of stocks...`
         );
       }
-      console.log("Order Placed Message : ", userSliceMessage);
+      //console.log("Order Placed Message : ", userSliceMessage);
       navigate("/myorders");
     }
 

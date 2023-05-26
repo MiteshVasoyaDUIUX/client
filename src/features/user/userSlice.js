@@ -27,7 +27,7 @@ export const placeOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
+      //console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
       return await userService.placeOrder(checkoutData, token);
     } catch (error) {
       const message =
@@ -47,7 +47,7 @@ export const placeCartOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
+      //console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
       return await userService.placeCartOrder(checkoutData, token);
     } catch (error) {
       const message =
@@ -67,7 +67,7 @@ export const fetchAllOrders = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("Token : ", token);
+      // //console.log("Token : ", token);
 
       return await userService.fetchAllOrders(userId, token);
     } catch (error) {
@@ -88,7 +88,7 @@ export const giveRating = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("ratingData : ", ratingData);
+      // //console.log("ratingData : ", ratingData);
 
       return await userService.giveRating(ratingData, token);
     } catch (error) {
@@ -130,7 +130,7 @@ export const updateCartQuantity = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
 
       const message = await userService.updateCart(newData, token);
-      // console.log("TOTKEOKE : ", message);
+      // //console.log("TOTKEOKE : ", message);
       return message;
     } catch (error) {
       const message =
@@ -191,7 +191,7 @@ export const removeFromWishlist = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
 
       const message = await userService.removeFromWishlist(data, token);
-      // console.log("TOTKEOKE : ", message);
+      // //console.log("TOTKEOKE : ", message);
       return message;
     } catch (error) {
       const message =
@@ -415,7 +415,7 @@ const userSlice = createSlice({
         state.isAddingToWishList = false;
         state.isAddedToWishList = true;
         state.wishlist = action.payload;
-        // console.log("Slice : ", action.payload);
+        // //console.log("Slice : ", action.payload);
       })
       .addCase(addToWishList.rejected, (state, action) => {
         state.isError = true;
@@ -460,7 +460,7 @@ const userSlice = createSlice({
         state.isPlacing = false;
         state.isError = false;
         state.orders = action.payload;
-        // console.log("New State : ", action.payload);
+        // //console.log("New State : ", action.payload);
       })
       .addCase(fetchAllOrders.rejected, (state, action) => {
         state.isError = true;
@@ -476,7 +476,7 @@ const userSlice = createSlice({
       })
       .addCase(applyCoupon.rejected, (state, action) => {
         state.isError = true;
-        console.log("COUPON ERROR : ", action.payload);
+        //console.log("COUPON ERROR : ", action.payload);
         state.userSliceMessage = action.payload;
       })
       .addCase(placeOrder.pending, (state) => {
@@ -489,7 +489,7 @@ const userSlice = createSlice({
       })
       .addCase(placeOrder.rejected, (state, action) => {
         state.isError = true;
-        // console.log("Message : ", action.payload);
+        // //console.log("Message : ", action.payload);
         // state.userSliceMessage = action.payload;
       })
       .addCase(placeCartOrder.pending, (state) => {

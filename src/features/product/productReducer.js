@@ -19,7 +19,7 @@ const uploadProduct = async (formData, token) => {
     config
   );
 
-  // console.log("Response : ", response.data);
+  // //console.log("Response : ", response.data);
   return response.data;
 };
 
@@ -32,7 +32,7 @@ const fetchProducts = async (productData, token) => {
 
   const response = await axios.get(API_URL + "/admin/allproducts", config);
 
-  // console.log("Response : ", response.data);
+  // //console.log("Response : ", response.data);
   return response.data;
 };
 
@@ -48,7 +48,7 @@ const removeProduct = async (productId, token) => {
     config
   );
 
-  // console.log("Response : ", response.data);
+  // //console.log("Response : ", response.data);
   return response.data;
 };
 
@@ -65,7 +65,7 @@ const updateProduct = async (productData, token) => {
     config
   );
 
-  // console.log("Response : ", response.data);
+  // //console.log("Response : ", response.data);
   return response.data;
 };
 

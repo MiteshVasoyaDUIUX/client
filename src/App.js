@@ -43,7 +43,6 @@ function App() {
   }, [activeSearchList]);
 
   const handleScroll = () => {
-    console.log("Scrolling...");
   };
 
   return (

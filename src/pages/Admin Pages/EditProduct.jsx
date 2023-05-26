@@ -28,7 +28,7 @@ function EditProduct() {
   const formData = location.state;
 
   //Print form data...
-  //     console.log("Form Data : ", formData);
+  //     //console.log("Form Data : ", formData);
   const categories = [
     "Clothes",
     "Footware",
@@ -77,7 +77,7 @@ function EditProduct() {
         theme: "light",
       });
 
-      console.log("___REDIRECTING___");
+      //console.log("___REDIRECTING___");
       navigate("/admin/allproduct");
 
       return () => {
@@ -100,24 +100,24 @@ function EditProduct() {
     prodImage,
   } = productData;
 
-  //   console.log("Prod Id : ", productId);
+  //   //console.log("Prod Id : ", productId);
   const handleChanges = (e) => {
     setProductData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
 
-    //     console.log(productData);
+    //     //console.log(productData);
   };
 
   const handleImageChange = (e) => {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
       URL.createObjectURL(e[1])
     );
-    // console.log("New Image : ", ImagesArray);
+    // //console.log("New Image : ", ImagesArray);
 
     setImage([...image, ...ImagesArray]);
-    // console.log("All Image Array : ", image);
+    // //console.log("All Image Array : ", image);
   };
 
   const handleCategoryChange = (e) => {
@@ -125,7 +125,7 @@ function EditProduct() {
       return;
     } else {
       setSelectedCategory(e.target.value);
-      // console.log(e.target.value);
+      // //console.log(e.target.value);
     }
   };
 
@@ -149,12 +149,12 @@ function EditProduct() {
       prodImage: image,
     };
 
-    //     console.log("New Data : ", productData);
-    // console.log("In Product Update Page...", productData);
+    //     //console.log("New Data : ", productData);
+    // //console.log("In Product Update Page...", productData);
     dispatch(updateProduct(productData));
   };
 
-  //   console.log("Data : ", formData);
+  //   //console.log("Data : ", formData);
 
   return (
     <div className="addproductform">

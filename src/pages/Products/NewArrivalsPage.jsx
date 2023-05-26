@@ -119,7 +119,7 @@ function NewArrivalsProductsPage() {
     try {
       setPage((prev) => prev + 1);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
@@ -133,7 +133,7 @@ function NewArrivalsProductsPage() {
     };
     if (moreProducts) {
       dispatch(fetchNewArrivals(prodReqData));
-      console.log("Dispatch More : ", prodReqData);
+      //console.log("Dispatch More : ", prodReqData);
       prodReqData = {
         page: page,
         sortBy: sortBy,

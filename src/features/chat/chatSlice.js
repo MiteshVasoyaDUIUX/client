@@ -14,7 +14,7 @@ export const fetchChatAdmin = createAsyncThunk(
   async (chatFetchdata, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("CHAT IN SLICE  : ", thunkAPI.getState());
+      // //console.log("CHAT IN SLICE  : ", thunkAPI.getState());
       return await chatService.fetchChatAdmin(chatFetchdata, token);
     } catch (error) {
       const message =
@@ -33,7 +33,7 @@ export const fetchChatClient = createAsyncThunk(
   async (chatFetchdata, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("THUNK API :", token);
+      // //console.log("THUNK API :", token);
       return await chatService.fetchChatClient(chatFetchdata, token);
     } catch (error) {
       const message =
@@ -52,7 +52,7 @@ export const fetchAllConversation = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("CHAT IN SLICE  : ");
+      // //console.log("CHAT IN SLICE  : ");
       return await chatService.fetchAllConversation(token);
     } catch (error) {
       const message =

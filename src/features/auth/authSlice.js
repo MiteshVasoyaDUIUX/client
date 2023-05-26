@@ -69,7 +69,7 @@ export const resetPassword = createAsyncThunk(
   "user/reset-password",
   async (email, thunkAPI) => {
     try {
-      // console.log("___Reset Password Slice...", email);
+      // //console.log("___Reset Password Slice...", email);
       return await authService.resetPassword(email);
     } catch (error) {
       const message =

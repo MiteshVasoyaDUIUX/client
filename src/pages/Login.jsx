@@ -38,10 +38,10 @@ export default function Login() {
     }
 
     if (user) {
-      console.log("---TRYING TO LOGIN____", message);
+      //console.log("---TRYING TO LOGIN____", message);
       if (user.role === "buyer") {
         if (user.user.isDeleted === true) {
-          console.log("User is Deleted___-");
+          //console.log("User is Deleted___-");
           toast.error("Your Account Has Been Deleted By User...")
         } else if (user.user.isBlocked === true) {
           if (blockDelete === true) {

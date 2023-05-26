@@ -136,7 +136,7 @@ const subColumns = [
 function OrderRow(props) {
   const { order } = props;
   const { userId } = props;
-  // console.log("Order Data : ", userId);
+  // //console.log("Order Data : ", userId);
 
   //Filtering Orders by User...
 
@@ -210,12 +210,12 @@ function Row({ user }) {
   const handleDeleteConfirmation = (response) => {
     if (response === "yes") {
       setDeleteConfirmation(false);
-      console.log("Response : ", response);
+      //console.log("Response : ", response);
       const userId = { userId: user._id };
       dispatch(deleteUser(userId));
     } else if (response === "cancel") {
       setDeleteConfirmation(false);
-      console.log("Response : ", response);
+      //console.log("Response : ", response);
     }
   };
 
@@ -515,7 +515,7 @@ function AllUser() {
 
     if (ordersUserwise) {
       dispatch(fetchOrderUserwise());
-      // console.log("Orders Userwise : ", ordersUserwise);
+      // //console.log("Orders Userwise : ", ordersUserwise);
     }
 
     return () => {

@@ -172,7 +172,7 @@ function BuyProduct() {
   }, [isPlaced, isVerified, isAddrRemoved, user, userSliceMessage]);
 
   useEffect(() => {
-    console.log("Selected Delivery Address : ", deliveryAddress);
+    //console.log("Selected Delivery Address : ", deliveryAddress);
   }, [deliveryAddress]);
 
   if (isPlacing) {
@@ -219,7 +219,7 @@ function BuyProduct() {
 
         // let checkoutData = [];
         // checkoutData.push(newData);
-        // console.log("Checkout Data : ", newData);
+        // //console.log("Checkout Data : ", newData);
         dispatch(placeOrder(newData));
       }
     }

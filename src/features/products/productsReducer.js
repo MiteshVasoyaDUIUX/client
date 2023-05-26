@@ -4,7 +4,7 @@ import axios from "axios";
 const API_URL = "http://localhost:5555";
 
 const fetchProducts = async (productReqData) => {
-  // console.log("Fetching Product...", productReqData.filter);
+  // //console.log("Fetching Product...", productReqData.filter);
   const filter = productReqData.filter;
   const response = await axios.post(
     API_URL +
@@ -41,7 +41,7 @@ const searchProduct = async (productReqData) => {
       productReqData.sortBy,
     filter
   );
-  console.log("Response : ", response.data);
+  //console.log("Response : ", response.data);
   return response.data;
 };
 
@@ -54,13 +54,13 @@ const fetchNewArrivals = async (productReqData) => {
       productReqData.sortBy,
     productReqData.filter
   );
-  // console.log("Response : ", response.data);
+  // //console.log("Response : ", response.data);
   return response.data;
 };
 
 const fetchNewArrivalComp = async (quary) => {
   const response = await axios.get(API_URL + "/newarrivalscomp");
-  // console.log("Response : ", response.data);
+  // //console.log("Response : ", response.data);
   return response.data;
 };
 
@@ -73,19 +73,19 @@ const fetchTrendingProducts = async (productReqData) => {
       productReqData.sortBy,
     productReqData.filter
   );
-  // console.log("Trending Products : ", response.data);
+  // //console.log("Trending Products : ", response.data);
   return response.data;
 };
 
 const fetchTrendingProductComp = async (quary) => {
   const response = await axios.get(API_URL + "/trendingproductscomp");
-  // console.log("Trending Products : ", response.data);
+  // //console.log("Trending Products : ", response.data);
   return response.data;
 };
 
 const fetchTopSellingComponent = async (quary) => {
   const response = await axios.get(API_URL + "/topsellingcomp");
-  // console.log("Trending Products : ", response.data);
+  // //console.log("Trending Products : ", response.data);
   return response.data;
 };
 

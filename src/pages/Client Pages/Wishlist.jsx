@@ -19,14 +19,14 @@ function ProductCard({ item, userId }) {
 
   const handleRemoveButton = (e, id) => {
     e.stopPropagation();
-    console.log("Remove Button is Clicked...", id);
+    //console.log("Remove Button is Clicked...", id);
 
     const data = {
       userId,
       productId: id,
     };
     dispatch(removeFromWishlist(data));
-    // console.log("User id : ", userId);
+    // //console.log("User id : ", userId);
   };
 
   const handleCardClick = () => {

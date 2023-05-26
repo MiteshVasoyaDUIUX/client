@@ -124,7 +124,7 @@ function TrendingProductsPage() {
     try {
       setPage((prev) => prev + 1);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
@@ -138,7 +138,7 @@ function TrendingProductsPage() {
     };
     if (moreProducts) {
       dispatch(fetchTrendingProducts(prodReqData));
-      console.log("Dispatch More : ", prodReqData);
+      //console.log("Dispatch More : ", prodReqData);
       prodReqData = {
         page: page,
         sortBy: sortBy,
@@ -161,7 +161,7 @@ function TrendingProductsPage() {
       sortBy: sortBy,
       filter: filter,
     };
-    console.log("Dispatch : ", prodReqData);
+    //console.log("Dispatch : ", prodReqData);
     dispatch(fetchTrendingProducts(prodReqData));
     prodReqData = {
       page: page,

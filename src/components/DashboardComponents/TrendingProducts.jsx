@@ -44,7 +44,7 @@ function TrendingProducts() {
   let trendingProducts = [{}];
 
   for (let index = 0; index < 4; index++) {
-    // console.log("Calculating Products for Trending Product Component___");
+    // //console.log("Calculating Products for Trending Product Component___");
     // const randomProductIndex = Math.floor(Math.random() * products.length);
     trendingProducts[index] = trendingProd[index];
   }

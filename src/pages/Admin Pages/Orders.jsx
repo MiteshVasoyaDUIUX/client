@@ -80,11 +80,11 @@ function Row(props) {
   const dispatch = useDispatch();
 
   const handleConfirmButton = () => {
-    // console.log("Confirm Button Clicked", row._id);
+    // //console.log("Confirm Button Clicked", row._id);
     dispatch(acceptOrder(row._id));
   };
   const handleCancelButton = () => {
-    // console.log("Cancel Button Clicked", row._id);
+    // //console.log("Cancel Button Clicked", row._id);
     dispatch(cancelOrder(row._id));
   };
 
@@ -193,7 +193,7 @@ function Orders() {
     setPage(0);
   };
 
-  // console.log("allOrders : ", allOrders);
+  // //console.log("allOrders : ", allOrders);
   return (
     <>
       <section className="all-orders-table" style={{}}>

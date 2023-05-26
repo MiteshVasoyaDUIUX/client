@@ -117,7 +117,7 @@ function AddProduct() {
       URL.createObjectURL(e[1])
     );
     setImage([...image, ...ImagesArray]);
-    // console.log("Image : ", image);
+    // //console.log("Image : ", image);
   };
 
   const handleCategoryChange = (e) => {
@@ -173,10 +173,10 @@ function AddProduct() {
       formData.append("prodPrice", prodPrice);
       formData.append("prodImage", image);
 
-      // console.log("image Array : ", Number(prodPrice));
+      // //console.log("image Array : ", Number(prodPrice));
       dispatch(uploadProduct(formData));
 
-      // console.log("In Product Upload Page...", productData);
+      // //console.log("In Product Upload Page...", productData);
     }
   };
 

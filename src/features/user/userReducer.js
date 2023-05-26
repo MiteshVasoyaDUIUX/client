@@ -4,7 +4,7 @@ import axios from "axios";
 const API_URL = "http://localhost:5555";
 
 const addToCart = async (data, token) => {
-  // console.log("Token : ", data.userId);
+  // //console.log("Token : ", data.userId);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -33,7 +33,7 @@ const updateCart = async (newData, token) => {
 };
 
 const fetchWishList = async (userId, token) => {
-  // console.log("Token : ", data.userId);
+  // //console.log("Token : ", data.userId);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -43,12 +43,12 @@ const fetchWishList = async (userId, token) => {
     API_URL + "/buyer/fetchwishlistprodid/" + userId,
     config
   );
-  // console.log("Fetch Wishlist Initially : ", response.data);
+  // //console.log("Fetch Wishlist Initially : ", response.data);
   return response.data;
 };
 
 const fetchWishListProducts = async (userId, token) => {
-  // console.log("Token : ", data.userId);
+  // //console.log("Token : ", data.userId);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -58,12 +58,12 @@ const fetchWishListProducts = async (userId, token) => {
     API_URL + "/buyer/fetchwishlistproducts/" + userId,
     config
   );
-  // console.log("Fetch Wishlist Initially : ", response.data);
+  // //console.log("Fetch Wishlist Initially : ", response.data);
   return response.data;
 };
 
 const fetchCart = async (userId, token) => {
-  // console.log("Token : ", data.userId);
+  // //console.log("Token : ", data.userId);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const fetchCart = async (userId, token) => {
     API_URL + "/buyer/fetchcart/" + userId,
     config
   );
-  // console.log("response.data Cart: ", response.data);
+  // //console.log("response.data Cart: ", response.data);
 
   return response.data;
 };
@@ -90,12 +90,12 @@ const removeFromCart = async (productId, token) => {
     config
   );
 
-  // console.log("Response : ", response.data);
+  // //console.log("Response : ", response.data);
   return response.data;
 };
 
 const addToWishList = async (data, token) => {
-  // console.log("Token : ", data.userId);
+  // //console.log("Token : ", data.userId);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -110,7 +110,7 @@ const addToWishList = async (data, token) => {
 };
 
 const removeFromWishlist = async (data, token) => {
-  // console.log("Token : ", data.userId);
+  // //console.log("Token : ", data.userId);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -131,7 +131,7 @@ const placeOrder = async (checkoutData, token) => {
     },
   };
 
-  console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData);
+  //console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData);
 
   const response = await axios.post(
     API_URL + "/buyer/placeorder",
@@ -148,7 +148,7 @@ const placeCartOrder = async (checkoutData, token) => {
     },
   };
 
-  console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData);
+  //console.log("CHECK OUT DATA IN REDUCERS  : ", checkoutData);
 
   const response = await axios.post(
     API_URL + "/buyer/placecartorder",
@@ -156,7 +156,7 @@ const placeCartOrder = async (checkoutData, token) => {
     config
   );
 
-  console.log("Check Out Responseeeeee: ");
+  //console.log("Check Out Responseeeeee: ");
   return response.data;
 };
 
@@ -195,7 +195,7 @@ const applyCoupon = async (coupon, token) => {
   // const couponCode = {
   //   coupon: coupon,
   // };
-  console.log("APPLIED COUPON : ");
+  //console.log("APPLIED COUPON : ");
   const response = await axios.get(API_URL + "/buyer/applycoupon/" + coupon);
   return response.data;
 };

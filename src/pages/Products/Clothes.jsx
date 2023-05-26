@@ -89,7 +89,7 @@ function Clothes() {
         setPage((prev) => prev + 1);
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 

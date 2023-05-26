@@ -18,7 +18,7 @@
 //     try {
 //       //'token' may be not use because only user can add the goal...
 //       const token = thunkAPI.getState().auth.user.token;
-//       console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
+//       //console.log("CHECK OUT DATA IN SLICE  : ", checkoutData);
 //       // return await orderService.placeOrder(checkoutData, token);
 //     } catch (error) {
 //       const message =
@@ -38,7 +38,7 @@
 //     try {
 //       //'token' may be not use because only user can add the goal...
 //       const token = thunkAPI.getState().auth.user.token;
-//       // console.log("Token : ", token);
+//       // //console.log("Token : ", token);
 
 //       return await orderService.fetchAllOrders(userId, token);
 //     } catch (error) {
@@ -59,7 +59,7 @@
 //     try {
 //       //'token' may be not use because only user can add the goal...
 //       const token = thunkAPI.getState().auth.user.token;
-//       // console.log("ratingData : ", ratingData);
+//       // //console.log("ratingData : ", ratingData);
 
 //       return await orderService.giveRating(ratingData, token);
 //     } catch (error) {
@@ -93,7 +93,7 @@
 //         state.isError = false;
 //         state.message = action.payload.message;
 //         // state.orderId = action.payload;
-//         //   console.log("New State : ", state.orderId);
+//         //   //console.log("New State : ", state.orderId);
 //       })
 //       .addCase(placeOrder.rejected, (state, action) => {
 //         state.isError = true;
@@ -115,7 +115,7 @@
 //         state.isPlacing = false;
 //         state.isError = false;
 //         state.orders = action.payload;
-//         // console.log("New State : ", action.payload);
+//         // //console.log("New State : ", action.payload);
 //       })
 //       .addCase(fetchAllOrders.rejected, (state, action) => {
 //         state.isError = true;
@@ -128,7 +128,7 @@
 //       .addCase(giveRating.pending, (state) => {})
 //       .addCase(giveRating.fulfilled, (state, action) => {
 //         state.isRated = true
-//         console.log("Rating Done : ", state.isRated)
+//         //console.log("Rating Done : ", state.isRated)
 //       })
 //       .addCase(giveRating.rejected, (state, action) => {
 //         state.message = action.payload;

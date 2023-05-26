@@ -152,7 +152,7 @@ function DetailedProductPage() {
       setCouponApplied(true);
       dispatch(applyCoupon(couponCode));
       setCouponData(coupon);
-      console.log("Applying Coupon...", coupon);
+      //console.log("Applying Coupon...", coupon);
     } else {
       alert("Enter Coupon Code...");
     }

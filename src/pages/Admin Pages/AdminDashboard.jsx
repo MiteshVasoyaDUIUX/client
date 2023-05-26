@@ -66,7 +66,7 @@ const optionsForLineChart = {
 };
 
 function ProductCard({ product }) {
-  console.log("Prod : ", product.ordersCount);
+  //console.log("Prod : ", product.ordersCount);
   return (
     <>
       <div className="prod-card">
@@ -150,7 +150,7 @@ function AdminDashboard() {
   for (let index = 0; index < orderMonthwise.length; index++) {
     if (monthlyOrderData.length > 0) {
       monthlyOrderData[index + 1][1] = orderMonthwise[index].orders;
-      // console.log("Monthly Orders : ", monthlyOrderData);
+      // //console.log("Monthly Orders : ", monthlyOrderData);
     }
   }
 
@@ -161,7 +161,7 @@ function AdminDashboard() {
   }
 
   avgRating = (avgRating / products.length).toFixed(2);
-  // console.log("All Orders : ", allOrders);
+  // //console.log("All Orders : ", allOrders);
 
   const OrderStatusData = [
     ["Order Status", ""],

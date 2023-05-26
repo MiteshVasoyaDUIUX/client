@@ -18,7 +18,7 @@ export const acceptOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("ORDER ID SLICE  : ", orderId);
+      // //console.log("ORDER ID SLICE  : ", orderId);
       return await adminService.acceptOrder(orderId, token);
     } catch (error) {
       const message =
@@ -38,7 +38,7 @@ export const cancelOrder = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("ORDER ID SLICE  : ", orderId);
+      // //console.log("ORDER ID SLICE  : ", orderId);
       return await adminService.cancelOrder(orderId, token);
     } catch (error) {
       const message =
@@ -76,7 +76,7 @@ export const uploadProduct = createAsyncThunk(
     try {
       //'token' may be not use because only user can add the goal...
       const token = thunkAPI.getState().auth.user.token;
-      // console.log("Form Data : ", formData);
+      // //console.log("Form Data : ", formData);
       return await adminService.uploadProduct(formData, token);
     } catch (error) {
       const message =
@@ -163,7 +163,7 @@ const adminSlice = createSlice({
       .addCase(acceptOrder.fulfilled, (state, action) => {
         state.isAccepted = true;
         state.isRejected = false;
-        //   console.log("ACTION PAYLOAD : ", action.payload)
+        //   //console.log("ACTION PAYLOAD : ", action.payload)
         state.allOrders = action.payload;
       })
       .addCase(acceptOrder.rejected, (state, action) => {
@@ -179,7 +179,7 @@ const adminSlice = createSlice({
         state.isAccepted = false;
         state.isRejected = true;
         state.allOrders = action.payload;
-        // console.log("New State : ", action.payload);
+        // //console.log("New State : ", action.payload);
       })
       .addCase(fetchAllOrders.pending, (state) => {
         state.isOrderFetching = true;
@@ -206,7 +206,7 @@ const adminSlice = createSlice({
         state.isSuccess = true;
         state.isLoading = false;
         state.addedProduct.push(action.payload);
-        // console.log("New State : ", initialState.products);
+        // //console.log("New State : ", initialState.products);
       })
       .addCase(uploadProduct.rejected, (state, action) => {
         state.isError = true;

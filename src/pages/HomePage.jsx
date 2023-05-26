@@ -39,7 +39,7 @@ function HomePage() {
         navigate(`/admin/dashboard`);
       } else {
         if (user?.user.isDeleted) {
-          console.log("USER IS DELETED...");
+          //console.log("USER IS DELETED...");
           
           // navigate("/deleteduser");
         } else if (user?.user.isBlocked) {

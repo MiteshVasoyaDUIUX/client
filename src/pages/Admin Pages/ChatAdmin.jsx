@@ -31,7 +31,7 @@ function Message({ message, own }) {
       <div
         className={own ? "time-of-sent-message" : "time-of-received-message"}
       >
-        {/* {console.log(message.time)} */}
+        {/* {//console.log(message.time)} */}
         {message.time.slice(4, 21)}
       </div>
     </div>
@@ -73,7 +73,7 @@ function Chat() {
     const socketIO = io("ws://localhost:8888");
     setSocket(socketIO);
     socketIO.on("connect", () => {
-      // console.log("Connected with Id : ", socketIO.id);
+      // //console.log("Connected with Id : ", socketIO.id);
       const socketIdData = {
         userId: user.user._id,
         socketId: socketIO.id,
@@ -116,14 +116,14 @@ function Chat() {
     });
 
     socketIO.on("disconnect", () => {
-      // console.log("Disconnect From....");
+      // //console.log("Disconnect From....");
     });
 
     if (scrollRef.current && toScroll === 1) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
-      // console.log("SCROLL VALUE : ", toScroll);
+      // //console.log("SCROLL VALUE : ", toScroll);
       setToScroll(0);
-      // console.log(" UPDATED SCROLL VALUE : ", toScroll);
+      // //console.log(" UPDATED SCROLL VALUE : ", toScroll);
     }
   }, [openConversationId]);
 
@@ -141,7 +141,7 @@ function Chat() {
   });
 
   if (openConversationId !== messages.conversationId) {
-    // console.log("New Message : ", newMsg);
+    // //console.log("New Message : ", newMsg);
     currentMsg = [];
   }
 

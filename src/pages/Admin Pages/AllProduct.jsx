@@ -123,11 +123,11 @@ function Row({ row }) {
   const handleDeleteConfirmation = (response) => {
     if (response === "yes") {
       setDeleteConfirmation(false);
-      console.log("Response : ", row._id);
+      //console.log("Response : ", row._id);
       dispatch(removeProduct(row._id));
     } else if (response === "cancel") {
       setDeleteConfirmation(false);
-      console.log("Response : ", response);
+      //console.log("Response : ", response);
     }
   };
 
@@ -340,7 +340,7 @@ function AllProduct() {
     setPage(0);
   };
 
-  // console.log("Products : ", products);
+  // //console.log("Products : ", products);
   useEffect(() => {
     if (isError) {
       toast.error(message);
@@ -356,7 +356,7 @@ function AllProduct() {
   }, [dispatch]);
 
   if (isLoading) {
-    // console.log("Fetching Products...");
+    // //console.log("Fetching Products...");
     return <Spinner />;
   }
 

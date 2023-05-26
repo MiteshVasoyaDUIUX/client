@@ -124,7 +124,7 @@ function Products() {
     try {
       setPage((prev) => prev + 1);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
@@ -138,7 +138,7 @@ function Products() {
     };
     if (moreProducts) {
       dispatch(fetchProducts(prodReqData));
-      console.log("Dispatch More : ", prodReqData);
+      //console.log("Dispatch More : ", prodReqData);
       prodReqData = {
         page: page,
         category: category,

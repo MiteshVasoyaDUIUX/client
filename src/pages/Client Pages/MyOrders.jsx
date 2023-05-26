@@ -106,7 +106,7 @@ function Row({ row }) {
     } else if (response === "cancel") {
       setConfirmation(false);
       setReadOnly(false);
-      console.log("Response : ", response);
+      //console.log("Response : ", response);
     }
   };
 
@@ -275,7 +275,7 @@ export default function MyOrders() {
     }
 
     if (user) {
-      // console.log("User : ", user)
+      // //console.log("User : ", user)
       dispatch(fetchAllOrders(userId));
     }
 
@@ -296,7 +296,7 @@ export default function MyOrders() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  console.log("Order : ", orders);
+  //console.log("Order : ", orders);
   return (
     <>
       <section className="content" style={{ marginTop: "55px" }}>
